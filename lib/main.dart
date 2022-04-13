@@ -7,13 +7,12 @@ void main() {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          
           title: Text('Here it Begins'),
           backgroundColor: Colors.blueGrey[900],
         ),
         backgroundColor: Colors.blueGrey,
       ),
-    initialRoute: HomeScreen.id,
+      initialRoute: HomeScreen.id,
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
       },

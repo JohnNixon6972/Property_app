@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/login.dart';
+import './screens/register.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
+void main() => runApp(PropertyApp());
+
+class PropertyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Here it Begins'),
-          backgroundColor: Colors.blueGrey[900],
-        ),
-        backgroundColor: Colors.blueGrey,
-      ),
-    ),
-  );
+      initialRoute: login.id,
+      routes: {
+        login.id: (context) => login(),
+        register.id :(context) => register(),
+      },
+    );
+  }
 }

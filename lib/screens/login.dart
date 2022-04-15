@@ -5,8 +5,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/register.dart';
 
-import '../components/roundedButton.dart';
-
 class login extends StatefulWidget {
   static const String id = 'login';
   @override
@@ -14,6 +12,9 @@ class login extends StatefulWidget {
 }
 
 class _loginState extends State<login> {
+  final _formKey = GlobalKey<FormState>();
+  late String email;
+  late String password;
   //final _auth = FirebaseAuth.instance;
 
   // String email;
@@ -22,10 +23,12 @@ class _loginState extends State<login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 251, 246, 246),
-        body: SafeArea(
-          child: ModalProgressHUD(
-              inAsyncCall: showSpinner,
+      backgroundColor: Color.fromARGB(255, 251, 246, 246),
+      body: SafeArea(
+        child: ModalProgressHUD(
+            inAsyncCall: showSpinner,
+            child: Form(
+              key: _formKey,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 child: Column(
@@ -38,7 +41,7 @@ class _loginState extends State<login> {
                         child: Container(
                           height: 300,
                           child: Image.asset(
-                            'images/loginLogo1.png',
+                            'images/try1.png',
                           ),
                         ),
                       ),
@@ -57,45 +60,82 @@ class _loginState extends State<login> {
                     SizedBox(
                       height: 20,
                     ),
-                    loginCredentials(
-                      hintTxt: 'EMAIL',
-                      icn: Icons.email,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    loginCredentials(hintTxt: 'PASSWORD', icn: Icons.lock),
-                    //
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Forgot Password?",
-                      textAlign: TextAlign.right,
-                      style: kTextTitleStyle.copyWith(fontSize: 17),
-                    ),
-                    RoundButton(
-                      color: Color(0XFF4ECED5),
-                      buttonTitle: 'Log In',
-                      onPrssed: () async {
-                        setState(() {
-                          showSpinner = true;
-                        });
-                        // try {
+                    TextFormField(
+                      keyboardType: TextInputType.phone,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.blue.shade900),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter valid text';
+                        } else {
+                          email = value;
+                        }
 
-                        //   final existingUser = await _auth.signInWithEmailAndPassword(
-                        //       email: email, password: password);
-
-                        //   if (existingUser != null ) {
-                        //     Navigator.pushNamed(context, ChatScreen.id);
-                        //   }
-                        //   setState(() {
-                        //     showSpinner = false;
-                        //   });
-                        // } catch (e) {
-                        //   print(e);
-                        // }
+                        return null;
                       },
+                      decoration: kTextFieldDecoration.copyWith(
+                        hintText: 'Enter your Email Address.',
+                        prefixIcon: Icon(Icons.email, color: Color(0XFF4ECED5)),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.visiblePassword,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.blue.shade900),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter valid text';
+                        } else {
+                          password = value;
+                        }
+
+                        return null;
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        hintText: 'Enter your Password.',
+                        prefixIcon: Icon(Icons.lock, color: Color(0XFF4ECED5)),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      child: Text(
+                        "Forgot Password?",
+                        textAlign: TextAlign.right,
+                        style: kTextTitleStyle.copyWith(fontSize: 17),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        if (_formKey.currentState!.validate()) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data')),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0XFF4ECED5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     GestureDetector(
                       child: Row(
@@ -118,27 +158,9 @@ class _loginState extends State<login> {
                     ),
                   ],
                 ),
-              )),
-        ));
-  }
-}
-
-class loginCredentials extends StatelessWidget {
-  final String hintTxt;
-  final IconData icn;
-  loginCredentials({required this.hintTxt, required this.icn});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      obscureText: true,
-      textAlign: TextAlign.left,
-      decoration: kTextFieldDecoration.copyWith(
-          hintText: hintTxt,
-          prefixIcon: Icon(
-            icn,
-            color: Colors.blueGrey,
-          )),
+              ),
+            )),
+      ),
     );
   }
 }

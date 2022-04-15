@@ -5,8 +5,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/login.dart';
 
-import '../components/roundedButton.dart';
-
 class register extends StatefulWidget {
   static const String id = 'register';
 
@@ -15,9 +13,10 @@ class register extends StatefulWidget {
 }
 
 class _registerState extends State<register> {
+  
   final _formKey = GlobalKey<FormState>();
 
-  // final _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   late String name;
   late String email;
   late String mobileNumber;
@@ -290,7 +289,7 @@ class _registerState extends State<register> {
                         height: 10,
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
                             // If the form is valid, display a snackbar. In the real world,
@@ -298,6 +297,19 @@ class _registerState extends State<register> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
                             );
+                          }
+                          try {
+                            final newUser =
+                                await _auth.createUserWithEmailAndPassword(
+                                    email: email, password: password);
+                            if (newUser != null) {
+                              Navigator.pushNamed(context, login.id);
+                            }
+                            setState(() {
+                              showSpinner = false;
+                            });
+                          } catch (e) {
+                            print(e);
                           }
                         },
                         style: ElevatedButton.styleFrom(

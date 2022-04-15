@@ -22,6 +22,8 @@ const kTextFieldDecoration = InputDecoration(
   ),
   // fillColor: Color(0XFF4ECED5),
   // hoverColor: Colors.lightBlueAccent,
+  fillColor: Color.fromARGB(255, 229, 238, 242),
+  filled: true,
   border: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(20.0)),
     borderSide: BorderSide(color: Color(0XFF4ECED5), width: 1.0),

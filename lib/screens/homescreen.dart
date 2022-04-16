@@ -48,50 +48,50 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-                child: Center(
-                  child: Material(
-                    elevation: 2,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      width: 220,
-                      height: 40,
-                      child: Row(
-                        children: const [
-                          Text(
-                            "  Add Property ",
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 164, 164, 164)),
-                          ),
-                          CircleAvatar(
-                            radius: 17,
-                            backgroundColor: Color.fromARGB(255, 38, 38, 38),
-                            child: Icon(
-                              Icons.home,
-                              color: Color.fromARGB(255, 228, 228, 228),
-                              size: 25,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Expanded(
+            //   flex: 3,
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+            //     child: Center(
+            //       child: Material(
+            //         elevation: 2,
+            //         borderRadius: const BorderRadius.all(
+            //           Radius.circular(15),
+            //         ),
+            //         child: Container(
+            //           decoration: const BoxDecoration(
+            //             color: Colors.white,
+            //             borderRadius: BorderRadius.all(
+            //               Radius.circular(15),
+            //             ),
+            //           ),
+            //           width: 220,
+            //           height: 40,
+            //           child: Row(
+            //             children: const [
+            //               Text(
+            //                 "  Add Property ",
+            //                 style: TextStyle(
+            //                     fontSize: 25,
+            //                     fontWeight: FontWeight.bold,
+            //                     color: Color.fromARGB(255, 164, 164, 164)),
+            //               ),
+            //               CircleAvatar(
+            //                 radius: 17,
+            //                 backgroundColor: Color.fromARGB(255, 38, 38, 38),
+            //                 child: Icon(
+            //                   Icons.home,
+            //                   color: Color.fromARGB(255, 228, 228, 228),
+            //                   size: 25,
+            //                 ),
+            //               )
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             const Padding(
               padding: EdgeInsets.only(top: 20, left: 15, right: 15),
               child: Text(
@@ -142,17 +142,38 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 20,
+              flex: 25,
               child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 20, left: 15, right: 15, bottom: 20),
+                padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    PropertyCard(imageloc: 'images/property1.jpg'),
-                    PropertyCard(imageloc: 'images/property2.jpg'),
-                    PropertyCard(imageloc: 'images/property3.jpg'),
+                  scrollDirection: Axis.vertical,
+                  physics: const BouncingScrollPhysics(),
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                      child: Text(
+                        'Properties on Sale ${Emojis.buildingConstruction}',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900,
+                            color: Color.fromARGB(255, 141, 141, 141)),
+                      ),
+                    ),
+                    PropertiesOnSale(),
+                    Divider(
+                      thickness: 1,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5, left: 15, right: 15),
+                      child: Text(
+                        'Properties on Rent ${Emojis.moneyBag}',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900,
+                            color: Color.fromARGB(255, 141, 141, 141)),
+                      ),
+                    ),
+                    PropertiesOnRent(),
                   ],
                 ),
               ),
@@ -208,6 +229,54 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+class PropertiesOnRent extends StatelessWidget {
+  const PropertiesOnRent({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 380,
+      child: ListView(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        children: [
+          PropertyCard(imageloc: 'images/property1.jpg'),
+          PropertyCard(imageloc: 'images/property2.jpg'),
+          PropertyCard(imageloc: 'images/property3.jpg'),
+        ],
+      ),
+    );
+  }
+}
+
+class PropertiesOnSale extends StatelessWidget {
+  const PropertiesOnSale({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 380,
+      child: ListView(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        // shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        children: [
+          PropertyCard(imageloc: 'images/property1.jpg'),
+          PropertyCard(imageloc: 'images/property2.jpg'),
+          PropertyCard(imageloc: 'images/property3.jpg'),
+        ],
+      ),
+    );
+  }
+}
+
 class PropertyCard extends StatelessWidget {
   final String imageloc;
   PropertyCard({required this.imageloc});
@@ -218,69 +287,67 @@ class PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    child: Image(
-                      width: 170,
-                      fit: BoxFit.cover,
-                      image: AssetImage(imageloc),
-                    ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+              left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  child: Image(
+                    width: 170,
+                    fit: BoxFit.cover,
+                    image: AssetImage(imageloc),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(
-                    'Nomaden Omah Sekut',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: Text(
+                  'Nomaden Omah Sekut',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'San Diego, California, USA',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 141, 141, 141),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    'San Diego, California, USA',
+              ),
+              Row(
+                children: [
+                  Text(
+                    "\$128 ",
                     style: TextStyle(
-                      color: Color.fromARGB(255, 141, 141, 141),
-                    ),
+                        fontSize: 18,
+                        color: Color(0xff5F9FFE),
+                        fontWeight: FontWeight.bold),
                   ),
-                ),
-                Row(
-                  children: const [
-                    Text(
-                      "\$128 ",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xff5F9FFE),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      " / Month",
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: Color.fromARGB(255, 141, 141, 141),
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                )
-              ],
-            ),
+                  Text(
+                    " / Month",
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Color.fromARGB(255, 141, 141, 141),
+                        fontWeight: FontWeight.w400),
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './screens/homescreen.dart';
+import '/screens/propertyDetailsScreen.dart';
 
 void main() {
   runApp(
@@ -12,9 +13,10 @@ void main() {
         ),
         backgroundColor: Colors.blueGrey,
       ),
-      initialRoute: HomeScreen.id,
+      initialRoute: PropertyDetailsScreen.id,
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
+        PropertyDetailsScreen.id: (context) => PropertyDetailsScreen()
       },
     ),
   );

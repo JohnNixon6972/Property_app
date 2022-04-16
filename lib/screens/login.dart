@@ -12,6 +12,7 @@ class login extends StatefulWidget {
 }
 
 class _loginState extends State<login> {
+  final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   late String email;
   late String password;
@@ -20,6 +21,7 @@ class _loginState extends State<login> {
   // String email;
   // String password;
   bool showSpinner = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,6 +110,20 @@ class _loginState extends State<login> {
                         textAlign: TextAlign.right,
                         style: kTextTitleStyle.copyWith(fontSize: 17),
                       ),
+                      onTap: () async {
+                        //     try {
+                        //   final newUser =
+                        //       await _auth.
+                        //   if (newUser != null) {
+                        //     Navigator.pushNamed(context, login.id);
+                        //   }
+                        //   setState(() {
+                        //     showSpinner = false;
+                        //   });
+                        // } catch (e) {
+                        //   print(e);
+                        // }
+                      },
                     ),
                     SizedBox(
                       height: 10,

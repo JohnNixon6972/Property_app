@@ -37,7 +37,7 @@ class _registerState extends State<register> {
             padding: EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Flexible(
                   child: Hero(
@@ -53,7 +53,7 @@ class _registerState extends State<register> {
                 Text(
                   "Personal Details :",
                   style: kTextTitleStyle.copyWith(fontSize: 18),
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(
                   height: 10,

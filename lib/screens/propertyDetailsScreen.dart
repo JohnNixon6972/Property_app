@@ -1,15 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   static const id = 'propertyDetailsScreen';
+
+  Completer<GoogleMapController> _controller = Completer();
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(14.0),
-          child: Column(
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            physics: const BouncingScrollPhysics(),
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -114,7 +132,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   children: [
                     Container(
                       height: 40,
-                      width: 160,
+                      width: 170,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(
@@ -131,7 +149,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     ),
                     Container(
                       height: 40,
-                      width: 160,
+                      width: 170,
                       decoration: BoxDecoration(
                         color: Color.fromARGB(255, 213, 213, 213),
                         borderRadius: BorderRadius.all(
@@ -156,17 +174,16 @@ class PropertyDetailsScreen extends StatelessWidget {
                 height: 10,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 90,
-                    height: 120,
+                    width: 110,
+                    height: 130,
                     decoration: BoxDecoration(
                         color: Color.fromARGB(255, 213, 213, 213),
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 10),
+                      padding: const EdgeInsets.all(15),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -195,13 +212,13 @@ class PropertyDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 90,
-                    height: 120,
+                    width: 110,
+                    height: 130,
                     decoration: BoxDecoration(
                         color: Color.fromARGB(255, 213, 213, 213),
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -230,13 +247,13 @@ class PropertyDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 90,
-                    height: 120,
+                    width: 110,
+                    height: 130,
                     decoration: BoxDecoration(
                         color: Color.fromARGB(255, 213, 213, 213),
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(15.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -272,7 +289,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 15),
+                        horizontal: 10.0, vertical: 20),
                     child: CircleAvatar(
                       backgroundImage: AssetImage('images/profile_img2.jpg'),
                     ),
@@ -326,9 +343,9 @@ class PropertyDetailsScreen extends StatelessWidget {
                   )
                 ],
               ),
-              lis(
+              Container(
                 child: Container(
-                  padding: EdgeInsets.only(top: 18, bottom: 18),
+                  padding: EdgeInsets.only(top: 8, bottom: 18),
                   height: 250,
                   width: double.infinity,
                   child: ClipRRect(
@@ -344,7 +361,14 @@ class PropertyDetailsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
+              Container(
+                height: 200,
+                width: 400,
+                child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(-33.870840, 151.206286), zoom: 12)),
+              ),
             ],
           ),
         ),

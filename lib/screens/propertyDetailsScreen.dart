@@ -362,13 +362,13 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                height: 200,
-                width: 400,
-                child: GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                        target: LatLng(-33.870840, 151.206286), zoom: 12)),
-              ),
+              // Container(
+              //   height: 200,
+              //   width: 400,
+              //   child: GoogleMap(
+              //       initialCameraPosition: CameraPosition(
+              //           target: LatLng(-33.870840, 151.206286), zoom: 12)),
+              // ),
             ],
           ),
         ),

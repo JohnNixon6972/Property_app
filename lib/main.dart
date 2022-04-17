@@ -13,7 +13,7 @@ void main() {
         ),
         backgroundColor: Colors.blueGrey,
       ),
-      initialRoute: PropertyDetailsScreen.id,
+      initialRoute: HomeScreen.id,
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
         PropertyDetailsScreen.id: (context) => PropertyDetailsScreen()

@@ -63,7 +63,7 @@ class _loginScreenState extends State<loginScreen> {
                       height: 20,
                     ),
                     TextFormField(
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.emailAddress,
                       textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.blue.shade900),
                       validator: (value) {

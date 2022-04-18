@@ -25,7 +25,7 @@ class _loginScreenState extends State<loginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 251, 246, 246),
+      backgroundColor: kPageBackgroundColor,
       body: SafeArea(
         child: ModalProgressHUD(
             inAsyncCall: showSpinner,
@@ -65,7 +65,7 @@ class _loginScreenState extends State<loginScreen> {
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.blue.shade900),
+                      style: TextStyle(color: kPrimaryButtonColor),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter valid text';
@@ -77,7 +77,8 @@ class _loginScreenState extends State<loginScreen> {
                       },
                       decoration: kTextFieldDecoration.copyWith(
                         hintText: 'Enter your Email Address.',
-                        prefixIcon: Icon(Icons.email, color: Color(0XFF4ECED5)),
+                        prefixIcon:
+                            Icon(Icons.email, color: kNavigationIconColor),
                       ),
                     ),
                     SizedBox(
@@ -86,7 +87,7 @@ class _loginScreenState extends State<loginScreen> {
                     TextFormField(
                       keyboardType: TextInputType.visiblePassword,
                       textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.blue.shade900),
+                      style: TextStyle(color: kPrimaryButtonColor),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter valid text';
@@ -98,7 +99,8 @@ class _loginScreenState extends State<loginScreen> {
                       },
                       decoration: kTextFieldDecoration.copyWith(
                         hintText: 'Enter your Password.',
-                        prefixIcon: Icon(Icons.lock, color: Color(0XFF4ECED5)),
+                        prefixIcon:
+                            Icon(Icons.lock, color: kNavigationIconColor),
                       ),
                     ),
                     SizedBox(
@@ -140,7 +142,7 @@ class _loginScreenState extends State<loginScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0XFF4ECED5),
+                        primary: kPrimaryButtonColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

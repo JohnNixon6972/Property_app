@@ -2,6 +2,8 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:property_app/screens/profileScreen.dart';
+import 'package:property_app/screens/propertyDetailsScreen.dart';
 import '../constants.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -105,7 +107,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Padding(
                 padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                 child: Row(
@@ -147,7 +149,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 25,
+              flex: 28,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
@@ -184,64 +186,72 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 3,
-              child: Container(
-                decoration:
-                    BoxDecoration(color: kBottomNavigationBackgroundColor),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircleAvatar(
-                      radius: 25,
-                      backgroundColor: kHighlightedTextColor,
-                      child: Icon(
-                        Icons.home,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.bookmark,
-                        color: kNavigationIconColor,
-                        size: 40,
-                      ),
-                    ),
-                    AvatarGlow(
-                      glowColor: kHighlightedTextColor,
-                      endRadius: 40,
-                      duration: Duration(milliseconds: 2000),
-                      repeat: true,
-                      // showTwoGlows: true,
-                      repeatPauseDuration: Duration(milliseconds: 200),
-                      child: CircleAvatar(
-                        backgroundColor: Color.fromARGB(255, 188, 188, 188),
-                        child: Icon(
-                          Icons.add,
-                          size: 40,
-                          color: Colors.white,
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
+                child: Material(
+                  color: kBottomNavigationBackgroundColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                  elevation: 3,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: kHighlightedTextColor,
+                          child: Icon(
+                            Icons.home,
+                            color: Colors.white,
+                            size: 40,
+                          ),
                         ),
-                        // radius: 40.0,
-                      ),
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.bookmark,
+                            color: kNavigationIconColor,
+                            size: 40,
+                          ),
+                        ),
+                        AvatarGlow(
+                          glowColor: kHighlightedTextColor,
+                          endRadius: 40,
+                          duration: Duration(milliseconds: 2000),
+                          repeat: true,
+                          // showTwoGlows: true,
+                          repeatPauseDuration: Duration(milliseconds: 200),
+                          child: CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 188, 188, 188),
+                            child: Icon(
+                              Icons.add,
+                              size: 40,
+                              color: Colors.white,
+                            ),
+                            // radius: 40.0,
+                          ),
+                        ),
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.navigation_rounded,
+                            color: kNavigationIconColor,
+                            size: 40,
+                          ),
+                        ),
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.man_rounded,
+                            color: kNavigationIconColor,
+                            size: 40,
+                          ),
+                        )
+                      ],
                     ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.navigation_rounded,
-                        color: kNavigationIconColor,
-                        size: 40,
-                      ),
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.man_rounded,
-                        color: kNavigationIconColor,
-                        size: 40,
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
             )
@@ -367,6 +377,28 @@ class PropertyCard extends StatelessWidget {
                         fontSize: 12,
                         color: kSubCategoryColor,
                         fontWeight: FontWeight.w400),
+                  )
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                // textDirection: ,
+                children: [
+                  SizedBox(
+                    width: 80,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, PropertyDetailsScreen.id);
+                      },
+                      child: Text(
+                        'View Details',
+                        style: TextStyle(color: kPrimaryButtonColor),
+                      ),
+                    ),
                   )
                 ],
               )

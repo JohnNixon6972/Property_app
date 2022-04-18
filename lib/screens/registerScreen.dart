@@ -31,6 +31,7 @@ class _registerScreenState extends State<registerScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: kPageBackgroundColor,
         body: Form(
           key: _formKey,
           child: Padding(
@@ -61,7 +62,7 @@ class _registerScreenState extends State<registerScreen> {
                 TextFormField(
                   keyboardType: TextInputType.name,
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.blue.shade900),
+                  style: TextStyle(color: kPrimaryButtonColor),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter valid text';
@@ -73,7 +74,7 @@ class _registerScreenState extends State<registerScreen> {
                   },
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your Name.',
-                    prefixIcon: Icon(Icons.badge, color: Color(0XFF4ECED5)),
+                    prefixIcon: Icon(Icons.badge, color: kNavigationIconColor),
                   ),
                 ),
                 SizedBox(
@@ -82,7 +83,7 @@ class _registerScreenState extends State<registerScreen> {
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.blue.shade900),
+                  style: TextStyle(color: kPrimaryButtonColor),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter valid text';
@@ -94,7 +95,7 @@ class _registerScreenState extends State<registerScreen> {
                   },
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your Mobile Number.',
-                    prefixIcon: Icon(Icons.phone, color: Color(0XFF4ECED5)),
+                    prefixIcon: Icon(Icons.phone, color: kNavigationIconColor),
                   ),
                 ),
                 SizedBox(
@@ -103,7 +104,7 @@ class _registerScreenState extends State<registerScreen> {
                 TextFormField(
                   keyboardType: TextInputType.phone,
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.blue.shade900),
+                  style: TextStyle(color: kPrimaryButtonColor),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter valid text';
@@ -115,7 +116,7 @@ class _registerScreenState extends State<registerScreen> {
                   },
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your Email Address.',
-                    prefixIcon: Icon(Icons.email, color: Color(0XFF4ECED5)),
+                    prefixIcon: Icon(Icons.email, color: kNavigationIconColor),
                   ),
                 ),
                 SizedBox(
@@ -124,7 +125,7 @@ class _registerScreenState extends State<registerScreen> {
                 TextFormField(
                   keyboardType: TextInputType.visiblePassword,
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.blue.shade900),
+                  style: TextStyle(color: kPrimaryButtonColor),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter valid text';
@@ -136,7 +137,7 @@ class _registerScreenState extends State<registerScreen> {
                   },
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your Password.',
-                    prefixIcon: Icon(Icons.lock, color: Color(0XFF4ECED5)),
+                    prefixIcon: Icon(Icons.lock, color: kNavigationIconColor),
                   ),
                 ),
                 SizedBox(
@@ -307,7 +308,7 @@ class _registerScreenState extends State<registerScreen> {
                     // }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0XFF4ECED5),
+                    primary: kPrimaryButtonColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),

@@ -37,6 +37,7 @@ dependencies:
   flutter_emoji: ">= 2.0.0"
   emojis: ^0.9.9
   google_maps_flutter: ^2.1.3
+  avatar_glow: ^2.0.2
 
 dev_dependencies:
   flutter_test:

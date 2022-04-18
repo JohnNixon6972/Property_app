@@ -1,13 +1,18 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
+import 'package:avatar_glow/avatar_glow.dart';
+import '../constants.dart';
 
 class HomeScreen extends StatelessWidget {
   static const id = 'homeScreen';
+  late AnimationController _animationController;
+  late Animation _animation;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 236, 236, 236),
+      backgroundColor: kPageBackgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,15 +29,15 @@ class HomeScreen extends StatelessWidget {
                         Text(
                           'Hey Marimar ${Emojis.wavingHandLightSkinTone}',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(255, 151, 151, 151),
+                            color: kSubCategoryColor,
                           ),
                         ),
                         Text(
                           "Let's find your your best residence!",
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -107,28 +112,28 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: const [
                     CategoryCard(
-                      btn_color: Color.fromARGB(255, 38, 38, 38),
+                      btn_color: kPrimaryButtonColor,
                       text: 'All',
                       width: 60,
                       text_color: Colors.white,
                     ),
                     CategoryCard(
-                      btn_color: Color.fromARGB(255, 236, 236, 236),
+                      btn_color: kSecondaryButtonColor,
                       text: 'Appartment',
                       width: 90,
-                      text_color: Color.fromARGB(255, 141, 141, 141),
+                      text_color: kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: Color.fromARGB(255, 236, 236, 236),
+                      btn_color: kSecondaryButtonColor,
                       text: 'Townhouse',
                       width: 90,
-                      text_color: Color.fromARGB(255, 141, 141, 141),
+                      text_color: kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: Color.fromARGB(255, 236, 236, 236),
+                      btn_color: kSecondaryButtonColor,
                       text: 'Villa',
                       width: 60,
-                      text_color: Color.fromARGB(255, 141, 141, 141),
+                      text_color: kSubCategoryColor,
                     ),
                   ],
                 ),
@@ -148,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.vertical,
                   physics: const BouncingScrollPhysics(),
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.only(top: 10, left: 15, right: 15),
                       child: Text(
@@ -156,7 +161,7 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w900,
-                            color: Color.fromARGB(255, 141, 141, 141)),
+                            color: kSubCategoryColor),
                       ),
                     ),
                     PropertiesOnSale(),
@@ -170,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w900,
-                            color: Color.fromARGB(255, 141, 141, 141)),
+                            color: kSubCategoryColor),
                       ),
                     ),
                     PropertiesOnRent(),
@@ -181,41 +186,59 @@ class HomeScreen extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Container(
-                decoration: BoxDecoration(color: Colors.white),
+                decoration:
+                    BoxDecoration(color: kBottomNavigationBackgroundColor),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
+                  children: [
                     CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Color(0xff5F9FFE),
+                      radius: 25,
+                      backgroundColor: kHighlightedTextColor,
                       child: Icon(
                         Icons.home,
                         color: Colors.white,
-                        size: 50,
+                        size: 40,
                       ),
                     ),
                     CircleAvatar(
                       backgroundColor: Colors.white,
                       child: Icon(
                         Icons.bookmark,
-                        color: Color.fromARGB(255, 188, 188, 188),
-                        size: 50,
+                        color: kNavigationIconColor,
+                        size: 40,
+                      ),
+                    ),
+                    AvatarGlow(
+                      glowColor: kHighlightedTextColor,
+                      endRadius: 40,
+                      duration: Duration(milliseconds: 2000),
+                      repeat: true,
+                      // showTwoGlows: true,
+                      repeatPauseDuration: Duration(milliseconds: 200),
+                      child: CircleAvatar(
+                        backgroundColor: Color.fromARGB(255, 188, 188, 188),
+                        child: Icon(
+                          Icons.add,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                        // radius: 40.0,
                       ),
                     ),
                     CircleAvatar(
                       backgroundColor: Colors.white,
                       child: Icon(
                         Icons.navigation_rounded,
-                        color: Color.fromARGB(255, 188, 188, 188),
-                        size: 50,
+                        color: kNavigationIconColor,
+                        size: 40,
                       ),
                     ),
                     CircleAvatar(
                       backgroundColor: Colors.white,
                       child: Icon(
                         Icons.man_rounded,
-                        color: Color.fromARGB(255, 188, 188, 188),
-                        size: 50,
+                        color: kNavigationIconColor,
+                        size: 40,
                       ),
                     )
                   ],
@@ -291,7 +314,7 @@ class PropertyCard extends StatelessWidget {
       padding: const EdgeInsets.only(right: 8.0),
       child: Container(
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
             Radius.circular(20),
           ),
@@ -325,7 +348,7 @@ class PropertyCard extends StatelessWidget {
                 child: Text(
                   'San Diego, California, USA',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 141, 141, 141),
+                    color: kSubCategoryColor,
                   ),
                 ),
               ),
@@ -335,14 +358,14 @@ class PropertyCard extends StatelessWidget {
                     "\$128 ",
                     style: TextStyle(
                         fontSize: 18,
-                        color: Color(0xff5F9FFE),
+                        color: kHighlightedTextColor,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     " / Month",
                     style: TextStyle(
                         fontSize: 12,
-                        color: Color.fromARGB(255, 141, 141, 141),
+                        color: kSubCategoryColor,
                         fontWeight: FontWeight.w400),
                   )
                 ],
@@ -369,7 +392,7 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 2,
+      elevation: 5,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       child: Container(
         height: 45,
@@ -377,7 +400,7 @@ class CategoryCard extends StatelessWidget {
         // margin: EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(
-            color: const Color.fromARGB(255, 173, 173, 173),
+            color: kSecondaryButtonColor,
           ),
           color: btn_color,
           borderRadius: const BorderRadius.all(

@@ -3,16 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
-import 'package:property_app/screens/register.dart';
+import 'package:property_app/screens/registerScreen.dart';
 
-class login extends StatefulWidget {
+class loginScreen extends StatefulWidget {
   static const String id = 'login';
   @override
-  State<login> createState() => _loginState();
+  State<loginScreen> createState() => _loginScreenState();
 }
 
-class _loginState extends State<login> {
-  final _auth = FirebaseAuth.instance;
+class _loginScreenState extends State<loginScreen> {
+  // final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   late String email;
   late String password;
@@ -169,7 +169,7 @@ class _loginState extends State<login> {
                         ],
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, register.id);
+                        Navigator.pushNamed(context, registerScreen.id);
                       },
                     ),
                   ],

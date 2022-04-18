@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:property_app/constants.dart';
-import 'package:property_app/screens/login.dart';
+import 'package:property_app/screens/loginScreen.dart';
 
-class register extends StatefulWidget {
+class registerScreen extends StatefulWidget {
   static const String id = 'register';
 
   @override
-  State<register> createState() => _registerState();
+  State<registerScreen> createState() => _registerScreenState();
 }
 
-class _registerState extends State<register> {
+class _registerScreenState extends State<registerScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final _auth = FirebaseAuth.instance;
+  // final _auth = FirebaseAuth.instance;
   late String name;
   late String email;
   late String mobileNumber;
@@ -292,19 +292,19 @@ class _registerState extends State<register> {
                         const SnackBar(content: Text('Processing Data')),
                       );
                     }
-                    try {
-                      final newUser =
-                          await _auth.createUserWithEmailAndPassword(
-                              email: email, password: password);
-                      if (newUser != null) {
-                        Navigator.pushNamed(context, login.id);
-                      }
-                      setState(() {
-                        showSpinner = false;
-                      });
-                    } catch (e) {
-                      print(e);
-                    }
+                    // try {
+                    //   final newUser =
+                    //       await _auth.createUserWithEmailAndPassword(
+                    //           email: email, password: password);
+                    //   if (newUser != null) {
+                    //     Navigator.pushNamed(context, login.id);
+                    //   }
+                    //   setState(() {
+                    //     showSpinner = false;
+                    //   });
+                    // } catch (e) {
+                    //   print(e);
+                    // }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color(0XFF4ECED5),
@@ -317,24 +317,27 @@ class _registerState extends State<register> {
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
-                // RoundButton(
-                //   color: Color(0XFF4ECED5),
-                //   buttonTitle: 'Register',
-                //   onPrssed: () async {
-                //     if (_formKey.currentState!.validate()) {
-                //       // If the form is valid, display a snackbar. In the real world,
-                //       // you'd often call a server or save the information in a database.
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         const SnackBar(content: Text('Processing Data')),
-                //       );
-                //     }
-                //     setState(() {
-                //       showSpinner = true;
-                //       Navigator.pushNamed(context, register.id);
-
-                //     });
-                //   },
-                // ),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      simpleTexts(
+                        texts: 'Already have an account?',
+                        styleConstant: kTextSubTitleStyle,
+                      ),
+                      simpleTexts(
+                        texts: 'Sign In',
+                        styleConstant: kTextTitleStyle.copyWith(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, loginScreen.id);
+                  },
+                ),
               ],
             ),
           ),

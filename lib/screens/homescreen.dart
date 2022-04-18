@@ -2,8 +2,10 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -141,47 +143,93 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 20, left: 15, right: 15),
-              child: Text(
-                'Best for you ${Emojis.smilingFaceWithHeartEyes}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
+
             Expanded(
-              flex: 28,
+              flex: 32,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-                      child: Text(
-                        'Properties on Sale ${Emojis.buildingConstruction}',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w900,
-                            color: kSubCategoryColor),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        child: Text(
+                          'Best for you ${Emojis.smilingFaceWithHeartEyes}',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    PropertiesOnSale(),
-                    Divider(
-                      thickness: 1,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5, left: 15, right: 15),
-                      child: Text(
-                        'Properties on Rent ${Emojis.moneyBag}',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w900,
-                            color: kSubCategoryColor),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: 15.0, left: 15.0, right: 15.0),
+                          child: Row(
+                            children: [
+                              ToggleSwitch(
+                                minHeight: 30,
+                                minWidth: 50,
+                                cornerRadius: 20.0,
+                                activeBgColors: [
+                                  const [kHighlightedTextColor],
+                                  [Colors.red[900]!]
+                                ],
+                                activeFgColor: Colors.white,
+                                inactiveBgColor: kNavigationIconColor,
+                                inactiveFgColor: Colors.white,
+                                initialLabelIndex: 1,
+                                totalSwitches: 2,
+                                labels: ['Yes', 'No'],
+                                radiusStyle: true,
+                                onToggle: (index) {
+                                  print('switched to: $index');
+                                },
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Center(
+                                  child: Text(
+                                    "Show admin Only Properties",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: kHighlightedTextColor),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    PropertiesOnRent(),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                        child: Text(
+                          'Properties on Sale ${Emojis.buildingConstruction}',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w900,
+                              color: kSubCategoryColor),
+                        ),
+                      ),
+                      PropertiesOnSale(),
+                      Divider(
+                        thickness: 1,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5, left: 15, right: 15),
+                        child: Text(
+                          'Properties on Rent ${Emojis.moneyBag}',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w900,
+                              color: kSubCategoryColor),
+                        ),
+                      ),
+                      PropertiesOnRent(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -208,12 +256,18 @@ class HomeScreen extends StatelessWidget {
                             size: 40,
                           ),
                         ),
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.bookmark,
-                            color: kNavigationIconColor,
-                            size: 40,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, BookmarkedPropertiesScreen.id);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(
+                              Icons.bookmark,
+                              color: kNavigationIconColor,
+                              size: 40,
+                            ),
                           ),
                         ),
                         AvatarGlow(

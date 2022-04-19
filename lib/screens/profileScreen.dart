@@ -20,13 +20,6 @@ class _profileScreenState extends State<profileScreen> {
   late String state;
   late String country;
   late String postalCode;
-  var items = [
-    'Working a lot harder',
-    'Being a lot smarter',
-    'Being a self-starter',
-    'Placed in charge of trading charter'
-  ];
-  final TextEditingController _controller = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +31,7 @@ class _profileScreenState extends State<profileScreen> {
           child: FormField(
             key: _formKey,
             builder: (FormFieldState<dynamic> field) {
+              var selectedValue;
               return Column(
                 children: [
                   Container(
@@ -144,7 +138,8 @@ class _profileScreenState extends State<profileScreen> {
                     },
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Address line 1',
-                      prefixIcon: Icon(Icons.home, color: kNavigationIconColor),
+                      prefixIcon:
+                          Icon(Icons.home, color: kNavigationIconColor),
                     ),
                   ),
                   SizedBox(
@@ -259,18 +254,6 @@ class _profileScreenState extends State<profileScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  // PopupMenuButton(
-                  //   icon: const Icon(Icons.arrow_drop_down),
-                  //   onSelected: (String value) {
-                  //     _controller.text = value;
-                  //   },
-                  //   itemBuilder: (BuildContext context) {
-                  //     return items.map<PopupMenuItem<String>>((String value) {
-                  //       return new PopupMenuItem(
-                  //           child: new Text(value), value: value);
-                  //     }).toList();
-                  //   },
-                  // )
                 ],
               );
             },

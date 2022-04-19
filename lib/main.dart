@@ -14,13 +14,13 @@ class PropertyApp extends StatelessWidget {
     // Firebase.initializeApp();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.id,
+      initialRoute: profileScreen.id,
       routes: {
         loginScreen.id: (context) => loginScreen(),
         registerScreen.id: (context) => registerScreen(),
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
-        PropertyDetailsScreen.id: (context) => PropertyDetailsScreen()
+        PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
       },
       home: Scaffold(
         appBar: AppBar(

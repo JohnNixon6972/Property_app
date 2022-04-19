@@ -102,7 +102,7 @@ class BottomPageNavigationBar extends StatelessWidget {
                         ? kHighlightedTextColor
                         : kBottomNavigationBackgroundColor,
                     child: Icon(
-                      Icons.account_circle_outlined,
+                      Icons.account_circle_rounded,
                       color: page == profileScreen.id
                           ? Colors.white
                           : kNavigationIconColor,

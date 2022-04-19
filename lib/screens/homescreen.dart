@@ -7,6 +7,7 @@ import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
+import '../components/bottomNavigationBar.dart';
 
 class HomeScreen extends StatelessWidget {
   static const id = 'homeScreen';
@@ -235,82 +236,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              flex: 4,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
-                child: Material(
-                  color: kBottomNavigationBackgroundColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
-                  ),
-                  elevation: 3,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: kHighlightedTextColor,
-                          child: Icon(
-                            Icons.home,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, BookmarkedPropertiesScreen.id);
-                          },
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(
-                              Icons.bookmark,
-                              color: kNavigationIconColor,
-                              size: 40,
-                            ),
-                          ),
-                        ),
-                        AvatarGlow(
-                          glowColor: kHighlightedTextColor,
-                          endRadius: 40,
-                          duration: Duration(milliseconds: 2000),
-                          repeat: true,
-                          // showTwoGlows: true,
-                          repeatPauseDuration: Duration(milliseconds: 200),
-                          child: CircleAvatar(
-                            backgroundColor: Color.fromARGB(255, 188, 188, 188),
-                            child: Icon(
-                              Icons.add,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                            // radius: 40.0,
-                          ),
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.navigation_rounded,
-                            color: kNavigationIconColor,
-                            size: 40,
-                          ),
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.man_rounded,
-                            color: kNavigationIconColor,
-                            size: 40,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )
+            BottomPageNavigationBar(
+              flex_by: 4,page: HomeScreen.id,
+            ),
           ],
         ),
       ),

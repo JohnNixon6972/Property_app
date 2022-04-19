@@ -16,7 +16,7 @@ class PropertyApp extends StatelessWidget {
     // Firebase.initializeApp();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.id,
+      initialRoute: profileScreen.id,
       routes: {
         loginScreen.id: (context) => loginScreen(),
         registerScreen.id: (context) => registerScreen(),

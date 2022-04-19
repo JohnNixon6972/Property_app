@@ -12,6 +12,8 @@ class HomeScreen extends StatelessWidget {
   static const id = 'homeScreen';
   late AnimationController _animationController;
   late Animation _animation;
+  late Color bookmarkIconColor;
+  late IconData icn;
 
   @override
   Widget build(BuildContext context) {
@@ -348,7 +350,7 @@ class PropertiesOnSale extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 380,
+      height: 400,
       child: ListView(
         padding: EdgeInsets.symmetric(vertical: 10),
         // shrinkWrap: true,
@@ -364,12 +366,21 @@ class PropertiesOnSale extends StatelessWidget {
   }
 }
 
-class PropertyCard extends StatelessWidget {
+class PropertyCard extends StatefulWidget {
   final String imageloc;
   PropertyCard({required this.imageloc});
+
+  @override
+  State<PropertyCard> createState() => _PropertyCardState();
+}
+
+class _PropertyCardState extends State<PropertyCard> {
+  late Color bookmarkIconColor = kSubCategoryColor;
+  late IconData bookmarkIconName = Icons.bookmark;
+  late bool bookedmark = false;
   @override
   void initState() {
-    print(imageloc);
+    print(widget.imageloc);
   }
 
   @override
@@ -377,6 +388,7 @@ class PropertyCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: Container(
+        width: 180,
         decoration: const BoxDecoration(
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
@@ -396,7 +408,7 @@ class PropertyCard extends StatelessWidget {
                   child: Image(
                     width: 170,
                     fit: BoxFit.cover,
-                    image: AssetImage(imageloc),
+                    image: AssetImage(widget.imageloc),
                   ),
                 ),
               ),
@@ -435,25 +447,41 @@ class PropertyCard extends StatelessWidget {
                 ],
               ),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
+                // crossAxisAlignment: CrossAxisAlignment.end,
+                // mainAxisAlignment: MainAxisAlignment.end,
                 // textDirection: ,
                 children: [
-                  SizedBox(
-                    width: 80,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, PropertyDetailsScreen.id);
-                      },
-                      child: Text(
-                        'View Details',
-                        style: TextStyle(color: kPrimaryButtonColor),
-                      ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, PropertyDetailsScreen.id);
+                    },
+                    child: Text(
+                      'View Details',
+                      style: TextStyle(color: kPrimaryButtonColor),
                     ),
-                  )
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        icon:
+                        Icon(
+                          Icons.bookmark,
+                          color: kPrimaryButtonColor,
+                        );
+                      });
+                    },
+                    // bookmarkIconColor: bookedmark == true
+                    //     ? kSubCategoryColor
+                    //     : kPrimaryButtonColor,
+                    // bookmarkIconName: bookedmark == true
+                    //     ? Icons.bookmark
+                    //     : Icons.bookmark_outline,
+                    icon: Icon(
+                      Icons.bookmark_outline,
+                      color: kSubCategoryColor,
+                    ),
+                  ),
                 ],
               )
             ],

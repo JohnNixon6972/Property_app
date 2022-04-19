@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:sticky_headers/sticky_headers.dart';
 import '../constants.dart';
 import 'dart:math';
 import 'propertyDetailsScreen.dart';
@@ -11,7 +12,7 @@ class BookmarkedPropertiesScreen extends StatelessWidget {
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(14),
+          padding: const EdgeInsets.all(14),
           child: Column(
             children: [
               Row(
@@ -23,16 +24,16 @@ class BookmarkedPropertiesScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.expand_less_rounded,
                         size: 30,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 50,
                   ),
-                  Center(
+                  const Center(
                     child: Text(
                       'BookMarked Properties',
                       style: TextStyle(
@@ -40,15 +41,36 @@ class BookmarkedPropertiesScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: kHighlightedTextColor),
                     ),
-                  )
+                  ),
                 ],
               ),
-              ListView(
-                scrollDirection: Axis.vertical,
-                children: [
-                  BookmarkedProperties(),
-                ],
-              )
+              const Divider(
+                thickness: 1,
+                indent: 70,
+                endIndent: 70,
+                color: kSubCategoryColor,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      BookmarkedProperties(),
+                      Divider(
+                        thickness: 1,
+                        color: kNavigationIconColor,
+                      ),
+                      BookmarkedProperties(),
+                      Divider(
+                        thickness: 1,
+                        color: kNavigationIconColor,
+                      ),
+                      BookmarkedProperties(),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -71,17 +93,18 @@ class BookmarkedProperties extends StatelessWidget {
           Radius.circular(20),
         ),
       ),
-      height: 320,
+      height: 350,
+      // width: 300,
       child: Padding(
         padding: const EdgeInsets.only(
             left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 10),
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
                 child: Image(
                   // width: 170,
                   fit: BoxFit.cover,
@@ -107,14 +130,14 @@ class BookmarkedProperties extends StatelessWidget {
             ),
             Row(
               children: [
-                Text(
+                const Text(
                   "\$128 ",
                   style: TextStyle(
                       fontSize: 18,
                       color: kHighlightedTextColor,
                       fontWeight: FontWeight.bold),
                 ),
-                Text(
+                const Text(
                   " / Month",
                   style: TextStyle(
                       fontSize: 12,
@@ -128,7 +151,7 @@ class BookmarkedProperties extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               // textDirection: ,
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 80,
                 ),
                 Padding(
@@ -137,14 +160,14 @@ class BookmarkedProperties extends StatelessWidget {
                     onTap: () {
                       Navigator.pushNamed(context, PropertyDetailsScreen.id);
                     },
-                    child: Text(
+                    child: const Text(
                       'View Details',
                       style: TextStyle(color: kPrimaryButtonColor),
                     ),
                   ),
                 )
               ],
-            )
+            ),
           ],
         ),
       ),

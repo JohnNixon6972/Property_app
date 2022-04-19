@@ -1,5 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
+import 'dart:math';
+import 'package:avatar_glow/avatar_glow.dart';
+import '../components/bottomNavigationBar.dart';
 
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';
@@ -26,240 +32,315 @@ class _profileScreenState extends State<profileScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: kPageBackgroundColor,
-        body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: FormField(
-            key: _formKey,
-            builder: (FormFieldState<dynamic> field) {
-              var selectedValue;
-              return Column(
-                children: [
-                  Container(
-                    height: 200,
-                    margin: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      //decoration for the outer wrapper
-                      color: kPrimaryButtonColor,
-                      borderRadius: BorderRadius.circular(
-                          30), //border radius exactly to ClipRRect
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5), //color of shadow
-                          spreadRadius: 5, //spread radius
-                          blurRadius: 7, // blur radius
-                          offset: Offset(0, 2), // changes position of shadow
-                          //first paramerter of offset is left-right
-                          //second parameter is top to down
-                        ),
-                        //you can set more BoxShadow() here
-                      ],
-                    ),
-                    child: ClipRRect(
-                      //to clip overflown positioned containers.
-                      borderRadius: BorderRadius.circular(30),
-                      //if we set border radius on container, the overflown content get displayed at corner.
-                      child: Container(
-                        child: Stack(
-                          children: <Widget>[
-                            //Stack helps to overlap widgets
-                            Positioned(
-                              //positioned helps to position widget wherever we want.
-                              top: -20,
-                              left: -50, //position of the widget
-                              child: Container(
-                                height: 250,
-                                width: 250,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: kBottomNavigationBackgroundColor
-                                        .withOpacity(
-                                            0.5) //background color with opacity
-                                    ),
-                              ),
-                            ),
-
-                            Positioned(
-                              left: -80,
-                              top: -50,
-                              child: Container(
-                                height: 180,
-                                width: 180,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: kPageBackgroundColor,
-                                ),
-                              ),
-                            ),
-
-                            Positioned(
-                              //main content container postition.
-                              child: Container(
-                                height: 250,
-                                alignment: Alignment.bottomCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(80)),
-                                    child: Image(
-                                      width: 100,
-                                      fit: BoxFit.cover,
-                                      image: AssetImage("images/try8.jpg"),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+        body: Column(
+          children: [
+            Stack(
+              overflow: Overflow.visible,
+              children: [
+                Image(
+                  width: double.infinity,
+                  // height: 250,
+                  image: AssetImage('images/propertyDetailed1.jpg'),
+                ),
+                Positioned(
+                    bottom: -60,
+                    left: 135,
+                    // ignore: prefer_const_constructors
+                    child: CircleAvatar(
+                      backgroundColor: kPageBackgroundColor,
+                      radius: 58,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(55),
+                        child: Image(
+                          height: 110,
+                          width: 110,
+                          image: AssetImage('images/profile_img1.jpg'),
                         ),
                       ),
+                    ))
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 65, bottom: 18),
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      'Devon Lane',
+                      style: TextStyle(
+                          color: kHighlightedTextColor,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          wordSpacing: -1),
                     ),
-                  ),
-                  Text(
-                    "Address :",
-                    style: kTextTitleStyle.copyWith(fontSize: 18),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: kPrimaryButtonColor),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter valid text';
-                      } else {
-                        addressLine1 = value;
-                      }
-
-                      return null;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Address line 1',
-                      prefixIcon:
-                          Icon(Icons.home, color: kNavigationIconColor),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: kPrimaryButtonColor),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter valid text';
-                      } else {
-                        addressLine2 = value;
-                      }
-
-                      return null;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Address line 2',
-                      prefixIcon:
-                          Icon(Icons.house, color: kNavigationIconColor),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: kPrimaryButtonColor),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter valid text';
-                      } else {
-                        city = value;
-                      }
-
-                      return null;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'City',
-                      prefixIcon: Icon(Icons.location_city,
-                          color: kNavigationIconColor),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: kPrimaryButtonColor),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter valid text';
-                      } else {
-                        state = value;
-                      }
-
-                      return null;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'State',
-                      prefixIcon:
-                          Icon(Icons.cabin, color: kNavigationIconColor),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: kPrimaryButtonColor),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter valid text';
-                      } else {
-                        country = value;
-                      }
-
-                      return null;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Country',
-                      prefixIcon:
-                          Icon(Icons.countertops, color: kNavigationIconColor),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.streetAddress,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: kPrimaryButtonColor),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter valid text';
-                      } else {
-                        postalCode = value;
-                      }
-
-                      return null;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Postal code',
-                      prefixIcon: Icon(Icons.code, color: kNavigationIconColor),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              );
-            },
-          ),
+                    Text(
+                      'weaver@example.com',
+                      style: TextStyle(
+                          color: kSubCategoryColor,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            ProfileDetailsContainer(
+              icon: Icons.account_circle_outlined,
+              Title: "Personal Information",
+              SubTitle: "Devon Lane",
+            ),
+            ProfileDetailsContainer(
+              icon: Icons.alternate_email_outlined,
+              Title: "Email",
+              SubTitle: "weaver@email.com",
+            ),
+            ProfileDetailsContainer(
+              icon: Icons.call_outlined,
+              Title: "Phone",
+              SubTitle: "(217) 555-0113",
+            ),
+            ProfileDetailsContainer(
+              icon: Icons.lock_outlined,
+              Title: "Password",
+              SubTitle: "Last updated March 25,2020",
+            ),
+            ProfileDetailsContainer(
+              icon: Icons.settings,
+              Title: "Settings",
+              SubTitle: "Custom",
+            ),
+            BottomPageNavigationBar(
+              flex_by: 1,page: profileScreen.id,
+            ),
+          ],
         ),
       ),
     );
   }
 }
+
+class ProfileDetailsContainer extends StatelessWidget {
+  final IconData icon;
+  final String Title;
+  final String SubTitle;
+  ProfileDetailsContainer(
+      {required this.icon, required this.Title, required this.SubTitle});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: kBottomNavigationBackgroundColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        height: 70,
+        // color: kSecondaryButtonColor,
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: CircleAvatar(
+                radius: 25,
+                backgroundColor: kPageBackgroundColor,
+                child: Icon(
+                  icon,
+                  size: 32,
+                  color: kNavigationIconColor,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      Title,
+                      style: TextStyle(
+                          color: kHighlightedTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Text(
+                    SubTitle,
+                    style: TextStyle(
+                        color: kNavigationIconColor,
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: Transform.rotate(
+                angle: 90 * pi / 180,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.expand_less_rounded,
+                    color: kNavigationIconColor,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+// Text(
+//                     "Address :",
+//                     style: kTextTitleStyle.copyWith(fontSize: 18),
+//                     textAlign: TextAlign.left,
+//                   ),
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+//                   TextFormField(
+//                     keyboardType: TextInputType.streetAddress,
+//                     textAlign: TextAlign.left,
+//                     style: TextStyle(color: kPrimaryButtonColor),
+//                     validator: (value) {
+//                       if (value == null || value.isEmpty) {
+//                         return 'Please enter valid text';
+//                       } else {
+//                         addressLine1 = value;
+//                       }
+
+//                       return null;
+//                     },
+//                     decoration: kTextFieldDecoration.copyWith(
+//                       hintText: 'Address line 1',
+//                       prefixIcon:
+//                           Icon(Icons.home, color: kNavigationIconColor),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+//                   TextFormField(
+//                     keyboardType: TextInputType.streetAddress,
+//                     textAlign: TextAlign.left,
+//                     style: TextStyle(color: kPrimaryButtonColor),
+//                     validator: (value) {
+//                       if (value == null || value.isEmpty) {
+//                         return 'Please enter valid text';
+//                       } else {
+//                         addressLine2 = value;
+//                       }
+
+//                       return null;
+//                     },
+//                     decoration: kTextFieldDecoration.copyWith(
+//                       hintText: 'Address line 2',
+//                       prefixIcon:
+//                           Icon(Icons.house, color: kNavigationIconColor),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+//                   TextFormField(
+//                     keyboardType: TextInputType.streetAddress,
+//                     textAlign: TextAlign.left,
+//                     style: TextStyle(color: kPrimaryButtonColor),
+//                     validator: (value) {
+//                       if (value == null || value.isEmpty) {
+//                         return 'Please enter valid text';
+//                       } else {
+//                         city = value;
+//                       }
+
+//                       return null;
+//                     },
+//                     decoration: kTextFieldDecoration.copyWith(
+//                       hintText: 'City',
+//                       prefixIcon: Icon(Icons.location_city,
+//                           color: kNavigationIconColor),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+//                   TextFormField(
+//                     keyboardType: TextInputType.streetAddress,
+//                     textAlign: TextAlign.left,
+//                     style: TextStyle(color: kPrimaryButtonColor),
+//                     validator: (value) {
+//                       if (value == null || value.isEmpty) {
+//                         return 'Please enter valid text';
+//                       } else {
+//                         state = value;
+//                       }
+
+//                       return null;
+//                     },
+//                     decoration: kTextFieldDecoration.copyWith(
+//                       hintText: 'State',
+//                       prefixIcon:
+//                           Icon(Icons.cabin, color: kNavigationIconColor),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+//                   TextFormField(
+//                     keyboardType: TextInputType.streetAddress,
+//                     textAlign: TextAlign.left,
+//                     style: TextStyle(color: kPrimaryButtonColor),
+//                     validator: (value) {
+//                       if (value == null || value.isEmpty) {
+//                         return 'Please enter valid text';
+//                       } else {
+//                         country = value;
+//                       }
+
+//                       return null;
+//                     },
+//                     decoration: kTextFieldDecoration.copyWith(
+//                       hintText: 'Country',
+//                       prefixIcon:
+//                           Icon(Icons.countertops, color: kNavigationIconColor),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+//                   TextFormField(
+//                     keyboardType: TextInputType.streetAddress,
+//                     textAlign: TextAlign.left,
+//                     style: TextStyle(color: kPrimaryButtonColor),
+//                     validator: (value) {
+//                       if (value == null || value.isEmpty) {
+//                         return 'Please enter valid text';
+//                       } else {
+//                         postalCode = value;
+//                       }
+
+//                       return null;
+//                     },
+//                     decoration: kTextFieldDecoration.copyWith(
+//                       hintText: 'Postal code',
+//                       prefixIcon: Icon(Icons.code, color: kNavigationIconColor),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+  

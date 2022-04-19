@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'dart:math';
 import 'propertyDetailsScreen.dart';
+import '../components/bottomNavigationBar.dart';
 
 class BookmarkedPropertiesScreen extends StatelessWidget {
   static const id = 'BookmarkedPropertiesScreen';
@@ -11,11 +12,11 @@ class BookmarkedPropertiesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            children: [
-              Row(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Transform.rotate(
@@ -44,46 +45,58 @@ class BookmarkedPropertiesScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(
-                thickness: 1,
-                indent: 70,
-                endIndent: 70,
-                color: kSubCategoryColor,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+            ),
+            Divider(
+              thickness: 1,
+              indent: 60,
+              endIndent: 60,
+              color: kSubCategoryColor,
+            ),
+            Expanded(
+              flex: 10,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.all(12),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       BookmarkedProperties(),
-                      Divider(
-                        thickness: 1,
-                        color: kNavigationIconColor,
+                      SizedBox(
+                        height: 10,
                       ),
                       BookmarkedProperties(),
-                      Divider(
-                        thickness: 1,
-                        color: kNavigationIconColor,
+                      SizedBox(
+                        height: 10,
                       ),
                       BookmarkedProperties(),
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            BottomPageNavigationBar(
+              flex_by: 1,
+              page: BookmarkedPropertiesScreen.id,
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class BookmarkedProperties extends StatelessWidget {
+class BookmarkedProperties extends StatefulWidget {
   const BookmarkedProperties({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<BookmarkedProperties> createState() => _BookmarkedPropertiesState();
+}
+
+class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
+  late bool bookedmark = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -93,7 +106,7 @@ class BookmarkedProperties extends StatelessWidget {
           Radius.circular(20),
         ),
       ),
-      height: 350,
+      height: 390,
       // width: 300,
       child: Padding(
         padding: const EdgeInsets.only(
@@ -147,25 +160,33 @@ class BookmarkedProperties extends StatelessWidget {
               ],
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.end,
+              // mainAxisAlignment: MainAxisAlignment.end,
               // textDirection: ,
               children: [
-                const SizedBox(
-                  width: 80,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, PropertyDetailsScreen.id);
-                    },
-                    child: const Text(
-                      'View Details',
-                      style: TextStyle(color: kPrimaryButtonColor),
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, PropertyDetailsScreen.id);
+                  },
+                  child: Text(
+                    'View Details',
+                    style: TextStyle(color: kPrimaryButtonColor),
                   ),
-                )
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      bookedmark = !bookedmark;
+                    });
+                  },
+                  icon: Icon(
+                    bookedmark ? Icons.bookmark : Icons.bookmark_outline,
+                    color: bookedmark
+                        ? kHighlightedTextColor
+                        : kNavigationIconColor,
+                  ),
+                ),
               ],
             ),
           ],

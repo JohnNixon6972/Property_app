@@ -237,7 +237,8 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             BottomPageNavigationBar(
-              flex_by: 4,page: HomeScreen.id,
+              flex_by: 4,
+              page: HomeScreen.id,
             ),
           ],
         ),
@@ -254,7 +255,7 @@ class PropertiesOnRent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 380,
+      height: 400,
       child: ListView(
         padding: EdgeInsets.symmetric(vertical: 10),
         shrinkWrap: true,
@@ -303,8 +304,7 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-  late Color bookmarkIconColor = kSubCategoryColor;
-  late IconData bookmarkIconName = Icons.bookmark;
+  
   late bool bookedmark = false;
   @override
   void initState() {
@@ -392,22 +392,14 @@ class _PropertyCardState extends State<PropertyCard> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        icon:
-                        Icon(
-                          Icons.bookmark,
-                          color: kPrimaryButtonColor,
-                        );
+                        bookedmark = !bookedmark;
                       });
                     },
-                    // bookmarkIconColor: bookedmark == true
-                    //     ? kSubCategoryColor
-                    //     : kPrimaryButtonColor,
-                    // bookmarkIconName: bookedmark == true
-                    //     ? Icons.bookmark
-                    //     : Icons.bookmark_outline,
                     icon: Icon(
-                      Icons.bookmark_outline,
-                      color: kSubCategoryColor,
+                      bookedmark ? Icons.bookmark : Icons.bookmark_outline,
+                      color: bookedmark
+                          ? kHighlightedTextColor
+                          : kNavigationIconColor,
                     ),
                   ),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import '../constants.dart';
 import '../screens/homescreen.dart';
 import '../screens/profileScreen.dart';
@@ -48,14 +49,18 @@ class BottomPageNavigationBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.pushNamed(context, )
+                    Navigator.pushNamed(context, BookmarkedPropertiesScreen.id);
                   },
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: page == BookmarkedPropertiesScreen.id
+                        ? kHighlightedTextColor
+                        : kBottomNavigationBackgroundColor,
                     child: Icon(
                       Icons.bookmark,
-                      color: kNavigationIconColor,
-                      size: 40,
+                      color: page == BookmarkedPropertiesScreen.id
+                          ? Colors.white
+                          : kNavigationIconColor,
+                      size: 30,
                     ),
                   ),
                 ),

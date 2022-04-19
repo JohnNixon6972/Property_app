@@ -36,41 +36,42 @@ class _profileScreenState extends State<profileScreen> {
         backgroundColor: kPageBackgroundColor,
         body: Column(
           children: [
-            Expanded(
-              flex: 3,
-              child: Stack(
-                overflow: Overflow.visible,
-                children: [
-                  ClipRRect(
+            Stack(
+              overflow: Overflow.visible,
+              children: [
+                Container(
+                  height: 300,
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30)),
-                    child: Image(
-                      width: double.infinity,
-                      image: AssetImage('images/propertyDetailed1.jpg'),
-                    ),
                   ),
-                  Positioned(
-                      bottom: -50,
-                      left: 135,
-                      // ignore: prefer_const_constructors
-                      child: CircleAvatar(
-                        backgroundColor: kPageBackgroundColor,
-                        radius: 53,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image(
-                            height: 100,
-                            width: 100,
-                            image: AssetImage('images/profile_img1.jpg'),
-                          ),
+                  child: Image(
+                    // height: 200,
+                    // width: double.infinity,
+                    image: AssetImage('images/propertyDetailed1.jpg'),
+                  ),
+                ),
+                Positioned(
+                    bottom: -50,
+                    left: 135,
+                    // ignore: prefer_const_constructors
+                    child: CircleAvatar(
+                      backgroundColor: kPageBackgroundColor,
+                      radius: 53,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image(
+                          height: 100,
+                          width: 100,
+                          image: AssetImage('images/profile_img1.jpg'),
                         ),
-                      ))
-                ],
-              ),
+                      ),
+                    ))
+              ],
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Padding(
                 padding: EdgeInsets.only(top: 65, bottom: 18),
                 child: Center(
@@ -96,8 +97,10 @@ class _profileScreenState extends State<profileScreen> {
               ),
             ),
             Expanded(
-              flex: 6,
-              child: Column(
+              flex: 8,
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                physics: BouncingScrollPhysics(),
                 children: [
                   ProfileDetailsContainer(
                     icon: Icons.account_circle_outlined,

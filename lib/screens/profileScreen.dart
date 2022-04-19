@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
@@ -34,82 +36,103 @@ class _profileScreenState extends State<profileScreen> {
         backgroundColor: kPageBackgroundColor,
         body: Column(
           children: [
-            Stack(
-              overflow: Overflow.visible,
-              children: [
-                Image(
-                  width: double.infinity,
-                  // height: 250,
-                  image: AssetImage('images/propertyDetailed1.jpg'),
-                ),
-                Positioned(
-                    bottom: -60,
-                    left: 135,
-                    // ignore: prefer_const_constructors
-                    child: CircleAvatar(
-                      backgroundColor: kPageBackgroundColor,
-                      radius: 58,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(55),
-                        child: Image(
-                          height: 110,
-                          width: 110,
-                          image: AssetImage('images/profile_img1.jpg'),
-                        ),
-                      ),
-                    ))
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 65, bottom: 18),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'Devon Lane',
-                      style: TextStyle(
-                          color: kHighlightedTextColor,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          wordSpacing: -1),
+            Expanded(
+              flex: 3,
+              child: Stack(
+                overflow: Overflow.visible,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30)),
+                    child: Image(
+                      width: double.infinity,
+                      image: AssetImage('images/propertyDetailed1.jpg'),
                     ),
-                    Text(
-                      'weaver@example.com',
-                      style: TextStyle(
-                          color: kSubCategoryColor,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
+                  ),
+                  Positioned(
+                      bottom: -50,
+                      left: 135,
+                      // ignore: prefer_const_constructors
+                      child: CircleAvatar(
+                        backgroundColor: kPageBackgroundColor,
+                        radius: 53,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image(
+                            height: 100,
+                            width: 100,
+                            image: AssetImage('images/profile_img1.jpg'),
+                          ),
+                        ),
+                      ))
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.only(top: 65, bottom: 18),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Devon Lane',
+                        style: TextStyle(
+                            color: kHighlightedTextColor,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            wordSpacing: -1),
+                      ),
+                      Text(
+                        'weaver@example.com',
+                        style: TextStyle(
+                            color: kSubCategoryColor,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-            ProfileDetailsContainer(
-              icon: Icons.account_circle_outlined,
-              Title: "Personal Information",
-              SubTitle: "Devon Lane",
-            ),
-            ProfileDetailsContainer(
-              icon: Icons.alternate_email_outlined,
-              Title: "Email",
-              SubTitle: "weaver@email.com",
-            ),
-            ProfileDetailsContainer(
-              icon: Icons.call_outlined,
-              Title: "Phone",
-              SubTitle: "(217) 555-0113",
-            ),
-            ProfileDetailsContainer(
-              icon: Icons.lock_outlined,
-              Title: "Password",
-              SubTitle: "Last updated March 25,2020",
-            ),
-            ProfileDetailsContainer(
-              icon: Icons.settings,
-              Title: "Settings",
-              SubTitle: "Custom",
+            Expanded(
+              flex: 6,
+              child: Column(
+                children: [
+                  ProfileDetailsContainer(
+                    icon: Icons.account_circle_outlined,
+                    Title: "Personal Information",
+                    SubTitle: "Devon Lane",
+                  ),
+                  ProfileDetailsContainer(
+                    icon: Icons.alternate_email_outlined,
+                    Title: "Email",
+                    SubTitle: "weaver@email.com",
+                  ),
+                  ProfileDetailsContainer(
+                    icon: Icons.call_outlined,
+                    Title: "Phone",
+                    SubTitle: "(217) 555-0113",
+                  ),
+                  ProfileDetailsContainer(
+                    icon: Icons.lock_outlined,
+                    Title: "Password",
+                    SubTitle: "Last updated March 25,2020",
+                  ),
+                  ProfileDetailsContainer(
+                    icon: Icons.settings,
+                    Title: "Settings",
+                    SubTitle: "Custom",
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                ],
+              ),
             ),
             BottomPageNavigationBar(
-              flex_by: 1,page: profileScreen.id,
+              flex_by: 1,
+              page: profileScreen.id,
             ),
           ],
         ),

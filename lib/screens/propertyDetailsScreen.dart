@@ -1,27 +1,29 @@
-import 'dart:async';
+// import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../constants.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   static const id = 'propertyDetailsScreen';
 
-  Completer<GoogleMapController> _controller = Completer();
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  // Completer<GoogleMapController> _controller = Completer();
+  // static final CameraPosition _kGooglePlex = CameraPosition(
+  //   target: LatLng(37.42796133580664, -122.085749655962),
+  //   zoom: 14.4746,
+  // );
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  // static final CameraPosition _kLake = CameraPosition(
+  //     bearing: 192.8334901395799,
+  //     target: LatLng(37.43296265331129, -122.08832357078792),
+  //     tilt: 59.440717697143555,
+  //     zoom: 19.151926040649414);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kPageBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(14.0),
@@ -35,9 +37,14 @@ class PropertyDetailsScreen extends StatelessWidget {
                 children: [
                   Transform.rotate(
                     angle: 270 * pi / 180,
-                    child: Icon(
-                      Icons.expand_less_rounded,
-                      size: 30,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.expand_less_rounded,
+                        size: 30,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -46,8 +53,10 @@ class PropertyDetailsScreen extends StatelessWidget {
                   Center(
                     child: Text(
                       'Details',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: kHighlightedTextColor),
                     ),
                   )
                 ],
@@ -76,7 +85,9 @@ class PropertyDetailsScreen extends StatelessWidget {
                       Text(
                         'Nomaden Omah Sekut',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: kHighlightedTextColor),
                       ),
                       SizedBox(
                         height: 8,
@@ -84,7 +95,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       Text(
                         'San Diego, California, USA',
                         style: TextStyle(
-                            color: Color.fromARGB(255, 141, 141, 141),
+                            color: kSubCategoryColor,
                             fontWeight: FontWeight.w500),
                       )
                     ],
@@ -100,19 +111,31 @@ class PropertyDetailsScreen extends StatelessWidget {
                         "\$128 ",
                         style: TextStyle(
                             fontSize: 18,
-                            color: Color(0xff5F9FFE),
+                            color: kHighlightedTextColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
                         " / Month",
                         style: TextStyle(
                             fontSize: 12,
-                            color: Color.fromARGB(255, 141, 141, 141),
+                            color: kSubCategoryColor,
                             fontWeight: FontWeight.w400),
                       )
                     ],
                   ),
                 ],
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.only(top: 10.0, left: 10.0, right: 15),
+                child: Text(
+                  "Hello there this is my Property that i would like to sell/Rent which is located in bla bla area its bla bla bla years old.",
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: kHighlightedTextColor,
+                      fontWeight: FontWeight.w400),
+                  // textAlign: TextAlign.center,
+                ),
               ),
               SizedBox(
                 height: 15,
@@ -121,7 +144,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 height: 50,
                 width: 340,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 213, 213, 213),
+                  color: kSecondaryButtonColor,
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
                   ),
@@ -134,7 +157,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       height: 40,
                       width: 170,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: kHighlightedTextColor,
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
                         ),
@@ -143,7 +166,9 @@ class PropertyDetailsScreen extends StatelessWidget {
                         child: Text(
                           'Overview',
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
                         ),
                       ),
                     ),
@@ -151,7 +176,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       height: 40,
                       width: 170,
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 213, 213, 213),
+                        color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
                         ),
@@ -162,7 +187,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 141, 141, 141),
+                            color: kSubCategoryColor,
                           ),
                         ),
                       ),
@@ -180,7 +205,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     width: 110,
                     height: 130,
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 213, 213, 213),
+                        color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
                       padding: const EdgeInsets.all(15),
@@ -189,7 +214,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.bathtub_outlined,
-                              color: Color.fromARGB(255, 141, 141, 141),
+                              color: kHighlightedTextColor,
                             ),
                             SizedBox(
                               height: 10,
@@ -197,8 +222,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                             Text(
                               'Bathroom',
                               style: TextStyle(
-                                  color: Color.fromARGB(255, 141, 141, 141),
-                                  fontSize: 15),
+                                  color: kHighlightedTextColor, fontSize: 15),
                             ),
                             SizedBox(
                               height: 10,
@@ -215,7 +239,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     width: 110,
                     height: 130,
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 213, 213, 213),
+                        color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -224,7 +248,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.bed_rounded,
-                              color: Color.fromARGB(255, 141, 141, 141),
+                              color: kHighlightedTextColor,
                             ),
                             SizedBox(
                               height: 10,
@@ -232,8 +256,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                             Text(
                               'Bedroom',
                               style: TextStyle(
-                                  color: Color.fromARGB(255, 141, 141, 141),
-                                  fontSize: 15),
+                                  color: kHighlightedTextColor, fontSize: 15),
                             ),
                             SizedBox(
                               height: 10,
@@ -250,7 +273,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     width: 110,
                     height: 130,
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 213, 213, 213),
+                        color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -259,16 +282,15 @@ class PropertyDetailsScreen extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.crop_square_rounded,
-                            color: Color.fromARGB(255, 141, 141, 141),
+                            color: kHighlightedTextColor,
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           Text(
-                            'Bathroom',
+                            'Area',
                             style: TextStyle(
-                                color: Color.fromARGB(255, 141, 141, 141),
-                                fontSize: 15),
+                                color: kHighlightedTextColor, fontSize: 15),
                           ),
                           SizedBox(
                             height: 10,
@@ -300,7 +322,9 @@ class PropertyDetailsScreen extends StatelessWidget {
                       Text(
                         'Laura Kimono',
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: kHighlightedTextColor),
                       ),
                       Text(
                         'Owner',
@@ -319,24 +343,18 @@ class PropertyDetailsScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Color.fromARGB(255, 213, 230, 255),
-                          child: Icon(
-                            Icons.mail,
-                            color: Color(0xff5F9FFE),
-                          ),
+                        child: Icon(
+                          Icons.mail,
+                          size: 30,
+                          color: kHighlightedTextColor,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Color.fromARGB(255, 213, 230, 255),
-                          child: Icon(
-                            Icons.call,
-                            color: Color(0xff5F9FFE),
-                          ),
+                        child: Icon(
+                          Icons.call,
+                          size: 30,
+                          color: kHighlightedTextColor,
                         ),
                       )
                     ],

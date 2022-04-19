@@ -20,7 +20,7 @@ class PropertyApp extends StatelessWidget {
         registerScreen.id: (context) => registerScreen(),
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
-        PropertyDetailsScreen.id: (context) => PropertyDetailsScreen()
+        PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
       },
       home: Scaffold(
         appBar: AppBar(

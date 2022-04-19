@@ -1,43 +1,44 @@
 import 'package:flutter/material.dart';
 
 const kTextTitleStyle = TextStyle(
-  color: Color(0XFF4ECED5),
+  color: kHighlightedTextColor,
   fontWeight: FontWeight.bold,
   fontSize: 40.0,
 );
 
 const kTextSubTitleStyle = TextStyle(
-  color: Colors.blueGrey,
+  color: kSubCategoryColor,
   // fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );
 
 const kTextFieldDecoration = InputDecoration(
   hintText: '',
-  hintStyle: TextStyle(color: Colors.blueGrey),
+  hintStyle: TextStyle(color: kSubCategoryColor),
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   prefixIcon: Icon(
     Icons.mail,
     color: Color(0XFF4ECED5),
   ),
-  // fillColor: Color(0XFF4ECED5),
+   // fillColor: Color(0XFF4ECED5),
   // hoverColor: Colors.lightBlueAccent,
-  fillColor: Color.fromARGB(255, 229, 238, 242),
+  fillColor: kTextFieldFillColor,
   filled: true,
   border: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(20.0)),
-    borderSide: BorderSide(color: Color(0XFF4ECED5), width: 1.0),
+    borderSide: BorderSide(color: kPrimaryButtonColor, width: 1.0),
   ),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Color(0XFF4ECED5), width: 1.0),
+    borderSide: BorderSide(color: kPrimaryButtonColor, width: 1.0),
     borderRadius: BorderRadius.all(Radius.circular(15.0)),
   ),
   focusedBorder: OutlineInputBorder(
-    borderSide:
-        BorderSide(color: Color.fromARGB(255, 29, 148, 154), width: 1.0),
+    borderSide: BorderSide(color: kPrimaryButtonColor, width: 1.0),
     borderRadius: BorderRadius.all(Radius.circular(15.0)),
   ),
 );
+
+
 // // Grey Color Scheme
 // const kPageBackgroundColor = Color.fromARGB(255, 236, 236, 236);
 // const kSubCategoryColor = Color.fromARGB(255, 151, 151, 151);
@@ -65,6 +66,7 @@ const kHighlightedTextColor = Color.fromARGB(255, 9, 70, 32);
 const kNavigationIconColor = Color.fromARGB(255, 188, 188, 188);
 const kBottomNavigationBackgroundColor = Colors.white;
 const kPropertyCardColor = Colors.white;
+const kTextFieldFillColor = Color.fromARGB(255, 226, 223, 218);
 
 // // Green Color Scheme
 // const kPageBackgroundColor = Color(0xffD6F3E1);

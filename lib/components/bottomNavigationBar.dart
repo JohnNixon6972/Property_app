@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+import 'package:property_app/screens/addPropertiesScreen1.dart';
+=======
+import 'package:property_app/screens/searchScreen.dart';
+>>>>>>> 2468c8f99f288561d9a592554e2296a37d3af1b7
 import '../constants.dart';
 import '../screens/homescreen.dart';
 import '../screens/profileScreen.dart';
 import '../screens/propertyDetailsScreen.dart';
+import '../screens/addPropertiesScreen1.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 
 class BottomPageNavigationBar extends StatelessWidget {
@@ -61,7 +67,7 @@ class BottomPageNavigationBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.pushNamed(context, )
+                    Navigator.pushNamed(context, AddPropertiesScreen.id);
                   },
                   child: AvatarGlow(
                     glowColor: kHighlightedTextColor,
@@ -82,13 +88,20 @@ class BottomPageNavigationBar extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, searchScreen.id);
+                  },
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
+                    radius: 25,
+                    backgroundColor: page == searchScreen.id
+                        ? kHighlightedTextColor
+                        : kBottomNavigationBackgroundColor,
                     child: Icon(
                       Icons.navigation_rounded,
-                      color: kNavigationIconColor,
-                      size: 40,
+                      color: page == searchScreen.id
+                          ? Colors.white
+                          : kNavigationIconColor,
+                      size: 45,
                     ),
                   ),
                 ),

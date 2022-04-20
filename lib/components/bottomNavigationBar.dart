@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/searchScreen.dart';
 import '../constants.dart';
 import '../screens/homescreen.dart';
 import '../screens/profileScreen.dart';
@@ -82,13 +83,20 @@ class BottomPageNavigationBar extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, searchScreen.id);
+                  },
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
+                    radius: 25,
+                    backgroundColor: page == searchScreen.id
+                        ? kHighlightedTextColor
+                        : kBottomNavigationBackgroundColor,
                     child: Icon(
                       Icons.navigation_rounded,
-                      color: kNavigationIconColor,
-                      size: 40,
+                      color: page == searchScreen.id
+                          ? Colors.white
+                          : kNavigationIconColor,
+                      size: 45,
                     ),
                   ),
                 ),

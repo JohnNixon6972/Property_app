@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
+import 'package:property_app/screens/searchScreen.dart';
 import 'screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/homescreen.dart';
@@ -21,6 +22,7 @@ class PropertyApp extends StatelessWidget {
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
+        searchScreen.id: ((context) => searchScreen())
       },
       home: Scaffold(
         appBar: AppBar(

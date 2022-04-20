@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'screens/registerScreen.dart';
@@ -14,13 +15,14 @@ class PropertyApp extends StatelessWidget {
     // Firebase.initializeApp();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: profileScreen.id,
+      initialRoute: AddPropertiesScreen.id,
       routes: {
         loginScreen.id: (context) => loginScreen(),
         registerScreen.id: (context) => registerScreen(),
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
+        AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
       },
       home: Scaffold(
         appBar: AppBar(

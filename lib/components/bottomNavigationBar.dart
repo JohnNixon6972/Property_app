@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:property_app/screens/addPropertiesScreen1.dart';
-=======
 import 'package:property_app/screens/searchScreen.dart';
->>>>>>> 2468c8f99f288561d9a592554e2296a37d3af1b7
 import '../constants.dart';
 import '../screens/homescreen.dart';
 import '../screens/profileScreen.dart';

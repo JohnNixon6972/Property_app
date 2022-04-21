@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/addPopertiesScreen2.dart';
 import '../constants.dart';
 import 'dart:math';
 
@@ -109,6 +110,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                       Spacer(),
                                       Radio(
                                         value: propertyTo.Sell,
+                                        activeColor: kHighlightedTextColor,
                                         groupValue: _to,
                                         onChanged: (propertyTo? value) {
                                           setState(() {
@@ -148,6 +150,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                       Spacer(),
                                       Radio(
                                         value: propertyTo.Rent,
+                                        activeColor: kHighlightedTextColor,
                                         groupValue: _to,
                                         onChanged: (propertyTo? value) {
                                           setState(() {
@@ -208,6 +211,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                       ),
                                       Spacer(),
                                       Radio(
+                                        activeColor: kHighlightedTextColor,
                                         value: propertyType.Residental,
                                         groupValue: _type,
                                         onChanged: (propertyType? value) {
@@ -247,6 +251,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                       ),
                                       Spacer(),
                                       Radio(
+                                        activeColor: kHighlightedTextColor,
                                         value: propertyType.Commercial,
                                         groupValue: _type,
                                         onChanged: (propertyType? value) {
@@ -316,6 +321,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                       ),
                                       Radio(
                                         value: propertyCategory.Penthouse,
+                                        activeColor: kHighlightedTextColor,
                                         groupValue: _category,
                                         onChanged: (propertyCategory? value) {
                                           setState(() {
@@ -354,6 +360,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                       ),
                                       Radio(
                                         value: propertyCategory.Apartment,
+                                        activeColor: kHighlightedTextColor,
                                         groupValue: _category,
                                         onChanged: (propertyCategory? value) {
                                           setState(() {
@@ -392,6 +399,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                       ),
                                       Radio(
                                         value: propertyCategory.Building,
+                                        activeColor: kHighlightedTextColor,
                                         groupValue: _category,
                                         onChanged: (propertyCategory? value) {
                                           setState(() {
@@ -473,15 +481,44 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
               Row(
                 children: [
                   Checkbox(
-                      checkColor: kHighlightedTextColor,
-                       fillColor: ,
-                      value: uselastusedaddress,
-                      onChanged: (bool? value) {
-                        setState(() {
+                    activeColor: kHighlightedTextColor,
+                    //  fillColor: ,
+                    value: uselastusedaddress,
+                    onChanged: (bool? value) {
+                      setState(
+                        () {
                           uselastusedaddress = value!;
-                        });
-                      })
+                        },
+                      );
+                    },
+                  ),
+                  Text(
+                    'Use last used address',
+                    style: TextStyle(fontSize: 15),
+                  )
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: CircleAvatar(
+                    radius: 35,
+                    backgroundColor: kTextFieldFillColor,
+                    child: Transform.rotate(
+                      angle: 90 * pi / 180,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, AddPropertiesScreen2.id);
+                        },
+                        child: Icon(
+                          Icons.expand_less_rounded,
+                          color: Colors.black,
+                          size: 70,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               )
             ],
           ),

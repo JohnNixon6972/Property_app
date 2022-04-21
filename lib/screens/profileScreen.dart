@@ -5,6 +5,7 @@ import '../constants.dart';
 import 'dart:math';
 import 'package:avatar_glow/avatar_glow.dart';
 import '../components/bottomNavigationBar.dart';
+import '../components/dialogBoxListWidgets.dart';
 
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';
@@ -12,6 +13,14 @@ class profileScreen extends StatefulWidget {
   @override
   State<profileScreen> createState() => _profileScreenState();
 }
+
+List<String> option_titles = [
+  "Personal Information",
+  "Email",
+  "Phone",
+  "Password",
+  "Address"
+];
 
 class _profileScreenState extends State<profileScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -34,7 +43,6 @@ class _profileScreenState extends State<profileScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-
             Expanded(
               flex: 7,
               child: Stack(
@@ -67,7 +75,6 @@ class _profileScreenState extends State<profileScreen> {
                           image: AssetImage('images/profile_img1.jpg'),
                         ),
                       ),
-
                     ),
                   )
                 ],
@@ -100,7 +107,6 @@ class _profileScreenState extends State<profileScreen> {
               ),
             ),
             Expanded(
-
               flex: 12,
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -127,9 +133,9 @@ class _profileScreenState extends State<profileScreen> {
                       SubTitle: "Last updated March 25,2020",
                     ),
                     ProfileDetailsContainer(
-                      icon: Icons.settings,
-                      Title: "Settings",
-                      SubTitle: "Custom",
+                      icon: Icons.add_location_outlined,
+                      Title: "Address",
+                      SubTitle: "Residential Address",
                     ),
                     SizedBox(
                       height: 8,
@@ -161,17 +167,6 @@ class ProfileDetailsContainer extends StatefulWidget {
   State<ProfileDetailsContainer> createState() =>
       _ProfileDetailsContainerState();
 }
-
-late String name;
-late String email;
-late String mobileNumber;
-late String addressLine1;
-late String addressLine2;
-late String password;
-late String city;
-late String state;
-late String country;
-late String postalCode;
 
 class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
   @override
@@ -233,12 +228,11 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    print("Tapped");
                     // Navigator.pop(context);
                     showDialog(
                         context: context,
-                        builder: (_) => editDetailsPopup(
-                            "Personal Information", personalInformation));
+                        builder: (_) => editDetailsPopup(widget.Title,
+                            fields[option_titles.indexOf(widget.Title)]));
                   },
                   child: Icon(
                     Icons.expand_less_rounded,
@@ -258,13 +252,46 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
     return SimpleDialog(
       backgroundColor: kPageBackgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      title: Text(boxTitle),
+      title: Text(
+        boxTitle,
+        style: TextStyle(
+          color: kHighlightedTextColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 25,
+        ),
+        textAlign: TextAlign.center,
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
             child: Column(
-              children: childern,
+              children: [
+                Column(children: childern),
+                ElevatedButton(
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false otherwise.
+                    // if (_formKey.currentState!.validate()) {
+                    //   // If the form is valid, display a snackbar. In the real world,
+                    //   // you'd often call a server or save the information in a database.
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //         content: Text('Processing Data')),
+                    //   );
+                    // }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: kPrimaryButtonColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

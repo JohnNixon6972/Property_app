@@ -20,9 +20,9 @@ const kTextFieldDecoration = InputDecoration(
     Icons.mail,
     color: Color(0XFF4ECED5),
   ),
-   // fillColor: Color(0XFF4ECED5),
+  // fillColor: Color(0XFF4ECED5),
   // hoverColor: Colors.lightBlueAccent,
-  fillColor: kTextFieldFillColor,
+  fillColor: kPropertyCardColor,
   filled: true,
   border: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -37,7 +37,6 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(15.0)),
   ),
 );
-
 
 // // Grey Color Scheme
 // const kPageBackgroundColor = Color.fromARGB(255, 236, 236, 236);

@@ -67,6 +67,7 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.name,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
@@ -89,6 +90,7 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.emailAddress,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
@@ -111,6 +113,7 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.phone,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
@@ -133,6 +136,7 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.visiblePassword,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),

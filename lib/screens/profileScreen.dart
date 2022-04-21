@@ -158,17 +158,18 @@ class ProfileDetailsContainer extends StatefulWidget {
       _ProfileDetailsContainerState();
 }
 
+late String name;
+late String email;
+late String mobileNumber;
+late String addressLine1;
+late String addressLine2;
+late String password;
+late String city;
+late String state;
+late String country;
+late String postalCode;
+
 class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
-  late String name;
-  late String email;
-  late String mobileNumber;
-  late String addressLine1;
-  late String addressLine2;
-  late String password;
-  late String city;
-  late String state;
-  late String country;
-  late String postalCode;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -231,7 +232,9 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     print("Tapped");
                     // Navigator.pop(context);
                     showDialog(
-                        context: context, builder: (_) => editDetailsPopup("Personal Information"));
+                        context: context,
+                        builder: (_) => editDetailsPopup(
+                            "Personal Information", personalInformation));
                   },
                   child: Icon(
                     Icons.expand_less_rounded,
@@ -247,147 +250,17 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
     );
   }
 
-  SimpleDialog editDetailsPopup(String boxTitle) {
-
+  SimpleDialog editDetailsPopup(String boxTitle, List<Widget> childern) {
     return SimpleDialog(
       backgroundColor: kPageBackgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      title: Text('Dialog Title'),
+      title: Text(boxTitle),
       children: [
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
             child: Column(
-              children: [
-                TextFormField(
-                  keyboardType: TextInputType.streetAddress,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: kPrimaryButtonColor),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter valid text';
-                    } else {
-                      addressLine1 = value;
-                    }
-
-                    return null;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Address line 1',
-                    prefixIcon: Icon(Icons.home, color: kNavigationIconColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.streetAddress,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: kPrimaryButtonColor),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter valid text';
-                    } else {
-                      addressLine2 = value;
-                    }
-
-                    return null;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Address line 2',
-                    prefixIcon: Icon(Icons.house, color: kNavigationIconColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.streetAddress,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: kPrimaryButtonColor),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter valid text';
-                    } else {
-                      city = value;
-                    }
-
-                    return null;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'City',
-                    prefixIcon:
-                        Icon(Icons.location_city, color: kNavigationIconColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.streetAddress,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: kPrimaryButtonColor),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter valid text';
-                    } else {
-                      state = value;
-                    }
-
-                    return null;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'State',
-                    prefixIcon: Icon(Icons.cabin, color: kNavigationIconColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.streetAddress,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: kPrimaryButtonColor),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter valid text';
-                    } else {
-                      country = value;
-                    }
-
-                    return null;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Country',
-                    prefixIcon:
-                        Icon(Icons.countertops, color: kNavigationIconColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.streetAddress,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: kPrimaryButtonColor),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter valid text';
-                    } else {
-                      postalCode = value;
-                    }
-
-                    return null;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Postal code',
-                    prefixIcon: Icon(Icons.code, color: kNavigationIconColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
+              children: childern,
             ),
           ),
         ),
@@ -395,6 +268,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
     );
   }
 }
+
 
 
 

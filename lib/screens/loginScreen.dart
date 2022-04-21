@@ -28,156 +28,188 @@ class _loginScreenState extends State<loginScreen> {
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
         child: ModalProgressHUD(
-            inAsyncCall: showSpinner,
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Flexible(
-                      child: Hero(
-                        tag: 'logo',
-                        child: Container(
-                          height: 300,
-                          child: Image.asset(
-                            'images/try1.png',
-                          ),
+          inAsyncCall: showSpinner,
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Hero(
+                      tag: 'logo',
+                      child: Container(
+                        height: 300,
+                        child: Image.asset(
+                          'images/try1.png',
                         ),
                       ),
                     ),
-                    simpleTexts(
-                      texts: 'Login',
-                      styleConstant: kTextTitleStyle,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    simpleTexts(
-                      texts: 'Please Login In to Continue',
-                      styleConstant: kTextSubTitleStyle,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: kPrimaryButtonColor),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter valid text';
-                        } else {
-                          email = value;
-                        }
-
-                        return null;
-                      },
-                      decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'Enter your Email Address.',
-                        prefixIcon:
-                            Icon(Icons.email, color: kNavigationIconColor),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.visiblePassword,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: kPrimaryButtonColor),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter valid text';
-                        } else {
-                          password = value;
-                        }
-
-                        return null;
-                      },
-                      decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'Enter your Password.',
-                        prefixIcon:
-                            Icon(Icons.lock, color: kNavigationIconColor),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      child: Text(
-                        "Forgot Password?",
-                        textAlign: TextAlign.right,
-                        style: kTextTitleStyle.copyWith(fontSize: 17),
-                      ),
-                      onTap: () async {
-                        //     try {
-                        //   final newUser =
-                        //       await _auth.
-                        //   if (newUser != null) {
-                        //     Navigator.pushNamed(context, login.id);
-                        //   }
-                        //   setState(() {
-                        //     showSpinner = false;
-                        //   });
-                        // } catch (e) {
-                        //   print(e);
-                        // }
-                      },
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: kPrimaryButtonColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          simpleTexts(
-                            texts: 'Dont have an account?',
-                            styleConstant: kTextSubTitleStyle,
+                        Row(
+                          children: [
+                            simpleTexts(
+                              texts: 'Login',
+                              styleConstant: kTextTitleStyle,
+                              align: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            simpleTexts(
+                              texts: 'Please Login to Continue',
+                              styleConstant: kTextSubTitleStyle,
+                              align: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(color: kPrimaryButtonColor),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter valid text';
+                            } else {
+                              email = value;
+                            }
+
+                            return null;
+                          },
+                          decoration: kTextFieldDecoration.copyWith(
+                            hintText: 'Enter your Email Address.',
+                            prefixIcon:
+                                Icon(Icons.email, color: kNavigationIconColor),
                           ),
-                          simpleTexts(
-                            texts: 'Sign Up',
-                            styleConstant:
-                                kTextTitleStyle.copyWith(fontSize: 18),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(color: kPrimaryButtonColor),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter valid text';
+                            } else {
+                              password = value;
+                            }
+
+                            return null;
+                          },
+                          decoration: kTextFieldDecoration.copyWith(
+                            hintText: 'Enter your Password.',
+                            prefixIcon:
+                                Icon(Icons.lock, color: kNavigationIconColor),
                           ),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, registerScreen.id);
-                      },
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        GestureDetector(
+                          child: Row(
+                            children: [
+                              Spacer(),
+                              Text(
+                                "Forgot Password?",
+                                textAlign: TextAlign.right,
+                                style: kTextTitleStyle.copyWith(fontSize: 17),
+                              ),
+                            ],
+                          ),
+                          onTap: () async {
+                            //     try {
+                            //   final newUser =
+                            //       await _auth.
+                            //   if (newUser != null) {
+                            //     Navigator.pushNamed(context, login.id);
+                            //   }
+                            //   setState(() {
+                            //     showSpinner = false;
+                            //   });
+                            // } catch (e) {
+                            //   print(e);
+                            // }
+                          },
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Validate returns true if the form is valid, or false otherwise.
+                            if (_formKey.currentState!.validate()) {
+                              // If the form is valid, display a snackbar. In the real world,
+                              // you'd often call a server or save the information in a database.
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Processing Data')),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: kPrimaryButtonColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              simpleTexts(
+                                texts: 'Dont have an account?',
+                                styleConstant: kTextSubTitleStyle,
+                                align: TextAlign.center,
+                              ),
+                              simpleTexts(
+                                texts: 'Sign Up',
+                                styleConstant:
+                                    kTextTitleStyle.copyWith(fontSize: 18),
+                                align: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, registerScreen.id);
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -186,13 +218,16 @@ class _loginScreenState extends State<loginScreen> {
 class simpleTexts extends StatelessWidget {
   final String texts;
   final styleConstant;
-  simpleTexts({required this.texts, required this.styleConstant});
+  final TextAlign align;
+  simpleTexts(
+      {required this.texts, required this.styleConstant, required this.align});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       texts,
       style: styleConstant,
+      textAlign: align,
     );
   }
 }

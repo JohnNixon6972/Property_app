@@ -35,26 +35,28 @@ class _profileScreenState extends State<profileScreen> {
       child: Scaffold(
         backgroundColor: kPageBackgroundColor,
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Stack(
-              overflow: Overflow.visible,
-              children: [
-                Container(
-                  height: 300,
-                  decoration: BoxDecoration(
+
+            Expanded(
+              flex: 7,
+              child: Stack(
+                overflow: Overflow.visible,
+                children: [
+                  ClipRRect(
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30)),
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
+                    child: Image(
+                      // width: 800,
+                      // height: 500,
+                      image: AssetImage('images/backgroundProfileImage3.png'),
+                    ),
                   ),
-                  child: Image(
-                    // height: 200,
-                    // width: double.infinity,
-                    image: AssetImage('images/propertyDetailed1.jpg'),
-                  ),
-                ),
-                Positioned(
-                    bottom: -50,
-                    left: 135,
+                  Positioned(
+                    bottom: -40,
+                    left: 145,
                     // ignore: prefer_const_constructors
                     child: CircleAvatar(
                       backgroundColor: kPageBackgroundColor,
@@ -67,11 +69,14 @@ class _profileScreenState extends State<profileScreen> {
                           image: AssetImage('images/profile_img1.jpg'),
                         ),
                       ),
-                    ))
-              ],
+
+                    ),
+                  )
+                ],
+              ),
             ),
             Expanded(
-              flex: 3,
+              flex: 5,
               child: Padding(
                 padding: EdgeInsets.only(top: 65, bottom: 18),
                 child: Center(
@@ -97,44 +102,46 @@ class _profileScreenState extends State<profileScreen> {
               ),
             ),
             Expanded(
-              flex: 8,
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                physics: BouncingScrollPhysics(),
-                children: [
-                  ProfileDetailsContainer(
-                    icon: Icons.account_circle_outlined,
-                    Title: "Personal Information",
-                    SubTitle: "Devon Lane",
-                  ),
-                  ProfileDetailsContainer(
-                    icon: Icons.alternate_email_outlined,
-                    Title: "Email",
-                    SubTitle: "weaver@email.com",
-                  ),
-                  ProfileDetailsContainer(
-                    icon: Icons.call_outlined,
-                    Title: "Phone",
-                    SubTitle: "(217) 555-0113",
-                  ),
-                  ProfileDetailsContainer(
-                    icon: Icons.lock_outlined,
-                    Title: "Password",
-                    SubTitle: "Last updated March 25,2020",
-                  ),
-                  ProfileDetailsContainer(
-                    icon: Icons.settings,
-                    Title: "Settings",
-                    SubTitle: "Custom",
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                ],
+
+              flex: 12,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    ProfileDetailsContainer(
+                      icon: Icons.account_circle_outlined,
+                      Title: "Personal Information",
+                      SubTitle: "Devon Lane",
+                    ),
+                    ProfileDetailsContainer(
+                      icon: Icons.alternate_email_outlined,
+                      Title: "Email",
+                      SubTitle: "weaver@email.com",
+                    ),
+                    ProfileDetailsContainer(
+                      icon: Icons.call_outlined,
+                      Title: "Phone",
+                      SubTitle: "(217) 555-0113",
+                    ),
+                    ProfileDetailsContainer(
+                      icon: Icons.lock_outlined,
+                      Title: "Password",
+                      SubTitle: "Last updated March 25,2020",
+                    ),
+                    ProfileDetailsContainer(
+                      icon: Icons.settings,
+                      Title: "Settings",
+                      SubTitle: "Custom",
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                  ],
+                ),
               ),
             ),
             BottomPageNavigationBar(
-              flex_by: 1,
+              flex_by: 2,
               page: profileScreen.id,
             ),
           ],

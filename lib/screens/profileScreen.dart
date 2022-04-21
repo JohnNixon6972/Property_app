@@ -37,6 +37,7 @@ class _profileScreenState extends State<profileScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+
             Expanded(
               flex: 7,
               child: Stack(
@@ -56,6 +57,7 @@ class _profileScreenState extends State<profileScreen> {
                   Positioned(
                     bottom: -40,
                     left: 145,
+
                     // ignore: prefer_const_constructors
                     child: CircleAvatar(
                       backgroundColor: kPageBackgroundColor,
@@ -68,6 +70,7 @@ class _profileScreenState extends State<profileScreen> {
                           image: AssetImage('images/profile_img1.jpg'),
                         ),
                       ),
+
                     ),
                   )
                 ],
@@ -100,6 +103,7 @@ class _profileScreenState extends State<profileScreen> {
               ),
             ),
             Expanded(
+
               flex: 12,
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),

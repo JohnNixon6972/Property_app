@@ -57,6 +57,7 @@ class _profileScreenState extends State<profileScreen> {
                   Positioned(
                     bottom: -40,
                     left: 145,
+
                     // ignore: prefer_const_constructors
                     child: CircleAvatar(
                       backgroundColor: kPageBackgroundColor,

@@ -1,7 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
@@ -148,12 +145,30 @@ class _profileScreenState extends State<profileScreen> {
   }
 }
 
-class ProfileDetailsContainer extends StatelessWidget {
+class ProfileDetailsContainer extends StatefulWidget {
   final IconData icon;
   final String Title;
   final String SubTitle;
+
   ProfileDetailsContainer(
       {required this.icon, required this.Title, required this.SubTitle});
+
+  @override
+  State<ProfileDetailsContainer> createState() =>
+      _ProfileDetailsContainerState();
+}
+
+class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
+  late String name;
+  late String email;
+  late String mobileNumber;
+  late String addressLine1;
+  late String addressLine2;
+  late String password;
+  late String city;
+  late String state;
+  late String country;
+  late String postalCode;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -176,7 +191,7 @@ class ProfileDetailsContainer extends StatelessWidget {
                 radius: 25,
                 backgroundColor: kPageBackgroundColor,
                 child: Icon(
-                  icon,
+                  widget.icon,
                   size: 32,
                   color: kNavigationIconColor,
                 ),
@@ -190,7 +205,7 @@ class ProfileDetailsContainer extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Text(
-                      Title,
+                      widget.Title,
                       style: TextStyle(
                           color: kHighlightedTextColor,
                           fontSize: 18,
@@ -198,7 +213,7 @@ class ProfileDetailsContainer extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    SubTitle,
+                    widget.SubTitle,
                     style: TextStyle(
                         color: kNavigationIconColor,
                         fontWeight: FontWeight.w500),
@@ -213,7 +228,10 @@ class ProfileDetailsContainer extends StatelessWidget {
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    print("Tapped");
+                    // Navigator.pop(context);
+                    showDialog(
+                        context: context, builder: (_) => editDetailsPopup("Personal Information"));
                   },
                   child: Icon(
                     Icons.expand_less_rounded,
@@ -228,7 +246,156 @@ class ProfileDetailsContainer extends StatelessWidget {
       ),
     );
   }
+
+  SimpleDialog editDetailsPopup(String boxTitle) {
+
+    return SimpleDialog(
+      backgroundColor: kPageBackgroundColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      title: Text('Dialog Title'),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            child: Column(
+              children: [
+                TextFormField(
+                  keyboardType: TextInputType.streetAddress,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: kPrimaryButtonColor),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter valid text';
+                    } else {
+                      addressLine1 = value;
+                    }
+
+                    return null;
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Address line 1',
+                    prefixIcon: Icon(Icons.home, color: kNavigationIconColor),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.streetAddress,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: kPrimaryButtonColor),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter valid text';
+                    } else {
+                      addressLine2 = value;
+                    }
+
+                    return null;
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Address line 2',
+                    prefixIcon: Icon(Icons.house, color: kNavigationIconColor),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.streetAddress,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: kPrimaryButtonColor),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter valid text';
+                    } else {
+                      city = value;
+                    }
+
+                    return null;
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'City',
+                    prefixIcon:
+                        Icon(Icons.location_city, color: kNavigationIconColor),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.streetAddress,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: kPrimaryButtonColor),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter valid text';
+                    } else {
+                      state = value;
+                    }
+
+                    return null;
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'State',
+                    prefixIcon: Icon(Icons.cabin, color: kNavigationIconColor),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.streetAddress,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: kPrimaryButtonColor),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter valid text';
+                    } else {
+                      country = value;
+                    }
+
+                    return null;
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Country',
+                    prefixIcon:
+                        Icon(Icons.countertops, color: kNavigationIconColor),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.streetAddress,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: kPrimaryButtonColor),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter valid text';
+                    } else {
+                      postalCode = value;
+                    }
+
+                    return null;
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Postal code',
+                    prefixIcon: Icon(Icons.code, color: kNavigationIconColor),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
+
 
 
 
@@ -242,25 +409,25 @@ class ProfileDetailsContainer extends StatelessWidget {
 //                   SizedBox(
 //                     height: 10,
 //                   ),
-//                   TextFormField(
-//                     keyboardType: TextInputType.streetAddress,
-//                     textAlign: TextAlign.left,
-//                     style: TextStyle(color: kPrimaryButtonColor),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter valid text';
-//                       } else {
-//                         addressLine1 = value;
-//                       }
+                  // TextFormField(
+                  //   keyboardType: TextInputType.streetAddress,
+                  //   textAlign: TextAlign.left,
+                  //   style: TextStyle(color: kPrimaryButtonColor),
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'Please enter valid text';
+                  //     } else {
+                  //       addressLine1 = value;
+                  //     }
 
-//                       return null;
-//                     },
-//                     decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'Address line 1',
-//                       prefixIcon:
-//                           Icon(Icons.home, color: kNavigationIconColor),
-//                     ),
-//                   ),
+                  //     return null;
+                  //   },
+                  //   decoration: kTextFieldDecoration.copyWith(
+                  //     hintText: 'Address line 1',
+                  //     prefixIcon:
+                  //         Icon(Icons.home, color: kNavigationIconColor),
+                  //   ),
+                  // ),
 //                   SizedBox(
 //                     height: 10,
 //                   ),

@@ -28,18 +28,18 @@ class _profileScreenState extends State<profileScreen> {
   late String state;
   late String country;
   late String postalCode;
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: kPageBackgroundColor,
-        body: Column(
+    double width = MediaQuery.of(context).size.width;
+    print(width);
+    return Scaffold(
+      backgroundColor: kPageBackgroundColor,
+      body: SafeArea(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-
             Expanded(
-              flex: 7,
+              flex: 6,
               child: Stack(
                 overflow: Overflow.visible,
                 children: [
@@ -55,8 +55,9 @@ class _profileScreenState extends State<profileScreen> {
                     ),
                   ),
                   Positioned(
-                    bottom: -40,
-                    left: 145,
+                    bottom: -20,
+
+                    left: (width / 2) - 53,
 
                     // ignore: prefer_const_constructors
                     child: CircleAvatar(
@@ -70,16 +71,15 @@ class _profileScreenState extends State<profileScreen> {
                           image: AssetImage('images/profile_img1.jpg'),
                         ),
                       ),
-
                     ),
                   )
                 ],
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Padding(
-                padding: EdgeInsets.only(top: 65, bottom: 18),
+                padding: EdgeInsets.only(top: 50),
                 child: Center(
                   child: Column(
                     children: [
@@ -103,7 +103,6 @@ class _profileScreenState extends State<profileScreen> {
               ),
             ),
             Expanded(
-
               flex: 12,
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),

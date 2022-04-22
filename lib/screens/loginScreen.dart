@@ -83,6 +83,7 @@ class _loginScreenState extends State<loginScreen> {
                           height: 20,
                         ),
                         TextFormField(
+                          cursorColor: kPrimaryButtonColor,
                           keyboardType: TextInputType.emailAddress,
                           textAlign: TextAlign.left,
                           style: TextStyle(color: kPrimaryButtonColor),
@@ -105,6 +106,7 @@ class _loginScreenState extends State<loginScreen> {
                           height: 10,
                         ),
                         TextFormField(
+                          cursorColor: kPrimaryButtonColor,
                           keyboardType: TextInputType.visiblePassword,
                           textAlign: TextAlign.left,
                           style: TextStyle(color: kPrimaryButtonColor),

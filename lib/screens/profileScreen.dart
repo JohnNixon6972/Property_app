@@ -1,13 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
 import 'dart:math';
 import 'package:avatar_glow/avatar_glow.dart';
 import '../components/bottomNavigationBar.dart';
+import '../components/dialogBoxListWidgets.dart';
 
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';
@@ -15,6 +13,14 @@ class profileScreen extends StatefulWidget {
   @override
   State<profileScreen> createState() => _profileScreenState();
 }
+
+List<String> option_titles = [
+  "Personal Information",
+  "Email",
+  "Phone",
+  "Password",
+  "Address"
+];
 
 class _profileScreenState extends State<profileScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -129,9 +135,9 @@ class _profileScreenState extends State<profileScreen> {
                       SubTitle: "Last updated March 25,2020",
                     ),
                     ProfileDetailsContainer(
-                      icon: Icons.settings,
-                      Title: "Settings",
-                      SubTitle: "Custom",
+                      icon: Icons.add_location_outlined,
+                      Title: "Address",
+                      SubTitle: "Residential Address",
                     ),
                     SizedBox(
                       height: 8,
@@ -151,12 +157,20 @@ class _profileScreenState extends State<profileScreen> {
   }
 }
 
-class ProfileDetailsContainer extends StatelessWidget {
+class ProfileDetailsContainer extends StatefulWidget {
   final IconData icon;
   final String Title;
   final String SubTitle;
+
   ProfileDetailsContainer(
       {required this.icon, required this.Title, required this.SubTitle});
+
+  @override
+  State<ProfileDetailsContainer> createState() =>
+      _ProfileDetailsContainerState();
+}
+
+class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -179,7 +193,7 @@ class ProfileDetailsContainer extends StatelessWidget {
                 radius: 25,
                 backgroundColor: kPageBackgroundColor,
                 child: Icon(
-                  icon,
+                  widget.icon,
                   size: 32,
                   color: kNavigationIconColor,
                 ),
@@ -193,7 +207,7 @@ class ProfileDetailsContainer extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Text(
-                      Title,
+                      widget.Title,
                       style: TextStyle(
                           color: kHighlightedTextColor,
                           fontSize: 18,
@@ -201,7 +215,7 @@ class ProfileDetailsContainer extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    SubTitle,
+                    widget.SubTitle,
                     style: TextStyle(
                         color: kNavigationIconColor,
                         fontWeight: FontWeight.w500),
@@ -216,7 +230,11 @@ class ProfileDetailsContainer extends StatelessWidget {
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    showDialog(
+                        context: context,
+                        builder: (_) => editDetailsPopup(widget.Title,
+                            fields[option_titles.indexOf(widget.Title)]));
                   },
                   child: Icon(
                     Icons.expand_less_rounded,
@@ -231,7 +249,60 @@ class ProfileDetailsContainer extends StatelessWidget {
       ),
     );
   }
+
+  SimpleDialog editDetailsPopup(String boxTitle, List<Widget> childern) {
+    return SimpleDialog(
+      backgroundColor: kPageBackgroundColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      title: Text(
+        boxTitle,
+        style: TextStyle(
+          color: kHighlightedTextColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 25,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            child: Column(
+              children: [
+                Column(children: childern),
+                ElevatedButton(
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false otherwise.
+                    // if (_formKey.currentState!.validate()) {
+                    //   // If the form is valid, display a snackbar. In the real world,
+                    //   // you'd often call a server or save the information in a database.
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //         content: Text('Processing Data')),
+                    //   );
+                    // }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: kPrimaryButtonColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
+
+
 
 
 
@@ -245,25 +316,25 @@ class ProfileDetailsContainer extends StatelessWidget {
 //                   SizedBox(
 //                     height: 10,
 //                   ),
-//                   TextFormField(
-//                     keyboardType: TextInputType.streetAddress,
-//                     textAlign: TextAlign.left,
-//                     style: TextStyle(color: kPrimaryButtonColor),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter valid text';
-//                       } else {
-//                         addressLine1 = value;
-//                       }
+                  // TextFormField(
+                  //   keyboardType: TextInputType.streetAddress,
+                  //   textAlign: TextAlign.left,
+                  //   style: TextStyle(color: kPrimaryButtonColor),
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'Please enter valid text';
+                  //     } else {
+                  //       addressLine1 = value;
+                  //     }
 
-//                       return null;
-//                     },
-//                     decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'Address line 1',
-//                       prefixIcon:
-//                           Icon(Icons.home, color: kNavigationIconColor),
-//                     ),
-//                   ),
+                  //     return null;
+                  //   },
+                  //   decoration: kTextFieldDecoration.copyWith(
+                  //     hintText: 'Address line 1',
+                  //     prefixIcon:
+                  //         Icon(Icons.home, color: kNavigationIconColor),
+                  //   ),
+                  // ),
 //                   SizedBox(
 //                     height: 10,
 //                   ),

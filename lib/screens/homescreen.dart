@@ -304,7 +304,6 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-  
   late bool bookedmark = false;
   @override
   void initState() {

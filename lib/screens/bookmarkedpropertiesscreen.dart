@@ -106,7 +106,7 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
           Radius.circular(20),
         ),
       ),
-      height: 390,
+      height: 350,
       // width: 300,
       child: Padding(
         padding: const EdgeInsets.only(
@@ -120,6 +120,7 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 child: Image(
                   // width: 170,
+                  height: 200,
                   fit: BoxFit.cover,
                   image: AssetImage('images/propertyDetailed1.jpg'),
                 ),

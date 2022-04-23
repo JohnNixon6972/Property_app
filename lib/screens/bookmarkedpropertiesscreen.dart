@@ -50,7 +50,7 @@ class BookmarkedPropertiesScreen extends StatelessWidget {
               thickness: 1,
               indent: 60,
               endIndent: 60,
-              color: kSubCategoryColor,
+              color: kHighlightedTextColor,
             ),
             Expanded(
               flex: 10,
@@ -100,13 +100,14 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: kPropertyCardColor,
+        border: Border.all(color: kHighlightedTextColor),
         borderRadius: BorderRadius.all(
           Radius.circular(20),
         ),
       ),
-      height: 350,
+      height: 352,
       // width: 300,
       child: Padding(
         padding: const EdgeInsets.only(

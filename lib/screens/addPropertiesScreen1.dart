@@ -93,6 +93,10 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Container(
                                   decoration: BoxDecoration(
+                                    border: _to == propertyTo.Sell
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
                                     borderRadius: BorderRadius.circular(15),
                                     color: _to == propertyTo.Sell
                                         ? kPropertyCardColor
@@ -133,6 +137,10 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 child: Container(
                                   width: 100,
                                   decoration: BoxDecoration(
+                                    border: _to == propertyTo.Rent
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
                                     color: _to == propertyTo.Rent
                                         ? kPropertyCardColor
                                         : kTextFieldFillColor,
@@ -196,6 +204,10 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
+                                    border: _type == propertyType.Residental
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
                                     color: _type == propertyType.Residental
                                         ? kPropertyCardColor
                                         : kTextFieldFillColor,
@@ -235,6 +247,10 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 child: Container(
                                   width: 100,
                                   decoration: BoxDecoration(
+                                    border: _type == propertyType.Commercial
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
                                     color: _type == propertyType.Commercial
                                         ? kPropertyCardColor
                                         : kTextFieldFillColor,
@@ -302,6 +318,11 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
+                                    border:
+                                        _category == propertyCategory.Penthouse
+                                            ? Border.all(
+                                                color: kHighlightedTextColor)
+                                            : null,
                                     color:
                                         _category == propertyCategory.Penthouse
                                             ? kPropertyCardColor
@@ -342,6 +363,11 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
+                                    border:
+                                        _category == propertyCategory.Apartment
+                                            ? Border.all(
+                                                color: kHighlightedTextColor)
+                                            : null,
                                     color:
                                         _category == propertyCategory.Apartment
                                             ? kPropertyCardColor
@@ -382,6 +408,11 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
+                                    border:
+                                        _category == propertyCategory.Building
+                                            ? Border.all(
+                                                color: kHighlightedTextColor)
+                                            : null,
                                     color:
                                         _category == propertyCategory.Building
                                             ? kPropertyCardColor
@@ -519,7 +550,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           },
                           child: Icon(
                             Icons.expand_less_rounded,
-                            color: Colors.black,
+                            color: kHighlightedTextColor,
                             size: 70,
                           ),
                         ),

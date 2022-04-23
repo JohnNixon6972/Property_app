@@ -165,45 +165,42 @@ class HomeScreen extends StatelessWidget {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: 15.0, left: 15.0, right: 15.0),
-                          child: Row(
-                            children: [
-                              ToggleSwitch(
-                                minHeight: 30,
-                                minWidth: 50,
-                                cornerRadius: 20.0,
-                                activeBgColors: [
-                                  const [kHighlightedTextColor],
-                                  [Colors.red[900]!]
-                                ],
-                                activeFgColor: Colors.white,
-                                inactiveBgColor: kNavigationIconColor,
-                                inactiveFgColor: Colors.white,
-                                initialLabelIndex: 1,
-                                totalSwitches: 2,
-                                labels: ['Yes', 'No'],
-                                radiusStyle: true,
-                                onToggle: (index) {
-                                  print('switched to: $index');
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Center(
-                                  child: Text(
-                                    "Show admin Only Properties",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: kHighlightedTextColor),
-                                  ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 15.0, left: 15.0, right: 15.0),
+                        child: Row(
+                          children: [
+                            ToggleSwitch(
+                              minHeight: 30,
+                              minWidth: 50,
+                              cornerRadius: 20.0,
+                              activeBgColors: [
+                                const [Color.fromARGB(255, 9, 70, 32)],
+                                [kHighlightedTextColor]
+                              ],
+                              activeFgColor: Colors.white,
+                              inactiveBgColor: kNavigationIconColor,
+                              inactiveFgColor: Colors.white,
+                              initialLabelIndex: 1,
+                              totalSwitches: 2,
+                              labels: ['Yes', 'No'],
+                              radiusStyle: true,
+                              onToggle: (index) {
+                                print('switched to: $index');
+                              },
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Center(
+                                child: Text(
+                                  "Show admin Only Properties",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: kHighlightedTextColor),
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Padding(
@@ -219,6 +216,7 @@ class HomeScreen extends StatelessWidget {
                       PropertiesOnSale(),
                       Divider(
                         thickness: 1,
+                        color: kHighlightedTextColor,
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 5, left: 15, right: 15),
@@ -304,7 +302,6 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-  
   late bool bookedmark = false;
   @override
   void initState() {
@@ -399,7 +396,7 @@ class _PropertyCardState extends State<PropertyCard> {
                       bookedmark ? Icons.bookmark : Icons.bookmark_outline,
                       color: bookedmark
                           ? kHighlightedTextColor
-                          : kNavigationIconColor,
+                          : kHighlightedTextColor,
                     ),
                   ),
                 ],

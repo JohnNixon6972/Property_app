@@ -46,6 +46,7 @@ dependencies:
   dropdown_formfield: ^0.1.4
   flutter_search_bar: ^2.1.0
   # flutter_search_bar: ^2.1.0
+  dotted_border: ^2.0.0+2
 
 dev_dependencies:
   flutter_test:

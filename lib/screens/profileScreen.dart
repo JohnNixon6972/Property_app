@@ -176,8 +176,9 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
       child: Container(
-        decoration: const BoxDecoration(
-          color: kBottomNavigationBackgroundColor,
+        decoration: BoxDecoration(
+          border: Border.all(color: kHighlightedTextColor),
+          color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
             Radius.circular(15),
           ),

@@ -27,7 +27,8 @@ class PropertyApp extends StatelessWidget {
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
-        BookmarkedPropertiesScreen.id:(context) =>BookmarkedPropertiesScreen(),
+        BookmarkedPropertiesScreen.id: (context) =>
+            BookmarkedPropertiesScreen(),
         AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
         searchScreen.id: (context) => searchScreen(),
         AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),

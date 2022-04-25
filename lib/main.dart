@@ -12,15 +12,18 @@ import '/screens/propertyDetailsScreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
 import './screens/addPopertiesScreen2.dart';
 
-void main() => runApp(PropertyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(PropertyApp());
+}
 
 class PropertyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Firebase.initializeApp();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.id,
+      initialRoute: registerScreen.id,
       routes: {
         loginScreen.id: (context) => loginScreen(),
         registerScreen.id: (context) => registerScreen(),
@@ -33,13 +36,6 @@ class PropertyApp extends StatelessWidget {
         searchScreen.id: (context) => searchScreen(),
         AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
       },
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Here it Begins'),
-          backgroundColor: Colors.blueGrey[900],
-        ),
-        backgroundColor: Colors.blueGrey,
-      ),
     );
   }
 }

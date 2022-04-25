@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:property_app/constants.dart';
+import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
 
 class registerScreen extends StatefulWidget {
@@ -12,6 +12,7 @@ class registerScreen extends StatefulWidget {
 }
 
 class _registerScreenState extends State<registerScreen> {
+  final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
 
   // final _auth = FirebaseAuth.instance;
@@ -91,7 +92,7 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       TextFormField(
                         cursorColor: kPrimaryButtonColor,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.number,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
                         validator: (value) {
@@ -114,7 +115,6 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       TextFormField(
                         cursorColor: kPrimaryButtonColor,
-                        keyboardType: TextInputType.phone,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
                         validator: (value) {
@@ -137,6 +137,7 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       TextFormField(
                         cursorColor: kPrimaryButtonColor,
+                        obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
@@ -181,6 +182,19 @@ class _registerScreenState extends State<registerScreen> {
                           // } catch (e) {
                           //   print(e);
                           // }
+                          try {
+                            print(email);
+                            print(password);
+                            final newUser =
+                                await _auth.createUserWithEmailAndPassword(
+                                    email: email, password: password);
+
+                            if (newUser != null) {
+                              Navigator.pushNamed(context, HomeScreen.id);
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           primary: kPrimaryButtonColor,

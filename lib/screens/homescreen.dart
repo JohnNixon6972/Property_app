@@ -332,6 +332,9 @@ class _PropertyCardState extends State<PropertyCard> {
       child: Container(
         width: 180,
         decoration: const BoxDecoration(
+          // border: Border.all(
+          //   color: kBottomNavigationBackgroundColor,
+          // ),
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
             Radius.circular(20),

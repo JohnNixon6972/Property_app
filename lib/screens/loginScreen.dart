@@ -33,25 +33,21 @@ class _loginScreenState extends State<loginScreen> {
             key: _formKey,
             child: Padding(
               padding: EdgeInsets.all(12),
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    flex: 3,
-                    child: Hero(
+              child: SingleChildScrollView(
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Hero(
                       tag: 'logo',
                       child: Container(
-                        height: 300,
+                        height: 400,
                         child: Image.asset(
                           'images/try1.png',
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Column(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -133,7 +129,7 @@ class _loginScreenState extends State<loginScreen> {
                             children: [
                               Spacer(),
                               Text(
-                                "Forgot Password?",
+                                "Forgot Password ?",
                                 textAlign: TextAlign.right,
                                 style: kTextTitleStyle.copyWith(fontSize: 17),
                               ),
@@ -155,7 +151,7 @@ class _loginScreenState extends State<loginScreen> {
                           },
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         ElevatedButton(
                           onPressed: () {
@@ -188,7 +184,7 @@ class _loginScreenState extends State<loginScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               simpleTexts(
-                                texts: 'Dont have an account?',
+                                texts: 'Dont have an account? ',
                                 styleConstant: kTextSubTitleStyle,
                                 align: TextAlign.center,
                               ),
@@ -204,10 +200,13 @@ class _loginScreenState extends State<loginScreen> {
                             Navigator.pushNamed(context, registerScreen.id);
                           },
                         ),
+                        SizedBox(
+                          height: 20,
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -56,15 +56,7 @@ const kTextFieldDecoration = InputDecoration(
 // const kBottomNavigationBackgroundColor = Colors.white;
 // const kPropertyCardColor = Colors.white;
 // const kTextFieldFillColor = Color.fromARGB(255, 226, 223, 218);
-// const kPageBackgroundColor = Color(0xffECE8E0);
-// const kSubCategoryColor = Color.fromARGB(255, 151, 151, 151);
-// const kPrimaryButtonColor = Color.fromARGB(255, 9, 70, 32);
-// const kSecondaryButtonColor = Color.fromARGB(255, 236, 236, 236);
-// const kHighlightedTextColor = Color.fromARGB(255, 9, 70, 32);
-// const kNavigationIconColor = Color.fromARGB(255, 188, 188, 188);
-// const kBottomNavigationBackgroundColor = Colors.white;
-// const kPropertyCardColor = Colors.white;
-// const kTextFieldFillColor = Color.fromARGB(255, 226, 223, 218);
+
 const kPageBackgroundColor = Color(0xffE9E3E3);
 const kSubCategoryColor = Color.fromARGB(255, 151, 151, 151);
 const kPrimaryButtonColor = Color(0xffF510055);

@@ -166,8 +166,8 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                            top: 15.0, left: 15.0, right: 15.0),
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
                         child: Row(
                           children: [
                             ToggleSwitch(
@@ -315,6 +315,9 @@ class _PropertyCardState extends State<PropertyCard> {
       child: Container(
         width: 180,
         decoration: const BoxDecoration(
+          // border: Border.all(
+          //   color: kBottomNavigationBackgroundColor,
+          // ),
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
             Radius.circular(20),

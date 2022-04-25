@@ -27,6 +27,7 @@ class _searchScreenState extends State<searchScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(30),
+            top: Radius.circular(30),
           ),
         ),
         backgroundColor: kBottomNavigationBackgroundColor,

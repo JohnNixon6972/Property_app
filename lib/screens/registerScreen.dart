@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:property_app/constants.dart';
+import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
 
 class registerScreen extends StatefulWidget {
@@ -12,6 +12,7 @@ class registerScreen extends StatefulWidget {
 }
 
 class _registerScreenState extends State<registerScreen> {
+  final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
 
   // final _auth = FirebaseAuth.instance;
@@ -29,38 +30,34 @@ class _registerScreenState extends State<registerScreen> {
   bool showSpinner = false;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: kPageBackgroundColor,
-        body: Form(
+    return Scaffold(
+      backgroundColor: kPageBackgroundColor,
+      body: SafeArea(
+        child: Form(
           key: _formKey,
           child: Padding(
             padding: EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  flex: 4,
-                  child: Hero(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Hero(
                     tag: 'logo',
                     child: Container(
-                      height: 300,
+                      height: 400,
                       child: Image.asset(
                         'images/try11.png',
                       ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       simpleTexts(
                         texts: 'Personal Details :',
-                        styleConstant: kTextTitleStyle.copyWith(fontSize: 20),
+                        styleConstant: kTextTitleStyle.copyWith(fontSize: 25),
                         align: TextAlign.center,
                       ),
                       SizedBox(
@@ -91,7 +88,7 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       TextFormField(
                         cursorColor: kPrimaryButtonColor,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.number,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
                         validator: (value) {
@@ -114,7 +111,6 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       TextFormField(
                         cursorColor: kPrimaryButtonColor,
-                        keyboardType: TextInputType.phone,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
                         validator: (value) {
@@ -137,6 +133,7 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       TextFormField(
                         cursorColor: kPrimaryButtonColor,
+                        obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
@@ -181,6 +178,19 @@ class _registerScreenState extends State<registerScreen> {
                           // } catch (e) {
                           //   print(e);
                           // }
+                          try {
+                            print(email);
+                            print(password);
+                            final newUser =
+                                await _auth.createUserWithEmailAndPassword(
+                                    email: email, password: password);
+
+                            if (newUser != null) {
+                              Navigator.pushNamed(context, HomeScreen.id);
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           primary: kPrimaryButtonColor,
@@ -201,7 +211,7 @@ class _registerScreenState extends State<registerScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             simpleTexts(
-                              texts: 'Already have an account?',
+                              texts: 'Already have an account? ',
                               styleConstant: kTextSubTitleStyle,
                               align: TextAlign.center,
                             ),
@@ -217,10 +227,13 @@ class _registerScreenState extends State<registerScreen> {
                           Navigator.pushNamed(context, loginScreen.id);
                         },
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

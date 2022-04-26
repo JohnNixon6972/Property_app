@@ -1,20 +1,37 @@
-import 'package:avatar_glow/avatar_glow.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
-import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatelessWidget {
+  final _auth = FirebaseAuth.instance;
   static const id = 'homeScreen';
   late AnimationController _animationController;
   late Animation _animation;
   late Color bookmarkIconColor;
   late IconData icn;
+  late User loggedInUser;
+
+  @override
+  void initState() {
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+        print(loggedInUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,8 +183,8 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                            top: 15.0, left: 15.0, right: 15.0),
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
                         child: Row(
                           children: [
                             ToggleSwitch(
@@ -315,6 +332,9 @@ class _PropertyCardState extends State<PropertyCard> {
       child: Container(
         width: 180,
         decoration: const BoxDecoration(
+          // border: Border.all(
+          //   color: kBottomNavigationBackgroundColor,
+          // ),
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
             Radius.circular(20),

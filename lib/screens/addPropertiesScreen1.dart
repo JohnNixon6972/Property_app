@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:property_app/screens/addPopertiesScreen2.dart';
 import '../constants.dart';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }
@@ -21,8 +23,12 @@ class AddPropertiesScreen extends StatefulWidget {
 }
 
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
-  var _controller = TextEditingController();
+  var _PropertyTitleController = TextEditingController();
+  var _PropertyAddressController = TextEditingController();
   bool uselastusedaddress = false;
+  final _auth = FirebaseAuth.instance;
+  final _firstore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -474,7 +480,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           TextField(
                             decoration:
                                 InputDecoration(border: InputBorder.none),
-                            controller: _controller,
+                            // controller: _controller,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             maxLines: 1,

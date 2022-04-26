@@ -1,3 +1,6 @@
+import 'package:file_picker/file_picker.dart';
+import 'package:property_app/storage_service.dart';
+
 import '../constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -13,6 +16,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   var _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final Storage storage = Storage();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -79,11 +83,32 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                 fontWeight: FontWeight.w500, fontSize: 18),
                           ),
                           Spacer(),
-                          CircleAvatar(
-                            backgroundColor: kPageBackgroundColor,
-                            child: Icon(
-                              Icons.photo_library_sharp,
-                              color: kHighlightedTextColor,
+                          GestureDetector(
+                            onTap: () async {
+                              final result =
+                                  await FilePicker.platform.pickFiles(
+                                type: FileType.custom,
+                                allowedExtensions: ['png', 'jpg'],
+                              );
+                              if (result == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('No file Selected')));
+                                return null;
+                              }
+                              final path = result.files.single.path;
+                              final filename = result.files.single.name;
+
+                              print(path);
+                              print(filename);
+                              storage.uploadFile(path!, filename).then((value) => print("Done"));
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: kPageBackgroundColor,
+                              child: Icon(
+                                Icons.photo_library_sharp,
+                                color: kHighlightedTextColor,
+                              ),
                             ),
                           )
                         ],

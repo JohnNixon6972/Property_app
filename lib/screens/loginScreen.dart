@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
+import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
 
 class loginScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class loginScreen extends StatefulWidget {
 }
 
 class _loginScreenState extends State<loginScreen> {
-  // final _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   late String email;
   late String password;
@@ -163,6 +164,14 @@ class _loginScreenState extends State<loginScreen> {
                                 const SnackBar(
                                     content: Text('Processing Data')),
                               );
+                            }
+                            try {
+                              _auth.signInWithEmailAndPassword(
+                                  email: email, password: password);
+
+                              Navigator.pushNamed(context, HomeScreen.id);
+                            } catch (e) {
+                              print(e);
                             }
                           },
                           style: ElevatedButton.styleFrom(

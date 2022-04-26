@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:property_app/screens/addPopertiesScreen2.dart';
 import '../constants.dart';
 import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:file_picker/file_picker.dart';
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }
 enum propertyCategory { Penthouse, Apartment, Building }
@@ -20,9 +22,41 @@ class AddPropertiesScreen extends StatefulWidget {
   State<AddPropertiesScreen> createState() => _AddPropertiesScreenState();
 }
 
+String getCategory() {
+  if (_category == propertyCategory.Apartment) {
+    return "Apartment";
+  } else if (_category == propertyCategory.Building) {
+    return "Building";
+  } else {
+    return "PentHouse";
+  }
+}
+
+String getType() {
+  if (_type == propertyType.Commercial) {
+    return "Commercial";
+  } else {
+    return "Residental";
+  }
+}
+
+String getTo() {
+  if (_to == propertyTo.Rent) {
+    return "Rent";
+  } else {
+    return "Sell";
+  }
+}
+
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
-  var _controller = TextEditingController();
+  var _PropertyTitleController = TextEditingController();
+  var _PropertyAddressController = TextEditingController();
+  late String PropertyTitle;
+  late String PropertyAddress;
   bool uselastusedaddress = false;
+  final _auth = FirebaseAuth.instance;
+  final _firstore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -474,7 +508,8 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           TextField(
                             decoration:
                                 InputDecoration(border: InputBorder.none),
-                            controller: _controller,
+                            // controller: _controller,
+                            controller: _PropertyTitleController,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             maxLines: 1,
@@ -498,6 +533,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         children: [
                           Expanded(
                             child: TextField(
+                              controller: _PropertyAddressController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Address",
@@ -545,6 +581,28 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         angle: 90 * pi / 180,
                         child: GestureDetector(
                           onTap: () {
+                            PropertyAddress = _PropertyAddressController.text;
+                            PropertyTitle = _PropertyTitleController.text;
+                            print(PropertyAddress);
+                            print(PropertyTitle);
+                            print(getCategory());
+                            print(getTo());
+                            print(getType());
+                            // print(uselastusedaddress);
+                            var Category = getCategory();
+                            var to = getTo();
+                            var type = getType();
+                            _firstore
+                                .collection("Properties")
+                                .doc(PropertyTitle)
+                                .set({
+                              "PropertyTitle": PropertyTitle,
+                              "PropertyAddress": PropertyAddress,
+                              "PropertyTo": to,
+                              "PropertyCategory": Category,
+                              "PropertyType": type
+                            });
+
                             Navigator.pushNamed(
                                 context, AddPropertiesScreen2.id);
                           },

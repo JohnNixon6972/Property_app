@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:property_app/constants.dart';
@@ -13,6 +14,7 @@ class registerScreen extends StatefulWidget {
 
 class _registerScreenState extends State<registerScreen> {
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
 
   // final _auth = FirebaseAuth.instance;
@@ -184,6 +186,12 @@ class _registerScreenState extends State<registerScreen> {
                             final newUser =
                                 await _auth.createUserWithEmailAndPassword(
                                     email: email, password: password);
+
+                            _firestore.collection("Users").doc(email).set({
+                              "email": email,
+                              "name": name,
+                              "number": mobileNumber
+                            });
 
                             if (newUser != null) {
                               Navigator.pushNamed(context, HomeScreen.id);

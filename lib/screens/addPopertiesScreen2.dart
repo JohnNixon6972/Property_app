@@ -5,6 +5,7 @@ import '../constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
+import './addPropertiesScreen1.dart';
 
 class AddPropertiesScreen2 extends StatefulWidget {
   static const String id = 'addPropertiesScreen2';
@@ -13,6 +14,9 @@ class AddPropertiesScreen2 extends StatefulWidget {
 }
 
 class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
+  // List<String> ImagePaths = [];
+  // List<String> ImageName = [];
+  List<ImagesFromGallery> PickedImages = [];
   var _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -99,9 +103,18 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                               final path = result.files.single.path;
                               final filename = result.files.single.name;
 
-                              print(path);
-                              print(filename);
-                              storage.uploadFile(path!, filename).then((value) => print("Done"));
+                              setState(() {
+                                // ImageName.add(filename);
+                                // ImagePaths.add(path!);
+                                PickedImages.add(
+                                    ImagesFromGallery(img_url: path!));
+                              });
+
+                              // print(path);
+                              // print(filename);
+                              // storage
+                              //     .uploadFile(path!, filename, PropertyTitle)
+                              //     .then((value) => print("Done"));
                             },
                             child: CircleAvatar(
                               backgroundColor: kPageBackgroundColor,
@@ -121,7 +134,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
                 child: Container(
-                  child: Row(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
                     children: [
                       ImagesFromGallery(img_url: 'images/property_img1.jpg'),
                       ImagesFromGallery(img_url: 'images/property_img2.jpg'),
@@ -283,15 +297,16 @@ class ImagesFromGallery extends StatelessWidget {
       child: Stack(
         overflow: Overflow.visible,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image(
-              image: AssetImage(img_url),
-              height: 80,
-              fit: BoxFit.fill,
-              width: 80,
-            ),
-          ),
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(15),
+          //   // child: Image(
+          //   //   image: AssetImage(img_url),
+          //   //   height: 80,
+          //   //   fit: BoxFit.fill,
+          //   //   width: 80,
+          //   child: Image.file(file),
+          //   ),
+          // ),
           Positioned(
               left: 60,
               top: -5,

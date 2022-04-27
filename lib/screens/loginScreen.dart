@@ -22,6 +22,7 @@ class _loginScreenState extends State<loginScreen> {
   // String email;
   // String password;
   bool showSpinner = false;
+  bool _isHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +105,7 @@ class _loginScreenState extends State<loginScreen> {
                         ),
                         TextFormField(
                           cursorColor: kPrimaryButtonColor,
+                          obscureText: _isHidden,
                           keyboardType: TextInputType.visiblePassword,
                           textAlign: TextAlign.left,
                           style: TextStyle(color: kPrimaryButtonColor),
@@ -120,6 +122,16 @@ class _loginScreenState extends State<loginScreen> {
                             hintText: 'Enter your Password.',
                             prefixIcon:
                                 Icon(Icons.lock, color: kNavigationIconColor),
+                            suffix: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _isHidden = !_isHidden;
+                                });
+                              },
+                              child: Icon(_isHidden
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -166,6 +178,7 @@ class _loginScreenState extends State<loginScreen> {
                               );
                             }
                             try {
+                              
                               _auth.signInWithEmailAndPassword(
                                   email: email, password: password);
 

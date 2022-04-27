@@ -16,8 +16,6 @@ class _registerScreenState extends State<registerScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
-
-  // final _auth = FirebaseAuth.instance;
   late String name;
   late String email;
   late String mobileNumber;
@@ -30,6 +28,7 @@ class _registerScreenState extends State<registerScreen> {
   late String postalCode;
 
   bool showSpinner = false;
+  bool _isHidden = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,7 +134,7 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       TextFormField(
                         cursorColor: kPrimaryButtonColor,
-                        obscureText: true,
+                        obscureText: _isHidden,
                         keyboardType: TextInputType.visiblePassword,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
@@ -152,6 +151,16 @@ class _registerScreenState extends State<registerScreen> {
                           hintText: 'Enter your Password.',
                           prefixIcon:
                               Icon(Icons.lock, color: kNavigationIconColor),
+                          suffix: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _isHidden = !_isHidden;
+                              });
+                            },
+                            child: Icon(_isHidden
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -160,25 +169,12 @@ class _registerScreenState extends State<registerScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState!.validate()) {
-                            // If the form is valid, display a snackbar. In the real world,
-                            // you'd often call a server or save the information in a database.
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
-                          }
-                          // try {
-                          //   final newUser =
-                          //       await _auth.createUserWithEmailAndPassword(
-                          //           email: email, password: password);
-                          //   if (newUser != null) {
-                          //     Navigator.pushNamed(context, login.id);
-                          //   }
-                          //   setState(() {
-                          //     showSpinner = false;
-                          //   });
-                          // } catch (e) {
-                          //   print(e);
+                          // if (_formKey.currentState!.validate()) {
+                          //   // If the form is valid, display a snackbar. In the real world,
+                          //   // you'd often call a server or save the information in a database.
+                          //   ScaffoldMessenger.of(context).showSnackBar(
+                          //     const SnackBar(content: Text('Processing Data')),
+                          //   );
                           // }
                           try {
                             print(email);

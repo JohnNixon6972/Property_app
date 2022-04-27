@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:file_picker/file_picker.dart';
+
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }
 enum propertyCategory { Penthouse, Apartment, Building }
@@ -48,10 +49,11 @@ String getTo() {
   }
 }
 
+late String PropertyTitle;
+
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
   var _PropertyTitleController = TextEditingController();
   var _PropertyAddressController = TextEditingController();
-  late String PropertyTitle;
   late String PropertyAddress;
   bool uselastusedaddress = false;
   final _auth = FirebaseAuth.instance;

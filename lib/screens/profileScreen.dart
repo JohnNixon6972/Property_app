@@ -1,4 +1,4 @@
-import 'dart:ffi';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
@@ -6,6 +6,11 @@ import 'dart:math';
 import 'package:avatar_glow/avatar_glow.dart';
 import '../components/bottomNavigationBar.dart';
 import '../components/dialogBoxListWidgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final _firestore = FirebaseFirestore.instance;
+late User loggedInUser;
 
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';
@@ -22,19 +27,77 @@ List<String> option_titles = [
   "Address"
 ];
 
+final _formKey = GlobalKey<FormState>();
+
 class _profileScreenState extends State<profileScreen> {
-  final _formKey = GlobalKey<FormState>();
-  late String name;
-  late String email;
-  late String mobileNumber;
-  late String addressLine1;
-  late String addressLine2;
-  late String password;
-  late String city;
-  late String state;
-  late String country;
-  late String postalCode;
+  final meaageTextController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  // final CollectionReference collectionRef =
+  //     FirebaseFirestore.instance.collection("users");
+  final messageTextController = TextEditingController();
+  late String name = "";
+  late String email = "";
+  late String mobileNumber="";
+  late String addressLine1="";
+  late String addressLine2="";
+  late String password="";
+  late String city="";
+  late String state="";
+  late String country="";
+  late String postalCode="";
+
   @override
+  void initState() {
+    print("Hi");
+    getCurrentUser();
+    super.initState();
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+
+      if (user != null) {
+        loggedInUser = user;
+        print(loggedInUser.email);
+        email = loggedInUser.email!;
+        var currUserCollection = _firestore.collection("Users");
+        var docSanpshot = await currUserCollection.doc(email).get();
+
+        if (docSanpshot.exists) {
+          Map<String, dynamic>? data = docSanpshot.data();
+          setState(
+            () {
+              name = data?['name'];
+              mobileNumber = data?['number'];
+              print(name);
+              print(mobileNumber);
+            },
+          );
+        }
+        print(email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // void getDetails() async {
+  //   var collection =
+  //       FirebaseFirestore.instance.collection('users').doc(loggedInUser.email);
+  //   var querySnapshot = await collection.get();
+  //   var queryDocumentSnapshot;
+  //   // for (var queryDocumentSnapshot in querySnapshot.docs)
+  //   if (queryDocumentSnapshot != null) {
+  //     Map<String, dynamic> data = await queryDocumentSnapshot.data();
+  //     name = await data['name'];
+  //     mobileNumber = await data['phone'];
+  //   } else {
+  //     print("No data found");
+  //   }
+  // }
+
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     print(width);
@@ -90,7 +153,7 @@ class _profileScreenState extends State<profileScreen> {
                   child: Column(
                     children: [
                       Text(
-                        'Devon Lane',
+                        name,
                         style: TextStyle(
                             color: kHighlightedTextColor,
                             fontSize: 25,
@@ -98,7 +161,7 @@ class _profileScreenState extends State<profileScreen> {
                             wordSpacing: -1),
                       ),
                       Text(
-                        'weaver@example.com',
+                        email,
                         style: TextStyle(
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.bold),
@@ -117,17 +180,17 @@ class _profileScreenState extends State<profileScreen> {
                     ProfileDetailsContainer(
                       icon: Icons.account_circle_outlined,
                       Title: "Personal Information",
-                      SubTitle: "Devon Lane",
+                      SubTitle: name,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.alternate_email_outlined,
                       Title: "Email",
-                      SubTitle: "weaver@email.com",
+                      SubTitle: email,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.call_outlined,
                       Title: "Phone",
-                      SubTitle: "(217) 555-0113",
+                      SubTitle: mobileNumber,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.lock_outlined,
@@ -274,14 +337,13 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 ElevatedButton(
                   onPressed: () {
                     // Validate returns true if the form is valid, or false otherwise.
-                    // if (_formKey.currentState!.validate()) {
-                    //   // If the form is valid, display a snackbar. In the real world,
-                    //   // you'd often call a server or save the information in a database.
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //         content: Text('Processing Data')),
-                    //   );
-                    // }
+                    if (_formKey.currentState!.validate()) {
+                      // If the form is valid, display a snackbar. In the real world,
+                      // you'd often call a server or save the information in a database.
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Processing Data')),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: kPrimaryButtonColor,
@@ -303,149 +365,33 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
   }
 }
 
+// class MessagesStream extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder<QuerySnapshot>(
+//       stream: _firestore.collection('messages').snapshots(),
+//       builder: (context, snapshot) {
+//         List messageBubbles = [];
+//         if (!snapshot.hasData) {
+//           return Center(
+//             child: CircularProgressIndicator(
+//               backgroundColor: Colors.lightBlue,
+//             ),
+//           );
+//         }
+//         final messages = snapshot.data!.docs.reversed;
+//         for (var message in messages) {
+//           try {
+//             final messageText = (message['text']);
+//             final messageSender = (message['sender']);
+//             final currentUser = loggedInUser.email;
+//           } catch (E) {
+//             print(E);
+//           }
+//         }
 
-
-
-
-
-
-// Text(
-//                     "Address :",
-//                     style: kTextTitleStyle.copyWith(fontSize: 18),
-//                     textAlign: TextAlign.left,
-//                   ),
-//                   SizedBox(
-//                     height: 10,
-//                   ),
-                  // TextFormField(
-                  //   keyboardType: TextInputType.streetAddress,
-                  //   textAlign: TextAlign.left,
-                  //   style: TextStyle(color: kPrimaryButtonColor),
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) {
-                  //       return 'Please enter valid text';
-                  //     } else {
-                  //       addressLine1 = value;
-                  //     }
-
-                  //     return null;
-                  //   },
-                  //   decoration: kTextFieldDecoration.copyWith(
-                  //     hintText: 'Address line 1',
-                  //     prefixIcon:
-                  //         Icon(Icons.home, color: kNavigationIconColor),
-                  //   ),
-                  // ),
-//                   SizedBox(
-//                     height: 10,
-//                   ),
-//                   TextFormField(
-//                     keyboardType: TextInputType.streetAddress,
-//                     textAlign: TextAlign.left,
-//                     style: TextStyle(color: kPrimaryButtonColor),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter valid text';
-//                       } else {
-//                         addressLine2 = value;
-//                       }
-
-//                       return null;
-//                     },
-//                     decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'Address line 2',
-//                       prefixIcon:
-//                           Icon(Icons.house, color: kNavigationIconColor),
-//                     ),
-//                   ),
-//                   SizedBox(
-//                     height: 10,
-//                   ),
-//                   TextFormField(
-//                     keyboardType: TextInputType.streetAddress,
-//                     textAlign: TextAlign.left,
-//                     style: TextStyle(color: kPrimaryButtonColor),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter valid text';
-//                       } else {
-//                         city = value;
-//                       }
-
-//                       return null;
-//                     },
-//                     decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'City',
-//                       prefixIcon: Icon(Icons.location_city,
-//                           color: kNavigationIconColor),
-//                     ),
-//                   ),
-//                   SizedBox(
-//                     height: 10,
-//                   ),
-//                   TextFormField(
-//                     keyboardType: TextInputType.streetAddress,
-//                     textAlign: TextAlign.left,
-//                     style: TextStyle(color: kPrimaryButtonColor),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter valid text';
-//                       } else {
-//                         state = value;
-//                       }
-
-//                       return null;
-//                     },
-//                     decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'State',
-//                       prefixIcon:
-//                           Icon(Icons.cabin, color: kNavigationIconColor),
-//                     ),
-//                   ),
-//                   SizedBox(
-//                     height: 10,
-//                   ),
-//                   TextFormField(
-//                     keyboardType: TextInputType.streetAddress,
-//                     textAlign: TextAlign.left,
-//                     style: TextStyle(color: kPrimaryButtonColor),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter valid text';
-//                       } else {
-//                         country = value;
-//                       }
-
-//                       return null;
-//                     },
-//                     decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'Country',
-//                       prefixIcon:
-//                           Icon(Icons.countertops, color: kNavigationIconColor),
-//                     ),
-//                   ),
-//                   SizedBox(
-//                     height: 10,
-//                   ),
-//                   TextFormField(
-//                     keyboardType: TextInputType.streetAddress,
-//                     textAlign: TextAlign.left,
-//                     style: TextStyle(color: kPrimaryButtonColor),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Please enter valid text';
-//                       } else {
-//                         postalCode = value;
-//                       }
-
-//                       return null;
-//                     },
-//                     decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'Postal code',
-//                       prefixIcon: Icon(Icons.code, color: kNavigationIconColor),
-//                     ),
-//                   ),
-//                   SizedBox(
-//                     height: 10,
-//                   ),
-  
+//         return Expanded(child: Text("hey"));
+//       },
+//     );
+//   }
+// }

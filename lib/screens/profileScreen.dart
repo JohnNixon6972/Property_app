@@ -1,15 +1,11 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
 import 'dart:math';
-import 'package:avatar_glow/avatar_glow.dart';
 import '../components/bottomNavigationBar.dart';
 import '../components/dialogBoxListWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final _firestore = FirebaseFirestore.instance;
 late User loggedInUser;
 
 class profileScreen extends StatefulWidget {
@@ -49,7 +45,7 @@ class _profileScreenState extends State<profileScreen> {
 
   @override
   void initState() {
-    print("Hi");
+    // print("Hi");
     getCurrentUser();
     super.initState();
   }
@@ -82,21 +78,6 @@ class _profileScreenState extends State<profileScreen> {
       print(e);
     }
   }
-
-  // void getDetails() async {
-  //   var collection =
-  //       FirebaseFirestore.instance.collection('users').doc(loggedInUser.email);
-  //   var querySnapshot = await collection.get();
-  //   var queryDocumentSnapshot;
-  //   // for (var queryDocumentSnapshot in querySnapshot.docs)
-  //   if (queryDocumentSnapshot != null) {
-  //     Map<String, dynamic> data = await queryDocumentSnapshot.data();
-  //     name = await data['name'];
-  //     mobileNumber = await data['phone'];
-  //   } else {
-  //     print("No data found");
-  //   }
-  // }
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -364,34 +345,3 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
     );
   }
 }
-
-// class MessagesStream extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamBuilder<QuerySnapshot>(
-//       stream: _firestore.collection('messages').snapshots(),
-//       builder: (context, snapshot) {
-//         List messageBubbles = [];
-//         if (!snapshot.hasData) {
-//           return Center(
-//             child: CircularProgressIndicator(
-//               backgroundColor: Colors.lightBlue,
-//             ),
-//           );
-//         }
-//         final messages = snapshot.data!.docs.reversed;
-//         for (var message in messages) {
-//           try {
-//             final messageText = (message['text']);
-//             final messageSender = (message['sender']);
-//             final currentUser = loggedInUser.email;
-//           } catch (E) {
-//             print(E);
-//           }
-//         }
-
-//         return Expanded(child: Text("hey"));
-//       },
-//     );
-//   }
-// }

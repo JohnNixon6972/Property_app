@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
       final user = await _auth.currentUser;
       if (user != null) {
         loggedInUser = user;
-        print(loggedInUser.email);
+        // print(loggedInUser.email);
       }
     } catch (e) {
       print(e);

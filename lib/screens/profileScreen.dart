@@ -36,21 +36,22 @@ class _profileScreenState extends State<profileScreen> {
   // final CollectionReference collectionRef =
   //     FirebaseFirestore.instance.collection("users");
   final messageTextController = TextEditingController();
-  late String name;
-  late String email;
-  late String mobileNumber;
-  late String addressLine1;
-  late String addressLine2;
-  late String password;
-  late String city;
-  late String state;
-  late String country;
-  late String postalCode;
+  late String name = "";
+  late String email = "";
+  late String mobileNumber="";
+  late String addressLine1="";
+  late String addressLine2="";
+  late String password="";
+  late String city="";
+  late String state="";
+  late String country="";
+  late String postalCode="";
 
   @override
   void initState() {
-    super.initState();
+    print("Hi");
     getCurrentUser();
+    super.initState();
   }
 
   void getCurrentUser() async {
@@ -59,8 +60,22 @@ class _profileScreenState extends State<profileScreen> {
 
       if (user != null) {
         loggedInUser = user;
-        // print(loggedInUser.email);
+        print(loggedInUser.email);
         email = loggedInUser.email!;
+        var currUserCollection = _firestore.collection("Users");
+        var docSanpshot = await currUserCollection.doc(email).get();
+
+        if (docSanpshot.exists) {
+          Map<String, dynamic>? data = docSanpshot.data();
+          setState(
+            () {
+              name = data?['name'];
+              mobileNumber = data?['number'];
+              print(name);
+              print(mobileNumber);
+            },
+          );
+        }
         print(email);
       }
     } catch (e) {
@@ -68,20 +83,20 @@ class _profileScreenState extends State<profileScreen> {
     }
   }
 
-  void getDetails() async {
-    var collection =
-        FirebaseFirestore.instance.collection('users').doc(loggedInUser.email);
-    var querySnapshot = await collection.get();
-    var queryDocumentSnapshot;
-    // for (var queryDocumentSnapshot in querySnapshot.docs)
-    if (queryDocumentSnapshot != null) {
-      Map<String, dynamic> data = queryDocumentSnapshot.data();
-      name = data['name'];
-      mobileNumber = data['phone'];
-    } else {
-      print("No data found");
-    }
-  }
+  // void getDetails() async {
+  //   var collection =
+  //       FirebaseFirestore.instance.collection('users').doc(loggedInUser.email);
+  //   var querySnapshot = await collection.get();
+  //   var queryDocumentSnapshot;
+  //   // for (var queryDocumentSnapshot in querySnapshot.docs)
+  //   if (queryDocumentSnapshot != null) {
+  //     Map<String, dynamic> data = await queryDocumentSnapshot.data();
+  //     name = await data['name'];
+  //     mobileNumber = await data['phone'];
+  //   } else {
+  //     print("No data found");
+  //   }
+  // }
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -138,7 +153,7 @@ class _profileScreenState extends State<profileScreen> {
                   child: Column(
                     children: [
                       Text(
-                        "hey",
+                        name,
                         style: TextStyle(
                             color: kHighlightedTextColor,
                             fontSize: 25,
@@ -146,7 +161,7 @@ class _profileScreenState extends State<profileScreen> {
                             wordSpacing: -1),
                       ),
                       Text(
-                        'weaver@example.com',
+                        email,
                         style: TextStyle(
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.bold),
@@ -165,17 +180,17 @@ class _profileScreenState extends State<profileScreen> {
                     ProfileDetailsContainer(
                       icon: Icons.account_circle_outlined,
                       Title: "Personal Information",
-                      SubTitle: "Devon Lane",
+                      SubTitle: name,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.alternate_email_outlined,
                       Title: "Email",
-                      SubTitle: "weaver@email.com",
+                      SubTitle: email,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.call_outlined,
                       Title: "Phone",
-                      SubTitle: "(217) 555-0113",
+                      SubTitle: mobileNumber,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.lock_outlined,

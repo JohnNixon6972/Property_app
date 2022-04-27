@@ -297,16 +297,16 @@ class ImagesFromGallery extends StatelessWidget {
       child: Stack(
         overflow: Overflow.visible,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            // child: Image(
-            //   image: AssetImage(img_url),
-            //   height: 80,
-            //   fit: BoxFit.fill,
-            //   width: 80,
-            child: Image.file(file),
-            ),
-          ),
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(15),
+          //   // child: Image(
+          //   //   image: AssetImage(img_url),
+          //   //   height: 80,
+          //   //   fit: BoxFit.fill,
+          //   //   width: 80,
+          //   child: Image.file(file),
+          //   ),
+          // ),
           Positioned(
               left: 60,
               top: -5,

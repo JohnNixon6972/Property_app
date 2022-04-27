@@ -27,11 +27,12 @@ List<String> option_titles = [
   "Address"
 ];
 
+final _formKey = GlobalKey<FormState>();
+
 class _profileScreenState extends State<profileScreen> {
   final meaageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
-  final _formKey = GlobalKey<FormState>();
   // final CollectionReference collectionRef =
   //     FirebaseFirestore.instance.collection("users");
   final messageTextController = TextEditingController();
@@ -58,10 +59,27 @@ class _profileScreenState extends State<profileScreen> {
 
       if (user != null) {
         loggedInUser = user;
-        print(loggedInUser.email);
+        // print(loggedInUser.email);
+        email = loggedInUser.email!;
+        print(email);
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  void getDetails() async {
+    var collection =
+        FirebaseFirestore.instance.collection('users').doc(loggedInUser.email);
+    var querySnapshot = await collection.get();
+    var queryDocumentSnapshot;
+    // for (var queryDocumentSnapshot in querySnapshot.docs)
+    if (queryDocumentSnapshot != null) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      name = data['name'];
+      mobileNumber = data['phone'];
+    } else {
+      print("No data found");
     }
   }
 
@@ -304,14 +322,13 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 ElevatedButton(
                   onPressed: () {
                     // Validate returns true if the form is valid, or false otherwise.
-                    // if (_formKey.currentState!.validate()) {
-                    //   // If the form is valid, display a snackbar. In the real world,
-                    //   // you'd often call a server or save the information in a database.
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //         content: Text('Processing Data')),
-                    //   );
-                    // }
+                    if (_formKey.currentState!.validate()) {
+                      // If the form is valid, display a snackbar. In the real world,
+                      // you'd often call a server or save the information in a database.
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Processing Data')),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: kPrimaryButtonColor,

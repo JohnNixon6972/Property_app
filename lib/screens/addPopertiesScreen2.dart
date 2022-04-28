@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:property_app/storage_service.dart';
 
@@ -6,18 +8,83 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import './addPropertiesScreen1.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:async';
 
 class AddPropertiesScreen2 extends StatefulWidget {
   static const String id = 'addPropertiesScreen2';
+
   @override
   State<AddPropertiesScreen2> createState() => _AddPropertiesScreen2State();
 }
 
 class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
+  final ImagePicker imagePicker = ImagePicker();
+  List<XFile>? imageFileList = [];
+
+  Future<void> selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
+      print("Image List Length:" + imageFileList!.length.toString());
+      setState(() {});
+    }
+  }
+
+  Widget buildGridView() {
+    return GridView.builder(
+        // scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
+        itemCount: imageFileList!.length,
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+        itemBuilder: (BuildContext context, int index) {
+          // return Image.file(
+          //   File(imageFileList![index].path),
+          //   fit: BoxFit.cover,
+          // );
+          return Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.file(
+                    File(imageFileList![index].path),
+                    height: 80,
+                    fit: BoxFit.fill,
+                    width: 80,
+                    // child: ,
+                  ),
+                ),
+                Positioned(
+                    left: 60,
+                    top: -5,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          imageFileList!.removeAt(index);
+                        });
+                      },
+                      child: Icon(
+                        Icons.cancel,
+                        color: kHighlightedTextColor,
+                        size: 25,
+                      ),
+                    ))
+              ],
+            ),
+          );
+        });
+  }
+
   // List<String> ImagePaths = [];
-  // List<String> ImageName = [];
   List<ImagesFromGallery> PickedImages = [];
+
   var _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final Storage storage = Storage();
@@ -88,34 +155,35 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           ),
                           Spacer(),
                           GestureDetector(
-                            onTap: () async {
-                              final result =
-                                  await FilePicker.platform.pickFiles(
-                                type: FileType.custom,
-                                allowedExtensions: ['png', 'jpg'],
-                              );
-                              if (result == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text('No file Selected')));
-                                return null;
-                              }
-                              final path = result.files.single.path;
-                              final filename = result.files.single.name;
+                            onTap: selectImages,
+                            // onTap: () async {
+                            //   final result =
+                            //       await FilePicker.platform.pickFiles(
+                            //     type: FileType.custom,
+                            //     allowedExtensions: ['png', 'jpg'],
+                            //   );
+                            //   if (result == null) {
+                            //     ScaffoldMessenger.of(context).showSnackBar(
+                            //         SnackBar(
+                            //             content: Text('No file Selected')));
+                            //     return null;
+                            //   }
+                            //   final path = result.files.single.path;
+                            //   final filename = result.files.single.name;
 
-                              setState(() {
-                                // ImageName.add(filename);
-                                // ImagePaths.add(path!);
-                                PickedImages.add(
-                                    ImagesFromGallery(img_url: path!));
-                              });
+                            //   setState(() {
+                            //     // ImageName.add(filename);
+                            //     // ImagePaths.add(path!);
+                            //     PickedImages.add(
+                            //         ImagesFromGallery(img_url: path!));
+                            //   });
 
-                              // print(path);
-                              // print(filename);
-                              // storage
-                              //     .uploadFile(path!, filename, PropertyTitle)
-                              //     .then((value) => print("Done"));
-                            },
+                            //   print(path);
+                            //   print(filename);
+                            //   storage
+                            //       .uploadFile(path!, filename, PropertyTitle)
+                            //       .then((value) => print("Done"));
+                            // },
                             child: CircleAvatar(
                               backgroundColor: kPageBackgroundColor,
                               child: Icon(
@@ -130,18 +198,21 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                   ),
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                child: Container(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      ImagesFromGallery(img_url: 'images/property_img1.jpg'),
-                      ImagesFromGallery(img_url: 'images/property_img2.jpg'),
-                      ImagesFromGallery(img_url: 'images/property_img3.jpg'),
-                      Spacer()
-                    ],
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                  child: Container(
+                    child: buildGridView(),
+                    // child: Row(
+                    //   // scrollDirection: Axis.horizontal,
+                    //   children: [
+                    //     ImagesFromGallery(img_url: 'images/property_img1.jpg'),
+                    //     ImagesFromGallery(img_url: 'images/property_img2.jpg'),
+                    //     ImagesFromGallery(img_url: 'images/property_img3.jpg'),
+                    //     Spacer()
+                    //   ],
+                    // ),
                   ),
                 ),
               ),
@@ -299,12 +370,12 @@ class ImagesFromGallery extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            // child: Image(
-            //   image: AssetImage(img_url),
-            //   height: 80,
-            //   fit: BoxFit.fill,
-            //   width: 80,
-            child: Image.file(file),
+            child: Image(
+              image: AssetImage(img_url),
+              height: 80,
+              fit: BoxFit.fill,
+              width: 80,
+              // child: ,
             ),
           ),
           Positioned(

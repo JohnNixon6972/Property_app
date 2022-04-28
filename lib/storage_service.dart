@@ -22,12 +22,12 @@ class Storage {
     }
   }
 
-  // Future<firebase_storage.ListResult> listFiles() async {
-  //   firebase_storage.ListResult result = await storage.ref('test/').listAll();
+  Future<firebase_storage.ListResult> listFiles() async {
+    firebase_storage.ListResult result = await storage.ref('test/').listAll();
 
-  //   result.items.forEach((firebase_storage.Reference ref) {
-  //     print('Found file $ref');
-  //   });
-  //   return result;
-  // }
+    result.items.forEach((firebase_storage.Reference ref) {
+      print('Found file $ref');
+    });
+    return result;
+  }
 }

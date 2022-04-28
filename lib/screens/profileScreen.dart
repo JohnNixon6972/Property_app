@@ -25,6 +25,17 @@ List<String> option_titles = [
 
 final _formKey = GlobalKey<FormState>();
 
+late String name = "";
+late String email = "";
+late String mobileNumber = "";
+late String addressLine1 = "";
+late String addressLine2 = "";
+late String password = "";
+late String city = "";
+late String state = "";
+late String country = "";
+late String postalCode = "";
+
 class _profileScreenState extends State<profileScreen> {
   final meaageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
@@ -32,16 +43,6 @@ class _profileScreenState extends State<profileScreen> {
   // final CollectionReference collectionRef =
   //     FirebaseFirestore.instance.collection("users");
   final messageTextController = TextEditingController();
-  late String name = "";
-  late String email = "";
-  late String mobileNumber="";
-  late String addressLine1="";
-  late String addressLine2="";
-  late String password="";
-  late String city="";
-  late String state="";
-  late String country="";
-  late String postalCode="";
 
   @override
   void initState() {

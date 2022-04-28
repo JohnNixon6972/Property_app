@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:property_app/screens/addPropertiesScreen1.dart';
+import 'package:property_app/screens/previewProperty.dart';
 import 'package:property_app/storage_service.dart';
 
 import '../constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
-import './addPropertiesScreen1.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
+import '../storage_service.dart';
 
 class AddPropertiesScreen2 extends StatefulWidget {
   static const String id = 'addPropertiesScreen2';
@@ -19,9 +19,16 @@ class AddPropertiesScreen2 extends StatefulWidget {
   State<AddPropertiesScreen2> createState() => _AddPropertiesScreen2State();
 }
 
+late String propertyDescription = "";
+late String squareFit = "";
+late String bedRoom = "";
+late String bathRoom = "";
+late String price = "";
+
+List<XFile>? imageFileList = [];
+
 class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   final ImagePicker imagePicker = ImagePicker();
-  List<XFile>? imageFileList = [];
 
   Future<void> selectImages() async {
     final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
@@ -32,13 +39,12 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
     }
   }
 
-  Widget buildGridView() {
-    return GridView.builder(
+  Widget buildListView() {
+    return ListView.builder(
         // scrollDirection: Axis.horizontal,
         physics: BouncingScrollPhysics(),
         itemCount: imageFileList!.length,
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+        scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
           // return Image.file(
           //   File(imageFileList![index].path),
@@ -100,7 +106,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                 angle: 270 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, AddPropertiesScreen.id);
                   },
                   child: Icon(
                     Icons.expand_less_rounded,
@@ -203,7 +209,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
                   child: Container(
-                    child: buildGridView(),
+                    child: buildListView(),
                     // child: Row(
                     //   // scrollDirection: Axis.horizontal,
                     //   children: [
@@ -234,6 +240,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           style: TextStyle(color: kSubCategoryColor),
                         ),
                         TextField(
+                          onChanged: (newValue) {
+                            propertyDescription = newValue;
+                          },
                           decoration: InputDecoration(border: InputBorder.none),
                           controller: _controller,
                           style: TextStyle(
@@ -250,19 +259,43 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                 children: [
                   Row(
                     children: [
-                      PropertyDetailTile(HintText: "Square Fit"),
+                      PropertyDetailTile(
+                        HintText: "Square Fit",
+                        onChange: (newValue) {
+                          setState(() {
+                            squareFit = newValue;
+                          });
+                        },
+                      ),
                       Spacer(),
                       PropertyDetailTile(
                         HintText: "Bed Room",
+                        onChange: (newValue) {
+                          setState(() {
+                            bedRoom = newValue;
+                          });
+                        },
                       )
                     ],
                   ),
                   Row(
                     children: [
-                      PropertyDetailTile(HintText: "Bathroom"),
+                      PropertyDetailTile(
+                        HintText: "Bathroom",
+                        onChange: (newValue) {
+                          setState(() {
+                            bathRoom = newValue;
+                          });
+                        },
+                      ),
                       Spacer(),
                       PropertyDetailTile(
                         HintText: "Price (USD)",
+                        onChange: (newValue) {
+                          setState(() {
+                            price = newValue;
+                          });
+                        },
                       )
                     ],
                   )
@@ -275,39 +308,50 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 70,
-                        width: 160,
-                        decoration: BoxDecoration(
-                          color: kNavigationIconColor,
-                          borderRadius: BorderRadius.circular(35),
-                        ),
-                        child: Center(
-                          child: Text('Preview',
-                              style: TextStyle(
-                                  color: kHighlightedTextColor,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400)),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, PreviewProperty.id);
+                        },
+                        child: Container(
+                          height: 70,
+                          width: 160,
+                          decoration: BoxDecoration(
+                            color: kNavigationIconColor,
+                            borderRadius: BorderRadius.circular(35),
+                          ),
+                          child: Center(
+                            child: Text('Preview',
+                                style: TextStyle(
+                                    color: kHighlightedTextColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400)),
+                          ),
                         ),
                       ),
                     ),
                     Spacer(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 70,
-                        width: 160,
-                        decoration: BoxDecoration(
-                          color: kHighlightedTextColor,
-                          borderRadius: BorderRadius.circular(35),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Submit',
-                            style: TextStyle(
-                                color: kSubCategoryColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400),
+                      child: GestureDetector(
+                        onTap: () {
+                          Storage _storage = Storage();
+                          _storage.uploadPropertyImages();
+                        },
+                        child: Container(
+                          height: 70,
+                          width: 160,
+                          decoration: BoxDecoration(
+                            color: kHighlightedTextColor,
+                            borderRadius: BorderRadius.circular(35),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                  color: kSubCategoryColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
                         ),
                       ),
@@ -325,7 +369,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
 
 class PropertyDetailTile extends StatelessWidget {
   final String HintText;
-  PropertyDetailTile({required this.HintText});
+  final Function(String) onChange;
+  PropertyDetailTile({required this.HintText, required this.onChange});
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +386,7 @@ class PropertyDetailTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
+            onChanged: onChange,
             keyboardType: TextInputType.number,
             maxLines: 1,
             cursorColor: kHighlightedTextColor,

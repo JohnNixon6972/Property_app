@@ -11,6 +11,7 @@ import './screens/homescreen.dart';
 import '/screens/propertyDetailsScreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
 import './screens/addPopertiesScreen2.dart';
+import './screens/previewProperty.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class PropertyApp extends StatelessWidget {
         AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
         searchScreen.id: (context) => searchScreen(),
         AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
+        PreviewProperty.id:(context) => PreviewProperty(),
       },
     );
   }

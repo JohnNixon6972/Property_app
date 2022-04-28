@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/addPopertiesScreen2.dart';
+import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,11 +51,11 @@ String getTo() {
 }
 
 late String PropertyTitle;
+late String PropertyAddress;
 
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
   var _PropertyTitleController = TextEditingController();
   var _PropertyAddressController = TextEditingController();
-  late String PropertyAddress;
   bool uselastusedaddress = false;
   final _auth = FirebaseAuth.instance;
   final _firstore = FirebaseFirestore.instance;
@@ -74,7 +75,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   angle: 270 * pi / 180,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, HomeScreen.id);
                     },
                     child: Icon(
                       Icons.expand_less_rounded,

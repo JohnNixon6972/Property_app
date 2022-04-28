@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:property_app/screens/addPropertiesScreen1.dart';
+import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/previewProperty.dart';
 import 'package:property_app/storage_service.dart';
 
@@ -335,7 +336,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                       child: GestureDetector(
                         onTap: () {
                           Storage _storage = Storage();
+                          _storage.uploadPropertyDetails();
                           _storage.uploadPropertyImages();
+                          Navigator.pushNamed(context, HomeScreen.id);
                         },
                         child: Container(
                           height: 70,

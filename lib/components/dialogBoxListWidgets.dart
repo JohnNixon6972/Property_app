@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
+import 'package:property_app/screens/profileScreen.dart';
 
-late String firstName;
-late String lastName;
-late String email;
-late String mobileNumber;
-late String addressLine1;
-late String addressLine2;
-late String password;
-late String city;
-late String state;
-late String country;
-late String postalCode;
-late String phone_num;
-
+final _formKey = GlobalKey<FormState>();
 List<List<Widget>> fields = [
   [
     SizedBox(
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        name = newValue;
+        print(name);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.name,
       textAlign: TextAlign.left,
@@ -28,36 +21,13 @@ List<List<Widget>> fields = [
         if (value == null || value.isEmpty) {
           return 'Please enter valid text';
         } else {
-          firstName = value;
+          name = value;
         }
-
-        return null;
+        // return firstName;
       },
       decoration: kTextFieldDecoration.copyWith(
-        hintText: 'Enter your Firstname.',
+        hintText: 'Enter your Full Name.',
         prefixIcon: Icon(Icons.badge, color: kPrimaryButtonColor),
-      ),
-    ),
-    SizedBox(
-      height: 10,
-    ),
-    TextFormField(
-      cursorColor: kPrimaryButtonColor,
-      keyboardType: TextInputType.name,
-      textAlign: TextAlign.left,
-      style: TextStyle(color: kPrimaryButtonColor),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter valid text';
-        } else {
-          lastName = value;
-        }
-
-        return null;
-      },
-      decoration: kTextFieldDecoration.copyWith(
-        hintText: 'Enter your Lastname.',
-        prefixIcon: Icon(Icons.badge_outlined, color: kPrimaryButtonColor),
       ),
     ),
     SizedBox(
@@ -69,6 +39,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        email = newValue;
+        print(email);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.emailAddress,
       textAlign: TextAlign.left,
@@ -80,7 +54,7 @@ List<List<Widget>> fields = [
           email = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Enter your Email Address.',
@@ -96,6 +70,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        mobileNumber = newValue;
+        print(mobileNumber);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.phone,
       textAlign: TextAlign.left,
@@ -104,10 +82,10 @@ List<List<Widget>> fields = [
         if (value == null || value.isEmpty) {
           return 'Please enter valid text';
         } else {
-          phone_num = value;
+          mobileNumber = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Enter your Mobile Number.',
@@ -123,6 +101,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        password = newValue;
+        print(password);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.visiblePassword,
       textAlign: TextAlign.left,
@@ -134,7 +116,7 @@ List<List<Widget>> fields = [
           password = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Enter your Password.',
@@ -150,6 +132,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        addressLine1 = newValue;
+        print(addressLine1);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.streetAddress,
       textAlign: TextAlign.left,
@@ -161,7 +147,7 @@ List<List<Widget>> fields = [
           addressLine1 = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Address line 1',
@@ -172,6 +158,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        addressLine2 = newValue;
+        print(addressLine2);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.streetAddress,
       textAlign: TextAlign.left,
@@ -183,7 +173,7 @@ List<List<Widget>> fields = [
           addressLine2 = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Address line 2',
@@ -194,6 +184,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        city = newValue;
+        print(city);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.streetAddress,
       textAlign: TextAlign.left,
@@ -205,7 +199,7 @@ List<List<Widget>> fields = [
           city = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'City',
@@ -216,6 +210,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        state = newValue;
+        print(state);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.streetAddress,
       textAlign: TextAlign.left,
@@ -227,7 +225,7 @@ List<List<Widget>> fields = [
           state = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'State',
@@ -238,6 +236,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        country = newValue;
+        print(country);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.streetAddress,
       textAlign: TextAlign.left,
@@ -249,7 +251,7 @@ List<List<Widget>> fields = [
           country = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Country',
@@ -260,6 +262,10 @@ List<List<Widget>> fields = [
       height: 10,
     ),
     TextFormField(
+      onChanged: (newValue) {
+        postalCode = newValue;
+        print(postalCode);
+      },
       cursorColor: kPrimaryButtonColor,
       keyboardType: TextInputType.streetAddress,
       textAlign: TextAlign.left,
@@ -271,7 +277,7 @@ List<List<Widget>> fields = [
           postalCode = value;
         }
 
-        return null;
+        // return null;
       },
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Postal code',

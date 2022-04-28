@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
 import '../components/bottomNavigationBar.dart';
@@ -23,25 +24,23 @@ List<String> option_titles = [
   "Address"
 ];
 
+final _firestore = FirebaseFirestore.instance;
 final _formKey = GlobalKey<FormState>();
 
 late String name = "";
 late String email = "";
 late String mobileNumber = "";
-late String addressLine1 = "";
-late String addressLine2 = "";
-late String password = "";
-late String city = "";
-late String state = "";
-late String country = "";
-late String postalCode = "";
+late String addressLine1 = "Not Saved";
+late String addressLine2 = "Not Saved";
+late String password = "Not Saved";
+late String city = "Not Saved";
+late String state = "Not Saved";
+late String country = "Not Saved";
+late String postalCode = "Not Saved";
 
 class _profileScreenState extends State<profileScreen> {
   final meaageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
-  // final CollectionReference collectionRef =
-  //     FirebaseFirestore.instance.collection("users");
   final messageTextController = TextEditingController();
 
   @override
@@ -128,37 +127,60 @@ class _profileScreenState extends State<profileScreen> {
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: 3,
               child: Padding(
-                padding: EdgeInsets.only(top: 50),
+                padding: EdgeInsets.only(top: 30),
                 child: Center(
                   child: Column(
                     children: [
-                      Text(
-                        name,
-                        style: TextStyle(
-                            color: kHighlightedTextColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            wordSpacing: -1),
+                      // Text(
+                      //   name,
+                      //   style: TextStyle(
+                      //       color: kHighlightedTextColor,
+                      //       fontSize: 25,
+                      //       fontWeight: FontWeight.bold,
+                      //       wordSpacing: -1),
+                      // ),
+                      // Text(
+                      //   email,
+                      //   style: TextStyle(
+                      //       color: kSubCategoryColor,
+                      //       fontWeight: FontWeight.bold),
+                      // ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
+                          Navigator.pushNamed(context, loginScreen.id);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          primary: kPrimaryButtonColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        child: const Text(
+                          'Log Out',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
                       ),
-                      Text(
-                        email,
-                        style: TextStyle(
-                            color: kSubCategoryColor,
-                            fontWeight: FontWeight.bold),
-                      )
+                      SizedBox(
+                        height: 10,
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
             Expanded(
-              flex: 12,
+              flex: 10,
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 10,
+                    ),
                     ProfileDetailsContainer(
                       icon: Icons.account_circle_outlined,
                       Title: "Personal Information",
@@ -177,7 +199,7 @@ class _profileScreenState extends State<profileScreen> {
                     ProfileDetailsContainer(
                       icon: Icons.lock_outlined,
                       Title: "Password",
-                      SubTitle: "Last updated March 25,2020",
+                      SubTitle: "Change Password",
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.add_location_outlined,
@@ -263,7 +285,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                   Text(
                     widget.SubTitle,
                     style: TextStyle(
-                        color: kNavigationIconColor,
+                        color: kBottomNavigationBackgroundColor,
                         fontWeight: FontWeight.w500),
                   )
                 ],
@@ -276,11 +298,13 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    // Navigator.pop(context);
                     showDialog(
                         context: context,
                         builder: (_) => editDetailsPopup(widget.Title,
                             fields[option_titles.indexOf(widget.Title)]));
+                    setState(() {
+                      // Navigator.pop(context);
+                    });
                   },
                   child: Icon(
                     Icons.expand_less_rounded,
@@ -297,6 +321,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
   }
 
   SimpleDialog editDetailsPopup(String boxTitle, List<Widget> childern) {
+    final _auth = FirebaseAuth.instance;
     return SimpleDialog(
       backgroundColor: kPageBackgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -317,15 +342,39 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
               children: [
                 Column(children: childern),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-                    }
+                    setState(() {
+                      try {
+                        // if (_formKey.currentState!.validate()) {
+                        //   //   //   //   //   // If the form is valid, display a snackbar. In the real world,
+                        //   //   //   //   //   // you'd often call a server or save the information in a database.
+                        //   //   //   //   //   // ScaffoldMessenger.of(context).showSnackBar(
+                        //   //   //   //   //   //   const SnackBar(content: Text('Processing Data')),
+                        //   //   //   //   //   // );
+
+                        // }
+                        print(name);
+                        name = name;
+                        _firestore
+                            .collection("Users")
+                            .doc(loggedInUser.email)
+                            .set({
+                          "email": email,
+                          "name": name,
+                          "number": mobileNumber,
+                          "addressLine1": addressLine1,
+                          "addressLine2": addressLine2,
+                          "city": city,
+                          "state": state,
+                          "country": country,
+                          "postalcode": postalCode,
+                        });
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print(e);
+                      }
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     primary: kPrimaryButtonColor,

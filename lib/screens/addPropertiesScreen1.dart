@@ -513,6 +513,9 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 InputDecoration(border: InputBorder.none),
                             // controller: _controller,
                             controller: _PropertyTitleController,
+                            onChanged: (newValue) {
+                              PropertyTitle = newValue;
+                            },
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             maxLines: 1,
@@ -536,6 +539,9 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         children: [
                           Expanded(
                             child: TextField(
+                              onChanged: (newValue) {
+                                PropertyAddress = newValue;
+                              },
                               controller: _PropertyAddressController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -584,28 +590,6 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         angle: 90 * pi / 180,
                         child: GestureDetector(
                           onTap: () {
-                            PropertyAddress = _PropertyAddressController.text;
-                            PropertyTitle = _PropertyTitleController.text;
-                            print(PropertyAddress);
-                            print(PropertyTitle);
-                            print(getCategory());
-                            print(getTo());
-                            print(getType());
-                            // print(uselastusedaddress);
-                            var Category = getCategory();
-                            var to = getTo();
-                            var type = getType();
-                            _firstore
-                                .collection("Properties")
-                                .doc(PropertyTitle)
-                                .set({
-                              "PropertyTitle": PropertyTitle,
-                              "PropertyAddress": PropertyAddress,
-                              "PropertyTo": to,
-                              "PropertyCategory": Category,
-                              "PropertyType": type
-                            });
-
                             Navigator.pushNamed(
                                 context, AddPropertiesScreen2.id);
                           },

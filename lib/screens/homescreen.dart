@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
@@ -7,14 +8,35 @@ import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomeScreen extends StatelessWidget {
-  final _auth = FirebaseAuth.instance;
+class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen';
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final _auth = FirebaseAuth.instance;
+
   late AnimationController _animationController;
+
   late Animation _animation;
+
   late Color bookmarkIconColor;
+
   late IconData icn;
+  final _firestore = FirebaseFirestore.instance;
   late User loggedInUser;
+  late String name = "";
+  late String email = "";
+  late String mobileNumber = "";
+  late String addressLine1 = "";
+  late String addressLine2 = "";
+  late String password = "";
+  late String city = "";
+  late String state = "";
+  late String country = "";
+  late String postalCode = "";
 
   @override
   void initState() {
@@ -24,9 +46,26 @@ class HomeScreen extends StatelessWidget {
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser;
+
       if (user != null) {
         loggedInUser = user;
-        // print(loggedInUser.email);
+        print(loggedInUser.email);
+        email = loggedInUser.email!;
+        var currUserCollection = _firestore.collection("Users");
+        var docSanpshot = await currUserCollection.doc(email).get();
+
+        if (docSanpshot.exists) {
+          Map<String, dynamic>? data = docSanpshot.data();
+          setState(
+            () {
+              name = data?['name'];
+              mobileNumber = data?['number'];
+              print(name);
+              print(mobileNumber);
+            },
+          );
+        }
+        print(email);
       }
     } catch (e) {
       print(e);
@@ -49,13 +88,13 @@ class HomeScreen extends StatelessWidget {
                     flex: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
-                          'Hey Marimar ${Emojis.wavingHandLightSkinTone}',
+                          'Hey $name ${Emojis.wavingHandLightSkinTone}',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
-                            color: kSubCategoryColor,
+                            color: kBottomNavigationBackgroundColor,
                           ),
                         ),
                         Text(

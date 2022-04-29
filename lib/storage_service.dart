@@ -12,6 +12,8 @@ class Storage {
 
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  late firebase_storage.Reference ref;
+  late CollectionReference imgRef;
 
   // Future<void> uploadFile(
   //     String filePath, String fileName, String propertyName) async {
@@ -41,9 +43,17 @@ class Storage {
 
       try {
         // await storage.ref('test/$fileName').putFile(file);
-        await storage
-            .ref('asset/propertyImages/$loggedIn_mail/$PropertyTitle/$fileName')
-            .putFile(file);
+        ref = await storage.ref().child(
+            'asset/propertyImages/$loggedIn_mail/$PropertyTitle/$fileName');
+        await ref.putFile(file).whenComplete(() async {
+          await ref.getDownloadURL().then((value) {
+            // imgRef.add({'url': value});
+            _firestore
+                .collection(email)
+                .doc(PropertyTitle)
+                .update({"imgUrl${i + 1}": value});
+          });
+        });
       } catch (e) {
         print(e);
       } on FirebaseException catch (e) {
@@ -63,7 +73,10 @@ class Storage {
     var Category = getCategory();
     var to = getTo();
     var type = getType();
-    _firestore.collection(loggedInUser.email.toString()).doc(PropertyTitle).set({
+    _firestore
+        .collection(loggedInUser.email.toString())
+        .doc(PropertyTitle)
+        .set({
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,
       "PropertyTo": to,
@@ -73,7 +86,17 @@ class Storage {
       "SquareFit": squareFit,
       "BedRoom": bedRoom,
       "BathRoom": bathRoom,
-      "Price": price
+      "Price": price,
+      "imgUrl1": "",
+      "imgUrl2": "",
+      "imgUrl3": "",
+      "imgUrl4": "",
+      "imgUrl5": "",
+      "imgUrl6": "",
+      "imgUrl7": "",
+      "imgUrl8": "",
+      "imgUrl9": "",
+      "imgUrl10": "",
     }).then((_) {
       print("Data Added Sucessfully");
     }).catchError((_) {

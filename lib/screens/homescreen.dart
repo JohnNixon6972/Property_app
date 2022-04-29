@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
+import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
+// import 'package:property_app/screens/addPropertiesScreen1.dart';
+// import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
@@ -41,6 +44,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getCurrentUser();
+  }
+
+  void buildStream() async {
+
+    _
+
+    StreamBuilder(
+      // stream: FirebaseFirestore.instance
+      //     .collection()
+      //     .doc()
+      //     .snapshots(),
+      // builder: (context, snapshot) {
+      //   return !snapshot.hasData
+      //       ? Center(
+      //           child: CircularProgressIndicator(),
+      //         )
+      //       : Container(
+      //           child: ListView.builder(itemCount: snapshot.data,itemBuilder: itemBuilder),
+      //         );
+      // },
+    );
   }
 
   void getCurrentUser() async {
@@ -116,50 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Expanded(
-            //   flex: 3,
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-            //     child: Center(
-            //       child: Material(
-            //         elevation: 2,
-            //         borderRadius: const BorderRadius.all(
-            //           Radius.circular(15),
-            //         ),
-            //         child: Container(
-            //           decoration: const BoxDecoration(
-            //             color: Colors.white,
-            //             borderRadius: BorderRadius.all(
-            //               Radius.circular(15),
-            //             ),
-            //           ),
-            //           width: 220,
-            //           height: 40,
-            //           child: Row(
-            //             children: const [
-            //               Text(
-            //                 "  Add Property ",
-            //                 style: TextStyle(
-            //                     fontSize: 25,
-            //                     fontWeight: FontWeight.bold,
-            //                     color: Color.fromARGB(255, 164, 164, 164)),
-            //               ),
-            //               CircleAvatar(
-            //                 radius: 17,
-            //                 backgroundColor: Color.fromARGB(255, 38, 38, 38),
-            //                 child: Icon(
-            //                   Icons.home,
-            //                   color: Color.fromARGB(255, 228, 228, 228),
-            //                   size: 25,
-            //                 ),
-            //               )
-            //             ],
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             const Padding(
               padding: EdgeInsets.only(top: 20, left: 15, right: 15),
               child: Text(
@@ -202,7 +182,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
             Expanded(
               flex: 32,
               child: Padding(
@@ -316,12 +295,13 @@ class PropertiesOnRent extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         children: [
-          PropertyCard(imageloc: 'images/property1.jpg'),
-          PropertyCard(imageloc: 'images/property2.jpg'),
-          PropertyCard(imageloc: 'images/property3.jpg'),
+          // PropertyCard(imageloc: 'images/property1.jpg',propertyName: "John",),
+          // PropertyCard(imageloc: 'images/property2.jpg'),
+          // PropertyCard(imageloc: 'images/property3.jpg'),
         ],
       ),
     );
+    // return ListView.builder(itemBuilder: itemBuilder)
   }
 }
 
@@ -340,9 +320,9 @@ class PropertiesOnSale extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         children: [
-          PropertyCard(imageloc: 'images/property1.jpg'),
-          PropertyCard(imageloc: 'images/property2.jpg'),
-          PropertyCard(imageloc: 'images/property3.jpg'),
+          // PropertyCard(imageloc: 'images/property1.jpg'),
+          // PropertyCard(imageloc: 'images/property2.jpg'),
+          // PropertyCard(imageloc: 'images/property3.jpg'),
         ],
       ),
     );
@@ -351,7 +331,14 @@ class PropertiesOnSale extends StatelessWidget {
 
 class PropertyCard extends StatefulWidget {
   final String imageloc;
-  PropertyCard({required this.imageloc});
+  final String propertyName;
+  final String propertyAddress;
+  final String price;
+  const PropertyCard(
+      {required this.imageloc,
+      required this.price,
+      required this.propertyAddress,
+      required this.propertyName});
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -359,6 +346,8 @@ class PropertyCard extends StatefulWidget {
 
 class _PropertyCardState extends State<PropertyCard> {
   late bool bookedmark = false;
+
+  // String propertyName;
   @override
   void initState() {
     print(widget.imageloc);
@@ -396,17 +385,17 @@ class _PropertyCardState extends State<PropertyCard> {
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: 5),
                 child: Text(
-                  'Nomaden Omah Sekut',
+                  widget.propertyName,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
                 child: Text(
-                  'San Diego, California, USA',
+                  widget.propertyAddress,
                   style: TextStyle(
                     color: kSubCategoryColor,
                   ),
@@ -415,7 +404,7 @@ class _PropertyCardState extends State<PropertyCard> {
               Row(
                 children: [
                   Text(
-                    "\$128 ",
+                    widget.price,
                     style: TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,

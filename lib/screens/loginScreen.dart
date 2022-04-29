@@ -4,10 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
+import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
 
-late String email = "";
-late String password = "";
+late String email;
+late String password;
 
 class loginScreen extends StatefulWidget {
   static const String id = 'login';
@@ -177,6 +178,8 @@ class _loginScreenState extends State<loginScreen> {
                               //   const SnackBar(content: Text("")),
                               // );
                             }
+                            print(email);
+                            print(password);
                             try {
                               _auth.signInWithEmailAndPassword(
                                   email: email, password: password);

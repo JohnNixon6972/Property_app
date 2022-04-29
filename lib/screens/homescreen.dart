@@ -46,25 +46,40 @@ class _HomeScreenState extends State<HomeScreen> {
     getCurrentUser();
   }
 
-  void buildStream() async {
+  Widget build(BuildContext context) {
+    List<String> Users = [];
+    StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection("Users").snapshots(),
+        builder: (context, snapshots) {
+          if (!snapshots.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final members = snapshots.data!.docs;
 
-    _
+          for (var user in members) {
+            Users.add(user.id.toString());
+          }
+        }); 
+      
 
-    StreamBuilder(
-      // stream: FirebaseFirestore.instance
-      //     .collection()
-      //     .doc()
-      //     .snapshots(),
-      // builder: (context, snapshot) {
-      //   return !snapshot.hasData
-      //       ? Center(
-      //           child: CircularProgressIndicator(),
-      //         )
-      //       : Container(
-      //           child: ListView.builder(itemCount: snapshot.data,itemBuilder: itemBuilder),
-      //         );
-      // },
-    );
+        StreamBuilder(
+                stream: _firestore
+                    .collection("Users")
+                    .doc(user.toString())
+                    .collection("Properties")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  
+                    return !snapshot.hasData? Center(
+                      child: CircularProgressIndicator()):ListView.builder(itemCount: snapshot.data?.doc.le,);
+                    
+
+                  
+
+                  
+                });
   }
 
   void getCurrentUser() async {

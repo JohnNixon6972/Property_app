@@ -49,9 +49,8 @@ class Storage {
           await ref.getDownloadURL().then((value) {
             // imgRef.add({'url': value});
             _firestore
-                .collection(email)
-                .doc(PropertyTitle)
-                .update({"imgUrl${i + 1}": value});
+                .collection('Users')
+        .doc(loggedInUser.email).collection('Properties').doc(PropertyTitle).update({"imgUrl${i+1}":value});
           });
         });
       } catch (e) {
@@ -74,8 +73,8 @@ class Storage {
     var to = getTo();
     var type = getType();
     _firestore
-        .collection(loggedInUser.email.toString())
-        .doc(PropertyTitle)
+        .collection('Users')
+        .doc(loggedInUser.email).collection('Properties').doc(PropertyTitle)
         .set({
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/loginScreen.dart';
+// import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
 import '../components/bottomNavigationBar.dart';
 import '../components/dialogBoxListWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import '../screens/registerScreen.dart';
+import '../screens/loginScreen.dart';
 
 late User loggedInUser;
 
@@ -28,11 +30,11 @@ final _firestore = FirebaseFirestore.instance;
 final _formKey = GlobalKey<FormState>();
 
 late String name = "";
-late String email = "";
+// late String email = "";
 late String mobileNumber = "";
 late String addressLine1 = "Not Saved";
 late String addressLine2 = "Not Saved";
-late String password = "Not Saved";
+// late String password = "Not Saved";
 late String city = "Not Saved";
 late String state = "Not Saved";
 late String country = "Not Saved";
@@ -48,6 +50,12 @@ class _profileScreenState extends State<profileScreen> {
     // print("Hi");
     getCurrentUser();
     super.initState();
+  }
+
+  void updateVisibility(bool isHidden) {
+    setState(() {
+      isHidden = !isHidden;
+    });
   }
 
   void getCurrentUser() async {
@@ -126,27 +134,27 @@ class _profileScreenState extends State<profileScreen> {
                 ],
               ),
             ),
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: Center(
+            Padding(
+              padding: EdgeInsets.only(top: 30),
+              child: Center(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      // Text(
-                      //   name,
-                      //   style: TextStyle(
-                      //       color: kHighlightedTextColor,
-                      //       fontSize: 25,
-                      //       fontWeight: FontWeight.bold,
-                      //       wordSpacing: -1),
-                      // ),
-                      // Text(
-                      //   email,
-                      //   style: TextStyle(
-                      //       color: kSubCategoryColor,
-                      //       fontWeight: FontWeight.bold),
-                      // ),
+                      Text(
+                        name,
+                        style: TextStyle(
+                            color: kHighlightedTextColor,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            wordSpacing: -1),
+                      ),
+                      Text(
+                        email,
+                        style: TextStyle(
+                            color: kSubCategoryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
                       ElevatedButton(
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
@@ -175,7 +183,7 @@ class _profileScreenState extends State<profileScreen> {
             Expanded(
               flex: 10,
               child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     SizedBox(
@@ -199,7 +207,7 @@ class _profileScreenState extends State<profileScreen> {
                     ProfileDetailsContainer(
                       icon: Icons.lock_outlined,
                       Title: "Password",
-                      SubTitle: "Change Password",
+                      SubTitle: password,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.add_location_outlined,
@@ -346,20 +354,31 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     // Validate returns true if the form is valid, or false otherwise.
                     setState(() {
                       try {
-                        // if (_formKey.currentState!.validate()) {
-                        //   //   //   //   //   // If the form is valid, display a snackbar. In the real world,
-                        //   //   //   //   //   // you'd often call a server or save the information in a database.
-                        //   //   //   //   //   // ScaffoldMessenger.of(context).showSnackBar(
-                        //   //   //   //   //   //   const SnackBar(content: Text('Processing Data')),
-                        //   //   //   //   //   // );
-
-                        // }
-                        print(name);
+                        if (passwordKey.currentState!.validate()) {
+                          //   //   //   //   //   // If the form is valid, display a snackbar. In the real world,
+                          //   //   //   //   //   // you'd often call a server or save the information in a database.
+                          //   //   //   //   //   // ScaffoldMessenger.of(context).showSnackBar(
+                          //   //   //   //   //   //   const SnackBar(content: Text('Processing Data')),
+                          //   //   //   //   //   // );
+                        }
+                        print(password);
                         name = name;
+                        if (newPassword == confirmNewPassword) {
+                          loggedInUser.updatePassword(password).then((_) {
+                            password = newPassword;
+                            print(password);
+                            print("Successfully changed password");
+                          }).catchError((error) {
+                            print(
+                                "Password can't be changed" + error.toString());
+                          });
+                        } else {
+                          print("Reconfirm New Password");
+                        }
                         _firestore
                             .collection("Users")
                             .doc(loggedInUser.email)
-                            .set({
+                            .update({
                           "email": email,
                           "name": name,
                           "number": mobileNumber,
@@ -370,6 +389,8 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                           "country": country,
                           "postalcode": postalCode,
                         });
+                        print("Process data");
+
                         Navigator.pop(context);
                       } catch (e) {
                         print(e);

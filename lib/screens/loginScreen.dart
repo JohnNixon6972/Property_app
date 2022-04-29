@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
+
+late String email = "";
+late String password = "";
 
 class loginScreen extends StatefulWidget {
   static const String id = 'login';
@@ -15,8 +18,6 @@ class loginScreen extends StatefulWidget {
 class _loginScreenState extends State<loginScreen> {
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  late String email;
-  late String password;
   //final _auth = FirebaseAuth.instance;
 
   // String email;
@@ -87,7 +88,7 @@ class _loginScreenState extends State<loginScreen> {
                           style: TextStyle(color: kPrimaryButtonColor),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter valid text';
+                              return 'Please enter valid email address';
                             } else {
                               email = value;
                             }

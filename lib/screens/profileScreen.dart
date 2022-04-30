@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import '../screens/registerScreen.dart';
 import '../screens/loginScreen.dart';
 
-late User loggedInUser;
+late User loggedInUser = "" as User;
 
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';

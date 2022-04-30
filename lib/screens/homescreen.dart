@@ -11,14 +11,55 @@ import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+late User loggedInUser;
+
+  List<PropertyCard> Properties = [];
+  Future<void> getUsers() async {
+    final users = _firestore.collection("Users");
+    users.get().then((snapshot) {
+      snapshot.docs.forEach((element) {
+        print(element.id);
+        getProperties(element.id);
+      });
+    });
+  }
+
+  Future<void> getProperties(String User) async {
+    final properties =
+        await _firestore.collection("Users").doc(User).collection("Properties");
+    properties.get().then((snapshot) {
+      snapshot.docs.forEach((element) {
+        print("Property Name :: " + element.id);
+        print("Imageloc :: " + element["imgUrl1"]);
+        print("Price :: " + element["Price"]);
+        print("Address :: " + element["PropertyAddress"]);
+
+        Properties.add(PropertyCard(
+            imageloc: element["imgUrl1"],
+            price: element["Price"],
+            propertyAddress: element["PropertyAddress"],
+            propertyName: element.id));
+      });
+    });
+  }
 class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen';
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+final _firestore = FirebaseFirestore.instance;
+
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+    setState(() {});
+  }
+
+  
+
   final _auth = FirebaseAuth.instance;
 
   late AnimationController _animationController;
@@ -28,8 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color bookmarkIconColor;
 
   late IconData icn;
-  final _firestore = FirebaseFirestore.instance;
-  late User loggedInUser;
   late String name = "";
   late String email = "";
   late String mobileNumber = "";
@@ -40,47 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late String state = "";
   late String country = "";
   late String postalCode = "";
-
-  @override
-  void initState() {
-    getCurrentUser();
-  }
-
-  Widget build(BuildContext context) {
-    List<String> Users = [];
-    StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection("Users").snapshots(),
-        builder: (context, snapshots) {
-          if (!snapshots.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final members = snapshots.data!.docs;
-
-          for (var user in members) {
-            Users.add(user.id.toString());
-          }
-        }); 
-      
-
-        StreamBuilder(
-                stream: _firestore
-                    .collection("Users")
-                    .doc(user.toString())
-                    .collection("Properties")
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  
-                    return !snapshot.hasData? Center(
-                      child: CircularProgressIndicator()):ListView.builder(itemCount: snapshot.data?.doc.le,);
-                    
-
-                  
-
-                  
-                });
-  }
 
   void getCurrentUser() async {
     try {
@@ -263,7 +261,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: kSubCategoryColor),
                         ),
                       ),
-                      PropertiesOnSale(),
+                      SizedBox(
+                        height: 400,
+                        child: ListView(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          // shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          children: Properties,
+                        ),
+                      ),
                       Divider(
                         thickness: 1,
                         color: kHighlightedTextColor,
@@ -278,7 +285,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: kSubCategoryColor),
                         ),
                       ),
-                      PropertiesOnRent(),
+                      SizedBox(
+                        height: 400,
+                        child: ListView(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          children: Properties,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -290,55 +306,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class PropertiesOnRent extends StatelessWidget {
-  const PropertiesOnRent({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
-      child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        children: [
-          // PropertyCard(imageloc: 'images/property1.jpg',propertyName: "John",),
-          // PropertyCard(imageloc: 'images/property2.jpg'),
-          // PropertyCard(imageloc: 'images/property3.jpg'),
-        ],
-      ),
-    );
-    // return ListView.builder(itemBuilder: itemBuilder)
-  }
-}
-
-class PropertiesOnSale extends StatelessWidget {
-  const PropertiesOnSale({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
-      child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        // shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        children: [
-          // PropertyCard(imageloc: 'images/property1.jpg'),
-          // PropertyCard(imageloc: 'images/property2.jpg'),
-          // PropertyCard(imageloc: 'images/property3.jpg'),
-        ],
       ),
     );
   }
@@ -392,13 +359,24 @@ class _PropertyCardState extends State<PropertyCard> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  child: Image(
-                    width: 170,
-                    fit: BoxFit.cover,
-                    image: AssetImage(widget.imageloc),
-                  ),
-                ),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    child: Image.network(
+                      widget.imageloc,
+                      fit: BoxFit.fill,
+                      width: 170,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    )),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),

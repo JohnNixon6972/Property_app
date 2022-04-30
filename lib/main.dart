@@ -19,7 +19,19 @@ void main() async {
   runApp(PropertyApp());
 }
 
-class PropertyApp extends StatelessWidget {
+class PropertyApp extends StatefulWidget {
+  @override
+  State<PropertyApp> createState() => _PropertyAppState();
+}
+
+class _PropertyAppState extends State<PropertyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUsers();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,7 +48,7 @@ class PropertyApp extends StatelessWidget {
         AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
         searchScreen.id: (context) => searchScreen(),
         AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
-        PreviewProperty.id:(context) => PreviewProperty(),
+        PreviewProperty.id: (context) => PreviewProperty(),
       },
     );
   }

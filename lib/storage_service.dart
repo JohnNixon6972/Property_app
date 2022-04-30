@@ -1,7 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:property_app/screens/profileScreen.dart';
+import './screens/homescreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/addPropertiesScreen1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,7 +50,10 @@ class Storage {
             // imgRef.add({'url': value});
             _firestore
                 .collection('Users')
-        .doc(loggedInUser.email).collection('Properties').doc(PropertyTitle).update({"imgUrl${i+1}":value});
+                .doc(loggedInUser.email)
+                .collection('Properties')
+                .doc(PropertyTitle)
+                .update({"imgUrl${i + 1}": value});
           });
         });
       } catch (e) {
@@ -74,7 +77,9 @@ class Storage {
     var type = getType();
     _firestore
         .collection('Users')
-        .doc(loggedInUser.email).collection('Properties').doc(PropertyTitle)
+        .doc(loggedInUser.email)
+        .collection('Properties')
+        .doc(PropertyTitle)
         .set({
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,

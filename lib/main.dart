@@ -29,7 +29,8 @@ class _PropertyAppState extends State<PropertyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUsers();
+  
+
   }
 
   @override

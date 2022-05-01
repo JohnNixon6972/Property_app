@@ -13,52 +13,56 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 late User loggedInUser;
 
-  List<PropertyCard> Properties = [];
-  Future<void> getUsers() async {
-    final users = _firestore.collection("Users");
-    users.get().then((snapshot) {
-      snapshot.docs.forEach((element) {
-        print(element.id);
-        getProperties(element.id);
-      });
-    });
-  }
-
-  Future<void> getProperties(String User) async {
-    final properties =
-        await _firestore.collection("Users").doc(User).collection("Properties");
-    properties.get().then((snapshot) {
-      snapshot.docs.forEach((element) {
-        print("Property Name :: " + element.id);
-        print("Imageloc :: " + element["imgUrl1"]);
-        print("Price :: " + element["Price"]);
-        print("Address :: " + element["PropertyAddress"]);
-
-        Properties.add(PropertyCard(
-            imageloc: element["imgUrl1"],
-            price: element["Price"],
-            propertyAddress: element["PropertyAddress"],
-            propertyName: element.id));
-      });
-    });
-  }
 class HomeScreen extends StatefulWidget {
-  static const id = 'homeScreen';
+  static const id = 'homeScreen1';
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 final _firestore = FirebaseFirestore.instance;
 
+class PropertiesAdv extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection("PropertiesSell").snapshots(),
+        builder: (sontext, snapshot) {
+          List<PropertyCard> Properties = [];
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final properties = snapshot.data!.docs;
+          for (var property in properties) {
+            try {
+              final Property = PropertyCard(
+                  imageloc: property["imgUrl1"],
+                  price: property["Price"],
+                  propertyAddress: property["PropertyAddress"],
+                  propertyName: property["PropertyTitle"]);
+              Properties.add(Property);
+            } catch (e) {
+              print(e);
+            }
+          }
+          return ListView(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            // shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: Properties,
+          );
+        });
+  }
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
     getCurrentUser();
-    setState(() {});
   }
-
-  
 
   final _auth = FirebaseAuth.instance;
 
@@ -263,13 +267,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         height: 400,
-                        child: ListView(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          // shrinkWrap: true,
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          children: Properties,
-                        ),
+                        // child: ListView(
+                        //   padding: EdgeInsets.symmetric(vertical: 10),
+                        //   // shrinkWrap: true,
+                        //   physics: BouncingScrollPhysics(),
+                        //   scrollDirection: Axis.horizontal,
+                        //   children: Properties,
+                        // ),
+                        child: PropertiesAdv(),
                       ),
                       Divider(
                         thickness: 1,
@@ -292,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           shrinkWrap: true,
                           physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          children: Properties,
+                          // children: Properties,
                         ),
                       ),
                     ],
@@ -330,10 +335,6 @@ class _PropertyCardState extends State<PropertyCard> {
   late bool bookedmark = false;
 
   // String propertyName;
-  @override
-  void initState() {
-    print(widget.imageloc);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -369,6 +370,7 @@ class _PropertyCardState extends State<PropertyCard> {
                         if (loadingProgress == null) return child;
                         return Center(
                           child: CircularProgressIndicator(
+                            strokeWidth: 10,
                             value: loadingProgress.expectedTotalBytes != null
                                 ? loadingProgress.cumulativeBytesLoaded /
                                     loadingProgress.expectedTotalBytes!

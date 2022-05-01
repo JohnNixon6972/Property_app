@@ -49,9 +49,7 @@ class Storage {
           await ref.getDownloadURL().then((value) {
             // imgRef.add({'url': value});
             _firestore
-                .collection('Users')
-                .doc(loggedInUser.email)
-                .collection('Properties')
+                .collection('Properties' + getTo())
                 .doc(PropertyTitle)
                 .update({"imgUrl${i + 1}": value});
           });
@@ -63,6 +61,7 @@ class Storage {
       }
     }
   }
+  
 
   Future<void> uploadPropertyDetails() async {
     print(PropertyAddress);
@@ -75,12 +74,8 @@ class Storage {
     var Category = getCategory();
     var to = getTo();
     var type = getType();
-    _firestore
-        .collection('Users')
-        .doc(loggedInUser.email)
-        .collection('Properties')
-        .doc(PropertyTitle)
-        .set({
+    _firestore.collection('Properties' + to).doc(PropertyTitle).set({
+      "PropertyBy": loggedInUser.email,
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,
       "PropertyTo": to,

@@ -1,21 +1,69 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
+import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
+// import 'package:property_app/screens/addPropertiesScreen1.dart';
+// import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const id = 'homeScreen';
+late User loggedInUser;
 
+class HomeScreen extends StatefulWidget {
+  static const id = 'homeScreen1';
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+final _firestore = FirebaseFirestore.instance;
+
+class PropertiesAdv extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection("PropertiesSell").snapshots(),
+        builder: (sontext, snapshot) {
+          List<PropertyCard> Properties = [];
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final properties = snapshot.data!.docs;
+          for (var property in properties) {
+            try {
+              final Property = PropertyCard(
+                  imageloc: property["imgUrl1"],
+                  price: property["Price"],
+                  propertyAddress: property["PropertyAddress"],
+                  propertyName: property["PropertyTitle"]);
+              Properties.add(Property);
+            } catch (e) {
+              print(e);
+            }
+          }
+          return ListView(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            // shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: Properties,
+          );
+        });
+  }
+}
+
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
   final _auth = FirebaseAuth.instance;
 
   late AnimationController _animationController;
@@ -25,8 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color bookmarkIconColor;
 
   late IconData icn;
-  final _firestore = FirebaseFirestore.instance;
-  late User loggedInUser;
   late String name = "";
   late String email = "";
   late String mobileNumber = "";
@@ -37,11 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late String state = "";
   late String country = "";
   late String postalCode = "";
-
-  @override
-  void initState() {
-    getCurrentUser();
-  }
 
   void getCurrentUser() async {
     try {
@@ -116,50 +157,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Expanded(
-            //   flex: 3,
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-            //     child: Center(
-            //       child: Material(
-            //         elevation: 2,
-            //         borderRadius: const BorderRadius.all(
-            //           Radius.circular(15),
-            //         ),
-            //         child: Container(
-            //           decoration: const BoxDecoration(
-            //             color: Colors.white,
-            //             borderRadius: BorderRadius.all(
-            //               Radius.circular(15),
-            //             ),
-            //           ),
-            //           width: 220,
-            //           height: 40,
-            //           child: Row(
-            //             children: const [
-            //               Text(
-            //                 "  Add Property ",
-            //                 style: TextStyle(
-            //                     fontSize: 25,
-            //                     fontWeight: FontWeight.bold,
-            //                     color: Color.fromARGB(255, 164, 164, 164)),
-            //               ),
-            //               CircleAvatar(
-            //                 radius: 17,
-            //                 backgroundColor: Color.fromARGB(255, 38, 38, 38),
-            //                 child: Icon(
-            //                   Icons.home,
-            //                   color: Color.fromARGB(255, 228, 228, 228),
-            //                   size: 25,
-            //                 ),
-            //               )
-            //             ],
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             const Padding(
               padding: EdgeInsets.only(top: 20, left: 15, right: 15),
               child: Text(
@@ -202,7 +199,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
             Expanded(
               flex: 32,
               child: Padding(
@@ -269,7 +265,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: kSubCategoryColor),
                         ),
                       ),
-                      PropertiesOnSale(),
+                      SizedBox(
+                        height: 400,
+                        // child: ListView(
+                        //   padding: EdgeInsets.symmetric(vertical: 10),
+                        //   // shrinkWrap: true,
+                        //   physics: BouncingScrollPhysics(),
+                        //   scrollDirection: Axis.horizontal,
+                        //   children: Properties,
+                        // ),
+                        child: PropertiesAdv(),
+                      ),
                       Divider(
                         thickness: 1,
                         color: kHighlightedTextColor,
@@ -284,7 +290,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: kSubCategoryColor),
                         ),
                       ),
-                      PropertiesOnRent(),
+                      SizedBox(
+                        height: 400,
+                        child: ListView(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          // children: Properties,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -301,57 +316,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class PropertiesOnRent extends StatelessWidget {
-  const PropertiesOnRent({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
-      child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        children: [
-          PropertyCard(imageloc: 'images/property1.jpg'),
-          PropertyCard(imageloc: 'images/property2.jpg'),
-          PropertyCard(imageloc: 'images/property3.jpg'),
-        ],
-      ),
-    );
-  }
-}
-
-class PropertiesOnSale extends StatelessWidget {
-  const PropertiesOnSale({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400,
-      child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        // shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        children: [
-          PropertyCard(imageloc: 'images/property1.jpg'),
-          PropertyCard(imageloc: 'images/property2.jpg'),
-          PropertyCard(imageloc: 'images/property3.jpg'),
-        ],
-      ),
-    );
-  }
-}
-
 class PropertyCard extends StatefulWidget {
   final String imageloc;
-  PropertyCard({required this.imageloc});
+  final String propertyName;
+  final String propertyAddress;
+  final String price;
+  const PropertyCard(
+      {required this.imageloc,
+      required this.price,
+      required this.propertyAddress,
+      required this.propertyName});
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -359,10 +333,8 @@ class PropertyCard extends StatefulWidget {
 
 class _PropertyCardState extends State<PropertyCard> {
   late bool bookedmark = false;
-  @override
-  void initState() {
-    print(widget.imageloc);
-  }
+
+  // String propertyName;
 
   @override
   Widget build(BuildContext context) {
@@ -388,25 +360,37 @@ class _PropertyCardState extends State<PropertyCard> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  child: Image(
-                    width: 170,
-                    fit: BoxFit.cover,
-                    image: AssetImage(widget.imageloc),
-                  ),
-                ),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    child: Image.network(
+                      widget.imageloc,
+                      fit: BoxFit.fill,
+                      width: 170,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 10,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    )),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: 5),
                 child: Text(
-                  'Nomaden Omah Sekut',
+                  widget.propertyName,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
                 child: Text(
-                  'San Diego, California, USA',
+                  widget.propertyAddress,
                   style: TextStyle(
                     color: kSubCategoryColor,
                   ),
@@ -415,7 +399,7 @@ class _PropertyCardState extends State<PropertyCard> {
               Row(
                 children: [
                   Text(
-                    "\$128 ",
+                    widget.price,
                     style: TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,

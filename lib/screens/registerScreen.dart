@@ -5,6 +5,17 @@ import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
 
+late String name = "";
+late String email = "";
+late String mobileNumber = "";
+late String addressLine1 = "";
+late String addressLine2 = "";
+late String password = "";
+late String city = "";
+late String state = "";
+late String country = "";
+late String postalCode = "";
+
 class registerScreen extends StatefulWidget {
   static const String id = 'register';
 
@@ -16,16 +27,6 @@ class _registerScreenState extends State<registerScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
-  late String name;
-  late String email;
-  late String mobileNumber;
-  late String addressLine1;
-  late String addressLine2;
-  late String password;
-  late String city;
-  late String state;
-  late String country;
-  late String postalCode;
 
   bool showSpinner = false;
   bool _isHidden = true;

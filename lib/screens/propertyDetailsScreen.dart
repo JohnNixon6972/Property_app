@@ -7,6 +7,27 @@ import '../constants.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   static const id = 'propertyDetailsScreen';
+  final String propertyTitle;
+  final String propertyAddress;
+  final String propertyDescription;
+  final String noBathroom;
+  final String noBedroom;
+  final String area;
+  final String ownerName;
+  final String to;
+  final String price;
+  final List<String> propertyImages;
+  PropertyDetailsScreen(
+      {required this.propertyTitle,
+      required this.propertyAddress,
+      required this.propertyDescription,
+      required this.noBathroom,
+      required this.noBedroom,
+      required this.area,
+      required this.ownerName,
+      required this.to,
+      required this.price,
+      required this.propertyImages});
 
   // Completer<GoogleMapController> _controller = Completer();
   // static final CameraPosition _kGooglePlex = CameraPosition(
@@ -83,7 +104,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Nomaden Omah Sekut',
+                        propertyTitle,
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -93,7 +114,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                         height: 8,
                       ),
                       Text(
-                        'San Diego, California, USA',
+                        propertyAddress,
                         style: TextStyle(
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.w500),
@@ -108,14 +129,15 @@ class PropertyDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        "\$128 ",
+                        "\$$price ",
                         style: TextStyle(
                             fontSize: 18,
                             color: kHighlightedTextColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        " / Month",
+                        to == "Rent"?
+                        " / Month":"",
                         style: TextStyle(
                             fontSize: 12,
                             color: kSubCategoryColor,
@@ -129,7 +151,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.only(top: 10.0, left: 10.0, right: 15),
                 child: Text(
-                  "Hello there this is my Property that i would like to sell/Rent which is located in bla bla area its bla bla bla years old.",
+                propertyDescription,
                   style: TextStyle(
                       fontSize: 15,
                       color: kHighlightedTextColor,
@@ -228,7 +250,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                               height: 10,
                             ),
                             Text(
-                              '2',
+                              noBathroom,
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             )
@@ -262,7 +284,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                               height: 10,
                             ),
                             Text(
-                              '2',
+                              noBedroom,
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             )
@@ -296,7 +318,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            '465 FT.',
+                            '$area FT.',
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           )
@@ -320,14 +342,15 @@ class PropertyDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Laura Kimono',
+                        ownerName,
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: kHighlightedTextColor),
                       ),
                       Text(
-                        'Owner',
+                        ownerName != "admin"?
+                        'Owner':"Admin",
                         style: TextStyle(
                           color: Color.fromARGB(255, 141, 141, 141),
                         ),

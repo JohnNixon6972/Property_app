@@ -43,7 +43,7 @@ class _PropertyAppState extends State<PropertyApp> {
         registerScreen.id: (context) => registerScreen(),
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
-        PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
+        // PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
         BookmarkedPropertiesScreen.id: (context) =>
             BookmarkedPropertiesScreen(),
         AddPropertiesScreen.id: (context) => AddPropertiesScreen(),

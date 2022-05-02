@@ -9,8 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import '../screens/registerScreen.dart';
 import '../screens/loginScreen.dart';
 
-late User loggedInUser = "" as User;
-
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';
 
@@ -60,28 +58,22 @@ class _profileScreenState extends State<profileScreen> {
 
   void getCurrentUser() async {
     try {
-      final user = await _auth.currentUser;
+      var currUserCollection = _firestore.collection("Users");
+      var docSanpshot =
+          await currUserCollection.doc(_auth.currentUser!.email).get();
 
-      if (user != null) {
-        loggedInUser = user;
-        print(loggedInUser.email);
-        email = loggedInUser.email!;
-        var currUserCollection = _firestore.collection("Users");
-        var docSanpshot = await currUserCollection.doc(email).get();
-
-        if (docSanpshot.exists) {
-          Map<String, dynamic>? data = docSanpshot.data();
-          setState(
-            () {
-              name = data?['name'];
-              mobileNumber = data?['number'];
-              print(name);
-              print(mobileNumber);
-            },
-          );
-        }
-        print(email);
+      if (docSanpshot.exists) {
+        Map<String, dynamic>? data = docSanpshot.data();
+        setState(
+          () {
+            name = data?['name'];
+            mobileNumber = data?['number'];
+            print(name);
+            print(mobileNumber);
+          },
+        );
       }
+      print(email);
     } catch (e) {
       print(e);
     }
@@ -364,7 +356,8 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                         print(password);
                         name = name;
                         if (newPassword == confirmNewPassword) {
-                          loggedInUser.updatePassword(password).then((_) {
+                          var loggedInUser = _auth.currentUser;
+                          loggedInUser?.updatePassword(password).then((_) {
                             password = newPassword;
                             print(password);
                             print("Successfully changed password");
@@ -377,7 +370,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                         }
                         _firestore
                             .collection("Users")
-                            .doc(loggedInUser.email)
+                            .doc(_auth.currentUser!.email)
                             .update({
                           "email": email,
                           "name": name,

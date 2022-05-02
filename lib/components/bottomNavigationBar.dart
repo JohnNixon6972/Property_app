@@ -32,7 +32,8 @@ class BottomPageNavigationBar extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, HomeScreen.id);
+                    if (page != HomeScreen.id)
+                      Navigator.pushNamed(context, HomeScreen.id);
                   },
                   child: CircleAvatar(
                     radius: 25,
@@ -52,7 +53,9 @@ class BottomPageNavigationBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, BookmarkedPropertiesScreen.id);
+                    if (page != BookmarkedPropertiesScreen.id)
+                      Navigator.pushNamed(
+                          context, BookmarkedPropertiesScreen.id);
                   },
                   child: CircleAvatar(
                     backgroundColor: page == BookmarkedPropertiesScreen.id
@@ -69,7 +72,8 @@ class BottomPageNavigationBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, AddPropertiesScreen.id);
+                    if (page != AddPropertiesScreen.id)
+                      Navigator.pushNamed(context, AddPropertiesScreen.id);
                   },
                   child: AvatarGlow(
                     glowColor: kHighlightedTextColor,
@@ -91,7 +95,8 @@ class BottomPageNavigationBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, searchScreen.id);
+                    if (page != searchScreen.id)
+                      Navigator.pushNamed(context, searchScreen.id);
                   },
                   child: CircleAvatar(
                     radius: 25,
@@ -109,7 +114,8 @@ class BottomPageNavigationBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, profileScreen.id);
+                    if (page != profileScreen.id)
+                      Navigator.pushNamed(context, profileScreen.id);
                   },
                   child: CircleAvatar(
                     radius: 25,

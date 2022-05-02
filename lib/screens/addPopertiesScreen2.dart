@@ -32,7 +32,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   final ImagePicker imagePicker = ImagePicker();
 
   Future<void> selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
     if (selectedImages!.isNotEmpty) {
       imageFileList!.addAll(selectedImages);
       print("Image List Length:" + imageFileList!.length.toString());
@@ -94,276 +94,299 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
 
   @override
   Widget build(BuildContext context) {
+    bool isloading = false;
     final Storage storage = Storage();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(14.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Transform.rotate(
-                angle: 270 * pi / 180,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AddPropertiesScreen.id);
-                  },
-                  child: Icon(
-                    Icons.expand_less_rounded,
-                    size: 40,
+          child: Stack(children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Transform.rotate(
+                  angle: 270 * pi / 180,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AddPropertiesScreen.id);
+                    },
+                    child: Icon(
+                      Icons.expand_less_rounded,
+                      size: 40,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Add Properties',
-                      style: TextStyle(
-                          color: kHighlightedTextColor,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    Spacer(),
-                    Text(
-                      'Step 2/2',
-                      style: TextStyle(
-                          color: kSubCategoryColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 10.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Add Properties',
+                        style: TextStyle(
+                            color: kHighlightedTextColor,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      Spacer(),
+                      Text(
+                        'Step 2/2',
+                        style: TextStyle(
+                            color: kSubCategoryColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
-                child: DottedBorder(
-                  color: kHighlightedTextColor,
-                  radius: Radius.circular(20),
-                  borderType: BorderType.RRect,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
+                  child: DottedBorder(
+                    color: kHighlightedTextColor,
+                    radius: Radius.circular(20),
+                    borderType: BorderType.RRect,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: kPropertyCardColor,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 14),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Upload Image',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 18),
+                            ),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: selectImages,
+                              // onTap: () async {
+                              //   final result =
+                              //       await FilePicker.platform.pickFiles(
+                              //     type: FileType.custom,
+                              //     allowedExtensions: ['png', 'jpg'],
+                              //   );
+                              //   if (result == null) {
+                              //     ScaffoldMessenger.of(context).showSnackBar(
+                              //         SnackBar(
+                              //             content: Text('No file Selected')));
+                              //     return null;
+                              //   }
+                              //   final path = result.files.single.path;
+                              //   final filename = result.files.single.name;
+
+                              //   setState(() {
+                              //     // ImageName.add(filename);
+                              //     // ImagePaths.add(path!);
+                              //     PickedImages.add(
+                              //         ImagesFromGallery(img_url: path!));
+                              //   });
+
+                              //   print(path);
+                              //   print(filename);
+                              //   storage
+                              //       .uploadFile(path!, filename, PropertyTitle)
+                              //       .then((value) => print("Done"));
+                              // },
+                              child: CircleAvatar(
+                                backgroundColor: kPageBackgroundColor,
+                                child: Icon(
+                                  Icons.photo_library_sharp,
+                                  color: kHighlightedTextColor,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 5),
+                    child: Container(
+                      child: buildListView(),
+                      // child: Row(
+                      //   // scrollDirection: Axis.horizontal,
+                      //   children: [
+                      //     ImagesFromGallery(img_url: 'images/property_img1.jpg'),
+                      //     ImagesFromGallery(img_url: 'images/property_img2.jpg'),
+                      //     ImagesFromGallery(img_url: 'images/property_img3.jpg'),
+                      //     Spacer()
+                      //   ],
+                      // ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: kPropertyCardColor,
-                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: kHighlightedTextColor),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 14),
-                      child: Row(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Upload Image',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 18),
+                            'Write Property Description',
+                            style: TextStyle(color: kSubCategoryColor),
                           ),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: selectImages,
-                            // onTap: () async {
-                            //   final result =
-                            //       await FilePicker.platform.pickFiles(
-                            //     type: FileType.custom,
-                            //     allowedExtensions: ['png', 'jpg'],
-                            //   );
-                            //   if (result == null) {
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //         SnackBar(
-                            //             content: Text('No file Selected')));
-                            //     return null;
-                            //   }
-                            //   final path = result.files.single.path;
-                            //   final filename = result.files.single.name;
-
-                            //   setState(() {
-                            //     // ImageName.add(filename);
-                            //     // ImagePaths.add(path!);
-                            //     PickedImages.add(
-                            //         ImagesFromGallery(img_url: path!));
-                            //   });
-
-                            //   print(path);
-                            //   print(filename);
-                            //   storage
-                            //       .uploadFile(path!, filename, PropertyTitle)
-                            //       .then((value) => print("Done"));
-                            // },
-                            child: CircleAvatar(
-                              backgroundColor: kPageBackgroundColor,
-                              child: Icon(
-                                Icons.photo_library_sharp,
-                                color: kHighlightedTextColor,
-                              ),
-                            ),
-                          )
+                          TextField(
+                            onChanged: (newValue) {
+                              propertyDescription = newValue;
+                            },
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
+                            controller: _controller,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                            maxLines: 3,
+                            // minLines: 5,
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                  child: Container(
-                    child: buildListView(),
-                    // child: Row(
-                    //   // scrollDirection: Axis.horizontal,
-                    //   children: [
-                    //     ImagesFromGallery(img_url: 'images/property_img1.jpg'),
-                    //     ImagesFromGallery(img_url: 'images/property_img2.jpg'),
-                    //     ImagesFromGallery(img_url: 'images/property_img3.jpg'),
-                    //     Spacer()
-                    //   ],
-                    // ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: kHighlightedTextColor),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                Column(
+                  children: [
+                    Row(
                       children: [
-                        Text(
-                          'Write Property Description',
-                          style: TextStyle(color: kSubCategoryColor),
-                        ),
-                        TextField(
-                          onChanged: (newValue) {
-                            propertyDescription = newValue;
+                        PropertyDetailTile(
+                          HintText: "Square Fit",
+                          onChange: (newValue) {
+                            setState(() {
+                              squareFit = newValue;
+                            });
                           },
-                          decoration: InputDecoration(border: InputBorder.none),
-                          controller: _controller,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                          maxLines: 3,
-                          // minLines: 5,
                         ),
+                        Spacer(),
+                        PropertyDetailTile(
+                          HintText: "Bed Room",
+                          onChange: (newValue) {
+                            setState(() {
+                              bedRoom = newValue;
+                            });
+                          },
+                        )
                       ],
                     ),
-                  ),
-                ),
-              ),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      PropertyDetailTile(
-                        HintText: "Square Fit",
-                        onChange: (newValue) {
-                          setState(() {
-                            squareFit = newValue;
-                          });
-                        },
-                      ),
-                      Spacer(),
-                      PropertyDetailTile(
-                        HintText: "Bed Room",
-                        onChange: (newValue) {
-                          setState(() {
-                            bedRoom = newValue;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      PropertyDetailTile(
-                        HintText: "Bathroom",
-                        onChange: (newValue) {
-                          setState(() {
-                            bathRoom = newValue;
-                          });
-                        },
-                      ),
-                      Spacer(),
-                      PropertyDetailTile(
-                        HintText: "Price (USD)",
-                        onChange: (newValue) {
-                          setState(() {
-                            price = newValue;
-                          });
-                        },
-                      )
-                    ],
-                  )
-                ],
-              ),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 25.0),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, PreviewProperty.id);
-                        },
-                        child: Container(
-                          height: 70,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            color: kNavigationIconColor,
-                            borderRadius: BorderRadius.circular(35),
-                          ),
-                          child: Center(
-                            child: Text('Preview',
-                                style: TextStyle(
-                                    color: kHighlightedTextColor,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400)),
-                          ),
+                    Row(
+                      children: [
+                        PropertyDetailTile(
+                          HintText: "Bathroom",
+                          onChange: (newValue) {
+                            setState(() {
+                              bathRoom = newValue;
+                            });
+                          },
                         ),
-                      ),
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Storage _storage = Storage();
-                          _storage.uploadPropertyDetails();
-                          _storage.uploadPropertyImages();
-                          Navigator.pushNamed(context, HomeScreen.id);
-                        },
-                        child: Container(
-                          height: 70,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            color: kHighlightedTextColor,
-                            borderRadius: BorderRadius.circular(35),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Submit',
-                              style: TextStyle(
-                                  color: kSubCategoryColor,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400),
+                        Spacer(),
+                        PropertyDetailTile(
+                          HintText: "Price (USD)",
+                          onChange: (newValue) {
+                            setState(() {
+                              price = newValue;
+                            });
+                          },
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 25.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, PreviewProperty.id);
+                          },
+                          child: Container(
+                            height: 70,
+                            width: 160,
+                            decoration: BoxDecoration(
+                              color: kNavigationIconColor,
+                              borderRadius: BorderRadius.circular(35),
+                            ),
+                            child: Center(
+                              child: Text('Preview',
+                                  style: TextStyle(
+                                      color: kHighlightedTextColor,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400)),
                             ),
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Storage _storage = Storage();
+                            setState(() {
+                              isloading = true;
+                              print("loading");
+                            });
+                            _storage.uploadPropertyDetails();
+                            _storage.uploadPropertyImages(context);
+                          },
+                          child: Container(
+                            height: 70,
+                            width: 160,
+                            decoration: BoxDecoration(
+                              color: kHighlightedTextColor,
+                              borderRadius: BorderRadius.circular(35),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Submit',
+                                style: TextStyle(
+                                    color: kSubCategoryColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+            isloading
+                ? Container(
+                    color: Colors.black.withOpacity(0.5),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Center(
+                            child:
+                                Text("Please Wait until your add gets posted"),
+                          ),
+                          CircularProgressIndicator(),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container()
+          ]),
         ),
       ),
     );

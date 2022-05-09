@@ -8,6 +8,5 @@ class getUserDetails {
   late String city = "not saved";
   late String state = "not saved";
   late String country = "not saved";
-  late String postalCode = "not saved"
-  ;
+  late String postalCode = "not saved";
 }

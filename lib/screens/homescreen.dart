@@ -17,6 +17,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:property_app/currentUserInformation.dart';
 
 late User loggedInUser;
+bool displayAdminProperties = false;
 
 class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen1';
@@ -27,12 +28,19 @@ class HomeScreen extends StatefulWidget {
 final _firestore = FirebaseFirestore.instance;
 
 class PropertiesOnSaleAdv extends StatelessWidget {
+  List<PropertyCard> PropertiesOnSaleAll = [];
+  List<PropertyCard> PropertiesOnSaleAdmin = [];
+  List<PropertyCard> ApartmentOnSaleAdmin = [];
+  List<PropertyCard> ApartmentOnSale = [];
+  List<PropertyCard> PentHouseOnSaleAdmin = [];
+  List<PropertyCard> PentHouseOnSale = [];
+  List<PropertyCard> BuildingOnSaleAdmin = [];
+  List<PropertyCard> BuildingOnSale = [];
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesSell").snapshots(),
       builder: (sontext, snapshot) {
-        List<PropertyCard> PropertiesOnSale = [];
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -79,7 +87,35 @@ class PropertiesOnSaleAdv extends StatelessWidget {
                 to: to,
                 area: area,
               );
-              PropertiesOnSale.add(Property);
+              PropertiesOnSaleAll.add(Property);
+              if (ownerName.toString() == "john") {
+                PropertiesOnSaleAdmin.add(Property);
+              }
+              if (propertyCategory.toString() == "Apartment") {
+                ApartmentOnSale.add(Property);
+                if (ownerName.toString() == "john") {
+                  ApartmentOnSaleAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "PentHouse") {
+                PentHouseOnSale.add(Property);
+                if (ownerName.toString() == "john") {
+                  PentHouseOnSaleAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "Building") {
+                BuildingOnSale.add(Property);
+                if (ownerName.toString() == "john") {
+                  BuildingOnSaleAdmin.add(Property);
+                }
+              }
+
+              print("Propertes on Sale All:"+ PropertiesOnSaleAll.toString());
+              print("Propertes on Sale Admin:" +PropertiesOnSaleAll.toString());
+              print("Apartments on Sale All:" +ApartmentOnSale.toString());
+              print("Apartments on Sale Admin:" +ApartmentOnSale
+              
+              .toString());
             } catch (e) {
               print(e);
             }
@@ -90,7 +126,9 @@ class PropertiesOnSaleAdv extends StatelessWidget {
           // shrinkWrap: true,
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          children: PropertiesOnSale,
+          children: displayAdminProperties
+              ? PropertiesOnSaleAdmin
+              : PropertiesOnSaleAll,
         );
       },
     );
@@ -98,12 +136,19 @@ class PropertiesOnSaleAdv extends StatelessWidget {
 }
 
 class PropertiesOnRentAdv extends StatelessWidget {
+  List<PropertyCard> PropertiesOnRentAll = [];
+  List<PropertyCard> PropertiesOnRentAdmin = [];
+  List<PropertyCard> ApartmentOnRentAdmin = [];
+  List<PropertyCard> ApartmentOnRent = [];
+  List<PropertyCard> PentHouseOnRentAdmin = [];
+  List<PropertyCard> PentHouseOnRent = [];
+  List<PropertyCard> BuildingOnRentAdmin = [];
+  List<PropertyCard> BuildingOnRent = [];
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesRent").snapshots(),
       builder: (sontext, snapshot) {
-        List<PropertyCard> Properties = [];
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -149,7 +194,28 @@ class PropertiesOnRentAdv extends StatelessWidget {
                 to: to,
                 area: area,
               );
-              Properties.add(Property);
+              PropertiesOnRentAll.add(Property);
+              if (ownerName.toString() == "john") {
+                PropertiesOnRentAdmin.add(Property);
+              }
+              if (propertyCategory.toString() == "Apartment") {
+                ApartmentOnRent.add(Property);
+                if (ownerName.toString() == "john") {
+                  ApartmentOnRentAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "PentHouse") {
+                PentHouseOnRent.add(Property);
+                if (ownerName.toString() == "john") {
+                  PentHouseOnRentAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "Building") {
+                BuildingOnRent.add(Property);
+                if (ownerName.toString() == "john") {
+                  BuildingOnRentAdmin.add(Property);
+                }
+              }
             } catch (e) {
               print(e);
             }
@@ -160,7 +226,9 @@ class PropertiesOnRentAdv extends StatelessWidget {
           // shrinkWrap: true,
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          children: Properties,
+          children: displayAdminProperties
+              ? PropertiesOnRentAdmin
+              : PropertiesOnRentAll,
         );
       },
     );
@@ -178,7 +246,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
   }
 
   final _auth = FirebaseAuth.instance;
@@ -227,6 +294,14 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void ToggleProperties(int index) {
+    setState(() {
+      displayAdminProperties = index == 1 ? false : true;
+      // print(PropertiesOnRentAdmin);
+      // print(PropertiesOnSaleAdmin);
+    });
   }
 
   @override
@@ -301,13 +376,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     CategoryCard(
                       btn_color: kSecondaryButtonColor,
-                      text: 'Townhouse',
+                      text: 'PentHouse',
                       width: 90,
                       text_color: kSubCategoryColor,
                     ),
                     CategoryCard(
                       btn_color: kSecondaryButtonColor,
-                      text: 'Villa',
+                      text: 'Building',
                       width: 60,
                       text_color: kSubCategoryColor,
                     ),
@@ -338,6 +413,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
                         child: Row(
                           children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Center(
+                                child: Text(
+                                  "Show admin Only Properties",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: kHighlightedTextColor),
+                                ),
+                              ),
+                            ),
+                            Spacer(),
                             ToggleSwitch(
                               minHeight: 30,
                               minWidth: 50,
@@ -354,20 +441,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               labels: ['Yes', 'No'],
                               radiusStyle: true,
                               onToggle: (index) {
-                                print('switched to: $index');
+                                // print('switched to: $index');
+
+                                // print("Show Admin properties");
+
+                                print(displayAdminProperties);
+                                ToggleProperties(index!);
                               },
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Center(
-                                child: Text(
-                                  "Show admin Only Properties",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: kHighlightedTextColor),
-                                ),
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -558,14 +639,14 @@ class _PropertyCardState extends State<PropertyCard> {
               Row(
                 children: [
                   Text(
-                    widget.price,
+                    widget.price + "\$",
                     style: TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    " / Month",
+                    widget.to == "Rent" ? " / Month" : "",
                     style: TextStyle(
                         fontSize: 12,
                         color: kSubCategoryColor,

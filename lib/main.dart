@@ -8,7 +8,6 @@ import 'package:property_app/screens/searchScreen.dart';
 import 'screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/homescreen.dart';
-import '/screens/propertyDetailsScreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/previewProperty.dart';

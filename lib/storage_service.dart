@@ -34,7 +34,7 @@ class Storage {
   //   }
   // }
 
-  Future<void> uploadPropertyImages(BuildContext context) async {
+  Future<void> uploadPropertyImages() async {
     var loggedIn_mail = _auth.currentUser!.email;
     for (int i = 0; i < imageFileList!.length; i++) {
       String filePath, fileName;
@@ -65,11 +65,10 @@ class Storage {
                 .collection('Properties' + getTo())
                 .doc(PropertyTitle)
                 .update({"isSetImages": "True"});
-    print("Redirecting to homescreen");
-    Navigator.pushNamed(context, HomeScreen.id);
+    print("Added Property Images");
   }
 
-  Future<void> uploadPropertyDetails() async {
+  Future<void> uploadPropertyDetails(BuildContext context) async {
     print(PropertyAddress);
     print(PropertyTitle);
     print(getCategory());
@@ -109,14 +108,15 @@ class Storage {
     }).catchError((_) {
       print("An error Occured");
     });
+    Navigator.pushNamed(context, HomeScreen.id);
   }
 
   Future<firebase_storage.ListResult> listFiles() async {
     firebase_storage.ListResult result = await storage.ref('test/').listAll();
 
-    result.items.forEach((firebase_storage.Reference ref) {
+    for (var ref in result.items) {
       print('Found file $ref');
-    });
+    }
     return result;
   }
 }

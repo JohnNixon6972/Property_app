@@ -59,7 +59,7 @@ const kTextFieldDecoration = InputDecoration(
 
 const kPageBackgroundColor = Color(0xffE9E3E3);
 const kSubCategoryColor = Color.fromARGB(255, 151, 151, 151);
-const kPrimaryButtonColor = Color(0xffF510055);
+const kPrimaryButtonColor = Color(0xff510055);
 const kSecondaryButtonColor = Color(0xffDAD8D9);
 const kHighlightedTextColor = Color(0xff510055);
 const kNavigationIconColor = Color.fromARGB(255, 211, 199, 199);

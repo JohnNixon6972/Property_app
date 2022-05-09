@@ -1,9 +1,8 @@
+// ignore_for_file: file_names, body_might_complete_normally_nullable, unrelated_type_equality_checks
+
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
-import '../screens/profileScreen.dart';
-import '../screens/loginScreen.dart';
 import 'package:property_app/main.dart';
-import 'package:property_app/currentUserInformation.dart';
 final dialogKey = GlobalKey<FormState>();
 final passwordKey = GlobalKey<FormState>();
 final TextEditingController _currentPassowrd = TextEditingController();
@@ -17,7 +16,7 @@ List<List<Widget>> fields = [
       key: dialogKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -28,21 +27,22 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.name,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
                 userInfo.name = value;
               }
+              return null;
               // return firstName;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Enter your Full Name.',
-              prefixIcon: Icon(Icons.badge, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.badge, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],
@@ -92,7 +92,7 @@ List<List<Widget>> fields = [
       key: dialogKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -103,7 +103,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.phone,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -115,10 +115,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Enter your Mobile Number.',
-              prefixIcon: Icon(Icons.lock, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],
@@ -130,7 +130,7 @@ List<List<Widget>> fields = [
       key: passwordKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -142,13 +142,13 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
                 // password = currentPassowrd;
-                if (_currentPassowrd != userInfo.password) {
+                if (userInfo.password != _currentPassowrd) {
                   print("Invalid Password");
                 }
               }
@@ -157,7 +157,7 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Current Password.',
-              prefixIcon: Icon(Icons.lock_outline, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock_outline, color: kPrimaryButtonColor),
               // suffix: InkWell(
               //                 onTap:(){},
               //                 child: Icon(_isHidden
@@ -167,7 +167,7 @@ List<List<Widget>> fields = [
               //             ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -179,7 +179,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -192,10 +192,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Enter your new password.',
-              prefixIcon: Icon(Icons.lock, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -207,7 +207,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -219,10 +219,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Confirm your new password.',
-              prefixIcon: Icon(Icons.lock_open, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock_open, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],
@@ -234,7 +234,7 @@ List<List<Widget>> fields = [
       key: dialogKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -245,7 +245,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -257,10 +257,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Address line 1',
-              prefixIcon: Icon(Icons.home, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.home, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -271,7 +271,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -283,10 +283,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Address line 2',
-              prefixIcon: Icon(Icons.house, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.house, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -297,7 +297,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -309,10 +309,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'City',
-              prefixIcon: Icon(Icons.location_city, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.location_city, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -323,7 +323,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -335,10 +335,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'State',
-              prefixIcon: Icon(Icons.cabin, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.cabin, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -349,7 +349,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -361,10 +361,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Country',
-              prefixIcon: Icon(Icons.countertops, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.countertops, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -375,7 +375,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -387,10 +387,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Postal code',
-              prefixIcon: Icon(Icons.code, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.code, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],

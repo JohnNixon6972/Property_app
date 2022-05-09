@@ -6,6 +6,7 @@ import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 // import 'package:property_app/screens/addPropertiesScreen1.dart';
 // import 'package:property_app/screens/propertyDetailsScreen.dart';
+import 'package:property_app/main.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
@@ -13,6 +14,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:property_app/currentUserInformation.dart';
 
 late User loggedInUser;
 
@@ -55,7 +57,7 @@ class PropertiesOnSaleAdv extends StatelessWidget {
             var bedRoom = property["BedRoom"];
             var BathRoom = property["BathRoom"];
             var propertyCategory = property["PropertyCategory"];
-            
+
             final Property = PropertyCard(
               imageloc: imageloc,
               price: price,
@@ -134,7 +136,7 @@ final customCacheManager = CacheManager(
       stalePeriod: const Duration(days: 15), maxNrOfCacheObjects: 100),
 );
 
-late String name = "";
+// late String name = "";
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -152,15 +154,15 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color bookmarkIconColor;
 
   late IconData icn;
-  late String email = "";
-  late String mobileNumber = "";
-  late String addressLine1 = "";
-  late String addressLine2 = "";
-  late String password = "";
-  late String city = "";
-  late String state = "";
-  late String country = "";
-  late String postalCode = "";
+  // late String email = "";
+  // late String mobileNumber = "";
+  // late String addressLine1 = "";
+  // late String addressLine2 = "";
+  // late String password = "";
+  // late String city = "";
+  // late String state = "";
+  // late String country = "";
+  // late String postalCode = "";
 
   void getCurrentUser() async {
     try {
@@ -169,22 +171,22 @@ class _HomeScreenState extends State<HomeScreen> {
       if (user != null) {
         loggedInUser = user;
         print(loggedInUser.email);
-        email = loggedInUser.email!;
+        userInfo.email = loggedInUser.email!;
         var currUserCollection = _firestore.collection("Users");
-        var docSanpshot = await currUserCollection.doc(email).get();
+        var docSanpshot = await currUserCollection.doc(userInfo.email).get();
 
         if (docSanpshot.exists) {
           Map<String, dynamic>? data = docSanpshot.data();
           setState(
             () {
-              name = data?['name'];
-              mobileNumber = data?['number'];
-              print(name);
-              print(mobileNumber);
+              userInfo.name = data?['name'];
+              userInfo.mobileNumber = data?['number'];
+              print(userInfo.name);
+              print(userInfo.mobileNumber);
             },
           );
         }
-        print(email);
+        print(userInfo.email);
       }
     } catch (e) {
       print(e);
@@ -209,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hey $name ${Emojis.wavingHandLightSkinTone}',
+                          'Hey ${userInfo.name} ${Emojis.wavingHandLightSkinTone}',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,

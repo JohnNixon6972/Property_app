@@ -6,6 +6,7 @@ import './screens/homescreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/addPropertiesScreen1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'currentUserInformation.dart';
 
 class Storage {
   final firebase_storage.FirebaseStorage storage =
@@ -75,7 +76,7 @@ class Storage {
     var type = getType();
     _firestore.collection('Properties' + to).doc(PropertyTitle).set({
       "PropertyBy": loggedInUser.email,
-      "OwnerName" : name,
+      "OwnerName": getUserDetails().name,
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,
       "PropertyTo": to,

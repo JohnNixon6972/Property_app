@@ -12,6 +12,10 @@ import '/screens/propertyDetailsScreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/previewProperty.dart';
+import 'currentUserInformation.dart';
+
+
+getUserDetails userInfo = getUserDetails();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,8 +33,6 @@ class _PropertyAppState extends State<PropertyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  
-
   }
 
   @override

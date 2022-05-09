@@ -6,6 +6,8 @@ import '../components/bottomNavigationBar.dart';
 import '../components/dialogBoxListWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:property_app/currentUserInformation.dart';
+import 'package:property_app/main.dart';
 // import '../screens/registerScreen.dart';
 import '../screens/loginScreen.dart';
 
@@ -27,16 +29,16 @@ List<String> option_titles = [
 final _firestore = FirebaseFirestore.instance;
 final _formKey = GlobalKey<FormState>();
 
-late String name = "";
-// late String email = "";
-late String mobileNumber = "";
-late String addressLine1 = "Not Saved";
-late String addressLine2 = "Not Saved";
-// late String password = "Not Saved";
-late String city = "Not Saved";
-late String state = "Not Saved";
-late String country = "Not Saved";
-late String postalCode = "Not Saved";
+// late String name = "";
+// // late String email = "";
+// late String mobileNumber = "";
+// late String addressLine1 = "Not Saved";
+// late String addressLine2 = "Not Saved";
+// // late String password = "Not Saved";
+// late String city = "Not Saved";
+// late String state = "Not Saved";
+// late String country = "Not Saved";
+// late String postalCode = "Not Saved";
 
 class _profileScreenState extends State<profileScreen> {
   final meaageTextController = TextEditingController();
@@ -66,14 +68,14 @@ class _profileScreenState extends State<profileScreen> {
         Map<String, dynamic>? data = docSanpshot.data();
         setState(
           () {
-            name = data?['name'];
-            mobileNumber = data?['number'];
-            print(name);
-            print(mobileNumber);
+            userInfo.name = data?['name'];
+            userInfo.mobileNumber = data?['number'];
+            print(userInfo.name);
+            print(userInfo.mobileNumber);
           },
         );
       }
-      print(email);
+      print(userInfo.email);
     } catch (e) {
       print(e);
     }
@@ -134,7 +136,7 @@ class _profileScreenState extends State<profileScreen> {
                   child: Column(
                     children: [
                       Text(
-                        name,
+                        userInfo.name,
                         style: TextStyle(
                             color: kHighlightedTextColor,
                             fontSize: 25,
@@ -142,7 +144,7 @@ class _profileScreenState extends State<profileScreen> {
                             wordSpacing: -1),
                       ),
                       Text(
-                        email,
+                        userInfo.email,
                         style: TextStyle(
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.bold),
@@ -181,25 +183,26 @@ class _profileScreenState extends State<profileScreen> {
                     SizedBox(
                       height: 10,
                     ),
+                    // ProfileDetailsContainer(
+                    //   icon: Icons.alternate_email_outlined,
+                    //   Title: "Email",
+                    //   SubTitle: userInfo.email,
+                    // ),
                     ProfileDetailsContainer(
                       icon: Icons.account_circle_outlined,
                       Title: "Personal Information",
-                      SubTitle: name,
+                      SubTitle: userInfo.name,
                     ),
-                    ProfileDetailsContainer(
-                      icon: Icons.alternate_email_outlined,
-                      Title: "Email",
-                      SubTitle: email,
-                    ),
+
                     ProfileDetailsContainer(
                       icon: Icons.call_outlined,
                       Title: "Phone",
-                      SubTitle: mobileNumber,
+                      SubTitle: userInfo.mobileNumber,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.lock_outlined,
                       Title: "Password",
-                      SubTitle: password,
+                      SubTitle: userInfo.password,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.add_location_outlined,
@@ -346,20 +349,16 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     // Validate returns true if the form is valid, or false otherwise.
                     setState(() {
                       try {
-                        if (passwordKey.currentState!.validate()) {
-                          //   //   //   //   //   // If the form is valid, display a snackbar. In the real world,
-                          //   //   //   //   //   // you'd often call a server or save the information in a database.
-                          //   //   //   //   //   // ScaffoldMessenger.of(context).showSnackBar(
-                          //   //   //   //   //   //   const SnackBar(content: Text('Processing Data')),
-                          //   //   //   //   //   // );
-                        }
-                        print(password);
-                        name = name;
+                        if (passwordKey.currentState!.validate()) {}
+                        print(userInfo.password);
+                        userInfo.name = userInfo.name;
                         if (newPassword == confirmNewPassword) {
                           var loggedInUser = _auth.currentUser;
-                          loggedInUser?.updatePassword(password).then((_) {
-                            password = newPassword;
-                            print(password);
+                          loggedInUser
+                              ?.updatePassword(userInfo.password)
+                              .then((_) {
+                            userInfo.password = newPassword;
+                            print(userInfo.password);
                             print("Successfully changed password");
                           }).catchError((error) {
                             print(
@@ -372,15 +371,15 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                             .collection("Users")
                             .doc(_auth.currentUser!.email)
                             .update({
-                          "email": email,
-                          "name": name,
-                          "number": mobileNumber,
-                          "addressLine1": addressLine1,
-                          "addressLine2": addressLine2,
-                          "city": city,
-                          "state": state,
-                          "country": country,
-                          "postalcode": postalCode,
+                          "email": userInfo.email,
+                          "name": userInfo.name,
+                          "number": userInfo.mobileNumber,
+                          "addressLine1": userInfo.addressLine1,
+                          "addressLine2": userInfo.addressLine2,
+                          "city": userInfo.city,
+                          "state": userInfo.state,
+                          "country": userInfo.country,
+                          "postalcode": userInfo.postalCode,
                         });
                         print("Process data");
 

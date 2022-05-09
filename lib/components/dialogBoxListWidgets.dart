@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
-// import 'package:property_app/screens/profileScreen.dart';
-// import '../screens/registerScreen.dart';
 import '../screens/profileScreen.dart';
 import '../screens/loginScreen.dart';
-
+import 'package:property_app/main.dart';
+import 'package:property_app/currentUserInformation.dart';
 final dialogKey = GlobalKey<FormState>();
 final passwordKey = GlobalKey<FormState>();
 final TextEditingController _currentPassowrd = TextEditingController();
-// final TextEditingController _newPassowrd = TextEditingController();
-// final TextEditingController _confirmNewPassowrd = TextEditingController();
 late String newPassword = "";
 late String confirmNewPassword = "";
-bool _isHidden = true;
+// bool _isHidden = true;
 
 List<List<Widget>> fields = [
   [
@@ -25,8 +22,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              name = newValue;
-              print(name);
+              userInfo.name = newValue;
+              print(userInfo.name);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.name,
@@ -36,7 +33,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                name = value;
+                userInfo.name = value;
               }
               // return firstName;
             },
@@ -52,44 +49,44 @@ List<List<Widget>> fields = [
       ),
     ),
   ],
-  [
-    Form(
-      key: dialogKey,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            onChanged: (newValue) {
-              email = newValue;
-              print(email);
-            },
-            cursorColor: kPrimaryButtonColor,
-            keyboardType: TextInputType.emailAddress,
-            textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter valid text';
-              } else {
-                email = value;
-              }
+  // [
+  //   Form(
+  //     key: dialogKey,
+  //     child: Column(
+  //       children: [
+  //         SizedBox(
+  //           height: 10,
+  //         ),
+  //         TextFormField(
+  //           onChanged: (newValue) {
+  //             userInfo.email = newValue;
+  //             print(userInfo.email);
+  //           },
+  //           cursorColor: kPrimaryButtonColor,
+  //           keyboardType: TextInputType.emailAddress,
+  //           textAlign: TextAlign.left,
+  //           style: TextStyle(color: kPrimaryButtonColor),
+  //           validator: (value) {
+  //             if (value == null || value.isEmpty) {
+  //               return 'Please enter valid text';
+  //             } else {
+  //               userInfo.email = value;
+  //             }
 
-              // return null;
-            },
-            decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Enter your Email Address.',
-              prefixIcon: Icon(Icons.email, color: kPrimaryButtonColor),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-    ),
-  ],
+  //             // return null;
+  //           },
+  //           decoration: kTextFieldDecoration.copyWith(
+  //             hintText: 'Enter your Email Address.',
+  //             prefixIcon: Icon(Icons.email, color: kPrimaryButtonColor),
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           height: 10,
+  //         ),
+  //       ],
+  //     ),
+  //   ),
+  // ],
   [
     Form(
       key: dialogKey,
@@ -100,8 +97,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              mobileNumber = newValue;
-              print(mobileNumber);
+              userInfo.mobileNumber = newValue;
+              print(userInfo.mobileNumber);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.phone,
@@ -111,7 +108,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                mobileNumber = value;
+                userInfo.mobileNumber = value;
               }
 
               // return null;
@@ -140,7 +137,7 @@ List<List<Widget>> fields = [
             // controller: _currentPassowrd,
             obscureText: true,
             onChanged: (value) {
-              password = value;
+              userInfo.password = value;
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
@@ -151,7 +148,7 @@ List<List<Widget>> fields = [
                 return 'Please enter valid text';
               } else {
                 // password = currentPassowrd;
-                if (_currentPassowrd != password) {
+                if (_currentPassowrd != userInfo.password) {
                   print("Invalid Password");
                 }
               }
@@ -242,8 +239,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              addressLine1 = newValue;
-              print(addressLine1);
+              userInfo.addressLine1 = newValue;
+              print(userInfo.addressLine1);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
@@ -253,7 +250,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                addressLine1 = value;
+                userInfo.addressLine1 = value;
               }
 
               // return null;
@@ -268,8 +265,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              addressLine2 = newValue;
-              print(addressLine2);
+              userInfo.addressLine2 = newValue;
+              print(userInfo.addressLine2);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
@@ -279,7 +276,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                addressLine2 = value;
+                userInfo.addressLine2 = value;
               }
 
               // return null;
@@ -294,8 +291,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              city = newValue;
-              print(city);
+              userInfo.city = newValue;
+              print(userInfo.city);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
@@ -305,7 +302,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                city = value;
+                userInfo.city = value;
               }
 
               // return null;
@@ -320,8 +317,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              state = newValue;
-              print(state);
+              userInfo.state = newValue;
+              print(userInfo.state);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
@@ -331,7 +328,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                state = value;
+                userInfo.state = value;
               }
 
               // return null;
@@ -346,8 +343,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              country = newValue;
-              print(country);
+              userInfo.country = newValue;
+              print(userInfo.country);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
@@ -357,7 +354,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                country = value;
+                userInfo.country = value;
               }
 
               // return null;
@@ -372,8 +369,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              postalCode = newValue;
-              print(postalCode);
+              userInfo.postalCode = newValue;
+              print(userInfo.postalCode);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
@@ -383,7 +380,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                postalCode = value;
+                userInfo.postalCode = value;
               }
 
               // return null;

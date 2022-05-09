@@ -5,6 +5,8 @@ import '../constants.dart';
 import 'addPopertiesScreen2.dart';
 import 'dart:io';
 import './profileScreen.dart';
+import 'package:property_app/currentUserInformation.dart';
+import 'package:property_app/main.dart';
 
 class PreviewProperty extends StatefulWidget {
   static const String id = "previewProperty";
@@ -330,7 +332,7 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        userInfo.name,
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,

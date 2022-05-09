@@ -121,9 +121,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(
-                    width: 55,
-                  ),
+                  Spacer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -136,8 +134,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        to == "Rent"?
-                        " / Month":"",
+                        to == "Rent" ? " / Month" : "",
                         style: TextStyle(
                             fontSize: 12,
                             color: kSubCategoryColor,
@@ -151,7 +148,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.only(top: 10.0, left: 10.0, right: 15),
                 child: Text(
-                propertyDescription,
+                  propertyDescription,
                   style: TextStyle(
                       fontSize: 15,
                       color: kHighlightedTextColor,
@@ -349,17 +346,14 @@ class PropertyDetailsScreen extends StatelessWidget {
                             color: kHighlightedTextColor),
                       ),
                       Text(
-                        ownerName != "admin"?
-                        'Owner':"Admin",
+                        ownerName != "admin" ? 'Owner' : "Admin",
                         style: TextStyle(
                           color: Color.fromARGB(255, 141, 141, 141),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: 100,
-                  ),
+                  Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,

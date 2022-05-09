@@ -41,15 +41,16 @@ class Storage {
       filePath = imageFileList![i].path;
       fileName = imageFileList![i].name;
       File file = File(filePath);
+      print("Adding property images");
 
       try {
         // await storage.ref('test/$fileName').putFile(file);
         ref = storage.ref().child(
             'asset/propertyImages/$loggedIn_mail/$PropertyTitle/$fileName');
         await ref.putFile(file).whenComplete(() async {
-          await ref.getDownloadURL().then((value) {
+          await ref.getDownloadURL().then((value) async{
             // imgRef.add({'url': value});
-            _firestore
+          await  _firestore
                 .collection('Properties' + getTo())
                 .doc(PropertyTitle)
                 .update({"imgUrl${i + 1}": value});
@@ -59,6 +60,11 @@ class Storage {
         print(e);
       }
     }
+    await  _firestore
+                .collection('Properties' + getTo())
+                .doc(PropertyTitle)
+                .update({"isSetImages": "True"});
+    print("Redirecting to homescreen");
     Navigator.pushNamed(context, HomeScreen.id);
   }
 
@@ -75,7 +81,7 @@ class Storage {
     var type = getType();
     _firestore.collection('Properties' + to).doc(PropertyTitle).set({
       "PropertyBy": loggedInUser.email,
-      "OwnerName" : name,
+      "OwnerName": name,
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,
       "PropertyTo": to,
@@ -85,6 +91,7 @@ class Storage {
       "SquareFit": squareFit,
       "BedRoom": bedRoom,
       "BathRoom": bathRoom,
+      "isSetImages":"False",
       "Price": price,
       "imgUrl1": "",
       "imgUrl2": "",

@@ -12,6 +12,7 @@ import '/screens/propertyDetailsScreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/previewProperty.dart';
+import './screens/propertyDetailsScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

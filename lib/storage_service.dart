@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import './screens/homescreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/addPropertiesScreen1.dart';
@@ -32,7 +33,7 @@ class Storage {
   //   }
   // }
 
-  Future<void> uploadPropertyImages() async {
+  Future<void> uploadPropertyImages(BuildContext context) async {
     var loggedIn_mail = _auth.currentUser!.email;
     for (int i = 0; i < imageFileList!.length; i++) {
       String filePath, fileName;
@@ -40,15 +41,16 @@ class Storage {
       filePath = imageFileList![i].path;
       fileName = imageFileList![i].name;
       File file = File(filePath);
+      print("Adding property images");
 
       try {
         // await storage.ref('test/$fileName').putFile(file);
-        ref = await storage.ref().child(
+        ref = storage.ref().child(
             'asset/propertyImages/$loggedIn_mail/$PropertyTitle/$fileName');
         await ref.putFile(file).whenComplete(() async {
-          await ref.getDownloadURL().then((value) {
+          await ref.getDownloadURL().then((value) async{
             // imgRef.add({'url': value});
-            _firestore
+          await  _firestore
                 .collection('Properties' + getTo())
                 .doc(PropertyTitle)
                 .update({"imgUrl${i + 1}": value});
@@ -56,12 +58,15 @@ class Storage {
         });
       } catch (e) {
         print(e);
-      } on FirebaseException catch (e) {
-        print(e);
       }
     }
+    await  _firestore
+                .collection('Properties' + getTo())
+                .doc(PropertyTitle)
+                .update({"isSetImages": "True"});
+    print("Redirecting to homescreen");
+    Navigator.pushNamed(context, HomeScreen.id);
   }
-  
 
   Future<void> uploadPropertyDetails() async {
     print(PropertyAddress);
@@ -76,6 +81,7 @@ class Storage {
     var type = getType();
     _firestore.collection('Properties' + to).doc(PropertyTitle).set({
       "PropertyBy": loggedInUser.email,
+      "OwnerName": name,
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,
       "PropertyTo": to,
@@ -85,6 +91,7 @@ class Storage {
       "SquareFit": squareFit,
       "BedRoom": bedRoom,
       "BathRoom": bathRoom,
+      "isSetImages":"False",
       "Price": price,
       "imgUrl1": "",
       "imgUrl2": "",

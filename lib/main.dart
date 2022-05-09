@@ -12,6 +12,7 @@ import '/screens/propertyDetailsScreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/previewProperty.dart';
+import './screens/propertyDetailsScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +44,7 @@ class _PropertyAppState extends State<PropertyApp> {
         registerScreen.id: (context) => registerScreen(),
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
-        PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
+        // PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
         BookmarkedPropertiesScreen.id: (context) =>
             BookmarkedPropertiesScreen(),
         AddPropertiesScreen.id: (context) => AddPropertiesScreen(),

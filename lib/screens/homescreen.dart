@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
-import 'package:property_app/screens/addPropertiesScreen1.dart';
+import 'package:property_app/screens/addPopertiesScreen2.dart';
+// import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 // import 'package:property_app/screens/addPropertiesScreen1.dart';
 // import 'package:property_app/screens/propertyDetailsScreen.dart';
@@ -10,6 +11,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 late User loggedInUser;
 
@@ -21,41 +24,153 @@ class HomeScreen extends StatefulWidget {
 
 final _firestore = FirebaseFirestore.instance;
 
-class PropertiesAdv extends StatelessWidget {
+class PropertiesOnSaleAdv extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection("PropertiesSell").snapshots(),
-        builder: (sontext, snapshot) {
-          List<PropertyCard> Properties = [];
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final properties = snapshot.data!.docs;
-          for (var property in properties) {
+      stream: _firestore.collection("PropertiesSell").snapshots(),
+      builder: (sontext, snapshot) {
+        List<PropertyCard> PropertiesOnSale = [];
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        final properties = snapshot.data!.docs;
+        for (var property in properties) {
+          var isSet = property["isSetImages"].toString();
+          if (isSet == "True") {
             try {
+              List<String> propertyImages = [];
+              for (int i = 1; i <= 10; i++) {
+                if (property["imgUrl$i"] != "") {
+                  propertyImages.add(property["imgUrl$i"]);
+                }
+              }
+              // print(propertyImages);
+              var imageloc = property["imgUrl1"];
+              // print(imageloc);
+              var price = property["Price"];
+              var propertyAddress = property["PropertyAddress"];
+              var propertyName = property["PropertyTitle"];
+              var propertyDescription = property["PropertyDescription"];
+              var to = "Sell";
+              var bedRoom = property["BedRoom"];
+              var BathRoom = property["BathRoom"];
+              var propertyCategory = property["PropertyCategory"];
+              var ownerName = property["OwnerName"];
+              var propertyType = property["PropertyType"];
+              var area = property["SquareFit"];
+
               final Property = PropertyCard(
-                  imageloc: property["imgUrl1"],
-                  price: property["Price"],
-                  propertyAddress: property["PropertyAddress"],
-                  propertyName: property["PropertyTitle"]);
+                imageloc: imageloc,
+                price: price,
+                propertyAddress: propertyAddress,
+                propertyName: propertyName,
+                propertyImages: propertyImages,
+                propertyCategory: propertyCategory,
+                propertyDescription: propertyDescription,
+                propertyType: propertyType,
+                bedRoom: bedRoom,
+                bathRoom: BathRoom,
+                ownerName: ownerName,
+                to: to,
+                area: area,
+              );
+              PropertiesOnSale.add(Property);
+            } catch (e) {
+              print(e);
+            }
+          }
+        }
+        return ListView(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          // shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          children: PropertiesOnSale,
+        );
+      },
+    );
+  }
+}
+
+class PropertiesOnRentAdv extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection("PropertiesRent").snapshots(),
+      builder: (sontext, snapshot) {
+        List<PropertyCard> Properties = [];
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        final properties = snapshot.data!.docs;
+        for (var property in properties) {
+          var isSet = property["isSetImages"].toString();
+          if (isSet == "True") {
+            try {
+              List<String> propertyImages = [];
+              for (int i = 1; i <= 10; i++) {
+                if (property["imgUrl$i"] != "") {
+                  propertyImages.add(property["imgUrl$i"]);
+                }
+              }
+              var imageloc = property["imgUrl1"];
+
+              var price = property["Price"];
+              var propertyAddress = property["PropertyAddress"];
+              var propertyName = property["PropertyTitle"];
+              var propertyDescription = property["PropertyDescription"];
+              var to = "Rent";
+              var bedRoom = property["BedRoom"];
+              var BathRoom = property["BathRoom"];
+              var propertyCategory = property["PropertyCategory"];
+              var ownerName = property["OwnerName"];
+              var propertyType = property["PropertyType"];
+              var area = property["SquareFit"];
+
+              final Property = PropertyCard(
+                imageloc: imageloc,
+                price: price,
+                propertyAddress: propertyAddress,
+                propertyName: propertyName,
+                propertyImages: propertyImages,
+                propertyCategory: propertyCategory,
+                propertyDescription: propertyDescription,
+                propertyType: propertyType,
+                bedRoom: bedRoom,
+                bathRoom: BathRoom,
+                ownerName: ownerName,
+                to: to,
+                area: area,
+              );
               Properties.add(Property);
             } catch (e) {
               print(e);
             }
           }
-          return ListView(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            // shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            children: Properties,
-          );
-        });
+        }
+        return ListView(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          // shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          children: Properties,
+        );
+      },
+    );
   }
 }
+
+final customCacheManager = CacheManager(
+  Config('customCacheKey',
+      stalePeriod: const Duration(days: 15), maxNrOfCacheObjects: 100),
+);
+
+late String name = "";
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -73,7 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color bookmarkIconColor;
 
   late IconData icn;
-  late String name = "";
   late String email = "";
   late String mobileNumber = "";
   late String addressLine1 = "";
@@ -266,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 400,
+                        height: 415,
                         // child: ListView(
                         //   padding: EdgeInsets.symmetric(vertical: 10),
                         //   // shrinkWrap: true,
@@ -274,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         //   scrollDirection: Axis.horizontal,
                         //   children: Properties,
                         // ),
-                        child: PropertiesAdv(),
+                        child: PropertiesOnSaleAdv(),
                       ),
                       Divider(
                         thickness: 1,
@@ -291,14 +405,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 400,
-                        child: ListView(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          shrinkWrap: true,
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          // children: Properties,
-                        ),
+                        height: 415,
+                        // child: ListView(
+                        //   padding: EdgeInsets.symmetric(vertical: 10),
+                        //   shrinkWrap: true,
+                        //   physics: BouncingScrollPhysics(),
+                        //   scrollDirection: Axis.horizontal,
+                        //   // children: Properties,
+                        // ),
+                        child: PropertiesOnRentAdv(),
                       ),
                     ],
                   ),
@@ -321,11 +436,29 @@ class PropertyCard extends StatefulWidget {
   final String propertyName;
   final String propertyAddress;
   final String price;
+  final String propertyDescription;
+  final String to;
+  final String ownerName;
+  final String propertyType;
+  final String bedRoom;
+  final String bathRoom;
+  final String propertyCategory;
+  final String area;
+  final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
       required this.price,
       required this.propertyAddress,
-      required this.propertyName});
+      required this.propertyName,
+      required this.bathRoom,
+      required this.bedRoom,
+      required this.ownerName,
+      required this.propertyCategory,
+      required this.propertyDescription,
+      required this.propertyType,
+      required this.to,
+      required this.propertyImages,
+      required this.area});
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -341,7 +474,8 @@ class _PropertyCardState extends State<PropertyCard> {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: Container(
-        width: 180,
+        width: 190,
+        height: 230,
         decoration: const BoxDecoration(
           // border: Border.all(
           //   color: kBottomNavigationBackgroundColor,
@@ -353,7 +487,7 @@ class _PropertyCardState extends State<PropertyCard> {
         ),
         child: Padding(
           padding: const EdgeInsets.only(
-              left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
+              left: 10.0, right: 10.0, bottom: 8.0, top: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -361,24 +495,47 @@ class _PropertyCardState extends State<PropertyCard> {
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    child: Image.network(
-                      widget.imageloc,
-                      fit: BoxFit.fill,
-                      width: 170,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 10,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                    )),
+                    child: CachedNetworkImage(
+                      cacheManager: customCacheManager,
+                      key: UniqueKey(),
+                      imageUrl: widget.imageloc,
+                      height: 230,
+                      width: 190,
+                      // maxHeightDiskCache: 230,
+                      // maxWidthDiskCache: 190,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                          color: kHighlightedTextColor,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.black12,
+                        child: Icon(
+                          Icons.error,
+                          color: kHighlightedTextColor,
+                        ),
+                      ),
+                    )
+                    // child: Image.network(
+                    //   widget.imageloc,
+                    //   fit: BoxFit.fill,
+                    //   width: 170,
+                    //   loadingBuilder: (BuildContext context, Widget child,
+                    //       ImageChunkEvent? loadingProgress) {
+                    //     if (loadingProgress == null) return child;
+                    //     return Center(
+                    //       child: CircularProgressIndicator(
+                    //         strokeWidth: 10,
+                    //         value: loadingProgress.expectedTotalBytes != null
+                    //             ? loadingProgress.cumulativeBytesLoaded /
+                    //                 loadingProgress.expectedTotalBytes!
+                    //             : null,
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                    ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),
@@ -421,7 +578,23 @@ class _PropertyCardState extends State<PropertyCard> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, PropertyDetailsScreen.id);
+                      // Navigator.pushNamed(context, PropertyDetailsScreen.id);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PropertyDetailsScreen(
+                              propertyAddress: widget.propertyAddress,
+                              propertyTitle: widget.propertyName,
+                              to: widget.to,
+                              ownerName: widget.ownerName,
+                              propertyDescription: widget.propertyDescription,
+                              noBathroom: widget.bathRoom,
+                              noBedroom: widget.bedRoom,
+                              area: widget.area,
+                              propertyImages: widget.propertyImages,
+                              price: widget.price),
+                        ),
+                      );
                     },
                     child: Text(
                       'View Details',

@@ -1,5 +1,6 @@
 // import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import '../constants.dart';
@@ -40,6 +41,47 @@ class PropertyDetailsScreen extends StatelessWidget {
   //     target: LatLng(37.43296265331129, -122.08832357078792),
   //     tilt: 59.440717697143555,
   //     zoom: 19.151926040649414);
+  Widget buildListView(List<String> propertyImages, BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return ListView.builder(
+        // scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
+        itemCount: propertyImages.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index) {
+          // return Image.file(
+          //   File(imageFileList![index].path),
+          //   fit: BoxFit.cover,
+          // );
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(25),
+              ),
+              child: CachedNetworkImage(
+                imageUrl: propertyImages[index],
+                key: UniqueKey(),
+                height: 400,
+                width: width - 30,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(
+                    color: kHighlightedTextColor,
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.black12,
+                  child: Icon(
+                    Icons.error,
+                    color: kHighlightedTextColor,
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,17 +127,7 @@ class PropertyDetailsScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(top: 18, bottom: 18),
                 height: 250,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(25),
-                  ),
-                  child: Image(
-                    fit: BoxFit.cover,
-                    // height: 400,
-                    width: double.infinity,
-                    image: AssetImage('images/propertyDetailed1.jpg'),
-                  ),
-                ),
+                child: buildListView(propertyImages, context),
               ),
               Row(
                 children: [

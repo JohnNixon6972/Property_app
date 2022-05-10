@@ -12,6 +12,7 @@ import 'package:property_app/currentUserInformation.dart';
 import 'package:property_app/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_logs/flutter_logs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // late String email;
 // late String password;
@@ -268,7 +269,8 @@ class _loginScreenState extends State<loginScreen> {
                           height: 10,
                         ),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
                             // Validate returns true if the form is valid, or false otherwise.
                             if (_loginFormKey.currentState!.validate()) {
                               // If the form is valid, display a snackbar. In the real world,
@@ -283,7 +285,8 @@ class _loginScreenState extends State<loginScreen> {
                                 _auth.signInWithEmailAndPassword(
                                     email: userInfo.email,
                                     password: userInfo.password);
-
+                                await prefs.setString('User', userInfo.email);
+                                await prefs.setString('Password', userInfo.password);
                                 Navigator.pushNamed(context, HomeScreen.id);
                               } catch (e) {
                                 print(e);

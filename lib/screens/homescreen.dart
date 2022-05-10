@@ -41,6 +41,14 @@ class PropertiesOnSaleAdv extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesSell").snapshots(),
       builder: (sontext, snapshot) {
+        PropertiesOnSaleAll = [];
+        PropertiesOnSaleAdmin = [];
+        ApartmentOnSaleAdmin = [];
+        ApartmentOnSale = [];
+        PentHouseOnSaleAdmin = [];
+        PentHouseOnSale = [];
+        BuildingOnSaleAdmin = [];
+        BuildingOnSale = [];
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -109,18 +117,19 @@ class PropertiesOnSaleAdv extends StatelessWidget {
                   BuildingOnSaleAdmin.add(Property);
                 }
               }
-
-              print("Propertes on Sale All:"+ PropertiesOnSaleAll.toString());
-              print("Propertes on Sale Admin:" +PropertiesOnSaleAll.toString());
-              print("Apartments on Sale All:" +ApartmentOnSale.toString());
-              print("Apartments on Sale Admin:" +ApartmentOnSale
-              
-              .toString());
             } catch (e) {
               print(e);
             }
           }
         }
+        // print("Propertes on Sale All:" + PropertiesOnSaleAll.toString());
+        // print("Propertes on Sale Admin:" + PropertiesOnSaleAll.toString());
+        // print("Apartments on Sale All:" + ApartmentOnSale.toString());
+        // print("Apartments on Sale Admin:" + ApartmentOnSale.toString());
+        // print("PentHouse on Sale All:" + ApartmentOnSale.toString());
+        // print("PentHouse on Sale Admin:" + ApartmentOnSale.toString());
+        // print("Building on Sale All:" + ApartmentOnSale.toString());
+        // print("Building on Sale Admin:" + ApartmentOnSale.toString());
         return ListView(
           padding: EdgeInsets.symmetric(vertical: 10),
           // shrinkWrap: true,
@@ -149,6 +158,14 @@ class PropertiesOnRentAdv extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesRent").snapshots(),
       builder: (sontext, snapshot) {
+        PropertiesOnRentAll = [];
+        PropertiesOnRentAdmin = [];
+        ApartmentOnRentAdmin = [];
+        ApartmentOnRent = [];
+        PentHouseOnRentAdmin = [];
+        PentHouseOnRent = [];
+        BuildingOnRentAdmin = [];
+        BuildingOnRent = [];
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -221,6 +238,14 @@ class PropertiesOnRentAdv extends StatelessWidget {
             }
           }
         }
+        // print("Propertes on Rent All:" + PropertiesOnRentAll.toString());
+        // print("Propertes on Rent Admin:" + PropertiesOnRentAll.toString());
+        // print("Apartments on Rent All:" + ApartmentOnRent.toString());
+        // print("Apartments on Rent Admin:" + ApartmentOnRent.toString());
+        // print("PentHouse on Rent All:" + ApartmentOnRent.toString());
+        // print("PentHouse on Rent Admin:" + ApartmentOnRent.toString());
+        // print("Building on Rent All:" + ApartmentOnRent.toString());
+        // print("Building on Rent Admin:" + ApartmentOnRent.toString());
         return ListView(
           padding: EdgeInsets.symmetric(vertical: 10),
           // shrinkWrap: true,
@@ -297,8 +322,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void ToggleProperties(int index) {
+    displayAdminProperties = index == 1 ? false : true;
     setState(() {
-      displayAdminProperties = index == 1 ? false : true;
       // print(PropertiesOnRentAdmin);
       // print(PropertiesOnSaleAdmin);
     });
@@ -560,9 +585,6 @@ class _PropertyCardState extends State<PropertyCard> {
         width: 190,
         height: 230,
         decoration: const BoxDecoration(
-          // border: Border.all(
-          //   color: kBottomNavigationBackgroundColor,
-          // ),
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
             Radius.circular(20),
@@ -599,26 +621,7 @@ class _PropertyCardState extends State<PropertyCard> {
                           color: kHighlightedTextColor,
                         ),
                       ),
-                    )
-                    // child: Image.network(
-                    //   widget.imageloc,
-                    //   fit: BoxFit.fill,
-                    //   width: 170,
-                    //   loadingBuilder: (BuildContext context, Widget child,
-                    //       ImageChunkEvent? loadingProgress) {
-                    //     if (loadingProgress == null) return child;
-                    //     return Center(
-                    //       child: CircularProgressIndicator(
-                    //         strokeWidth: 10,
-                    //         value: loadingProgress.expectedTotalBytes != null
-                    //             ? loadingProgress.cumulativeBytesLoaded /
-                    //                 loadingProgress.expectedTotalBytes!
-                    //             : null,
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
-                    ),
+                    )),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),

@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:property_app/currentUserInformation.dart';
 import 'package:property_app/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import '../screens/registerScreen.dart';
 import '../screens/loginScreen.dart';
 
@@ -151,7 +152,9 @@ class _profileScreenState extends State<profileScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
+                          final prefs = await SharedPreferences.getInstance();
                           await FirebaseAuth.instance.signOut();
+                          await prefs.clear();
                           Navigator.pushNamed(context, loginScreen.id);
                         },
                         style: ElevatedButton.styleFrom(

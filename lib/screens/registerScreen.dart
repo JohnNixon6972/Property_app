@@ -227,11 +227,24 @@ class _registerScreenState extends State<registerScreen> {
                                   // }
                                 });
                               } else {
-                                Timer(Duration(seconds: 3), () {
-                                  // Text("Invalid email address");
-
-                                  print("invalid email");
+                                Timer _timer;
+                                _timer = Timer(Duration(seconds: 5), () {
+                                  Navigator.of(context).pop();
                                 });
+
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext builderContext) {
+                                      _timer = Timer(Duration(seconds: 5), () {
+                                        Navigator.of(context).pop();
+                                      });
+
+                                      return AlertDialog(
+                                        backgroundColor:
+                                            kBottomNavigationBackgroundColor,
+                                        title: Text('Invalid Email'),
+                                      );
+                                    }).then((val) {});
                               }
                             } catch (e) {
                               print(e);

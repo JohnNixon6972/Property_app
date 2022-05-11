@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_auth/email_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:property_app/constants.dart';
@@ -7,6 +11,7 @@ import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/currentUserInformation.dart';
 
+final TextEditingController _otpController = TextEditingController();
 // late String name = "";
 // late String email = "";
 // late String mobileNumber = "";
@@ -195,17 +200,38 @@ class _registerScreenState extends State<registerScreen> {
                                       email: userInfo.email,
                                       password: userInfo.password);
 
-                              _firestore
-                                  .collection("Users")
-                                  .doc(userInfo.email)
-                                  .set({
-                                "email": userInfo.email,
-                                "name": userInfo.name,
-                                "number": userInfo.mobileNumber
-                              });
+                              EmailAuth emailAuth =
+                                  new EmailAuth(sessionName: "Smple Session");
 
-                              if (newUser != null) {
-                                Navigator.pushNamed(context, HomeScreen.id);
+                              // void sendOtp() async {
+                              bool result = await emailAuth.sendOtp(
+                                  recipientMail: userInfo.email, otpLength: 5);
+                              // }
+                              var finalresult = emailAuth.validateOtp(
+                                  recipientMail: userInfo.email,
+                                  userOtp: _otpController.value.text);
+
+                              if (finalresult == true) {
+                                print("Email exists");
+                                setState(() {
+                                  _firestore
+                                      .collection("Users")
+                                      .doc(userInfo.email)
+                                      .set({
+                                    "email": userInfo.email,
+                                    "name": userInfo.name,
+                                    "number": userInfo.mobileNumber
+                                  });
+                                  // if (newUser != null) {
+                                  Navigator.pushNamed(context, HomeScreen.id);
+                                  // }
+                                });
+                              } else {
+                                Timer(Duration(seconds: 3), () {
+                                  // Text("Invalid email address");
+
+                                  print("invalid email");
+                                });
                               }
                             } catch (e) {
                               print(e);

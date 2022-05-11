@@ -58,6 +58,7 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   fluttertoast: ^8.0.9
   flutter_logs: ^2.1.5
+  email_auth: ^1.0.0
   shared_preferences: ^2.0.13
 
 

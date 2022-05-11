@@ -205,7 +205,8 @@ class _profileScreenState extends State<profileScreen> {
                     ProfileDetailsContainer(
                       icon: Icons.lock_outlined,
                       Title: "Password",
-                      SubTitle: userInfo.password,
+                      SubTitle: "",
+                      // SubTitle: userInfo.password,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.add_location_outlined,

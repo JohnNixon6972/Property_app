@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:email_auth/email_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,8 @@ import 'package:property_app/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final TextEditingController _otpController = TextEditingController();
 
 // late String email;
 // late String password;
@@ -273,21 +278,45 @@ class _loginScreenState extends State<loginScreen> {
                             final prefs = await SharedPreferences.getInstance();
                             // Validate returns true if the form is valid, or false otherwise.
                             if (_loginFormKey.currentState!.validate()) {
-                              // If the form is valid, display a snackbar. In the real world,
-                              // you'd often call a server or save the information in a database.
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(content: Text("")),
-                              // );
-
                               print(userInfo.email);
                               print(userInfo.password);
                               try {
-                                _auth.signInWithEmailAndPassword(
-                                    email: userInfo.email,
-                                    password: userInfo.password);
-                                await prefs.setString('User', userInfo.email);
-                                await prefs.setString('Password', userInfo.password);
-                                Navigator.pushNamed(context, HomeScreen.id);
+                                var match =
+                                    await _auth.signInWithEmailAndPassword(
+                                        email: userInfo.email,
+                                        password: userInfo.password);
+                                if (match == true) {
+                                  await prefs.setString('User', userInfo.email);
+                                  await prefs.setString(
+                                      'Password', userInfo.password);
+                                }
+                              //   EmailAuth emailAuth =
+                              //       new EmailAuth(sessionName: "Smple Session");
+
+                              //   // void sendOtp() async {
+                              //   bool result = await emailAuth.sendOtp(
+                              //       recipientMail: userInfo.email,
+                              //       otpLength: 5);
+                              //   // }
+                              //   var finalresult = emailAuth.validateOtp(
+                              //       recipientMail: userInfo.email,
+                              //       userOtp: _otpController.value.text);
+
+                              //   if (finalresult == true) {
+                              //     print("Email exists");
+                              //     setState(() {
+                              //       Navigator.pushNamed(context, HomeScreen.id);
+                              //     });
+                              //   } else {
+                              //     Timer(Duration(seconds: 3), () {
+                              //       // AlertDialog(
+                              //       //   title:
+                              //       //       const Text("Invalid email address"),
+                              //       // );
+                              //       print("invalid email");
+                              //     });
+                              //     Navigator.pushNamed(context, HomeScreen.id);
+                              //   }
                               } catch (e) {
                                 print(e);
                               }

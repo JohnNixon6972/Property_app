@@ -29,6 +29,9 @@ final _auth = FirebaseAuth.instance;
 
 Future<void> getUser() async {
   final prefs = await SharedPreferences.getInstance();
+  
+
+  // await prefs.clear();
   String? savedUser = await prefs.getString("User");
   String? savedPassword = await prefs.getString("Password");
 

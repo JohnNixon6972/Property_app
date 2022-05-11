@@ -285,38 +285,40 @@ class _loginScreenState extends State<loginScreen> {
                                     await _auth.signInWithEmailAndPassword(
                                         email: userInfo.email,
                                         password: userInfo.password);
-                                if (match == true) {
+                                // print(match);
+                                // if (match == true) {
                                   await prefs.setString('User', userInfo.email);
                                   await prefs.setString(
                                       'Password', userInfo.password);
-                                }
-                              //   EmailAuth emailAuth =
-                              //       new EmailAuth(sessionName: "Smple Session");
+                                  Navigator.pushNamed(context, HomeScreen.id);
+                                // }
+                                //   EmailAuth emailAuth =
+                                //       new EmailAuth(sessionName: "Smple Session");
 
-                              //   // void sendOtp() async {
-                              //   bool result = await emailAuth.sendOtp(
-                              //       recipientMail: userInfo.email,
-                              //       otpLength: 5);
-                              //   // }
-                              //   var finalresult = emailAuth.validateOtp(
-                              //       recipientMail: userInfo.email,
-                              //       userOtp: _otpController.value.text);
+                                //   // void sendOtp() async {
+                                //   bool result = await emailAuth.sendOtp(
+                                //       recipientMail: userInfo.email,
+                                //       otpLength: 5);
+                                //   // }
+                                //   var finalresult = emailAuth.validateOtp(
+                                //       recipientMail: userInfo.email,
+                                //       userOtp: _otpController.value.text);
 
-                              //   if (finalresult == true) {
-                              //     print("Email exists");
-                              //     setState(() {
-                              //       Navigator.pushNamed(context, HomeScreen.id);
-                              //     });
-                              //   } else {
-                              //     Timer(Duration(seconds: 3), () {
-                              //       // AlertDialog(
-                              //       //   title:
-                              //       //       const Text("Invalid email address"),
-                              //       // );
-                              //       print("invalid email");
-                              //     });
-                              //     Navigator.pushNamed(context, HomeScreen.id);
-                              //   }
+                                //   if (finalresult == true) {
+                                //     print("Email exists");
+                                //     setState(() {
+                                //       Navigator.pushNamed(context, HomeScreen.id);
+                                //     });
+                                //   } else {
+                                //     Timer(Duration(seconds: 3), () {
+                                //       // AlertDialog(
+                                //       //   title:
+                                //       //       const Text("Invalid email address"),
+                                //       // );
+                                //       print("invalid email");
+                                //     });
+                                //     Navigator.pushNamed(context, HomeScreen.id);
+                                //   }
                               } catch (e) {
                                 print(e);
                               }

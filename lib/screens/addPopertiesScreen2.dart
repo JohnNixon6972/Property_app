@@ -307,7 +307,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                               print("loading");
                             });
                             _storage.uploadPropertyDetails(context);
-                            _storage.uploadPropertyImages();
+                            _storage.uploadPropertyImages(context);
                           },
                           child: Container(
                             height: 70,

@@ -17,7 +17,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:property_app/currentUserInformation.dart';
 
 late User loggedInUser;
-bool displayAdminProperties = false;
+bool displayAdminProperties = true;
 
 class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen1';
@@ -27,15 +27,28 @@ class HomeScreen extends StatefulWidget {
 
 final _firestore = FirebaseFirestore.instance;
 
-class PropertiesOnSaleAdv extends StatelessWidget {
+class PropertiesOnSaleAdv extends StatefulWidget {
+  @override
+  State<PropertiesOnSaleAdv> createState() => _PropertiesOnSaleAdvState();
+}
+
+class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
   List<PropertyCard> PropertiesOnSaleAll = [];
+
   List<PropertyCard> PropertiesOnSaleAdmin = [];
+
   List<PropertyCard> ApartmentOnSaleAdmin = [];
+
   List<PropertyCard> ApartmentOnSale = [];
+
   List<PropertyCard> PentHouseOnSaleAdmin = [];
+
   List<PropertyCard> PentHouseOnSale = [];
+
   List<PropertyCard> BuildingOnSaleAdmin = [];
+
   List<PropertyCard> BuildingOnSale = [];
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -131,6 +144,7 @@ class PropertiesOnSaleAdv extends StatelessWidget {
         // print("Building on Sale All:" + ApartmentOnSale.toString());
         // print("Building on Sale Admin:" + ApartmentOnSale.toString());
         return ListView(
+          reverse: true,
           padding: EdgeInsets.symmetric(vertical: 10),
           // shrinkWrap: true,
           physics: BouncingScrollPhysics(),
@@ -144,15 +158,28 @@ class PropertiesOnSaleAdv extends StatelessWidget {
   }
 }
 
-class PropertiesOnRentAdv extends StatelessWidget {
+class PropertiesOnRentAdv extends StatefulWidget {
+  @override
+  State<PropertiesOnRentAdv> createState() => _PropertiesOnRentAdvState();
+}
+
+class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
   List<PropertyCard> PropertiesOnRentAll = [];
+
   List<PropertyCard> PropertiesOnRentAdmin = [];
+
   List<PropertyCard> ApartmentOnRentAdmin = [];
+
   List<PropertyCard> ApartmentOnRent = [];
+
   List<PropertyCard> PentHouseOnRentAdmin = [];
+
   List<PropertyCard> PentHouseOnRent = [];
+
   List<PropertyCard> BuildingOnRentAdmin = [];
+
   List<PropertyCard> BuildingOnRent = [];
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -247,14 +274,14 @@ class PropertiesOnRentAdv extends StatelessWidget {
         // print("Building on Rent All:" + ApartmentOnRent.toString());
         // print("Building on Rent Admin:" + ApartmentOnRent.toString());
         return ListView(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          // shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          children: displayAdminProperties
-              ? PropertiesOnRentAdmin
-              : PropertiesOnRentAll,
-        );
+            reverse: true,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            // shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: displayAdminProperties
+                ? PropertiesOnRentAdmin
+                : PropertiesOnRentAll);
       },
     );
   }
@@ -268,8 +295,11 @@ final customCacheManager = CacheManager(
 // late String name = "";
 
 class _HomeScreenState extends State<HomeScreen> {
+  late List<bool> isSelected;
   @override
   void initState() {
+    isSelected = [true, false];
+    getCurrentUser();
     super.initState();
   }
 
@@ -282,16 +312,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color bookmarkIconColor;
 
   late IconData icn;
-  // late String email = "";
-  // late String mobileNumber = "";
-  // late String addressLine1 = "";
-  // late String addressLine2 = "";
-  // late String password = "";
-  // late String city = "";
-  // late String state = "";
-  // late String country = "";
-  // late String postalCode = "";
-
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser;
@@ -319,14 +339,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print(e);
     }
-  }
-
-  void ToggleProperties(int index) {
-    displayAdminProperties = index == 1 ? false : true;
-    setState(() {
-      // print(PropertiesOnRentAdmin);
-      // print(PropertiesOnSaleAdmin);
-    });
   }
 
   @override
@@ -450,29 +462,39 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Spacer(),
-                            ToggleSwitch(
-                              minHeight: 30,
-                              minWidth: 50,
-                              cornerRadius: 20.0,
-                              activeBgColors: [
-                                const [Color.fromARGB(255, 9, 70, 32)],
-                                [kHighlightedTextColor]
+                            ToggleButtons(
+                              constraints: BoxConstraints(minHeight: 8),
+                              fillColor: kHighlightedTextColor,
+                              borderWidth: 2,
+                              selectedColor: Colors.white,
+                              borderRadius: BorderRadius.circular(35),
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Yes',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'No',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
                               ],
-                              activeFgColor: Colors.white,
-                              inactiveBgColor: kNavigationIconColor,
-                              inactiveFgColor: Colors.white,
-                              initialLabelIndex: 1,
-                              totalSwitches: 2,
-                              labels: ['Yes', 'No'],
-                              radiusStyle: true,
-                              onToggle: (index) {
-                                // print('switched to: $index');
-
-                                // print("Show Admin properties");
-
-                                print(displayAdminProperties);
-                                ToggleProperties(index!);
+                              onPressed: (int index) {
+                                setState(() {
+                                  displayAdminProperties =
+                                      index == 0 ? true : false;
+                                  print(displayAdminProperties);
+                                  for (int i = 0; i < isSelected.length; i++) {
+                                    isSelected[i] = i == index;
+                                  }
+                                });
                               },
+                              isSelected: isSelected,
                             ),
                           ],
                         ),
@@ -489,13 +511,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         height: 415,
-                        // child: ListView(
-                        //   padding: EdgeInsets.symmetric(vertical: 10),
-                        //   // shrinkWrap: true,
-                        //   physics: BouncingScrollPhysics(),
-                        //   scrollDirection: Axis.horizontal,
-                        //   children: Properties,
-                        // ),
                         child: PropertiesOnSaleAdv(),
                       ),
                       Divider(
@@ -514,13 +529,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         height: 415,
-                        // child: ListView(
-                        //   padding: EdgeInsets.symmetric(vertical: 10),
-                        //   shrinkWrap: true,
-                        //   physics: BouncingScrollPhysics(),
-                        //   scrollDirection: Axis.horizontal,
-                        //   // children: Properties,
-                        // ),
                         child: PropertiesOnRentAdv(),
                       ),
                     ],

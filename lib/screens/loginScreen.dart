@@ -290,35 +290,27 @@ class _loginScreenState extends State<loginScreen> {
                                   await prefs.setString('User', userInfo.email);
                                   await prefs.setString(
                                       'Password', userInfo.password);
-                                  Navigator.pushNamed(context, HomeScreen.id);
-                                // }
-                                //   EmailAuth emailAuth =
-                                //       new EmailAuth(sessionName: "Smple Session");
+                                } else {
+                                  Timer _timer;
+                                  _timer = Timer(Duration(seconds: 5), () {
+                                    Navigator.of(context).pop();
+                                  });
 
-                                //   // void sendOtp() async {
-                                //   bool result = await emailAuth.sendOtp(
-                                //       recipientMail: userInfo.email,
-                                //       otpLength: 5);
-                                //   // }
-                                //   var finalresult = emailAuth.validateOtp(
-                                //       recipientMail: userInfo.email,
-                                //       userOtp: _otpController.value.text);
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext builderContext) {
+                                        _timer =
+                                            Timer(Duration(seconds: 5), () {
+                                          Navigator.of(context).pop();
+                                        });
 
-                                //   if (finalresult == true) {
-                                //     print("Email exists");
-                                //     setState(() {
-                                //       Navigator.pushNamed(context, HomeScreen.id);
-                                //     });
-                                //   } else {
-                                //     Timer(Duration(seconds: 3), () {
-                                //       // AlertDialog(
-                                //       //   title:
-                                //       //       const Text("Invalid email address"),
-                                //       // );
-                                //       print("invalid email");
-                                //     });
-                                //     Navigator.pushNamed(context, HomeScreen.id);
-                                //   }
+                                        return AlertDialog(
+                                          backgroundColor:
+                                              kBottomNavigationBackgroundColor,
+                                          title: Text('Login In Failed'),
+                                        );
+                                      }).then((val) {});
+                                }
                               } catch (e) {
                                 print(e);
                               }

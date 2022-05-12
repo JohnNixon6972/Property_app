@@ -684,29 +684,30 @@ class _PropertyCardState extends State<PropertyCard> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    child: CachedNetworkImage(
-                      cacheManager: customCacheManager,
-                      key: UniqueKey(),
-                      imageUrl: widget.imageloc,
-                      height: 230,
-                      width: 190,
-                      // maxHeightDiskCache: 230,
-                      // maxWidthDiskCache: 190,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(
-                          color: kHighlightedTextColor,
-                        ),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  child: CachedNetworkImage(
+                    cacheManager: customCacheManager,
+                    key: UniqueKey(),
+                    imageUrl: widget.imageloc,
+                    height: 230,
+                    width: 190,
+                    // maxHeightDiskCache: 230,
+                    // maxWidthDiskCache: 190,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                        color: kHighlightedTextColor,
                       ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.black12,
-                        child: Icon(
-                          Icons.error,
-                          color: kHighlightedTextColor,
-                        ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.black12,
+                      child: Icon(
+                        Icons.error,
+                        color: kHighlightedTextColor,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),

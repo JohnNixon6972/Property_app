@@ -1,18 +1,14 @@
+// ignore_for_file: file_names, body_might_complete_normally_nullable, unrelated_type_equality_checks
+
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
-// import 'package:property_app/screens/profileScreen.dart';
-// import '../screens/registerScreen.dart';
-import '../screens/profileScreen.dart';
-import '../screens/loginScreen.dart';
-
+import 'package:property_app/main.dart';
 final dialogKey = GlobalKey<FormState>();
 final passwordKey = GlobalKey<FormState>();
 final TextEditingController _currentPassowrd = TextEditingController();
-// final TextEditingController _newPassowrd = TextEditingController();
-// final TextEditingController _confirmNewPassowrd = TextEditingController();
 late String newPassword = "";
 late String confirmNewPassword = "";
-bool _isHidden = true;
+// bool _isHidden = true;
 
 List<List<Widget>> fields = [
   [
@@ -20,108 +16,109 @@ List<List<Widget>> fields = [
       key: dialogKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              name = newValue;
-              print(name);
+              userInfo.name = newValue;
+              print(userInfo.name);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.name,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                name = value;
+                userInfo.name = value;
               }
+              return null;
               // return firstName;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Enter your Full Name.',
-              prefixIcon: Icon(Icons.badge, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.badge, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],
       ),
     ),
   ],
-  [
-    Form(
-      key: dialogKey,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            onChanged: (newValue) {
-              email = newValue;
-              print(email);
-            },
-            cursorColor: kPrimaryButtonColor,
-            keyboardType: TextInputType.emailAddress,
-            textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter valid text';
-              } else {
-                email = value;
-              }
+  // [
+  //   Form(
+  //     key: dialogKey,
+  //     child: Column(
+  //       children: [
+  //         SizedBox(
+  //           height: 10,
+  //         ),
+  //         TextFormField(
+  //           onChanged: (newValue) {
+  //             userInfo.email = newValue;
+  //             print(userInfo.email);
+  //           },
+  //           cursorColor: kPrimaryButtonColor,
+  //           keyboardType: TextInputType.emailAddress,
+  //           textAlign: TextAlign.left,
+  //           style: TextStyle(color: kPrimaryButtonColor),
+  //           validator: (value) {
+  //             if (value == null || value.isEmpty) {
+  //               return 'Please enter valid text';
+  //             } else {
+  //               userInfo.email = value;
+  //             }
 
-              // return null;
-            },
-            decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Enter your Email Address.',
-              prefixIcon: Icon(Icons.email, color: kPrimaryButtonColor),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-    ),
-  ],
+  //             // return null;
+  //           },
+  //           decoration: kTextFieldDecoration.copyWith(
+  //             hintText: 'Enter your Email Address.',
+  //             prefixIcon: Icon(Icons.email, color: kPrimaryButtonColor),
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           height: 10,
+  //         ),
+  //       ],
+  //     ),
+  //   ),
+  // ],
   [
     Form(
       key: dialogKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              mobileNumber = newValue;
-              print(mobileNumber);
+              userInfo.mobileNumber = newValue;
+              print(userInfo.mobileNumber);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.phone,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                mobileNumber = value;
+                userInfo.mobileNumber = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Enter your Mobile Number.',
-              prefixIcon: Icon(Icons.lock, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],
@@ -133,25 +130,25 @@ List<List<Widget>> fields = [
       key: passwordKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             // controller: _currentPassowrd,
             obscureText: true,
             onChanged: (value) {
-              password = value;
+              userInfo.password = value;
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
                 // password = currentPassowrd;
-                if (_currentPassowrd != password) {
+                if (userInfo.password != _currentPassowrd) {
                   print("Invalid Password");
                 }
               }
@@ -160,7 +157,7 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Current Password.',
-              prefixIcon: Icon(Icons.lock_outline, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock_outline, color: kPrimaryButtonColor),
               // suffix: InkWell(
               //                 onTap:(){},
               //                 child: Icon(_isHidden
@@ -170,7 +167,7 @@ List<List<Widget>> fields = [
               //             ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -182,7 +179,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -195,10 +192,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Enter your new password.',
-              prefixIcon: Icon(Icons.lock, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -210,7 +207,7 @@ List<List<Widget>> fields = [
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
@@ -222,10 +219,10 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Confirm your new password.',
-              prefixIcon: Icon(Icons.lock_open, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.lock_open, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],
@@ -237,163 +234,163 @@ List<List<Widget>> fields = [
       key: dialogKey,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              addressLine1 = newValue;
-              print(addressLine1);
+              userInfo.addressLine1 = newValue;
+              print(userInfo.addressLine1);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                addressLine1 = value;
+                userInfo.addressLine1 = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Address line 1',
-              prefixIcon: Icon(Icons.home, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.home, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              addressLine2 = newValue;
-              print(addressLine2);
+              userInfo.addressLine2 = newValue;
+              print(userInfo.addressLine2);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                addressLine2 = value;
+                userInfo.addressLine2 = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Address line 2',
-              prefixIcon: Icon(Icons.house, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.house, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              city = newValue;
-              print(city);
+              userInfo.city = newValue;
+              print(userInfo.city);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                city = value;
+                userInfo.city = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'City',
-              prefixIcon: Icon(Icons.location_city, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.location_city, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              state = newValue;
-              print(state);
+              userInfo.state = newValue;
+              print(userInfo.state);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                state = value;
+                userInfo.state = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'State',
-              prefixIcon: Icon(Icons.cabin, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.cabin, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              country = newValue;
-              print(country);
+              userInfo.country = newValue;
+              print(userInfo.country);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                country = value;
+                userInfo.country = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Country',
-              prefixIcon: Icon(Icons.countertops, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.countertops, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
             onChanged: (newValue) {
-              postalCode = newValue;
-              print(postalCode);
+              userInfo.postalCode = newValue;
+              print(userInfo.postalCode);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.streetAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(color: kPrimaryButtonColor),
+            style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                postalCode = value;
+                userInfo.postalCode = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Postal code',
-              prefixIcon: Icon(Icons.code, color: kPrimaryButtonColor),
+              prefixIcon: const Icon(Icons.code, color: kPrimaryButtonColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],

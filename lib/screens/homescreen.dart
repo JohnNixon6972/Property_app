@@ -7,14 +7,18 @@ import 'package:property_app/screens/addPopertiesScreen2.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 // import 'package:property_app/screens/addPropertiesScreen1.dart';
 // import 'package:property_app/screens/propertyDetailsScreen.dart';
+import 'package:property_app/main.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:property_app/currentUserInformation.dart';
 
 late User loggedInUser;
+bool displayAdminProperties = true;
+List<PropertyCard> bookmarkedProperties = [];
 
 class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen1';
@@ -24,13 +28,41 @@ class HomeScreen extends StatefulWidget {
 
 final _firestore = FirebaseFirestore.instance;
 
-class PropertiesOnSaleAdv extends StatelessWidget {
+class PropertiesOnSaleAdv extends StatefulWidget {
+  @override
+  State<PropertiesOnSaleAdv> createState() => _PropertiesOnSaleAdvState();
+}
+
+class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
+  List<PropertyCard> PropertiesOnSaleAll = [];
+
+  List<PropertyCard> PropertiesOnSaleAdmin = [];
+
+  List<PropertyCard> ApartmentOnSaleAdmin = [];
+
+  List<PropertyCard> ApartmentOnSale = [];
+
+  List<PropertyCard> PentHouseOnSaleAdmin = [];
+
+  List<PropertyCard> PentHouseOnSale = [];
+
+  List<PropertyCard> BuildingOnSaleAdmin = [];
+
+  List<PropertyCard> BuildingOnSale = [];
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesSell").snapshots(),
       builder: (sontext, snapshot) {
-        List<PropertyCard> PropertiesOnSale = [];
+        PropertiesOnSaleAll = [];
+        PropertiesOnSaleAdmin = [];
+        ApartmentOnSaleAdmin = [];
+        ApartmentOnSale = [];
+        PentHouseOnSaleAdmin = [];
+        PentHouseOnSale = [];
+        BuildingOnSaleAdmin = [];
+        BuildingOnSale = [];
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -77,31 +109,110 @@ class PropertiesOnSaleAdv extends StatelessWidget {
                 to: to,
                 area: area,
               );
-              PropertiesOnSale.add(Property);
+              PropertiesOnSaleAll.add(Property);
+              if (ownerName.toString() == "john") {
+                PropertiesOnSaleAdmin.add(Property);
+              }
+              if (propertyCategory.toString() == "Apartment") {
+                ApartmentOnSale.add(Property);
+                if (ownerName.toString() == "john") {
+                  ApartmentOnSaleAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "PentHouse") {
+                PentHouseOnSale.add(Property);
+                if (ownerName.toString() == "john") {
+                  PentHouseOnSaleAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "Building") {
+                BuildingOnSale.add(Property);
+                if (ownerName.toString() == "john") {
+                  BuildingOnSaleAdmin.add(Property);
+                }
+              }
             } catch (e) {
               print(e);
             }
           }
         }
+        // print("Propertes on Sale All:" + PropertiesOnSaleAll.toString());
+        // print("Propertes on Sale Admin:" + PropertiesOnSaleAll.toString());
+        // print("Apartments on Sale All:" + ApartmentOnSale.toString());
+        // print("Apartments on Sale Admin:" + ApartmentOnSale.toString());
+        // print("PentHouse on Sale All:" + ApartmentOnSale.toString());
+        // print("PentHouse on Sale Admin:" + ApartmentOnSale.toString());
+        // print("Building on Sale All:" + ApartmentOnSale.toString());
+        // print("Building on Sale Admin:" + ApartmentOnSale.toString());
+        List<PropertyCard> displaySaleProperties = [];
+        if (displayAdminProperties) {
+          if (categorySelected == "Appartment") {
+            displaySaleProperties = ApartmentOnSaleAdmin;
+          } else if (categorySelected == "PentHouse") {
+            displaySaleProperties = PentHouseOnSaleAdmin;
+          } else if (categorySelected == "Building") {
+            displaySaleProperties = BuildingOnSaleAdmin;
+          } else {
+            displaySaleProperties = PropertiesOnSaleAdmin;
+          }
+        } else {
+          if (categorySelected == "Appartment") {
+            displaySaleProperties = ApartmentOnSale;
+          } else if (categorySelected == "PentHouse") {
+            displaySaleProperties = PentHouseOnSale;
+          } else if (categorySelected == "Building") {
+            displaySaleProperties = BuildingOnSale;
+          } else {
+            displaySaleProperties = PropertiesOnSaleAll;
+          }
+        }
         return ListView(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          // shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          children: PropertiesOnSale,
-        );
+            // reverse: true,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            // shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: displaySaleProperties);
       },
     );
   }
 }
 
-class PropertiesOnRentAdv extends StatelessWidget {
+class PropertiesOnRentAdv extends StatefulWidget {
+  @override
+  State<PropertiesOnRentAdv> createState() => _PropertiesOnRentAdvState();
+}
+
+class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
+  List<PropertyCard> PropertiesOnRentAll = [];
+
+  List<PropertyCard> PropertiesOnRentAdmin = [];
+
+  List<PropertyCard> ApartmentOnRentAdmin = [];
+
+  List<PropertyCard> ApartmentOnRent = [];
+
+  List<PropertyCard> PentHouseOnRentAdmin = [];
+
+  List<PropertyCard> PentHouseOnRent = [];
+
+  List<PropertyCard> BuildingOnRentAdmin = [];
+
+  List<PropertyCard> BuildingOnRent = [];
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesRent").snapshots(),
       builder: (sontext, snapshot) {
-        List<PropertyCard> Properties = [];
+        PropertiesOnRentAll = [];
+        PropertiesOnRentAdmin = [];
+        ApartmentOnRentAdmin = [];
+        ApartmentOnRent = [];
+        PentHouseOnRentAdmin = [];
+        PentHouseOnRent = [];
+        BuildingOnRentAdmin = [];
+        BuildingOnRent = [];
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -147,19 +258,70 @@ class PropertiesOnRentAdv extends StatelessWidget {
                 to: to,
                 area: area,
               );
-              Properties.add(Property);
+              PropertiesOnRentAll.add(Property);
+              if (ownerName.toString() == "john") {
+                PropertiesOnRentAdmin.add(Property);
+              }
+              if (propertyCategory.toString() == "Apartment") {
+                ApartmentOnRent.add(Property);
+                if (ownerName.toString() == "john") {
+                  ApartmentOnRentAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "PentHouse") {
+                PentHouseOnRent.add(Property);
+                if (ownerName.toString() == "john") {
+                  PentHouseOnRentAdmin.add(Property);
+                }
+              }
+              if (propertyCategory.toString() == "Building") {
+                BuildingOnRent.add(Property);
+                if (ownerName.toString() == "john") {
+                  BuildingOnRentAdmin.add(Property);
+                }
+              }
             } catch (e) {
               print(e);
             }
           }
         }
+        // print("Propertes on Rent All:" + PropertiesOnRentAll.toString());
+        // print("Propertes on Rent Admin:" + PropertiesOnRentAll.toString());
+        // print("Apartments on Rent All:" + ApartmentOnRent.toString());
+        // print("Apartments on Rent Admin:" + ApartmentOnRent.toString());
+        // print("PentHouse on Rent All:" + ApartmentOnRent.toString());
+        // print("PentHouse on Rent Admin:" + ApartmentOnRent.toString());
+        // print("Building on Rent All:" + ApartmentOnRent.toString());
+        // print("Building on Rent Admin:" + ApartmentOnRent.toString());
+        List<PropertyCard> displayRentProperties = [];
+        if (displayAdminProperties) {
+          if (categorySelected == "Appartment") {
+            displayRentProperties = ApartmentOnRentAdmin;
+          } else if (categorySelected == "PentHouse") {
+            displayRentProperties = PentHouseOnRentAdmin;
+          } else if (categorySelected == "Building") {
+            displayRentProperties = BuildingOnRentAdmin;
+          } else {
+            displayRentProperties = PropertiesOnRentAdmin;
+          }
+        } else {
+          if (categorySelected == "Appartment") {
+            displayRentProperties = ApartmentOnRent;
+          } else if (categorySelected == "PentHouse") {
+            displayRentProperties = PentHouseOnRent;
+          } else if (categorySelected == "Building") {
+            displayRentProperties = BuildingOnRent;
+          } else {
+            displayRentProperties = PropertiesOnRentAll;
+          }
+        }
         return ListView(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          // shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          children: Properties,
-        );
+            // reverse: true,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            // shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: displayRentProperties);
       },
     );
   }
@@ -170,13 +332,16 @@ final customCacheManager = CacheManager(
       stalePeriod: const Duration(days: 15), maxNrOfCacheObjects: 100),
 );
 
-late String name = "";
+// late String name = "";
+String categorySelected = "All";
 
 class _HomeScreenState extends State<HomeScreen> {
+  late List<bool> isSelected;
   @override
   void initState() {
-    super.initState();
+    isSelected = [true, false];
     getCurrentUser();
+    super.initState();
   }
 
   final _auth = FirebaseAuth.instance;
@@ -188,16 +353,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color bookmarkIconColor;
 
   late IconData icn;
-  late String email = "";
-  late String mobileNumber = "";
-  late String addressLine1 = "";
-  late String addressLine2 = "";
-  late String password = "";
-  late String city = "";
-  late String state = "";
-  late String country = "";
-  late String postalCode = "";
-
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser;
@@ -205,22 +360,22 @@ class _HomeScreenState extends State<HomeScreen> {
       if (user != null) {
         loggedInUser = user;
         print(loggedInUser.email);
-        email = loggedInUser.email!;
+        userInfo.email = loggedInUser.email!;
         var currUserCollection = _firestore.collection("Users");
-        var docSanpshot = await currUserCollection.doc(email).get();
+        var docSanpshot = await currUserCollection.doc(userInfo.email).get();
 
         if (docSanpshot.exists) {
           Map<String, dynamic>? data = docSanpshot.data();
           setState(
             () {
-              name = data?['name'];
-              mobileNumber = data?['number'];
-              print(name);
-              print(mobileNumber);
+              userInfo.name = data?['name'];
+              userInfo.mobileNumber = data?['number'];
+              print(userInfo.name);
+              print(userInfo.mobileNumber);
             },
           );
         }
-        print(email);
+        print(userInfo.email);
       }
     } catch (e) {
       print(e);
@@ -245,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hey $name ${Emojis.wavingHandLightSkinTone}',
+                          'Hey ${userInfo.name} ${Emojis.wavingHandLightSkinTone}',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
@@ -284,30 +439,66 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
+                  children: [
                     CategoryCard(
-                      btn_color: kPrimaryButtonColor,
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "All";
+                        });
+                      },
+                      btn_color: categorySelected == "All"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
                       text: 'All',
                       width: 60,
-                      text_color: Colors.white,
+                      text_color: categorySelected == "All"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: kSecondaryButtonColor,
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "Appartment";
+                        });
+                      },
+                      btn_color: categorySelected == "Appartment"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
                       text: 'Appartment',
                       width: 90,
-                      text_color: kSubCategoryColor,
+                      text_color: categorySelected == "Appartment"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: kSecondaryButtonColor,
-                      text: 'Townhouse',
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "PentHouse";
+                        });
+                      },
+                      btn_color: categorySelected == "PentHouse"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
+                      text: 'PentHouse',
                       width: 90,
-                      text_color: kSubCategoryColor,
+                      text_color: categorySelected == "PentHouse"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: kSecondaryButtonColor,
-                      text: 'Villa',
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "Building";
+                        });
+                      },
+                      btn_color: categorySelected == "Building"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
+                      text: 'Building',
                       width: 60,
-                      text_color: kSubCategoryColor,
+                      text_color: categorySelected == "Building"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                   ],
                 ),
@@ -336,25 +527,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
                         child: Row(
                           children: [
-                            ToggleSwitch(
-                              minHeight: 30,
-                              minWidth: 50,
-                              cornerRadius: 20.0,
-                              activeBgColors: [
-                                const [Color.fromARGB(255, 9, 70, 32)],
-                                [kHighlightedTextColor]
-                              ],
-                              activeFgColor: Colors.white,
-                              inactiveBgColor: kNavigationIconColor,
-                              inactiveFgColor: Colors.white,
-                              initialLabelIndex: 1,
-                              totalSwitches: 2,
-                              labels: ['Yes', 'No'],
-                              radiusStyle: true,
-                              onToggle: (index) {
-                                print('switched to: $index');
-                              },
-                            ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Center(
@@ -365,7 +537,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: kHighlightedTextColor),
                                 ),
                               ),
-                            )
+                            ),
+                            Spacer(),
+                            ToggleButtons(
+                              constraints: BoxConstraints(minHeight: 8),
+                              fillColor: kHighlightedTextColor,
+                              borderWidth: 2,
+                              selectedColor: Colors.white,
+                              borderRadius: BorderRadius.circular(35),
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Yes',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'No',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ],
+                              onPressed: (int index) {
+                                setState(() {
+                                  displayAdminProperties =
+                                      index == 0 ? true : false;
+                                  print(displayAdminProperties);
+                                  for (int i = 0; i < isSelected.length; i++) {
+                                    isSelected[i] = i == index;
+                                  }
+                                });
+                              },
+                              isSelected: isSelected,
+                            ),
                           ],
                         ),
                       ),
@@ -381,13 +588,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         height: 415,
-                        // child: ListView(
-                        //   padding: EdgeInsets.symmetric(vertical: 10),
-                        //   // shrinkWrap: true,
-                        //   physics: BouncingScrollPhysics(),
-                        //   scrollDirection: Axis.horizontal,
-                        //   children: Properties,
-                        // ),
                         child: PropertiesOnSaleAdv(),
                       ),
                       Divider(
@@ -406,13 +606,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         height: 415,
-                        // child: ListView(
-                        //   padding: EdgeInsets.symmetric(vertical: 10),
-                        //   shrinkWrap: true,
-                        //   physics: BouncingScrollPhysics(),
-                        //   scrollDirection: Axis.horizontal,
-                        //   // children: Properties,
-                        // ),
                         child: PropertiesOnRentAdv(),
                       ),
                     ],
@@ -477,9 +670,6 @@ class _PropertyCardState extends State<PropertyCard> {
         width: 190,
         height: 230,
         decoration: const BoxDecoration(
-          // border: Border.all(
-          //   color: kBottomNavigationBackgroundColor,
-          // ),
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
             Radius.circular(20),
@@ -516,26 +706,7 @@ class _PropertyCardState extends State<PropertyCard> {
                           color: kHighlightedTextColor,
                         ),
                       ),
-                    )
-                    // child: Image.network(
-                    //   widget.imageloc,
-                    //   fit: BoxFit.fill,
-                    //   width: 170,
-                    //   loadingBuilder: (BuildContext context, Widget child,
-                    //       ImageChunkEvent? loadingProgress) {
-                    //     if (loadingProgress == null) return child;
-                    //     return Center(
-                    //       child: CircularProgressIndicator(
-                    //         strokeWidth: 10,
-                    //         value: loadingProgress.expectedTotalBytes != null
-                    //             ? loadingProgress.cumulativeBytesLoaded /
-                    //                 loadingProgress.expectedTotalBytes!
-                    //             : null,
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
-                    ),
+                    )),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),
@@ -556,14 +727,14 @@ class _PropertyCardState extends State<PropertyCard> {
               Row(
                 children: [
                   Text(
-                    widget.price,
+                    widget.price + "\$",
                     style: TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    " / Month",
+                    widget.to == "Rent" ? " / Month" : "",
                     style: TextStyle(
                         fontSize: 12,
                         color: kSubCategoryColor,
@@ -631,33 +802,38 @@ class CategoryCard extends StatelessWidget {
       {required this.text_color,
       required this.btn_color,
       required this.text,
-      required this.width});
+      required this.width,
+      required this.onTap});
   final Color btn_color;
   final Color text_color;
   final String text;
   final double width;
+  final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: 5,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
-      child: Container(
-        height: 45,
-        width: width,
-        // margin: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: kSecondaryButtonColor,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 45,
+          width: width,
+          // margin: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: kSecondaryButtonColor,
+            ),
+            color: btn_color,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(12),
+            ),
           ),
-          color: btn_color,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(12),
-          ),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(color: text_color, fontWeight: FontWeight.w500),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(color: text_color, fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       ),

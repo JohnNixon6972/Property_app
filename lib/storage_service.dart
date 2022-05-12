@@ -6,6 +6,8 @@ import './screens/homescreen.dart';
 import './screens/addPopertiesScreen2.dart';
 import './screens/addPropertiesScreen1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'currentUserInformation.dart';
+import 'main.dart';
 
 class Storage {
   final firebase_storage.FirebaseStorage storage =
@@ -34,7 +36,7 @@ class Storage {
   // }
 
   Future<void> uploadPropertyImages(BuildContext context) async {
-    var loggedIn_mail = _auth.currentUser!.email;
+    var loggedIn_mail =await _auth.currentUser!.email;
     for (int i = 0; i < imageFileList!.length; i++) {
       String filePath, fileName;
 
@@ -59,20 +61,20 @@ class Storage {
       } catch (e) {
         print(e);
       }
+    Navigator.pushNamed(context, HomeScreen.id);
     }
     await  _firestore
                 .collection('Properties' + getTo())
                 .doc(PropertyTitle)
                 .update({"isSetImages": "True"});
-    print("Redirecting to homescreen");
-    Navigator.pushNamed(context, HomeScreen.id);
+    print("Added Property Images");
   }
 
-  Future<void> uploadPropertyDetails() async {
+  Future<void> uploadPropertyDetails(BuildContext context) async {
     print(PropertyAddress);
     print(PropertyTitle);
     print(getCategory());
-    print(loggedInUser.email);
+    print(userInfo.email);
     print(getTo());
     print(getType());
     // print(uselastusedaddress);
@@ -80,8 +82,8 @@ class Storage {
     var to = getTo();
     var type = getType();
     _firestore.collection('Properties' + to).doc(PropertyTitle).set({
-      "PropertyBy": loggedInUser.email,
-      "OwnerName": name,
+      "PropertyBy": userInfo.email,
+      "OwnerName": userInfo.name,
       "PropertyTitle": PropertyTitle,
       "PropertyAddress": PropertyAddress,
       "PropertyTo": to,
@@ -113,9 +115,9 @@ class Storage {
   Future<firebase_storage.ListResult> listFiles() async {
     firebase_storage.ListResult result = await storage.ref('test/').listAll();
 
-    result.items.forEach((firebase_storage.Reference ref) {
+    for (var ref in result.items) {
       print('Found file $ref');
-    });
+    }
     return result;
   }
 }

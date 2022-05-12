@@ -1,20 +1,27 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_auth/email_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:property_app/constants.dart';
+import 'package:property_app/main.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
+import 'package:property_app/currentUserInformation.dart';
 
-late String name = "";
-late String email = "";
-late String mobileNumber = "";
-late String addressLine1 = "";
-late String addressLine2 = "";
-late String password = "";
-late String city = "";
-late String state = "";
-late String country = "";
-late String postalCode = "";
+final TextEditingController _otpController = TextEditingController();
+// late String name = "";
+// late String email = "";
+// late String mobileNumber = "";
+// late String addressLine1 = "";
+// late String addressLine2 = "";
+// late String password = "";
+// late String city = "";
+// late String state = "";
+// late String country = "";
+// late String postalCode = "";
 
 class registerScreen extends StatefulWidget {
   static const String id = 'register';
@@ -32,6 +39,7 @@ class _registerScreenState extends State<registerScreen> {
   bool _isHidden = true;
   @override
   Widget build(BuildContext context) {
+    var _passwordController;
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -66,6 +74,9 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        onChanged: (value) {
+                          userInfo.name = value;
+                        },
                         cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.name,
                         textAlign: TextAlign.left,
@@ -74,11 +85,12 @@ class _registerScreenState extends State<registerScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter valid text';
                           } else {
-                            name = value;
+                            userInfo.name = value;
                           }
 
                           return null;
                         },
+                        textInputAction: TextInputAction.done,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your Name.',
                           prefixIcon:
@@ -89,6 +101,9 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        onChanged: (value) {
+                          userInfo.mobileNumber = value;
+                        },
                         cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.left,
@@ -97,7 +112,7 @@ class _registerScreenState extends State<registerScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter valid text';
                           } else {
-                            mobileNumber = value;
+                            userInfo.mobileNumber = value;
                           }
 
                           return null;
@@ -112,6 +127,9 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        onChanged: (value) {
+                          userInfo.email = value;
+                        },
                         cursorColor: kPrimaryButtonColor,
                         textAlign: TextAlign.left,
                         style: TextStyle(color: kPrimaryButtonColor),
@@ -119,7 +137,7 @@ class _registerScreenState extends State<registerScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter valid text';
                           } else {
-                            email = value;
+                            userInfo.email = value;
                           }
 
                           return null;
@@ -134,6 +152,9 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       TextFormField(
+                        onChanged: (value) {
+                          userInfo.password = value;
+                        },
                         cursorColor: kPrimaryButtonColor,
                         obscureText: _isHidden,
                         keyboardType: TextInputType.visiblePassword,
@@ -143,7 +164,7 @@ class _registerScreenState extends State<registerScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter valid text';
                           } else {
-                            password = value;
+                            userInfo.password = value;
                           }
 
                           return null;
@@ -171,30 +192,63 @@ class _registerScreenState extends State<registerScreen> {
                         onPressed: () async {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
-                            //   // If the form is valid, display a snackbar. In the real world,
-                            //   // you'd often call a server or save the information in a database.
-                            //   ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(content: Text('Processing Data')),
-                            //   );
-                          }
-                          try {
-                            print(email);
-                            print(password);
-                            final newUser =
-                                await _auth.createUserWithEmailAndPassword(
-                                    email: email, password: password);
+                            try {
+                              print(userInfo.email);
+                              print(userInfo.password);
+                              final newUser =
+                                  await _auth.createUserWithEmailAndPassword(
+                                      email: userInfo.email,
+                                      password: userInfo.password);
 
-                            _firestore.collection("Users").doc(email).set({
-                              "email": email,
-                              "name": name,
-                              "number": mobileNumber
-                            });
+                              EmailAuth emailAuth =
+                                  new EmailAuth(sessionName: "Smple Session");
 
-                            if (newUser != null) {
-                              Navigator.pushNamed(context, HomeScreen.id);
+                              // void sendOtp() async {
+                              bool result = await emailAuth.sendOtp(
+                                  recipientMail: userInfo.email, otpLength: 5);
+                              // }
+                              var finalresult = emailAuth.validateOtp(
+                                  recipientMail: userInfo.email,
+                                  userOtp: _otpController.value.text);
+
+                              if (finalresult == true) {
+                                print("Email exists");
+                                setState(() {
+                                  _firestore
+                                      .collection("Users")
+                                      .doc(userInfo.email)
+                                      .set({
+                                    "email": userInfo.email,
+                                    "name": userInfo.name,
+                                    "number": userInfo.mobileNumber
+                                  });
+                                  // if (newUser != null) {
+                                  Navigator.pushNamed(context, HomeScreen.id);
+                                  // }
+                                });
+                              } else {
+                                Timer _timer;
+                                _timer = Timer(Duration(seconds: 5), () {
+                                  Navigator.of(context).pop();
+                                });
+
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext builderContext) {
+                                      _timer = Timer(Duration(seconds: 5), () {
+                                        Navigator.of(context).pop();
+                                      });
+
+                                      return AlertDialog(
+                                        backgroundColor:
+                                            kBottomNavigationBackgroundColor,
+                                        title: Text('Invalid Email'),
+                                      );
+                                    }).then((val) {});
+                              }
+                            } catch (e) {
+                              print(e);
                             }
-                          } catch (e) {
-                            print(e);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -246,17 +300,3 @@ class _registerScreenState extends State<registerScreen> {
     );
   }
 }
-
-// Container(
-//           height: double.infinity,
-//           width: double.infinity,
-//           decoration: BoxDecoration(
-//             image: DecorationImage(
-//               image: AssetImage(
-//                 "images/try11.png",
-//               ),
-//               fit: BoxFit.contain,
-//               // opacity: 400,
-//             ),
-//           ),
-// )

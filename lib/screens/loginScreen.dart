@@ -1,14 +1,25 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:email_auth/email_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
+import 'package:property_app/currentUserInformation.dart';
+import 'package:property_app/main.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_logs/flutter_logs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-late String email;
-late String password;
+final TextEditingController _otpController = TextEditingController();
 
 class loginScreen extends StatefulWidget {
   static const String id = 'login';
@@ -18,11 +29,7 @@ class loginScreen extends StatefulWidget {
 
 class _loginScreenState extends State<loginScreen> {
   final _auth = FirebaseAuth.instance;
-  final _formKey = GlobalKey<FormState>();
-  //final _auth = FirebaseAuth.instance;
-
-  // String email;
-  // String password;
+  final _loginFormKey = GlobalKey<FormState>();
   bool showSpinner = false;
   bool _isHidden = true;
 
@@ -34,7 +41,7 @@ class _loginScreenState extends State<loginScreen> {
         child: ModalProgressHUD(
           inAsyncCall: showSpinner,
           child: Form(
-            key: _formKey,
+            key: _loginFormKey,
             child: Padding(
               padding: EdgeInsets.all(12),
               child: SingleChildScrollView(
@@ -91,7 +98,7 @@ class _loginScreenState extends State<loginScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter valid email address';
                             } else {
-                              email = value;
+                              userInfo.email = value;
                             }
 
                             return null;
@@ -115,7 +122,7 @@ class _loginScreenState extends State<loginScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter valid text';
                             } else {
-                              password = value;
+                              userInfo.password = value;
                             }
 
                             return null;
@@ -151,42 +158,160 @@ class _loginScreenState extends State<loginScreen> {
                             ],
                           ),
                           onTap: () async {
-                            //     try {
-                            //   final newUser =
-                            //       await _auth.
-                            //   if (newUser != null) {
-                            //     Navigator.pushNamed(context, login.id);
-                            //   }
-                            //   setState(() {
-                            //     showSpinner = false;
-                            //   });
-                            // } catch (e) {
-                            //   print(e);
-                            // }
+                            final _auth = FirebaseAuth.instance;
+                            // FirebaseAuth.instance
+                            //     .sendPasswordResetEmail(email: userInfo.email);
+                            showDialog(
+                              context: context,
+                              builder: (_) => SimpleDialog(
+                                backgroundColor: kPageBackgroundColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                title: Text(
+                                  "Reset password",
+                                  style: TextStyle(
+                                    color: kHighlightedTextColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 25,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      children: [
+                                        Form(
+                                          // key: _loginFormKey,
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              TextFormField(
+                                                onChanged: (newValue) {
+                                                  userInfo.email = newValue;
+                                                  print(userInfo.email);
+                                                },
+                                                cursorColor:
+                                                    kPrimaryButtonColor,
+                                                keyboardType:
+                                                    TextInputType.emailAddress,
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    color: kPrimaryButtonColor),
+                                                validator: (value) {
+                                                  if (value == null ||
+                                                      value.isEmpty) {
+                                                    return 'Please enter valid text';
+                                                  } else {
+                                                    userInfo.email = value;
+                                                  }
+
+                                                  // return null;
+                                                },
+                                                decoration: kTextFieldDecoration
+                                                    .copyWith(
+                                                  hintText:
+                                                      'Enter your Email Address.',
+                                                  prefixIcon: Icon(Icons.email,
+                                                      color:
+                                                          kPrimaryButtonColor),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () async {
+                                                  // Validate returns true if the form is valid, or false otherwise.
+                                                  setState(
+                                                    () {
+                                                      if (_loginFormKey
+                                                          .currentState!
+                                                          .validate()) {}
+                                                      FirebaseAuth.instance
+                                                          .sendPasswordResetEmail(
+                                                              email: userInfo
+                                                                  .email);
+                                                    },
+                                                  );
+                                                  Navigator.pop(context);
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: kPrimaryButtonColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  ),
+                                                ),
+                                                child: const Text(
+                                                  'Request link',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           },
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
                             // Validate returns true if the form is valid, or false otherwise.
-                            if (_formKey.currentState!.validate()) {
-                              // If the form is valid, display a snackbar. In the real world,
-                              // you'd often call a server or save the information in a database.
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(content: Text("")),
-                              // );
-                            }
-                            print(email);
-                            print(password);
-                            try {
-                              _auth.signInWithEmailAndPassword(
-                                  email: email, password: password);
+                            if (_loginFormKey.currentState!.validate()) {
+                              print(userInfo.email);
+                              print(userInfo.password);
+                              try {
+                                await _auth.signInWithEmailAndPassword(
+                                    email: userInfo.email,
+                                    password: userInfo.password);
+                                // await prefs.setString('User', userInfo.email);
+                                // await prefs.setString(
+                                //     'Password', userInfo.password);
+                                Navigator.pushNamed(context, HomeScreen.id);
+                              } on FirebaseAuthException catch (error) {
+                                switch (error.message) {
+                                  case 'The email address is badly formatted.':
+                                    popUpAlertDialogBox(
+                                        context, "Invalid Email");
+                                    break;
 
-                              Navigator.pushNamed(context, HomeScreen.id);
-                            } catch (e) {
-                              print(e);
+                                  case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+                                    popUpAlertDialogBox(
+                                        context, "User Not Registered");
+                                    break;
+
+                                  case 'The password is invalid or the user does not have a password.':
+                                    popUpAlertDialogBox(
+                                        context, "Invalid Password");
+                                    break;
+
+                                  case 'We have blocked all requests from this device due to unusual activity. Try again later.':
+                                    popUpAlertDialogBox(context,
+                                        "Session Time Out.\nTry again later.");
+                                    break;
+
+                                  default:
+                                    print(
+                                        'Case ${error} is not yet implemented');
+                                    break;
+                                }
+                              } catch (e) {
+                                print(e);
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -237,6 +362,29 @@ class _loginScreenState extends State<loginScreen> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
+    Timer _timer;
+    IconData icn = Icons.warning;
+    return showDialog(
+        context: context,
+        builder: (BuildContext builderContext) {
+          _timer = Timer(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
+          return AlertDialog(
+            elevation: 30,
+            backgroundColor: kBottomNavigationBackgroundColor,
+            title: Text(
+              "⚠️ $title",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: kPrimaryButtonColor,
+              ),
+            ),
+          );
+        });
   }
 }
 

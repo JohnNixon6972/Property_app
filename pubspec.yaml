@@ -49,13 +49,19 @@ dependencies:
   flutter_search_bar: ^2.1.0
   # flutter_search_bar: ^2.1.0
   dotted_border: ^2.0.0+2
-  firebase_core: ^1.15.0
-  firebase_auth: ^3.3.15
+  firebase_core: ^1.16.0
+  firebase_auth: ^3.3.17
   file_picker: ^4.5.1
-  firebase_storage: ^10.2.13
+  firebase_storage: ^10.2.15
   transparent_image: ^2.0.0
   cached_network_image: ^3.2.0
   flutter_cache_manager: ^3.3.0
+  fluttertoast: ^8.0.9
+  flutter_logs: ^2.1.5
+  email_auth: ^1.0.0
+  shared_preferences: ^2.0.13
+  http: ^0.13.4
+
 
 dev_dependencies:
   flutter_test:

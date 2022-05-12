@@ -165,34 +165,6 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                             Spacer(),
                             GestureDetector(
                               onTap: selectImages,
-                              // onTap: () async {
-                              //   final result =
-                              //       await FilePicker.platform.pickFiles(
-                              //     type: FileType.custom,
-                              //     allowedExtensions: ['png', 'jpg'],
-                              //   );
-                              //   if (result == null) {
-                              //     ScaffoldMessenger.of(context).showSnackBar(
-                              //         SnackBar(
-                              //             content: Text('No file Selected')));
-                              //     return null;
-                              //   }
-                              //   final path = result.files.single.path;
-                              //   final filename = result.files.single.name;
-
-                              //   setState(() {
-                              //     // ImageName.add(filename);
-                              //     // ImagePaths.add(path!);
-                              //     PickedImages.add(
-                              //         ImagesFromGallery(img_url: path!));
-                              //   });
-
-                              //   print(path);
-                              //   print(filename);
-                              //   storage
-                              //       .uploadFile(path!, filename, PropertyTitle)
-                              //       .then((value) => print("Done"));
-                              // },
                               child: CircleAvatar(
                                 backgroundColor: kPageBackgroundColor,
                                 child: Icon(
@@ -213,15 +185,6 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                         horizontal: 8.0, vertical: 5),
                     child: Container(
                       child: buildListView(),
-                      // child: Row(
-                      //   // scrollDirection: Axis.horizontal,
-                      //   children: [
-                      //     ImagesFromGallery(img_url: 'images/property_img1.jpg'),
-                      //     ImagesFromGallery(img_url: 'images/property_img2.jpg'),
-                      //     ImagesFromGallery(img_url: 'images/property_img3.jpg'),
-                      //     Spacer()
-                      //   ],
-                      // ),
                     ),
                   ),
                 ),
@@ -343,7 +306,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                               isloading = true;
                               print("loading");
                             });
-                            _storage.uploadPropertyDetails();
+                            _storage.uploadPropertyDetails(context);
                             _storage.uploadPropertyImages(context);
                           },
                           child: Container(

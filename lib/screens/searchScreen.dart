@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
+import 'package:property_app/screens/propertyDetailsScreen.dart';
 
 import '../components/bottomNavigationBar.dart';
 import './homescreen.dart';
@@ -13,9 +17,11 @@ class searchScreen extends StatefulWidget {
 }
 
 class _searchScreenState extends State<searchScreen> {
+  late List<bool> isSelected;
   String query = "";
-  CollectionReference _saleCollection =
-      FirebaseFirestore.instance.collection("PropertiesSell");
+  String searchType = "PropertiesRent";
+  final _firestore = FirebaseFirestore.instance;
+
   Icon customIcon = const Icon(
     Icons.search,
     color: kPrimaryButtonColor,
@@ -24,10 +30,16 @@ class _searchScreenState extends State<searchScreen> {
     'Search',
     style: TextStyle(color: kPrimaryButtonColor),
   );
+  @override
+  void initState() {
+    isSelected = [true, false];
+    super.initState();
+  }
 
   Widget buildResults(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _saleCollection.snapshots().asBroadcastStream(),
+        stream:
+            _firestore.collection(searchType).snapshots().asBroadcastStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -35,66 +47,92 @@ class _searchScreenState extends State<searchScreen> {
                 color: kHighlightedTextColor,
               ),
             );
+          } else if (query == "") {
+            // return Padding(
+            //   padding: const EdgeInsets.only(top: 430),
+            //   child: Center(
+            //     child: Text(
+            //       "Type Name of the place to look for properties!",
+            //       style: TextStyle(
+            //           fontSize: 17,
+            //           fontWeight: FontWeight.w500,
+            //           color: kHighlightedTextColor),
+            //     ),
+            //   ),
+            // );
+            return Container();
           } else {
-            print(snapshot.data);
-            return ListView(
-              children: [
-                ...snapshot.data!.docs
-                    .where((QueryDocumentSnapshot<Object?> element) =>
-                        element['PropertyAddress']
-                            .toString()
-                            .toLowerCase()
-                            .contains(query.toLowerCase()))
-                    .map((QueryDocumentSnapshot<Object?> property) {
-                  var isSet = property["isSetImages"].toString();
-                  if (isSet == "True") {
-                    try {
-                      List<String> propertyImages = [];
-                      for (int i = 1; i <= 10; i++) {
-                        if (property["imgUrl$i"] != "") {
-                          propertyImages.add(property["imgUrl$i"]);
-                        }
-                      }
-                      // print(propertyImages);
-                      var imageloc = property["imgUrl1"];
-                      // print(imageloc);
-                      var price = property["Price"];
-                      var propertyAddress = property["PropertyAddress"];
-                      var propertyName = property["PropertyTitle"];
-                      var propertyDescription = property["PropertyDescription"];
-                      var to = "Sell";
-                      var bedRoom = property["BedRoom"];
-                      var BathRoom = property["BathRoom"];
-                      var propertyCategory = property["PropertyCategory"];
-                      var ownerName = property["OwnerName"];
-                      var propertyType = property["PropertyType"];
-                      var area = property["SquareFit"];
+            if (snapshot.data!.docs
+                .where((QueryDocumentSnapshot<Object?> element) =>
+                    element['PropertyAddress']
+                        .toString()
+                        .toLowerCase()
+                        .contains(query.toLowerCase()))
+                .isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 430),
+                child: Center(
+                  child: Text(
+                    "No Such Place For Property Found!",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                        color: kHighlightedTextColor),
+                  ),
+                ),
+              );
+            } else {
+              return ListView(
+                children: [
+                  ...snapshot.data!.docs
+                      .where((QueryDocumentSnapshot<Object?> element) =>
+                          element['PropertyAddress']
+                              .toString()
+                              .toLowerCase()
+                              .contains(query.toLowerCase()))
+                      .map((QueryDocumentSnapshot<Object?> property) {
+                    var isSet = property["isSetImages"].toString();
 
-                      final Property = PropertyCard(
-                        imageloc: imageloc,
-                        price: price,
-                        propertyAddress: propertyAddress,
-                        propertyName: propertyName,
-                        propertyImages: propertyImages,
-                        propertyCategory: propertyCategory,
-                        propertyDescription: propertyDescription,
-                        propertyType: propertyType,
-                        bedRoom: bedRoom,
-                        bathRoom: BathRoom,
-                        ownerName: ownerName,
-                        to: to,
-                        area: area,
-                      );
-                      return Property;
-                    } catch (e) {
-                      print(e);
+                    List<String> propertyImages = [];
+                    for (int i = 1; i <= 10; i++) {
+                      if (property["imgUrl$i"] != "") {
+                        propertyImages.add(property["imgUrl$i"]);
+                      }
                     }
-                  }else{
-                    // return Center(child: circular,)
-                  }
-                })
-              ],
-            );
+                    // print(propertyImages);
+                    var imageloc = property["imgUrl1"];
+                    // print(imageloc);
+                    var price = property["Price"];
+                    var propertyAddress = property["PropertyAddress"];
+                    var propertyName = property["PropertyTitle"];
+                    var propertyDescription = property["PropertyDescription"];
+                    var to = property["PropertyTo"];
+                    var bedRoom = property["BedRoom"];
+                    var BathRoom = property["BathRoom"];
+                    var propertyCategory = property["PropertyCategory"];
+                    var ownerName = property["OwnerName"];
+                    var propertyType = property["PropertyType"];
+                    var area = property["SquareFit"];
+
+                    return SearchedProperties(
+                      imageloc: imageloc,
+                      price: price,
+                      propertyAddress: propertyAddress,
+                      propertyName: propertyName,
+                      propertyImages: propertyImages,
+                      propertyCategory: propertyCategory,
+                      propertyDescription: propertyDescription,
+                      propertyType: propertyType,
+                      bedRoom: bedRoom,
+                      bathRoom: BathRoom,
+                      ownerName: ownerName,
+                      to: to,
+                      area: area,
+                    );
+                  })
+                ],
+              );
+            }
           }
         });
   }
@@ -117,6 +155,7 @@ class _searchScreenState extends State<searchScreen> {
           IconButton(
             onPressed: () {
               setState(() {
+                query = "";
                 if (customIcon.icon == Icons.search) {
                   // Perform set of instructions.
                   customIcon = const Icon(
@@ -131,7 +170,9 @@ class _searchScreenState extends State<searchScreen> {
                     ),
                     title: TextField(
                       onChanged: (value) {
-                        query = value;
+                        setState(() {
+                          query = value.toString();
+                        });
                       },
                       decoration: const InputDecoration(
                         hintText: 'Type your text here',
@@ -166,26 +207,250 @@ class _searchScreenState extends State<searchScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 25.0),
+                  child: Center(
+                    child: Text(
+                      "Show Properties On ",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: kHighlightedTextColor),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
+                  child: ToggleButtons(
+                    constraints: BoxConstraints(minHeight: 8),
+                    fillColor: kHighlightedTextColor,
+                    borderWidth: 2,
+                    selectedColor: Colors.white,
+                    borderRadius: BorderRadius.circular(35),
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Rent',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Sale',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                    onPressed: (int index) {
+                      setState(() {
+                        searchType =
+                            index == 0 ? "PropertiesRent" : "PropertiesSell";
+                      });
+                      for (int i = 0; i < isSelected.length; i++) {
+                        isSelected[i] = i == index;
+                      }
+                    },
+                    isSelected: isSelected,
+                  ),
+                ),
+              ],
+            ),
             Expanded(
-              flex: 10,
-              child: Opacity(
-                opacity: 0.5,
-                child: Stack(children: [
-                  Center(
+              flex: 15,
+              child: Stack(children: [
+                Opacity(
+                  opacity: 0.5,
+                  child: Center(
                     child: Container(
                       child: Image(
                         image: AssetImage("images/try10.png"),
                       ),
                     ),
                   ),
-                  buildResults(context)
-                ]),
-              ),
+                ),
+                buildResults(context)
+              ]),
             ),
             BottomPageNavigationBar(
-              flex_by: 1,
+              flex_by: 2,
               page: searchScreen.id,
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SearchedProperties extends StatefulWidget {
+  final String imageloc;
+  final String propertyName;
+  final String propertyAddress;
+  final String price;
+  final String propertyDescription;
+  final String to;
+  final String ownerName;
+  final String propertyType;
+  final String bedRoom;
+  final String bathRoom;
+  final String propertyCategory;
+  final String area;
+  final List<String> propertyImages;
+  const SearchedProperties(
+      {required this.imageloc,
+      required this.price,
+      required this.propertyAddress,
+      required this.propertyName,
+      required this.bathRoom,
+      required this.bedRoom,
+      required this.ownerName,
+      required this.propertyCategory,
+      required this.propertyDescription,
+      required this.propertyType,
+      required this.to,
+      required this.propertyImages,
+      required this.area});
+  @override
+  State<SearchedProperties> createState() => _SearchedPropertiesState();
+}
+
+class _SearchedPropertiesState extends State<SearchedProperties> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: kHighlightedTextColor),
+          color: kPropertyCardColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        height: 120,
+        // color: kSecondaryButtonColor,
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: CachedNetworkImage(
+                  cacheManager: customCacheManager,
+                  key: UniqueKey(),
+                  imageUrl: widget.imageloc,
+                  height: 110,
+                  width: 110,
+                  // maxHeightDiskCache: 230,
+                  // maxWidthDiskCache: 190,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      color: kHighlightedTextColor,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: Colors.black12,
+                    child: Icon(
+                      Icons.error,
+                      color: kHighlightedTextColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      widget.propertyName,
+                      style: TextStyle(
+                          color: kHighlightedTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Text(
+                    widget.propertyAddress,
+                    style: TextStyle(
+                        color: kBottomNavigationBackgroundColor,
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0, top: 32, bottom: 10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        widget.price + "\$",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: kHighlightedTextColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        widget.to == "Rent" ? " / Month" : "",
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: kSubCategoryColor,
+                            fontWeight: FontWeight.w400),
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          // Navigator.pushNamed(context, PropertyDetailsScreen.id);
+                          print("ViewDetails Pressed");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PropertyDetailsScreen(
+                                  propertyAddress: widget.propertyAddress,
+                                  propertyTitle: widget.propertyName,
+                                  to: widget.to,
+                                  ownerName: widget.ownerName,
+                                  propertyDescription:
+                                      widget.propertyDescription,
+                                  noBathroom: widget.bathRoom,
+                                  noBedroom: widget.bedRoom,
+                                  area: widget.area,
+                                  propertyImages: widget.propertyImages,
+                                  price: widget.price),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'View Details',
+                          style: TextStyle(color: kPrimaryButtonColor),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),

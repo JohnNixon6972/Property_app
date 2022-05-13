@@ -3,10 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:property_app/screens/addPopertiesScreen2.dart';
-// import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
-// import 'package:property_app/screens/addPropertiesScreen1.dart';
-// import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
@@ -19,6 +16,7 @@ import 'package:property_app/currentUserInformation.dart';
 late User loggedInUser;
 bool displayAdminProperties = true;
 List<PropertyCard> bookmarkedProperties = [];
+List<String> bookmarkedPropertyNames = [];
 
 class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen1';
@@ -52,6 +50,9 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
 
   @override
   Widget build(BuildContext context) {
+    bookmarkedPropertyNames = [];
+    bookmarkedProperties = [];
+
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesSell").snapshots(),
       builder: (sontext, snapshot) {
@@ -86,7 +87,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var propertyAddress = property["PropertyAddress"];
               var propertyName = property["PropertyTitle"];
               var propertyDescription = property["PropertyDescription"];
-              var to = "Sell";
+              var to = property["PropertyTo"];
               var bedRoom = property["BedRoom"];
               var BathRoom = property["BathRoom"];
               var propertyCategory = property["PropertyCategory"];
@@ -110,6 +111,10 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                 area: area,
               );
               PropertiesOnSaleAll.add(Property);
+              if (bookmarkedPropertyNames.contains(propertyName.toString())) {
+                print(propertyName);
+                bookmarkedProperties.add(Property);
+              }
               if (ownerName.toString() == "john") {
                 PropertiesOnSaleAdmin.add(Property);
               }
@@ -166,6 +171,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
             displaySaleProperties = PropertiesOnSaleAll;
           }
         }
+        print(bookmarkedProperties);
         return ListView(
             // reverse: true,
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -204,7 +210,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesRent").snapshots(),
-      builder: (sontext, snapshot) {
+      builder: (context, snapshot) {
         PropertiesOnRentAll = [];
         PropertiesOnRentAdmin = [];
         ApartmentOnRentAdmin = [];
@@ -235,7 +241,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var propertyAddress = property["PropertyAddress"];
               var propertyName = property["PropertyTitle"];
               var propertyDescription = property["PropertyDescription"];
-              var to = "Rent";
+              var to = property["PropertyTo"];
               var bedRoom = property["BedRoom"];
               var BathRoom = property["BathRoom"];
               var propertyCategory = property["PropertyCategory"];
@@ -261,6 +267,9 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               PropertiesOnRentAll.add(Property);
               if (ownerName.toString() == "john") {
                 PropertiesOnRentAdmin.add(Property);
+              }
+              if (bookmarkedPropertyNames.contains(propertyName)) {
+                bookmarkedProperties.add(Property);
               }
               if (propertyCategory.toString() == "Apartment") {
                 ApartmentOnRent.add(Property);
@@ -315,6 +324,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
             displayRentProperties = PropertiesOnRentAll;
           }
         }
+        print(bookmarkedProperties);
         return ListView(
             // reverse: true,
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -325,6 +335,21 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
       },
     );
   }
+}
+
+Future<void> getBookMarkedProperties() async {
+  // print(userInfo.email);
+  // print("Hi");
+  final db = FirebaseFirestore.instance;
+  var result = await db
+      .collection('Users')
+      .doc(userInfo.email)
+      .collection("BookMarkedProperties")
+      .get();
+  for (var res in result.docs) {
+    bookmarkedPropertyNames.add(res.id.toString());
+  }
+  print(bookmarkedPropertyNames);
 }
 
 final customCacheManager = CacheManager(
@@ -353,7 +378,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color bookmarkIconColor;
 
   late IconData icn;
-  void getCurrentUser() async {
+
+  Future<void> getCurrentUser() async {
     try {
       final user = await _auth.currentUser;
 
@@ -384,6 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getBookMarkedProperties();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -403,12 +430,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Hey ${userInfo.name} ${Emojis.wavingHandLightSkinTone}',
                           style: TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w900,
                             color: kBottomNavigationBackgroundColor,
                           ),
                         ),
                         Text(
-                          "Let's find your your best residence!",
+                          "Let's find your best residence!",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold),
                         )
@@ -684,29 +711,30 @@ class _PropertyCardState extends State<PropertyCard> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    child: CachedNetworkImage(
-                      cacheManager: customCacheManager,
-                      key: UniqueKey(),
-                      imageUrl: widget.imageloc,
-                      height: 230,
-                      width: 190,
-                      // maxHeightDiskCache: 230,
-                      // maxWidthDiskCache: 190,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(
-                          color: kHighlightedTextColor,
-                        ),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  child: CachedNetworkImage(
+                    cacheManager: customCacheManager,
+                    key: UniqueKey(),
+                    imageUrl: widget.imageloc,
+                    height: 230,
+                    width: 190,
+                    // maxHeightDiskCache: 230,
+                    // maxWidthDiskCache: 190,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                        color: kHighlightedTextColor,
                       ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.black12,
-                        child: Icon(
-                          Icons.error,
-                          color: kHighlightedTextColor,
-                        ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.black12,
+                      child: Icon(
+                        Icons.error,
+                        color: kHighlightedTextColor,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),
@@ -777,6 +805,14 @@ class _PropertyCardState extends State<PropertyCard> {
                     onPressed: () {
                       setState(() {
                         bookedmark = !bookedmark;
+
+                        _firestore
+                            .collection("Users")
+                            .doc(loggedInUser.email)
+                            .collection("BookMarkedProperties")
+                            .doc(widget.propertyName)
+                            .set({"PropertyName": widget.propertyName});
+                        print("Bookmarked ${widget.propertyName}");
                       });
                     },
                     icon: Icon(

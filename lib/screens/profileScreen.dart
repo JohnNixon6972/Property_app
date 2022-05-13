@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/myProperties.dart';
 // import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
@@ -21,25 +22,14 @@ class profileScreen extends StatefulWidget {
 
 List<String> option_titles = [
   "Personal Information",
-  "Email",
+  // "Email",
   "Phone",
   "Password",
-  "Address"
+  "Address",
 ];
 
 final _firestore = FirebaseFirestore.instance;
 final _formKey = GlobalKey<FormState>();
-
-// late String name = "";
-// // late String email = "";
-// late String mobileNumber = "";
-// late String addressLine1 = "Not Saved";
-// late String addressLine2 = "Not Saved";
-// // late String password = "Not Saved";
-// late String city = "Not Saved";
-// late String state = "Not Saved";
-// late String country = "Not Saved";
-// late String postalCode = "Not Saved";
 
 class _profileScreenState extends State<profileScreen> {
   final meaageTextController = TextEditingController();
@@ -186,17 +176,11 @@ class _profileScreenState extends State<profileScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    // ProfileDetailsContainer(
-                    //   icon: Icons.alternate_email_outlined,
-                    //   Title: "Email",
-                    //   SubTitle: userInfo.email,
-                    // ),
                     ProfileDetailsContainer(
                       icon: Icons.account_circle_outlined,
                       Title: "Personal Information",
                       SubTitle: userInfo.name,
                     ),
-
                     ProfileDetailsContainer(
                       icon: Icons.call_outlined,
                       Title: "Phone",
@@ -212,6 +196,14 @@ class _profileScreenState extends State<profileScreen> {
                       icon: Icons.add_location_outlined,
                       Title: "Address",
                       SubTitle: "Residential Address",
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    ProfileDetailsContainer(
+                      icon: Icons.house,
+                      Title: "My Properties",
+                      SubTitle: "",
                     ),
                     SizedBox(
                       height: 8,
@@ -305,10 +297,12 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => editDetailsPopup(widget.Title,
-                            fields[option_titles.indexOf(widget.Title)]));
+                    widget.Title == "My Properties"
+                        ? Navigator.pushNamed(context, myProperties.id)
+                        : showDialog(
+                            context: context,
+                            builder: (_) => editDetailsPopup(widget.Title,
+                                fields[option_titles.indexOf(widget.Title)]));
                     setState(() {
                       // Navigator.pop(context);
                     });
@@ -350,7 +344,21 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 Column(children: childern),
                 ElevatedButton(
                   onPressed: () async {
-                    // Validate returns true if the form is valid, or false otherwise.
+                    _firestore
+                        .collection("Users")
+                        .doc(_auth.currentUser!.email)
+                        .update({
+                      "email": userInfo.email,
+                      "name": userInfo.name,
+                      "number": userInfo.mobileNumber,
+                      "addressLine1": userInfo.addressLine1,
+                      "addressLine2": userInfo.addressLine2,
+                      "city": userInfo.city,
+                      "state": userInfo.state,
+                      "country": userInfo.country,
+                      "postalcode": userInfo.postalCode,
+                    });
+                    Navigator.pop(context);
                     setState(() {
                       try {
                         if (passwordKey.currentState!.validate()) {}
@@ -371,22 +379,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                         } else {
                           print("Reconfirm New Password");
                         }
-                        _firestore
-                            .collection("Users")
-                            .doc(_auth.currentUser!.email)
-                            .update({
-                          "email": userInfo.email,
-                          "name": userInfo.name,
-                          "number": userInfo.mobileNumber,
-                          "addressLine1": userInfo.addressLine1,
-                          "addressLine2": userInfo.addressLine2,
-                          "city": userInfo.city,
-                          "state": userInfo.state,
-                          "country": userInfo.country,
-                          "postalcode": userInfo.postalCode,
-                        });
                         print("Process data");
-
                         Navigator.pop(context);
                       } catch (e) {
                         print(e);

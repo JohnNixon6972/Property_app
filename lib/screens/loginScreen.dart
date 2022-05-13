@@ -18,6 +18,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_logs/flutter_logs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'alertPopUp.dart';
 
 final TextEditingController _otpController = TextEditingController();
 
@@ -278,9 +279,9 @@ class _loginScreenState extends State<loginScreen> {
                                 await _auth.signInWithEmailAndPassword(
                                     email: userInfo.email,
                                     password: userInfo.password);
-                                // await prefs.setString('User', userInfo.email);
-                                // await prefs.setString(
-                                //     'Password', userInfo.password);
+                                await prefs.setString('User', userInfo.email);
+                                await prefs.setString(
+                                    'Password', userInfo.password);
                                 Navigator.pushNamed(context, HomeScreen.id);
                               } on FirebaseAuthException catch (error) {
                                 switch (error.message) {
@@ -307,6 +308,7 @@ class _loginScreenState extends State<loginScreen> {
                                   default:
                                     print(
                                         'Case ${error} is not yet implemented');
+
                                     break;
                                 }
                               } catch (e) {
@@ -362,29 +364,6 @@ class _loginScreenState extends State<loginScreen> {
         ),
       ),
     );
-  }
-
-  Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
-    Timer _timer;
-    IconData icn = Icons.warning;
-    return showDialog(
-        context: context,
-        builder: (BuildContext builderContext) {
-          _timer = Timer(Duration(seconds: 3), () {
-            Navigator.of(context).pop();
-          });
-          return AlertDialog(
-            elevation: 30,
-            backgroundColor: kBottomNavigationBackgroundColor,
-            title: Text(
-              "⚠️ $title",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: kPrimaryButtonColor,
-              ),
-            ),
-          );
-        });
   }
 }
 

@@ -106,7 +106,7 @@ class _searchScreenState extends State<searchScreen> {
                     var propertyAddress = property["PropertyAddress"];
                     var propertyName = property["PropertyTitle"];
                     var propertyDescription = property["PropertyDescription"];
-                    var to = "Sell";
+                    var to = property["PropertyTo"];
                     var bedRoom = property["BedRoom"];
                     var BathRoom = property["BathRoom"];
                     var propertyCategory = property["PropertyCategory"];

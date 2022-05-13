@@ -318,7 +318,7 @@ class _searchScreenState extends State<searchScreen> {
                 Column(
                   children: [
                     buildSaleResults(context),
-                    buildRentResults(context),
+                    // buildRentResults(context),
                   ],
                 )
               ]),

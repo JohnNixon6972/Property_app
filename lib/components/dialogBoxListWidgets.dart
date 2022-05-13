@@ -1,8 +1,8 @@
-// ignore_for_file: file_names, body_might_complete_normally_nullable, unrelated_type_equality_checks
-
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
+import 'package:property_app/screens/myProperties.dart';
+
 final dialogKey = GlobalKey<FormState>();
 final passwordKey = GlobalKey<FormState>();
 final TextEditingController _currentPassowrd = TextEditingController();
@@ -157,7 +157,8 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Current Password.',
-              prefixIcon: const Icon(Icons.lock_outline, color: kPrimaryButtonColor),
+              prefixIcon:
+                  const Icon(Icons.lock_outline, color: kPrimaryButtonColor),
               // suffix: InkWell(
               //                 onTap:(){},
               //                 child: Icon(_isHidden
@@ -219,7 +220,8 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Confirm your new password.',
-              prefixIcon: const Icon(Icons.lock_open, color: kPrimaryButtonColor),
+              prefixIcon:
+                  const Icon(Icons.lock_open, color: kPrimaryButtonColor),
             ),
           ),
           const SizedBox(
@@ -309,7 +311,8 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'City',
-              prefixIcon: const Icon(Icons.location_city, color: kPrimaryButtonColor),
+              prefixIcon:
+                  const Icon(Icons.location_city, color: kPrimaryButtonColor),
             ),
           ),
           const SizedBox(
@@ -361,7 +364,8 @@ List<List<Widget>> fields = [
             },
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Country',
-              prefixIcon: const Icon(Icons.countertops, color: kPrimaryButtonColor),
+              prefixIcon:
+                  const Icon(Icons.countertops, color: kPrimaryButtonColor),
             ),
           ),
           const SizedBox(
@@ -397,5 +401,5 @@ List<List<Widget>> fields = [
       ),
     )
   ],
+  [],
 ];
-

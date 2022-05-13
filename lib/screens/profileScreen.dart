@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/myProperties.dart';
 // import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
@@ -186,17 +187,11 @@ class _profileScreenState extends State<profileScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    // ProfileDetailsContainer(
-                    //   icon: Icons.alternate_email_outlined,
-                    //   Title: "Email",
-                    //   SubTitle: userInfo.email,
-                    // ),
                     ProfileDetailsContainer(
                       icon: Icons.account_circle_outlined,
                       Title: "Personal Information",
                       SubTitle: userInfo.name,
                     ),
-
                     ProfileDetailsContainer(
                       icon: Icons.call_outlined,
                       Title: "Phone",
@@ -212,6 +207,14 @@ class _profileScreenState extends State<profileScreen> {
                       icon: Icons.add_location_outlined,
                       Title: "Address",
                       SubTitle: "Residential Address",
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    ProfileDetailsContainer(
+                      icon: Icons.house,
+                      Title: "My Properties",
+                      SubTitle: "",
                     ),
                     SizedBox(
                       height: 8,
@@ -305,6 +308,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
+                    widget.Title == "My Properties"?Navigator.pushNamed(context, myProperties.id):
                     showDialog(
                         context: context,
                         builder: (_) => editDetailsPopup(widget.Title,

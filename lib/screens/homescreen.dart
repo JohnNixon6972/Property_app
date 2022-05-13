@@ -15,7 +15,6 @@ import 'package:property_app/currentUserInformation.dart';
 
 late User loggedInUser;
 bool displayAdminProperties = true;
-List<PropertyCard> bookmarkedProperties = [];
 List<String> bookmarkedPropertyNames = [];
 
 class HomeScreen extends StatefulWidget {
@@ -31,9 +30,9 @@ class PropertiesOnSaleAdv extends StatefulWidget {
   State<PropertiesOnSaleAdv> createState() => _PropertiesOnSaleAdvState();
 }
 
-class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
-  List<PropertyCard> PropertiesOnSaleAll = [];
+List<PropertyCard> PropertiesOnSaleAll = [];
 
+class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
   List<PropertyCard> PropertiesOnSaleAdmin = [];
 
   List<PropertyCard> ApartmentOnSaleAdmin = [];
@@ -50,9 +49,6 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
 
   @override
   Widget build(BuildContext context) {
-    bookmarkedPropertyNames = [];
-    bookmarkedProperties = [];
-
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesSell").snapshots(),
       builder: (sontext, snapshot) {
@@ -111,10 +107,10 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                 area: area,
               );
               PropertiesOnSaleAll.add(Property);
-              if (bookmarkedPropertyNames.contains(propertyName.toString())) {
-                print(propertyName);
-                bookmarkedProperties.add(Property);
-              }
+              // print(propertyName);
+              // if (bookmarkedPropertyNames.contains(propertyName.toString())) {
+              //   bookmarkedProperties.add(Property);
+              // }
               if (ownerName.toString() == "john") {
                 PropertiesOnSaleAdmin.add(Property);
               }
@@ -171,7 +167,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
             displaySaleProperties = PropertiesOnSaleAll;
           }
         }
-        print(bookmarkedProperties);
+
         return ListView(
             // reverse: true,
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -189,9 +185,9 @@ class PropertiesOnRentAdv extends StatefulWidget {
   State<PropertiesOnRentAdv> createState() => _PropertiesOnRentAdvState();
 }
 
-class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
-  List<PropertyCard> PropertiesOnRentAll = [];
+List<PropertyCard> PropertiesOnRentAll = [];
 
+class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
   List<PropertyCard> PropertiesOnRentAdmin = [];
 
   List<PropertyCard> ApartmentOnRentAdmin = [];
@@ -268,9 +264,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               if (ownerName.toString() == "john") {
                 PropertiesOnRentAdmin.add(Property);
               }
-              if (bookmarkedPropertyNames.contains(propertyName)) {
-                bookmarkedProperties.add(Property);
-              }
+
               if (propertyCategory.toString() == "Apartment") {
                 ApartmentOnRent.add(Property);
                 if (ownerName.toString() == "john") {
@@ -324,7 +318,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
             displayRentProperties = PropertiesOnRentAll;
           }
         }
-        print(bookmarkedProperties);
+
         return ListView(
             // reverse: true,
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -340,6 +334,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
 Future<void> getBookMarkedProperties() async {
   // print(userInfo.email);
   // print("Hi");
+
   final db = FirebaseFirestore.instance;
   var result = await db
       .collection('Users')
@@ -347,7 +342,9 @@ Future<void> getBookMarkedProperties() async {
       .collection("BookMarkedProperties")
       .get();
   for (var res in result.docs) {
-    bookmarkedPropertyNames.add(res.id.toString());
+    if (!bookmarkedPropertyNames.contains(res.id.toString())) {
+      bookmarkedPropertyNames.add(res.id.toString());
+    }
   }
   print(bookmarkedPropertyNames);
 }
@@ -379,29 +376,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late IconData icn;
 
-  Future<void> getCurrentUser() async {
+  void getCurrentUser() async {
     try {
       final user = await _auth.currentUser;
 
       if (user != null) {
         loggedInUser = user;
-        print(loggedInUser.email);
+        // print(loggedInUser.email);
         userInfo.email = loggedInUser.email!;
         var currUserCollection = _firestore.collection("Users");
         var docSanpshot = await currUserCollection.doc(userInfo.email).get();
 
         if (docSanpshot.exists) {
           Map<String, dynamic>? data = docSanpshot.data();
-          setState(
-            () {
-              userInfo.name = data?['name'];
-              userInfo.mobileNumber = data?['number'];
-              print(userInfo.name);
-              print(userInfo.mobileNumber);
-            },
-          );
+
+          userInfo.name = await data?['name'];
+          userInfo.mobileNumber = await data?['number'];
+          // print(userInfo.name);
+          // print(userInfo.mobileNumber);
+
+          setState(() {});
         }
         print(userInfo.email);
+        getBookMarkedProperties();
       }
     } catch (e) {
       print(e);
@@ -410,7 +407,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getBookMarkedProperties();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -812,12 +808,13 @@ class _PropertyCardState extends State<PropertyCard> {
                             .collection("BookMarkedProperties")
                             .doc(widget.propertyName)
                             .set({"PropertyName": widget.propertyName});
-                        print("Bookmarked ${widget.propertyName}");
+                        // print("Bookmarked ${widget.propertyName}");
+                        bookmarkedPropertyNames.add(widget.propertyName);
                       });
                     },
                     icon: Icon(
-                      bookedmark ? Icons.bookmark : Icons.bookmark_outline,
-                      color: bookedmark
+                      bookmarkedPropertyNames.contains(widget.propertyName) ? Icons.bookmark : Icons.bookmark_outline,
+                      color: bookmarkedPropertyNames.contains(widget.propertyName)
                           ? kHighlightedTextColor
                           : kHighlightedTextColor,
                     ),

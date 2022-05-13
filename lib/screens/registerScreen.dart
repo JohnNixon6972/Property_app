@@ -5,23 +5,17 @@ import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:otp_text_field/otp_field_style.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/currentUserInformation.dart';
+import 'alertPopUp.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/style.dart';
 
 final TextEditingController _otpController = TextEditingController();
-// late String name = "";
-// late String email = "";
-// late String mobileNumber = "";
-// late String addressLine1 = "";
-// late String addressLine2 = "";
-// late String password = "";
-// late String city = "";
-// late String state = "";
-// late String country = "";
-// late String postalCode = "";
 
 class registerScreen extends StatefulWidget {
   static const String id = 'register';
@@ -190,65 +184,143 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          // Validate returns true if the form is valid, or false otherwise.
+                          var validateStatus;
                           if (_formKey.currentState!.validate()) {
                             try {
                               print(userInfo.email);
                               print(userInfo.password);
-                              final newUser =
-                                  await _auth.createUserWithEmailAndPassword(
-                                      email: userInfo.email,
-                                      password: userInfo.password);
 
                               EmailAuth emailAuth =
-                                  new EmailAuth(sessionName: "Smple Session");
+                                  new EmailAuth(sessionName: "Sample Session");
 
-                              // void sendOtp() async {
                               bool result = await emailAuth.sendOtp(
                                   recipientMail: userInfo.email, otpLength: 5);
-                              // }
-                              var finalresult = emailAuth.validateOtp(
-                                  recipientMail: userInfo.email,
-                                  userOtp: _otpController.value.text);
 
-                              if (finalresult == true) {
-                                print("Email exists");
-                                setState(() {
-                                  _firestore
-                                      .collection("Users")
-                                      .doc(userInfo.email)
-                                      .set({
-                                    "email": userInfo.email,
-                                    "name": userInfo.name,
-                                    "number": userInfo.mobileNumber
+                              Timer _timer;
+                              var pin;
+                              var finalresult;
+
+                              var otp;
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext builderContext) {
+                                  _timer = Timer(Duration(seconds: 30), () {
+                                    Navigator.of(context).pop();
                                   });
-                                  // if (newUser != null) {
+                                  return Column(
+                                    children: [
+                                      Card(
+                                        child: OTPTextField(
+                                          length: 6,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          fieldWidth: 50,
+                                          otpFieldStyle: OtpFieldStyle(
+                                            borderColor: kNavigationIconColor,
+                                          ),
+                                          style: TextStyle(fontSize: 17),
+                                          textFieldAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          fieldStyle: FieldStyle.underline,
+                                          onCompleted: (pin) {
+                                            otp = pin;
+                                            print("Completed: " + pin);
+                                          },
+                                          onChanged: (pin) {},
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          finalresult =
+                                              await emailAuth.validateOtp(
+                                                  recipientMail: userInfo.email,
+                                                  userOtp: otp);
+                                          validateStatus = finalresult;
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary: kPrimaryButtonColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Verify OTP',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              await Future.delayed(Duration(seconds: 20));
+
+                              if (validateStatus == true) {
+                                _firestore
+                                    .collection("Users")
+                                    .doc(userInfo.email)
+                                    .set({
+                                  "email": userInfo.email,
+                                  "name": userInfo.name,
+                                  "number": userInfo.mobileNumber
+                                });
+                                try {
+                                  final newUser = await _auth
+                                      .createUserWithEmailAndPassword(
+                                          email: userInfo.email,
+                                          password: userInfo.password);
                                   Navigator.pushNamed(context, HomeScreen.id);
-                                  // }
-                                });
+                                } on FirebaseAuthException catch (error) {
+                                  switch (error.message) {
+                                    case 'The email address is badly formatted.':
+                                      popUpAlertDialogBox(
+                                          context, "Invalid Email");
+                                      break;
+                                    case 'The email address is already in use by another account.':
+                                      popUpAlertDialogBox(
+                                          context, "User Already exists");
+                                      break;
+                                    case 'Password should be at least 6 characters':
+                                      popUpAlertDialogBox(context,
+                                          "Password should be atleast 6 characters");
+                                      break;
+
+                                    default:
+                                      popUpAlertDialogBox(
+                                          context, "Invalid Email");
+                                      break;
+                                  }
+                                } catch (e) {
+                                  print(e);
+                                }
                               } else {
-                                Timer _timer;
-                                _timer = Timer(Duration(seconds: 5), () {
-                                  Navigator.of(context).pop();
-                                });
+                                popUpAlertDialogBox(
+                                    context, "Session Time Out");
+                              }
+                            } on FirebaseAuthException catch (error) {
+                              switch (error.message) {
+                                case 'The email address is badly formatted.':
+                                  popUpAlertDialogBox(context, "Invalid Email");
+                                  break;
+                                case 'The email address is already in use by another account.':
+                                  popUpAlertDialogBox(
+                                      context, "User Already exists");
+                                  break;
+                                case 'Password should be at least 6 characters':
+                                  popUpAlertDialogBox(context,
+                                      "Password should be atleast 6 characters");
+                                  break;
 
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext builderContext) {
-                                      _timer = Timer(Duration(seconds: 5), () {
-                                        Navigator.of(context).pop();
-                                      });
-
-                                      return AlertDialog(
-                                        backgroundColor:
-                                            kBottomNavigationBackgroundColor,
-                                        title: Text('Invalid Email'),
-                                      );
-                                    }).then((val) {});
+                                default:
+                                  print('Case ${error} is not yet implemented');
+                                  break;
                               }
                             } catch (e) {
-                              print(e);
+                              popUpAlertDialogBox(context, "Invalid Email");
                             }
+                            ;
                           }
                         },
                         style: ElevatedButton.styleFrom(

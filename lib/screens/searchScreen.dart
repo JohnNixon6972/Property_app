@@ -1,13 +1,12 @@
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
-
 import '../components/bottomNavigationBar.dart';
 import './homescreen.dart';
+
+final myController = TextEditingController();
 
 class searchScreen extends StatefulWidget {
   static const String id = 'searchScreen';
@@ -22,18 +21,13 @@ class _searchScreenState extends State<searchScreen> {
   String searchType = "PropertiesRent";
   final _firestore = FirebaseFirestore.instance;
 
-  Icon customIcon = const Icon(
-    Icons.search,
-    color: kPrimaryButtonColor,
-  );
-  Widget customSearchBar = const Text(
-    'Search',
-    style: TextStyle(color: kPrimaryButtonColor),
-  );
   @override
   void initState() {
     isSelected = [true, false];
     super.initState();
+    myController.addListener(() {
+      // print("myController.text = ${myController.text}");
+    });
   }
 
   Widget buildResults(BuildContext context) {
@@ -48,18 +42,6 @@ class _searchScreenState extends State<searchScreen> {
               ),
             );
           } else if (query == "") {
-            // return Padding(
-            //   padding: const EdgeInsets.only(top: 430),
-            //   child: Center(
-            //     child: Text(
-            //       "Type Name of the place to look for properties!",
-            //       style: TextStyle(
-            //           fontSize: 17,
-            //           fontWeight: FontWeight.w500,
-            //           color: kHighlightedTextColor),
-            //     ),
-            //   ),
-            // );
             return Container();
           } else {
             if (snapshot.data!.docs
@@ -139,70 +121,50 @@ class _searchScreenState extends State<searchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final myController = TextEditingController();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       appBar: AppBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-            top: Radius.circular(30),
+        automaticallyImplyLeading: false,
+        backgroundColor: kBottomNavigationBackgroundColor,
+        title: Container(
+          width: double.infinity,
+          height: 40,
+          decoration: BoxDecoration(
+              color: kPageBackgroundColor,
+              borderRadius: BorderRadius.circular(50)),
+          child: Center(
+            child: TextField(
+              controller: myController,
+              cursorColor: kHighlightedTextColor,
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(8),
+                  iconColor: kNavigationIconColor,
+                  // prefixIcon: Icon(
+                  //   Icons.search,
+                  //   color: kHighlightedTextColor,
+                  // ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: kHighlightedTextColor,
+                    ),
+                    onPressed: () {
+                      query = " ";
+                      myController.text = "";
+                      // print(query);
+                    },
+                  ),
+                  hintText: 'Search...',
+                  border: InputBorder.none),
+              onChanged: (value) {
+                query = value;
+                // print(query);
+                buildResults(context);
+              },
+            ),
           ),
         ),
-        backgroundColor: kBottomNavigationBackgroundColor,
-        title: customSearchBar,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                query = "";
-                if (customIcon.icon == Icons.search) {
-                  // Perform set of instructions.
-                  customIcon = const Icon(
-                    Icons.cancel,
-                    color: kPrimaryButtonColor,
-                  );
-                  customSearchBar = ListTile(
-                    leading: const Icon(
-                      Icons.search,
-                      color: kPrimaryButtonColor,
-                      size: 28,
-                    ),
-                    title: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          query = value.toString();
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        hintText: 'Type your text here',
-                        hintStyle: TextStyle(
-                          color: kPrimaryButtonColor,
-                          fontSize: 18,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                      style: const TextStyle(
-                        color: kPrimaryButtonColor,
-                      ),
-                    ),
-                  );
-                } else {
-                  customIcon = const Icon(Icons.search);
-                  customSearchBar = const Text(
-                    'Search',
-                    style: TextStyle(
-                      color: kPrimaryButtonColor,
-                    ),
-                  );
-                }
-              });
-            },
-            icon: customIcon,
-          )
-        ],
-        centerTitle: true,
       ),
       body: SafeArea(
         child: Column(

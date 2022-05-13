@@ -110,7 +110,7 @@ class BottomPageNavigationBar extends StatelessWidget {
                       ? kHighlightedTextColor
                       : kBottomNavigationBackgroundColor,
                   child: Icon(
-                    Icons.navigation_rounded,
+                    Icons.search_sharp,
                     color: page == searchScreen.id
                         ? Colors.white
                         : kNavigationIconColor,

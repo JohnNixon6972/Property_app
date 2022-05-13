@@ -49,44 +49,6 @@ List<List<Widget>> fields = [
       ),
     ),
   ],
-  // [
-  //   Form(
-  //     key: dialogKey,
-  //     child: Column(
-  //       children: [
-  //         SizedBox(
-  //           height: 10,
-  //         ),
-  //         TextFormField(
-  //           onChanged: (newValue) {
-  //             userInfo.email = newValue;
-  //             print(userInfo.email);
-  //           },
-  //           cursorColor: kPrimaryButtonColor,
-  //           keyboardType: TextInputType.emailAddress,
-  //           textAlign: TextAlign.left,
-  //           style: TextStyle(color: kPrimaryButtonColor),
-  //           validator: (value) {
-  //             if (value == null || value.isEmpty) {
-  //               return 'Please enter valid text';
-  //             } else {
-  //               userInfo.email = value;
-  //             }
-
-  //             // return null;
-  //           },
-  //           decoration: kTextFieldDecoration.copyWith(
-  //             hintText: 'Enter your Email Address.',
-  //             prefixIcon: Icon(Icons.email, color: kPrimaryButtonColor),
-  //           ),
-  //         ),
-  //         SizedBox(
-  //           height: 10,
-  //         ),
-  //       ],
-  //     ),
-  //   ),
-  // ],
   [
     Form(
       key: dialogKey,
@@ -159,13 +121,7 @@ List<List<Widget>> fields = [
               hintText: 'Current Password.',
               prefixIcon:
                   const Icon(Icons.lock_outline, color: kPrimaryButtonColor),
-              // suffix: InkWell(
-              //                 onTap:(){},
-              //                 child: Icon(_isHidden
-              //                     ? Icons.visibility
-              //                     : Icons.visibility_off),
-              //               ),
-              //             ),
+              
             ),
           ),
           const SizedBox(
@@ -401,5 +357,43 @@ List<List<Widget>> fields = [
       ),
     )
   ],
-  [],
 ];
+
+// [
+  //   Form(
+  //     key: dialogKey,
+  //     child: Column(
+  //       children: [
+  //         SizedBox(
+  //           height: 10,
+  //         ),
+  //         TextFormField(
+  //           onChanged: (newValue) {
+  //             userInfo.email = newValue;
+  //             print(userInfo.email);
+  //           },
+  //           cursorColor: kPrimaryButtonColor,
+  //           keyboardType: TextInputType.emailAddress,
+  //           textAlign: TextAlign.left,
+  //           style: TextStyle(color: kPrimaryButtonColor),
+  //           validator: (value) {
+  //             if (value == null || value.isEmpty) {
+  //               return 'Please enter valid text';
+  //             } else {
+  //               userInfo.email = value;
+  //             }
+
+  //             // return null;
+  //           },
+  //           decoration: kTextFieldDecoration.copyWith(
+  //             hintText: 'Enter your Email Address.',
+  //             prefixIcon: Icon(Icons.email, color: kPrimaryButtonColor),
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           height: 10,
+  //         ),
+  //       ],
+  //     ),
+  //   ),
+  // ],

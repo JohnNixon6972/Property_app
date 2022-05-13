@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
+import 'package:property_app/screens/myProperties.dart';
 import 'package:property_app/screens/searchScreen.dart';
 import '../constants.dart';
 import '../screens/homescreen.dart';
@@ -14,7 +15,9 @@ class BottomPageNavigationBar extends StatelessWidget {
   final int flex_by;
   final String page;
 
-  const BottomPageNavigationBar({Key? key, required this.flex_by, required this.page}) : super(key: key);
+  const BottomPageNavigationBar(
+      {Key? key, required this.flex_by, required this.page})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -55,8 +58,7 @@ class BottomPageNavigationBar extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   if (page != BookmarkedPropertiesScreen.id) {
-                    Navigator.pushNamed(
-                        context, BookmarkedPropertiesScreen.id);
+                    Navigator.pushNamed(context, BookmarkedPropertiesScreen.id);
                   }
                 },
                 child: CircleAvatar(
@@ -124,9 +126,10 @@ class BottomPageNavigationBar extends StatelessWidget {
                 },
                 child: CircleAvatar(
                   radius: 25,
-                  backgroundColor: page == profileScreen.id
-                      ? kHighlightedTextColor
-                      : kBottomNavigationBackgroundColor,
+                  backgroundColor:
+                      page == profileScreen.id || myProperties.id == page
+                          ? kHighlightedTextColor
+                          : kBottomNavigationBackgroundColor,
                   child: Icon(
                     Icons.account_circle_rounded,
                     color: page == profileScreen.id

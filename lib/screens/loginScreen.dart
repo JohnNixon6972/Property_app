@@ -279,9 +279,9 @@ class _loginScreenState extends State<loginScreen> {
                                 await _auth.signInWithEmailAndPassword(
                                     email: userInfo.email,
                                     password: userInfo.password);
-                                // await prefs.setString('User', userInfo.email);
-                                // await prefs.setString(
-                                //     'Password', userInfo.password);
+                                await prefs.setString('User', userInfo.email);
+                                await prefs.setString(
+                                    'Password', userInfo.password);
                                 Navigator.pushNamed(context, HomeScreen.id);
                               } on FirebaseAuthException catch (error) {
                                 switch (error.message) {

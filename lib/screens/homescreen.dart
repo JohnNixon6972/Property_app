@@ -18,6 +18,7 @@ import 'package:property_app/currentUserInformation.dart';
 
 late User loggedInUser;
 bool displayAdminProperties = true;
+List<PropertyCard> bookmarkedProperties = [];
 
 class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen1';
@@ -143,16 +144,35 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
         // print("PentHouse on Sale Admin:" + ApartmentOnSale.toString());
         // print("Building on Sale All:" + ApartmentOnSale.toString());
         // print("Building on Sale Admin:" + ApartmentOnSale.toString());
+        List<PropertyCard> displaySaleProperties = [];
+        if (displayAdminProperties) {
+          if (categorySelected == "Appartment") {
+            displaySaleProperties = ApartmentOnSaleAdmin;
+          } else if (categorySelected == "PentHouse") {
+            displaySaleProperties = PentHouseOnSaleAdmin;
+          } else if (categorySelected == "Building") {
+            displaySaleProperties = BuildingOnSaleAdmin;
+          } else {
+            displaySaleProperties = PropertiesOnSaleAdmin;
+          }
+        } else {
+          if (categorySelected == "Appartment") {
+            displaySaleProperties = ApartmentOnSale;
+          } else if (categorySelected == "PentHouse") {
+            displaySaleProperties = PentHouseOnSale;
+          } else if (categorySelected == "Building") {
+            displaySaleProperties = BuildingOnSale;
+          } else {
+            displaySaleProperties = PropertiesOnSaleAll;
+          }
+        }
         return ListView(
-          reverse: true,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          // shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          children: displayAdminProperties
-              ? PropertiesOnSaleAdmin
-              : PropertiesOnSaleAll,
-        );
+            // reverse: true,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            // shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: displaySaleProperties);
       },
     );
   }
@@ -273,15 +293,35 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
         // print("PentHouse on Rent Admin:" + ApartmentOnRent.toString());
         // print("Building on Rent All:" + ApartmentOnRent.toString());
         // print("Building on Rent Admin:" + ApartmentOnRent.toString());
+        List<PropertyCard> displayRentProperties = [];
+        if (displayAdminProperties) {
+          if (categorySelected == "Appartment") {
+            displayRentProperties = ApartmentOnRentAdmin;
+          } else if (categorySelected == "PentHouse") {
+            displayRentProperties = PentHouseOnRentAdmin;
+          } else if (categorySelected == "Building") {
+            displayRentProperties = BuildingOnRentAdmin;
+          } else {
+            displayRentProperties = PropertiesOnRentAdmin;
+          }
+        } else {
+          if (categorySelected == "Appartment") {
+            displayRentProperties = ApartmentOnRent;
+          } else if (categorySelected == "PentHouse") {
+            displayRentProperties = PentHouseOnRent;
+          } else if (categorySelected == "Building") {
+            displayRentProperties = BuildingOnRent;
+          } else {
+            displayRentProperties = PropertiesOnRentAll;
+          }
+        }
         return ListView(
-            reverse: true,
+            // reverse: true,
             padding: EdgeInsets.symmetric(vertical: 10),
             // shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            children: displayAdminProperties
-                ? PropertiesOnRentAdmin
-                : PropertiesOnRentAll);
+            children: displayRentProperties);
       },
     );
   }
@@ -293,6 +333,7 @@ final customCacheManager = CacheManager(
 );
 
 // late String name = "";
+String categorySelected = "All";
 
 class _HomeScreenState extends State<HomeScreen> {
   late List<bool> isSelected;
@@ -398,30 +439,66 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
+                  children: [
                     CategoryCard(
-                      btn_color: kPrimaryButtonColor,
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "All";
+                        });
+                      },
+                      btn_color: categorySelected == "All"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
                       text: 'All',
                       width: 60,
-                      text_color: Colors.white,
+                      text_color: categorySelected == "All"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: kSecondaryButtonColor,
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "Appartment";
+                        });
+                      },
+                      btn_color: categorySelected == "Appartment"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
                       text: 'Appartment',
                       width: 90,
-                      text_color: kSubCategoryColor,
+                      text_color: categorySelected == "Appartment"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: kSecondaryButtonColor,
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "PentHouse";
+                        });
+                      },
+                      btn_color: categorySelected == "PentHouse"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
                       text: 'PentHouse',
                       width: 90,
-                      text_color: kSubCategoryColor,
+                      text_color: categorySelected == "PentHouse"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                     CategoryCard(
-                      btn_color: kSecondaryButtonColor,
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "Building";
+                        });
+                      },
+                      btn_color: categorySelected == "Building"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
                       text: 'Building',
                       width: 60,
-                      text_color: kSubCategoryColor,
+                      text_color: categorySelected == "Building"
+                          ? Colors.white
+                          : kSubCategoryColor,
                     ),
                   ],
                 ),
@@ -607,29 +684,30 @@ class _PropertyCardState extends State<PropertyCard> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    child: CachedNetworkImage(
-                      cacheManager: customCacheManager,
-                      key: UniqueKey(),
-                      imageUrl: widget.imageloc,
-                      height: 230,
-                      width: 190,
-                      // maxHeightDiskCache: 230,
-                      // maxWidthDiskCache: 190,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(
-                          color: kHighlightedTextColor,
-                        ),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  child: CachedNetworkImage(
+                    cacheManager: customCacheManager,
+                    key: UniqueKey(),
+                    imageUrl: widget.imageloc,
+                    height: 230,
+                    width: 190,
+                    // maxHeightDiskCache: 230,
+                    // maxWidthDiskCache: 190,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                        color: kHighlightedTextColor,
                       ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.black12,
-                        child: Icon(
-                          Icons.error,
-                          color: kHighlightedTextColor,
-                        ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.black12,
+                      child: Icon(
+                        Icons.error,
+                        color: kHighlightedTextColor,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),
@@ -725,33 +803,38 @@ class CategoryCard extends StatelessWidget {
       {required this.text_color,
       required this.btn_color,
       required this.text,
-      required this.width});
+      required this.width,
+      required this.onTap});
   final Color btn_color;
   final Color text_color;
   final String text;
   final double width;
+  final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: 5,
       borderRadius: const BorderRadius.all(Radius.circular(12)),
-      child: Container(
-        height: 45,
-        width: width,
-        // margin: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: kSecondaryButtonColor,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 45,
+          width: width,
+          // margin: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: kSecondaryButtonColor,
+            ),
+            color: btn_color,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(12),
+            ),
           ),
-          color: btn_color,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(12),
-          ),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(color: text_color, fontWeight: FontWeight.w500),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(color: text_color, fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       ),

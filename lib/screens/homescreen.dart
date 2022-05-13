@@ -403,12 +403,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Hey ${userInfo.name} ${Emojis.wavingHandLightSkinTone}',
                           style: TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w900,
                             color: kBottomNavigationBackgroundColor,
                           ),
                         ),
                         Text(
-                          "Let's find your your best residence!",
+                          "Let's find your best residence!",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold),
                         )

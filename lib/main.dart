@@ -4,7 +4,7 @@ import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPopertiesScreen2.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/loginScreen.dart';
-import 'package:property_app/screens/myProperties.dart';
+import 'package:property_app/screens/myPropertiesScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/searchScreen.dart';
 import 'screens/registerScreen.dart';
@@ -62,7 +62,7 @@ class _PropertyAppState extends State<PropertyApp> {
         registerScreen.id: (context) => registerScreen(),
         profileScreen.id: (context) => profileScreen(),
         HomeScreen.id: (context) => HomeScreen(),
-        myProperties.id: (context) => myProperties(),
+        myPropertiesScreen.id: (context) => myPropertiesScreen(),
         // PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
         BookmarkedPropertiesScreen.id: (context) =>
             BookmarkedPropertiesScreen(),

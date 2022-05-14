@@ -61,7 +61,7 @@ class Storage {
       } catch (e) {
         print(e);
       }
-    Navigator.pushNamed(context, HomeScreen.id);
+    
     }
     await  _firestore
                 .collection('Properties' + getTo())
@@ -107,6 +107,7 @@ class Storage {
       "imgUrl10": "",
     }).then((_) {
       print("Data Added Sucessfully");
+      Navigator.pushNamed(context, HomeScreen.id);
     }).catchError((_) {
       print("An error Occured");
     });

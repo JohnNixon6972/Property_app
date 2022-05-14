@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
-import 'package:property_app/screens/myProperties.dart';
+import 'package:property_app/screens/myPropertiesScreen.dart';
 
 final dialogKey = GlobalKey<FormState>();
 final passwordKey = GlobalKey<FormState>();

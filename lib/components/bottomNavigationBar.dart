@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
-import 'package:property_app/screens/myProperties.dart';
+import 'package:property_app/screens/myPropertiesScreen.dart';
 import 'package:property_app/screens/searchScreen.dart';
 import '../constants.dart';
 import '../screens/homescreen.dart';
@@ -127,7 +127,7 @@ class BottomPageNavigationBar extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 25,
                   backgroundColor:
-                      page == profileScreen.id || myProperties.id == page
+                      page == profileScreen.id || myPropertiesScreen.id == page
                           ? kHighlightedTextColor
                           : kBottomNavigationBackgroundColor,
                   child: Icon(

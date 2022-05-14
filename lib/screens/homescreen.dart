@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:property_app/screens/addPopertiesScreen2.dart';
+import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -16,6 +17,7 @@ import 'package:property_app/currentUserInformation.dart';
 late User loggedInUser;
 bool displayAdminProperties = true;
 List<String> bookmarkedPropertyNames = [];
+List<String> myPropertiesAdv = [];
 
 class HomeScreen extends StatefulWidget {
   static const id = 'homeScreen1';
@@ -90,6 +92,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var ownerName = property["OwnerName"];
               var propertyType = property["PropertyType"];
               var area = property["SquareFit"];
+              var ownerEmail = property["PropertyBy"];
 
               final Property = PropertyCard(
                 imageloc: imageloc,
@@ -111,6 +114,11 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               // if (bookmarkedPropertyNames.contains(propertyName.toString())) {
               //   bookmarkedProperties.add(Property);
               // }
+              if (ownerEmail.toString() == userInfo.email &&
+                  !myPropertiesAdv.contains(Property.propertyName)) {
+                print(Property.propertyName);
+                myPropertiesAdv.add(Property.propertyName);
+              }
               if (ownerName.toString() == "john") {
                 PropertiesOnSaleAdmin.add(Property);
               }
@@ -244,6 +252,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var ownerName = property["OwnerName"];
               var propertyType = property["PropertyType"];
               var area = property["SquareFit"];
+              var ownerEmail = property["PropertyBy"];
 
               final Property = PropertyCard(
                 imageloc: imageloc,
@@ -261,6 +270,10 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                 area: area,
               );
               PropertiesOnRentAll.add(Property);
+              if (ownerEmail.toString() == userInfo.email &&
+                  !myPropertiesAdv.contains(Property.propertyName)) {
+                myPropertiesAdv.add(Property.propertyName);
+              }
               if (ownerName.toString() == "john") {
                 PropertiesOnRentAdmin.add(Property);
               }
@@ -681,7 +694,7 @@ class PropertyCard extends StatefulWidget {
 }
 
 class _PropertyCardState extends State<PropertyCard> {
-  late bool bookedmark = false;
+  late bool bookedmark = bookmarkedPropertyNames.contains(widget.propertyName);
 
   // String propertyName;
 
@@ -801,22 +814,34 @@ class _PropertyCardState extends State<PropertyCard> {
                     onPressed: () {
                       setState(() {
                         bookedmark = !bookedmark;
-
-                        _firestore
-                            .collection("Users")
-                            .doc(loggedInUser.email)
-                            .collection("BookMarkedProperties")
-                            .doc(widget.propertyName)
-                            .set({"PropertyName": widget.propertyName});
-                        // print("Bookmarked ${widget.propertyName}");
-                        bookmarkedPropertyNames.add(widget.propertyName);
+                        if (bookedmark) {
+                          _firestore
+                              .collection("Users")
+                              .doc(loggedInUser.email)
+                              .collection("BookMarkedProperties")
+                              .doc(widget.propertyName)
+                              .set({"PropertyName": widget.propertyName});
+                          // print("Bookmarked ${widget.propertyName}");
+                          bookmarkedPropertyNames.add(widget.propertyName);
+                        } else {
+                          _firestore
+                              .collection("Users")
+                              .doc(userInfo.email)
+                              .collection("BookMarkedProperties")
+                              .doc(widget.propertyName)
+                              .delete();
+                          bookmarkedPropertyNames.remove(widget.propertyName);
+                        }
                       });
                     },
                     icon: Icon(
-                      bookmarkedPropertyNames.contains(widget.propertyName) ? Icons.bookmark : Icons.bookmark_outline,
-                      color: bookmarkedPropertyNames.contains(widget.propertyName)
-                          ? kHighlightedTextColor
-                          : kHighlightedTextColor,
+                      bookmarkedPropertyNames.contains(widget.propertyName)
+                          ? Icons.bookmark
+                          : Icons.bookmark_outline,
+                      color:
+                          bookmarkedPropertyNames.contains(widget.propertyName)
+                              ? kHighlightedTextColor
+                              : kHighlightedTextColor,
                     ),
                   ),
                 ],

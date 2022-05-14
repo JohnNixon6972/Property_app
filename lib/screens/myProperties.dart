@@ -67,7 +67,7 @@ class myProperties extends StatelessWidget {
                 // shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.vertical,
-                // children:
+                children:[myProperty()]
               ),
             ),
             BottomPageNavigationBar(

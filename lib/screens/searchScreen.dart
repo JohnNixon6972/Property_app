@@ -93,10 +93,14 @@ class _searchScreenState extends State<searchScreen> {
                     var BathRoom = property["BathRoom"];
                     var propertyCategory = property["PropertyCategory"];
                     var ownerName = property["OwnerName"];
+                    var ownerPhno = property["Phno"];
+                    var ownerMail = property["PropertyBy"];
                     var propertyType = property["PropertyType"];
                     var area = property["SquareFit"];
 
                     return SearchedProperties(
+                      ownerMail: ownerMail,
+                      ownerPhno: ownerPhno,
                       imageloc: imageloc,
                       price: price,
                       propertyAddress: propertyAddress,
@@ -159,8 +163,7 @@ class _searchScreenState extends State<searchScreen> {
                   border: InputBorder.none),
               onChanged: (value) {
                 setState(() {
-                  
-                query = value;
+                  query = value;
                 });
                 // print(query);
                 buildResults(context);
@@ -263,6 +266,8 @@ class SearchedProperties extends StatefulWidget {
   final String propertyDescription;
   final String to;
   final String ownerName;
+  final String ownerMail;
+  final String ownerPhno;
   final String propertyType;
   final String bedRoom;
   final String bathRoom;
@@ -271,6 +276,8 @@ class SearchedProperties extends StatefulWidget {
   final List<String> propertyImages;
   const SearchedProperties(
       {required this.imageloc,
+      required this.ownerMail,
+      required this.ownerPhno,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -366,7 +373,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                   Row(
                     children: [
                       Text(
-                        widget.price + "\$",
+                        widget.price + " \u{20B9}",
                         style: TextStyle(
                             fontSize: 15,
                             color: kHighlightedTextColor,
@@ -392,6 +399,10 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => PropertyDetailsScreen(
+                                  ownerMail: widget.ownerMail,
+                                  ownerPhoneNo: widget.ownerPhno,
+                                  type: widget.propertyType,
+                                  category: widget.propertyCategory,
                                   propertyAddress: widget.propertyAddress,
                                   propertyTitle: widget.propertyName,
                                   to: widget.to,

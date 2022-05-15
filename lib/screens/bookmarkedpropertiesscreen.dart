@@ -26,6 +26,8 @@ void getBookMarkedPropertiesCards() {
   for (PropertyCard property in PropertiesOnRentAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(BookmarkedProperties(
+        ownerMail: property.ownerMail,
+        ownerPhNo: property.ownerPhoneNo,
         imageloc: property.imageloc,
         price: property.price,
         propertyAddress: property.propertyAddress,
@@ -45,6 +47,8 @@ void getBookMarkedPropertiesCards() {
   for (PropertyCard property in PropertiesOnSaleAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(BookmarkedProperties(
+        ownerMail: property.ownerMail,
+        ownerPhNo: property.ownerPhoneNo,
         imageloc: property.imageloc,
         price: property.price,
         propertyAddress: property.propertyAddress,
@@ -62,7 +66,6 @@ void getBookMarkedPropertiesCards() {
     }
   }
   print(bookMarkedProperties);
-  
 }
 
 class _BookmarkedPropertiesScreenState
@@ -75,7 +78,7 @@ class _BookmarkedPropertiesScreenState
 
   Widget buildBookMarks() {
     return ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: bookmarkedPropertyNames.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
@@ -85,7 +88,7 @@ class _BookmarkedPropertiesScreenState
               decoration: BoxDecoration(
                 color: kPropertyCardColor,
                 border: Border.all(color: kHighlightedTextColor),
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(20),
                 ),
               ),
@@ -98,9 +101,10 @@ class _BookmarkedPropertiesScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
                         child: CachedNetworkImage(
                           cacheManager: customCacheManager,
                           key: UniqueKey(),
@@ -118,7 +122,7 @@ class _BookmarkedPropertiesScreenState
                           ),
                           errorWidget: (context, url, error) => Container(
                             color: Colors.black12,
-                            child: Icon(
+                            child: const Icon(
                               Icons.error,
                               color: kHighlightedTextColor,
                             ),
@@ -127,18 +131,18 @@ class _BookmarkedPropertiesScreenState
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         bookMarkedProperties[index].propertyName,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
+                      padding: const EdgeInsets.only(bottom: 8.0),
                       child: Text(
                         bookMarkedProperties[index].propertyAddress,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: kSubCategoryColor,
                         ),
                       ),
@@ -147,7 +151,7 @@ class _BookmarkedPropertiesScreenState
                       children: [
                         Text(
                           "\$${bookMarkedProperties[index].price}",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 18,
                               color: kHighlightedTextColor,
                               fontWeight: FontWeight.bold),
@@ -156,7 +160,7 @@ class _BookmarkedPropertiesScreenState
                           bookMarkedProperties[index].to == "Rent"
                               ? " / Month"
                               : "",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 12,
                               color: kSubCategoryColor,
                               fontWeight: FontWeight.w400),
@@ -174,6 +178,12 @@ class _BookmarkedPropertiesScreenState
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
+                                  ownerMail: bookMarkedProperties[index].ownerMail,
+                                  ownerPhoneNo: bookMarkedProperties[index].ownerPhNo,
+                                    type: bookMarkedProperties[index]
+                                        .propertyType,
+                                    category: bookMarkedProperties[index]
+                                        .propertyCategory,
                                     propertyAddress: bookMarkedProperties[index]
                                         .propertyAddress,
                                     propertyTitle: bookMarkedProperties[index]
@@ -195,12 +205,12 @@ class _BookmarkedPropertiesScreenState
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'View Details',
                             style: TextStyle(color: kPrimaryButtonColor),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
                           onPressed: () {
                             setState(() {
@@ -215,11 +225,11 @@ class _BookmarkedPropertiesScreenState
                                   bookMarkedProperties[index].propertyName);
                               bookMarkedProperties.removeAt(index);
                               print(bookMarkedProperties);
-                        
+
                               // getBookMarkedProperties();
                             });
                           },
-                          icon: Icon(Icons.bookmark,
+                          icon: const Icon(Icons.bookmark,
                               color: kHighlightedTextColor),
                         ),
                       ],
@@ -272,25 +282,14 @@ class _BookmarkedPropertiesScreenState
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1,
               indent: 60,
               endIndent: 60,
               color: kHighlightedTextColor,
             ),
-            Expanded(
-                flex: 10,
-                // child: SingleChildScrollView(
-                //   physics: BouncingScrollPhysics(),
-                //   child: Padding(
-                //     padding: EdgeInsets.all(12),
-                //     child: Column(
-                //         mainAxisSize: MainAxisSize.max,
-                //         children: bookMarkedProperties),
-                //   ),
-                // ),
-                child: buildBookMarks()),
-            BottomPageNavigationBar(
+            Expanded(flex: 10, child: buildBookMarks()),
+            const BottomPageNavigationBar(
               flex_by: 1,
               page: BookmarkedPropertiesScreen.id,
             ),
@@ -309,6 +308,8 @@ class BookmarkedProperties extends StatefulWidget {
   final String propertyDescription;
   final String to;
   final String ownerName;
+  final String ownerMail;
+  final String ownerPhNo;
   final String propertyType;
   final String bedRoom;
   final String bathRoom;
@@ -316,7 +317,10 @@ class BookmarkedProperties extends StatefulWidget {
   final String area;
   final List<String> propertyImages;
   const BookmarkedProperties(
-      {required this.imageloc,
+      {Key? key,
+      required this.ownerPhNo,
+      required this.ownerMail,
+      required this.imageloc,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -328,7 +332,8 @@ class BookmarkedProperties extends StatefulWidget {
       required this.propertyType,
       required this.to,
       required this.propertyImages,
-      required this.area});
+      required this.area})
+      : super(key: key);
   @override
   State<BookmarkedProperties> createState() => _BookmarkedPropertiesState();
 }
@@ -343,7 +348,7 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
         decoration: BoxDecoration(
           color: kPropertyCardColor,
           border: Border.all(color: kHighlightedTextColor),
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(20),
           ),
         ),
@@ -356,9 +361,9 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                   child: CachedNetworkImage(
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
@@ -376,7 +381,7 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                     ),
                     errorWidget: (context, url, error) => Container(
                       color: Colors.black12,
-                      child: Icon(
+                      child: const Icon(
                         Icons.error,
                         color: kHighlightedTextColor,
                       ),
@@ -385,17 +390,18 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: Text(
                   widget.propertyName,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.only(bottom: 8.0),
                 child: Text(
                   widget.propertyAddress,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: kSubCategoryColor,
                   ),
                 ),
@@ -404,14 +410,14 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                 children: [
                   Text(
                     "\$${widget.price}",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     widget.to == "Rent" ? " / Month" : "",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         color: kSubCategoryColor,
                         fontWeight: FontWeight.w400),
@@ -429,6 +435,10 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            ownerMail: widget.ownerMail,
+                            ownerPhoneNo: widget.ownerPhNo,
+                              type: widget.propertyType,
+                              category: widget.propertyCategory,
                               propertyAddress: widget.propertyAddress,
                               propertyTitle: widget.propertyName,
                               to: widget.to,
@@ -442,12 +452,12 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'View Details',
                       style: TextStyle(color: kPrimaryButtonColor),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
                     onPressed: () {
                       setState(() {

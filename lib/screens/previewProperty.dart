@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/addPropertiesScreen1.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 import '../constants.dart';
-import 'addPopertiesScreen2.dart';
 import 'dart:io';
-import './profileScreen.dart';
 import 'package:property_app/currentUserInformation.dart';
 import 'package:property_app/main.dart';
 
 class PreviewProperty extends StatefulWidget {
   static const String id = "previewProperty";
+  List<XFile>? imageFileList;
+  String PropertyTitle;
+  String PropertyAddress;
+  String PropertyDescription;
+  String Price;
+  String to;
+  String BathRoom;
+  String BedRoom;
+  String Area;
+  PreviewProperty(
+      {Key? key, required this.imageFileList,
+      required this.PropertyTitle,
+      required this.PropertyAddress,
+      required this.PropertyDescription,
+      required this.Area,
+      required this.BathRoom,
+      required this.BedRoom,
+      required this.Price,
+      required this.to}) : super(key: key);
   @override
   State<PreviewProperty> createState() => _PreviewPropertyState();
 }
@@ -19,8 +36,8 @@ class _PreviewPropertyState extends State<PreviewProperty> {
     double width = MediaQuery.of(context).size.width;
     return ListView.builder(
         // scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
-        itemCount: imageFileList!.length,
+        physics: const BouncingScrollPhysics(),
+        itemCount: widget.imageFileList!.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
           // return Image.file(
@@ -30,11 +47,11 @@ class _PreviewPropertyState extends State<PreviewProperty> {
           return Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ClipRRect(
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(25),
               ),
               child: Image.file(
-                File(imageFileList![index].path),
+                File(widget.imageFileList![index].path),
                 fit: BoxFit.cover,
                 height: 400,
                 width: width - 35,
@@ -65,16 +82,16 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.expand_less_rounded,
                         size: 30,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 45,
                   ),
-                  Center(
+                  const Center(
                     child: Text(
                       "Added Property Preview",
                       style: TextStyle(
@@ -86,7 +103,7 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                 ],
               ),
               Container(
-                padding: EdgeInsets.only(top: 12, bottom: 12),
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
                 height: 250,
                 child: buildListView(),
               ),
@@ -97,38 +114,38 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        PropertyTitle,
-                        style: TextStyle(
+                        widget.PropertyTitle,
+                        style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: kHighlightedTextColor),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Text(
-                        PropertyAddress,
-                        style: TextStyle(
+                        widget.PropertyAddress,
+                        style: const TextStyle(
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.w500),
                       )
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        "\$$price ",
-                        style: TextStyle(
+                        "\$${widget.Price}",
+                        style: const TextStyle(
                             fontSize: 18,
                             color: kHighlightedTextColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        " / Month",
-                        style: TextStyle(
+                        widget.to == "Rent" ? " / Month" : "",
+                        style: const TextStyle(
                             fontSize: 12,
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.w400),
@@ -141,21 +158,21 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                 padding:
                     const EdgeInsets.only(top: 10.0, left: 10.0, right: 15),
                 child: Text(
-                  propertyDescription,
-                  style: TextStyle(
+                  widget.PropertyDescription,
+                  style: const TextStyle(
                       fontSize: 15,
                       color: kHighlightedTextColor,
                       fontWeight: FontWeight.w400),
                   // textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Container(
                 height: 50,
                 width: 340,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: kSecondaryButtonColor,
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -168,13 +185,13 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                     Container(
                       height: 40,
                       width: 170,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: kHighlightedTextColor,
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Overview',
                           style: TextStyle(
@@ -187,13 +204,13 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                     Container(
                       height: 40,
                       width: 170,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Review',
                           style: TextStyle(
@@ -207,7 +224,7 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -216,32 +233,33 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                   Container(
                     width: 110,
                     height: 130,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
-                        borderRadius: BorderRadius.all((Radius.circular(15)))),
+                        borderRadius:
+                            BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.bathtub_outlined,
                               color: kHighlightedTextColor,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
-                            Text(
+                            const Text(
                               'Bathroom',
                               style: TextStyle(
                                   color: kHighlightedTextColor, fontSize: 15),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              bathRoom,
-                              style: TextStyle(
+                              widget.BathRoom,
+                              style: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             )
                           ]),
@@ -250,7 +268,7 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                   Container(
                     width: 110,
                     height: 130,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
@@ -258,24 +276,24 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.bed_rounded,
                               color: kHighlightedTextColor,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
-                            Text(
+                            const Text(
                               'Bedroom',
                               style: TextStyle(
                                   color: kHighlightedTextColor, fontSize: 15),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
-                              bedRoom,
-                              style: TextStyle(
+                              widget.BedRoom,
+                              style: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             )
                           ]),
@@ -284,7 +302,7 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                   Container(
                     width: 110,
                     height: 130,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
@@ -292,24 +310,24 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.crop_square_rounded,
                             color: kHighlightedTextColor,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
+                          const Text(
                             'Area',
                             style: TextStyle(
                                 color: kHighlightedTextColor, fontSize: 15),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
-                            '$squareFit FT.',
-                            style: TextStyle(
+                            '${widget.Area} FT.',
+                            style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           )
                         ],
@@ -321,9 +339,9 @@ class _PreviewPropertyState extends State<PreviewProperty> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 20),
+                  const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
                     child: CircleAvatar(
                       backgroundImage: AssetImage('images/profile_img2.jpg'),
                     ),
@@ -333,12 +351,12 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                     children: [
                       Text(
                         userInfo.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: kHighlightedTextColor),
                       ),
-                      Text(
+                      const Text(
                         'Owner',
                         style: TextStyle(
                           color: Color.fromARGB(255, 141, 141, 141),
@@ -346,21 +364,21 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
+                      const Padding(
+                        padding: EdgeInsets.all(5.0),
                         child: Icon(
                           Icons.mail,
                           size: 30,
                           color: kHighlightedTextColor,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
+                      const Padding(
+                        padding: EdgeInsets.all(5.0),
                         child: Icon(
                           Icons.call,
                           size: 30,
@@ -373,10 +391,10 @@ class _PreviewPropertyState extends State<PreviewProperty> {
               ),
               Container(
                 child: Container(
-                  padding: EdgeInsets.only(top: 8, bottom: 18),
+                  padding: const EdgeInsets.only(top: 8, bottom: 18),
                   height: 250,
                   width: double.infinity,
-                  child: ClipRRect(
+                  child: const ClipRRect(
                     borderRadius: BorderRadius.all(
                       Radius.circular(25),
                     ),

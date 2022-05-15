@@ -158,7 +158,10 @@ class _searchScreenState extends State<searchScreen> {
                   hintText: 'Search...',
                   border: InputBorder.none),
               onChanged: (value) {
+                setState(() {
+                  
                 query = value;
+                });
                 // print(query);
                 buildResults(context);
               },

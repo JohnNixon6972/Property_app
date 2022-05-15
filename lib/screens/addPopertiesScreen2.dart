@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:property_app/screens/addPropertiesScreen1.dart';
-import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/previewProperty.dart';
 import 'package:property_app/storage_service.dart';
 
@@ -20,19 +19,25 @@ class AddPropertiesScreen2 extends StatefulWidget {
   State<AddPropertiesScreen2> createState() => _AddPropertiesScreen2State();
 }
 
-late String propertyDescription = "";
-late String squareFit = "";
-late String bedRoom = "";
-late String bathRoom = "";
-late String price = "";
+late String PropertyDescription = "";
+late String SquareFit = "";
+late String BedRoom = "";
+late String BathRoom = "";
+late String Price = "";
 
 List<XFile>? imageFileList = [];
 
 class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   final ImagePicker imagePicker = ImagePicker();
+  @override
+  void initState() {
+    imageFileList = [];
+    super.initState();
+  }
 
   Future<void> selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
+    final List<XFile>? selectedImages =
+        await imagePicker.pickMultiImage(imageQuality: 80);
     if (selectedImages!.isNotEmpty) {
       imageFileList!.addAll(selectedImages);
       print("Image List Length:" + imageFileList!.length.toString());
@@ -207,7 +212,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           ),
                           TextField(
                             onChanged: (newValue) {
-                              propertyDescription = newValue;
+                              PropertyDescription = newValue;
                             },
                             decoration:
                                 InputDecoration(border: InputBorder.none),
@@ -230,7 +235,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           HintText: "Square Fit",
                           onChange: (newValue) {
                             setState(() {
-                              squareFit = newValue;
+                              SquareFit = newValue;
                             });
                           },
                         ),
@@ -239,7 +244,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           HintText: "Bed Room",
                           onChange: (newValue) {
                             setState(() {
-                              bedRoom = newValue;
+                              BedRoom = newValue;
                             });
                           },
                         )
@@ -251,7 +256,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           HintText: "Bathroom",
                           onChange: (newValue) {
                             setState(() {
-                              bathRoom = newValue;
+                              BathRoom = newValue;
                             });
                           },
                         ),
@@ -260,7 +265,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           HintText: "Price (USD)",
                           onChange: (newValue) {
                             setState(() {
-                              price = newValue;
+                              Price = newValue;
                             });
                           },
                         )
@@ -277,7 +282,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, PreviewProperty.id);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>PreviewProperty(imageFileList: imageFileList, PropertyTitle: PropertyTitle, PropertyAddress: PropertyAddress, PropertyDescription: PropertyDescription, Area: SquareFit, BathRoom: BathRoom, BedRoom: BedRoom, Price: Price, to: getTo())));
                           },
                           child: Container(
                             height: 70,
@@ -303,11 +308,23 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           onTap: () {
                             Storage _storage = Storage();
                             setState(() {
+                              String propertyAddress = PropertyAddress;
+                              String propertyTitle = PropertyTitle;
+                              String category = getCategory();
+                              String to = getTo();
+                              String type = getType();
+                              String propertyDescription = PropertyDescription;
+                              String squareFit = SquareFit;
+                              String bedRoom = BedRoom;
+                              String bathRoom = BathRoom;
+                              String price = Price;
                               isloading = true;
                               print("loading");
+                            _storage.uploadPropertyDetails(
+                                context,propertyAddress,propertyTitle,category,to,type,propertyDescription,squareFit,bedRoom,bathRoom,price,false);
+                            _storage.uploadPropertyImages(context,imageFileList,propertyTitle,to,false);
                             });
-                            _storage.uploadPropertyDetails(context);
-                            _storage.uploadPropertyImages(context);
+
                           },
                           child: Container(
                             height: 70,

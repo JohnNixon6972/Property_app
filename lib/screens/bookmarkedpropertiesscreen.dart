@@ -62,14 +62,15 @@ void getBookMarkedPropertiesCards() {
     }
   }
   print(bookMarkedProperties);
+  
 }
 
 class _BookmarkedPropertiesScreenState
     extends State<BookmarkedPropertiesScreen> {
   @override
   void initState() {
-    super.initState();
     getBookMarkedPropertiesCards();
+    super.initState();
   }
 
   Widget buildBookMarks() {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPopertiesScreen2.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
+import 'package:property_app/screens/editPropertyScreen1.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
@@ -69,7 +70,6 @@ class _PropertyAppState extends State<PropertyApp> {
         AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
         searchScreen.id: (context) => searchScreen(),
         AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
-        PreviewProperty.id: (context) => PreviewProperty(),
       },
     );
   }

@@ -5,7 +5,7 @@ import '../constants.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:file_picker/file_picker.dart';
+
 
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }

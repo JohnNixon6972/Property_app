@@ -2,9 +2,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import './screens/homescreen.dart';
-import './screens/addPopertiesScreen2.dart';
-import './screens/addPropertiesScreen1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'currentUserInformation.dart';
 import 'main.dart';
@@ -35,13 +34,18 @@ class Storage {
   //   }
   // }
 
-  Future<void> uploadPropertyImages(BuildContext context) async {
-    var loggedIn_mail =await _auth.currentUser!.email;
+  Future<void> uploadPropertyImages(
+      BuildContext context,
+      List<XFile>? imageFileList,
+      String PropertyTitle,
+      String to,
+      bool isUpdate) async {
+    var loggedIn_mail = await _auth.currentUser!.email;
     for (int i = 0; i < imageFileList!.length; i++) {
       String filePath, fileName;
 
-      filePath = imageFileList![i].path;
-      fileName = imageFileList![i].name;
+      filePath = imageFileList[i].path;
+      fileName = imageFileList[i].name;
       File file = File(filePath);
       print("Adding property images");
 
@@ -50,10 +54,10 @@ class Storage {
         ref = storage.ref().child(
             'asset/propertyImages/$loggedIn_mail/$PropertyTitle/$fileName');
         await ref.putFile(file).whenComplete(() async {
-          await ref.getDownloadURL().then((value) async{
+          await ref.getDownloadURL().then((value) async {
             // imgRef.add({'url': value});
-          await  _firestore
-                .collection('Properties' + getTo())
+            await _firestore
+                .collection('Properties' + to)
                 .doc(PropertyTitle)
                 .update({"imgUrl${i + 1}": value});
           });
@@ -61,56 +65,108 @@ class Storage {
       } catch (e) {
         print(e);
       }
-    
     }
-    await  _firestore
-                .collection('Properties' + getTo())
-                .doc(PropertyTitle)
-                .update({"isSetImages": "True"});
+    await _firestore
+        .collection('Properties' + to)
+        .doc(PropertyTitle)
+        .update({"isSetImages": "True"});
     print("Added Property Images");
+    isUpdate
+        ? Navigator.pop(context)
+        : Navigator.pushNamed(context, HomeScreen.id);
   }
 
-  Future<void> uploadPropertyDetails(BuildContext context) async {
-    print(PropertyAddress);
-    print(PropertyTitle);
-    print(getCategory());
+  Future<void> uploadPropertyDetails(
+      BuildContext context,
+      String propertyAddress,
+      String propertyTitle,
+      String category,
+      String to,
+      String type,
+      String propertyDescription,
+      String squareFit,
+      String bedRoom,
+      String bathRoom,
+      String price,
+      bool isUpdate) async {
+    print(propertyAddress);
+    print(propertyTitle);
+    print(type);
+    print(to);
     print(userInfo.email);
-    print(getTo());
-    print(getType());
+
     // print(uselastusedaddress);
-    var Category = getCategory();
-    var to = getTo();
-    var type = getType();
-    _firestore.collection('Properties' + to).doc(PropertyTitle).set({
-      "PropertyBy": userInfo.email,
-      "OwnerName": userInfo.name,
-      "PropertyTitle": PropertyTitle,
-      "PropertyAddress": PropertyAddress,
-      "PropertyTo": to,
-      "PropertyCategory": Category,
-      "PropertyType": type,
-      "PropertyDescription": propertyDescription,
-      "SquareFit": squareFit,
-      "BedRoom": bedRoom,
-      "BathRoom": bathRoom,
-      "isSetImages":"False",
-      "Price": price,
-      "imgUrl1": "",
-      "imgUrl2": "",
-      "imgUrl3": "",
-      "imgUrl4": "",
-      "imgUrl5": "",
-      "imgUrl6": "",
-      "imgUrl7": "",
-      "imgUrl8": "",
-      "imgUrl9": "",
-      "imgUrl10": "",
-    }).then((_) {
-      print("Data Added Sucessfully");
-      Navigator.pushNamed(context, HomeScreen.id);
-    }).catchError((_) {
-      print("An error Occured");
-    });
+    if (!isUpdate) {
+      // print("Hi");
+      String propertyFor = to == "Rent" ? "Sell" : "Rent";
+      String collection = "Properties" + propertyFor;
+      // print(collection);
+      // print(propertyTitle);
+      print("Deleting Duplicate");
+      await _firestore
+          .collection(collection)
+          .doc(propertyTitle)
+          .delete();
+    }
+    !isUpdate
+        ? _firestore.collection('Properties' + to).doc(propertyTitle).set({
+            "PropertyBy": userInfo.email,
+            "OwnerName": userInfo.name,
+            "PropertyTitle": propertyTitle,
+            "PropertyAddress": propertyAddress,
+            "PropertyTo": to,
+            "PropertyCategory": category,
+            "PropertyType": type,
+            "PropertyDescription": propertyDescription,
+            "SquareFit": squareFit,
+            "BedRoom": bedRoom,
+            "BathRoom": bathRoom,
+            "isSetImages": "False",
+            "Price": price,
+            "imgUrl1": "",
+            "imgUrl2": "",
+            "imgUrl3": "",
+            "imgUrl4": "",
+            "imgUrl5": "",
+            "imgUrl6": "",
+            "imgUrl7": "",
+            "imgUrl8": "",
+            "imgUrl9": "",
+            "imgUrl10": "",
+          }).then((_) {
+            print("Data Added Sucessfully");
+          }).catchError((_) {
+            print("An error Occured");
+          })
+        : _firestore.collection('Properties' + to).doc(propertyTitle).update({
+            "PropertyBy": userInfo.email,
+            "OwnerName": userInfo.name,
+            "PropertyTitle": propertyTitle,
+            "PropertyAddress": propertyAddress,
+            "PropertyTo": to,
+            "PropertyCategory": category,
+            "PropertyType": type,
+            "PropertyDescription": propertyDescription,
+            "SquareFit": squareFit,
+            "BedRoom": bedRoom,
+            "BathRoom": bathRoom,
+            "isSetImages": "False",
+            "Price": price,
+            "imgUrl1": "",
+            "imgUrl2": "",
+            "imgUrl3": "",
+            "imgUrl4": "",
+            "imgUrl5": "",
+            "imgUrl6": "",
+            "imgUrl7": "",
+            "imgUrl8": "",
+            "imgUrl9": "",
+            "imgUrl10": "",
+          }).then((_) {
+            print("Data Added Sucessfully");
+          }).catchError((_) {
+            print("An error Occured");
+          });
   }
 
   Future<firebase_storage.ListResult> listFiles() async {

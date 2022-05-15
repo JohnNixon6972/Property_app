@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
+import 'package:property_app/screens/editPropertyScreen1.dart';
 // import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
@@ -181,133 +182,14 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                         Spacer(),
                         IconButton(
                           onPressed: () {
-                            setState(() {
-                              // Timer _timer;
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext builderContext) {
-                                    // _timer = Timer(Duration(seconds: 3), () {
-                                    //   Navigator.of(context).pop();
-                                    // });
-                                    return SimpleDialog(
-                                      backgroundColor: kPageBackgroundColor,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      title: Text(
-                                        "Delete Property ?",
-                                        style: TextStyle(
-                                          color: kHighlightedTextColor,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 25,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Spacer(),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    String collection =
-                                                        "Properties" +
-                                                            myProperties[index]
-                                                                .to;
-                                                    setState(() {
-                                                      final firestore =
-                                                          FirebaseFirestore
-                                                              .instance;
-
-                                                      firestore
-                                                          .collection(
-                                                              collection)
-                                                          .doc(myProperties[
-                                                                  index]
-                                                              .propertyName)
-                                                          .delete();
-
-                                                      if (bookmarkedPropertyNames
-                                                          .contains(myProperties[
-                                                                  index]
-                                                              .propertyName)) {
-                                                        print("Hi");
-
-                                                        final _firestore =
-                                                            FirebaseFirestore
-                                                                .instance;
-
-                                                        _firestore
-                                                            .collection("Users")
-                                                            .doc(userInfo.email)
-                                                            .collection(
-                                                                "BookMarkedProperties")
-                                                            .doc(myProperties[
-                                                                    index]
-                                                                .propertyName)
-                                                            .delete();
-                                                        bookmarkedPropertyNames
-                                                            .remove(myProperties[
-                                                                    index]
-                                                                .propertyName);
-                                                      }
-                                                      myPropertiesAdv.remove(
-                                                          myProperties[index]
-                                                              .propertyName);
-                                                      myProperties.remove(
-                                                          myProperties[index]);
-                                                      Navigator.pop(context);
-                                                    });
-                                                  });
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary:
-                                                      kBottomNavigationBackgroundColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'Yes',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 30,
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: kPrimaryButtonColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'No',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditPropertyScreen1(
+                                  propertyToEdit: myProperties[index],
+                                ),
+                              ),
+                            );
                           },
                           icon: Icon(
                             Icons.edit,

@@ -29,7 +29,6 @@ List<String> option_titles = [
 ];
 
 final _firestore = FirebaseFirestore.instance;
-final _formKey = GlobalKey<FormState>();
 
 class _profileScreenState extends State<profileScreen> {
   final meaageTextController = TextEditingController();
@@ -74,7 +73,9 @@ class _profileScreenState extends State<profileScreen> {
 
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+
     print(width);
+
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -98,7 +99,7 @@ class _profileScreenState extends State<profileScreen> {
                     ),
                   ),
                   Positioned(
-                    bottom: -20,
+                    top: 115,
 
                     left: (width / 2) - 53,
 

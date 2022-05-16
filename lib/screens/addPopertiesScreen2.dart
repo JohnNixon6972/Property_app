@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/previewProperty.dart';
 import 'package:property_app/storage_service.dart';
@@ -36,9 +37,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   }
 
   Future<void> selectImages() async {
-    final List<XFile>? selectedImages =
-        await imagePicker.pickMultiImage(imageQuality: 80);
-    if (selectedImages!.isNotEmpty) {
+    List<XFile>? selectedImages = null;
+
+    selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
+    if (selectedImages == null) {
+      return;
+    }
+    if (selectedImages.isNotEmpty) {
       imageFileList!.addAll(selectedImages);
       print("Image List Length:" + imageFileList!.length.toString());
       setState(() {});
@@ -48,7 +53,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   Widget buildListView() {
     return ListView.builder(
         // scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: imageFileList!.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
@@ -80,7 +85,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           imageFileList!.removeAt(index);
                         });
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.cancel,
                         color: kHighlightedTextColor,
                         size: 25,
@@ -97,277 +102,365 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
 
   var _controller = TextEditingController();
 
+  bool isloading = false;
   @override
   Widget build(BuildContext context) {
-    bool isloading = false;
     final Storage storage = Storage();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Stack(children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Transform.rotate(
-                  angle: 270 * pi / 180,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, AddPropertiesScreen.id);
-                    },
-                    child: Icon(
-                      Icons.expand_less_rounded,
-                      size: 40,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 10.0),
-                  child: Row(
+        child: isloading
+            ? Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: kPageBackgroundColor,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Add Properties',
-                        style: TextStyle(
-                            color: kHighlightedTextColor,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700),
+                      const Center(
+                        child: Text(
+                          "Please Wait until your add gets posted",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: kSubCategoryColor),
+                        ),
                       ),
-                      Spacer(),
-                      Text(
-                        'Step 2/2',
-                        style: TextStyle(
-                            color: kSubCategoryColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500),
-                      )
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 5,
+                          color: kHighlightedTextColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      const Center(
+                        child: Text(
+                          "You will be redirected once the add is posted",
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: kBottomNavigationBackgroundColor),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
-                  child: DottedBorder(
-                    color: kHighlightedTextColor,
-                    radius: Radius.circular(20),
-                    borderType: BorderType.RRect,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: kPropertyCardColor,
-                        borderRadius: BorderRadius.circular(18),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Stack(children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Transform.rotate(
+                        angle: 270 * pi / 180,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AddPropertiesScreen.id);
+                          },
+                          child: const Icon(
+                            Icons.expand_less_rounded,
+                            size: 40,
+                          ),
+                        ),
                       ),
-                      child: Padding(
+                      Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 12.0, horizontal: 14),
+                            horizontal: 20, vertical: 10.0),
                         child: Row(
                           children: [
-                            Text(
-                              'Upload Image',
+                            const Text(
+                              'Add Properties',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 18),
-                            ),
-                            Spacer(),
-                            GestureDetector(
-                              onTap: selectImages,
-                              child: CircleAvatar(
-                                backgroundColor: kPageBackgroundColor,
-                                child: Icon(
-                                  Icons.photo_library_sharp,
                                   color: kHighlightedTextColor,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            const Spacer(),
+                            const Text(
+                              'Step 2/2',
+                              style: TextStyle(
+                                  color: kSubCategoryColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 12),
+                        child: DottedBorder(
+                          color: kHighlightedTextColor,
+                          radius: const Radius.circular(20),
+                          borderType: BorderType.RRect,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: kPropertyCardColor,
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12.0, horizontal: 14),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Upload Image',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18),
+                                  ),
+                                  const Spacer(),
+                                  AvatarGlow(
+                                    glowColor: kHighlightedTextColor,
+                                    endRadius: 25,
+                                    duration:
+                                        const Duration(milliseconds: 3000),
+                                    repeat: true,
+                                    // showTwoGlows: true,
+                                    repeatPauseDuration:
+                                        const Duration(milliseconds: 500),
+                                    child: GestureDetector(
+                                      onTap: selectImages,
+                                      child: const CircleAvatar(
+                                        backgroundColor: kPageBackgroundColor,
+                                        child: Icon(
+                                          Icons.photo_library_sharp,
+                                          color: kHighlightedTextColor,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 5),
+                          child: Container(
+                            height: 100,
+                            child: buildListView(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 14),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: kHighlightedTextColor),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Write Property Description',
+                                  style: TextStyle(color: kSubCategoryColor),
+                                ),
+                                TextField(
+                                  onChanged: (newValue) {
+                                    PropertyDescription = newValue;
+                                  },
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none),
+                                  controller: _controller,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                  maxLines: 3,
+                                  // minLines: 5,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              PropertyDetailTile(
+                                HintText: "Square Fit",
+                                onChange: (newValue) {
+                                  setState(() {
+                                    SquareFit = newValue;
+                                  });
+                                },
+                              ),
+                              const Spacer(),
+                              PropertyDetailTile(
+                                HintText: "Bed Room",
+                                onChange: (newValue) {
+                                  setState(() {
+                                    BedRoom = newValue;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              PropertyDetailTile(
+                                HintText: "Bathroom",
+                                onChange: (newValue) {
+                                  setState(() {
+                                    BathRoom = newValue;
+                                  });
+                                },
+                              ),
+                              const Spacer(),
+                              PropertyDetailTile(
+                                HintText: "Price (INR)",
+                                onChange: (newValue) {
+                                  setState(() {
+                                    Price = newValue;
+                                  });
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 25.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PreviewProperty(
+                                              imageFileList: imageFileList,
+                                              PropertyTitle: PropertyTitle,
+                                              PropertyAddress: PropertyAddress,
+                                              PropertyDescription:
+                                                  PropertyDescription,
+                                              Area: SquareFit,
+                                              BathRoom: BathRoom,
+                                              BedRoom: BedRoom,
+                                              Price: Price,
+                                              to: getTo())));
+                                },
+                                child: Container(
+                                  height: 70,
+                                  width: 160,
+                                  decoration: BoxDecoration(
+                                    color: kNavigationIconColor,
+                                    borderRadius: BorderRadius.circular(35),
+                                  ),
+                                  child: const Center(
+                                    child: Text('Preview',
+                                        style: TextStyle(
+                                            color: kHighlightedTextColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Storage _storage = Storage();
+                                  setState(() {
+                                    isloading = true;
+                                    String propertyAddress = PropertyAddress;
+                                    String propertyTitle = PropertyTitle;
+                                    String category = getCategory();
+                                    String to = getTo();
+                                    String type = getType();
+                                    String propertyDescription =
+                                        PropertyDescription;
+                                    String squareFit = SquareFit;
+                                    String bedRoom = BedRoom;
+                                    String bathRoom = BathRoom;
+                                    String price = Price;
+
+                                    print("loading");
+                                    _storage.uploadPropertyDetails(
+                                        context,
+                                        propertyAddress,
+                                        propertyTitle,
+                                        category,
+                                        to,
+                                        type,
+                                        propertyDescription,
+                                        squareFit,
+                                        bedRoom,
+                                        bathRoom,
+                                        price,
+                                        false);
+                                    _storage.uploadPropertyImages(
+                                        context,
+                                        imageFileList,
+                                        propertyTitle,
+                                        to,
+                                        false);
+                                  });
+                                },
+                                child: Container(
+                                  height: 70,
+                                  width: 160,
+                                  decoration: BoxDecoration(
+                                    color: kHighlightedTextColor,
+                                    borderRadius: BorderRadius.circular(35),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Submit',
+                                      style: TextStyle(
+                                          color: kSubCategoryColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
                                 ),
                               ),
                             )
                           ],
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 5),
-                    child: Container(
-                      child: buildListView(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: kHighlightedTextColor),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Write Property Description',
-                            style: TextStyle(color: kSubCategoryColor),
-                          ),
-                          TextField(
-                            onChanged: (newValue) {
-                              PropertyDescription = newValue;
-                            },
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
-                            controller: _controller,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                            maxLines: 3,
-                            // minLines: 5,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        PropertyDetailTile(
-                          HintText: "Square Fit",
-                          onChange: (newValue) {
-                            setState(() {
-                              SquareFit = newValue;
-                            });
-                          },
-                        ),
-                        Spacer(),
-                        PropertyDetailTile(
-                          HintText: "Bed Room",
-                          onChange: (newValue) {
-                            setState(() {
-                              BedRoom = newValue;
-                            });
-                          },
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        PropertyDetailTile(
-                          HintText: "Bathroom",
-                          onChange: (newValue) {
-                            setState(() {
-                              BathRoom = newValue;
-                            });
-                          },
-                        ),
-                        Spacer(),
-                        PropertyDetailTile(
-                          HintText: "Price (USD)",
-                          onChange: (newValue) {
-                            setState(() {
-                              Price = newValue;
-                            });
-                          },
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 25.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>PreviewProperty(imageFileList: imageFileList, PropertyTitle: PropertyTitle, PropertyAddress: PropertyAddress, PropertyDescription: PropertyDescription, Area: SquareFit, BathRoom: BathRoom, BedRoom: BedRoom, Price: Price, to: getTo())));
-                          },
-                          child: Container(
-                            height: 70,
-                            width: 160,
-                            decoration: BoxDecoration(
-                              color: kNavigationIconColor,
-                              borderRadius: BorderRadius.circular(35),
-                            ),
-                            child: Center(
-                              child: Text('Preview',
-                                  style: TextStyle(
-                                      color: kHighlightedTextColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400)),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Storage _storage = Storage();
-                            setState(() {
-                              String propertyAddress = PropertyAddress;
-                              String propertyTitle = PropertyTitle;
-                              String category = getCategory();
-                              String to = getTo();
-                              String type = getType();
-                              String propertyDescription = PropertyDescription;
-                              String squareFit = SquareFit;
-                              String bedRoom = BedRoom;
-                              String bathRoom = BathRoom;
-                              String price = Price;
-                              isloading = true;
-                              print("loading");
-                            _storage.uploadPropertyDetails(
-                                context,propertyAddress,propertyTitle,category,to,type,propertyDescription,squareFit,bedRoom,bathRoom,price,false);
-                            _storage.uploadPropertyImages(context,imageFileList,propertyTitle,to,false);
-                            });
-
-                          },
-                          child: Container(
-                            height: 70,
-                            width: 160,
-                            decoration: BoxDecoration(
-                              color: kHighlightedTextColor,
-                              borderRadius: BorderRadius.circular(35),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Submit',
-                                style: TextStyle(
-                                    color: kSubCategoryColor,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ),
-                        ),
                       )
                     ],
                   ),
-                )
-              ],
-            ),
-            isloading
-                ? Container(
-                    color: Colors.black.withOpacity(0.5),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Center(
-                            child:
-                                Text("Please Wait until your add gets posted"),
+                  isloading
+                      ? Container(
+                          color: Colors.black.withOpacity(0.5),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                const Center(
+                                  child: Text(
+                                      "Please Wait until your add gets posted"),
+                                ),
+                                const CircularProgressIndicator(),
+                              ],
+                            ),
                           ),
-                          CircularProgressIndicator(),
-                        ],
-                      ),
-                    ),
-                  )
-                : Container()
-          ]),
-        ),
+                        )
+                      : Container()
+                ]),
+              ),
       ),
     );
   }
@@ -397,11 +490,12 @@ class PropertyDetailTile extends StatelessWidget {
             maxLines: 1,
             cursorColor: kHighlightedTextColor,
             textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: HintText,
-              hintStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              hintStyle:
+                  const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -430,7 +524,7 @@ class ImagesFromGallery extends StatelessWidget {
               // child: ,
             ),
           ),
-          Positioned(
+          const Positioned(
               left: 60,
               top: -5,
               child: Icon(

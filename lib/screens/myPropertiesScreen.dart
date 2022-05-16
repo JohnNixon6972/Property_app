@@ -32,6 +32,8 @@ void getMyPropertiesCards() {
   for (PropertyCard property in PropertiesOnRentAll) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
+        ownerMail: property.ownerMail,
+        ownerPhno: property.ownerPhoneNo,
         imageloc: property.imageloc,
         price: property.price,
         propertyAddress: property.propertyAddress,
@@ -51,6 +53,8 @@ void getMyPropertiesCards() {
   for (PropertyCard property in PropertiesOnSaleAll) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
+        ownerMail: property.ownerMail,
+        ownerPhno: property.ownerPhoneNo,
         imageloc: property.imageloc,
         price: property.price,
         propertyAddress: property.propertyAddress,
@@ -82,7 +86,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
 
   Widget buildMyProperties() {
     return ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: myPropertiesAdv.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
@@ -92,8 +96,8 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
               decoration: BoxDecoration(
                 color: kPropertyCardColor,
                 border: Border.all(color: kHighlightedTextColor),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
+                borderRadius: const BorderRadius.all(
+                  const Radius.circular(20),
                 ),
               ),
               height: 352,
@@ -105,9 +109,9 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderRadius: const BorderRadius.all(const Radius.circular(20)),
                         child: CachedNetworkImage(
                           cacheManager: customCacheManager,
                           key: UniqueKey(),
@@ -125,7 +129,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                           ),
                           errorWidget: (context, url, error) => Container(
                             color: Colors.black12,
-                            child: Icon(
+                            child: const Icon(
                               Icons.error,
                               color: kHighlightedTextColor,
                             ),
@@ -134,18 +138,18 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         myProperties[index].propertyName,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
+                      padding: const EdgeInsets.only(bottom: 8.0),
                       child: Text(
                         myProperties[index].propertyAddress,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: kSubCategoryColor,
                         ),
                       ),
@@ -153,15 +157,15 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                     Row(
                       children: [
                         Text(
-                          "\$${myProperties[index].price} ",
-                          style: TextStyle(
+                          "\u{20B9} ${myProperties[index].price} ",
+                          style: const TextStyle(
                               fontSize: 18,
                               color: kHighlightedTextColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
                           myProperties[index].to == "Rent" ? " / Month" : "",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 12,
                               color: kSubCategoryColor,
                               fontWeight: FontWeight.w400),
@@ -172,14 +176,33 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, profileScreen.id);
+                             Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PropertyDetailsScreen(
+                            ownerMail: myProperties[index].ownerMail,
+                            ownerPhoneNo: myProperties[index].ownerPhno,
+                            type: myProperties[index].propertyType,
+                            category: myProperties[index].propertyCategory,
+                              propertyAddress: myProperties[index].propertyAddress,
+                              propertyTitle: myProperties[index].propertyName,
+                              to: myProperties[index].to,
+                              ownerName: myProperties[index].ownerName,
+                              propertyDescription: myProperties[index].propertyDescription,
+                              noBathroom: myProperties[index].bathRoom,
+                              noBedroom: myProperties[index].bedRoom,
+                              area:myProperties[index].area,
+                              propertyImages: myProperties[index].propertyImages,
+                              price:myProperties[index].price),
+                        ),
+                      );
                           },
-                          child: Text(
+                          child: const Text(
                             'View Details',
                             style: TextStyle(color: kPrimaryButtonColor),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
                           onPressed: () {
                             Navigator.push(
@@ -191,7 +214,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                               ),
                             );
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.edit,
                             color: kHighlightedTextColor,
                           ),
@@ -211,7 +234,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(15)),
-                                      title: Text(
+                                      title: const Text(
                                         "Delete Property ?",
                                         style: TextStyle(
                                           color: kHighlightedTextColor,
@@ -225,7 +248,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Row(
                                             children: [
-                                              Spacer(),
+                                              const Spacer(),
                                               ElevatedButton(
                                                 onPressed: () {
                                                   setState(() {
@@ -270,6 +293,23 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                                     index]
                                                                 .propertyName);
                                                       }
+                                                      
+                                                      print(
+                                                          "asset/propertyImages/${userInfo.email}/${myProperties[index].propertyName}");
+                                                      FirebaseStorage.instance
+                                                          .ref(
+                                                              "asset/propertyImages/${userInfo.email}/${myProperties[index].propertyName}")
+                                                          .listAll()
+                                                          .then((value) {
+                                                        value.items
+                                                            .forEach((element) {
+                                                          FirebaseStorage
+                                                              .instance
+                                                              .ref(element
+                                                                  .fullPath)
+                                                              .delete();
+                                                        });
+                                                      });
                                                       myPropertiesAdv.remove(
                                                           myProperties[index]
                                                               .propertyName);
@@ -295,7 +335,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                       fontSize: 20),
                                                 ),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 30,
                                               ),
                                               ElevatedButton(
@@ -317,7 +357,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                       fontSize: 20),
                                                 ),
                                               ),
-                                              Spacer(),
+                                              const Spacer(),
                                             ],
                                           ),
                                         ),
@@ -326,7 +366,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                   });
                             });
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.delete,
                             color: kHighlightedTextColor,
                           ),
@@ -368,8 +408,8 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                   const SizedBox(
                     width: 100,
                   ),
-                  Center(
-                    child: Text(
+                  const Center(
+                    child: const Text(
                       'My Properties',
                       style: TextStyle(
                         fontSize: 20,
@@ -381,14 +421,14 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1,
               indent: 60,
               endIndent: 60,
               color: kHighlightedTextColor,
             ),
             Expanded(flex: 10, child: buildMyProperties()),
-            BottomPageNavigationBar(
+            const BottomPageNavigationBar(
               flex_by: 1,
               page: myPropertiesScreen.id,
             ),
@@ -407,6 +447,8 @@ class myProperty extends StatefulWidget {
   final String propertyDescription;
   final String to;
   final String ownerName;
+  final String ownerMail;
+  final String ownerPhno;
   final String propertyType;
   final String bedRoom;
   final String bathRoom;
@@ -415,6 +457,8 @@ class myProperty extends StatefulWidget {
   final List<String> propertyImages;
   const myProperty(
       {required this.imageloc,
+      required this.ownerMail,
+      required this.ownerPhno,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -440,7 +484,7 @@ class _myPropertyState extends State<myProperty> {
         decoration: BoxDecoration(
           color: kPropertyCardColor,
           border: Border.all(color: kHighlightedTextColor),
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(20),
           ),
         ),
@@ -453,9 +497,9 @@ class _myPropertyState extends State<myProperty> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(const Radius.circular(20)),
                   child: CachedNetworkImage(
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
@@ -473,7 +517,7 @@ class _myPropertyState extends State<myProperty> {
                     ),
                     errorWidget: (context, url, error) => Container(
                       color: Colors.black12,
-                      child: Icon(
+                      child: const Icon(
                         Icons.error,
                         color: kHighlightedTextColor,
                       ),
@@ -482,17 +526,17 @@ class _myPropertyState extends State<myProperty> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: Text(
                   widget.propertyName,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.only(bottom: 8.0),
                 child: Text(
                   widget.propertyAddress,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: kSubCategoryColor,
                   ),
                 ),
@@ -508,7 +552,7 @@ class _myPropertyState extends State<myProperty> {
                   ),
                   Text(
                     widget.to == "Rent" ? " / Month" : "",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         color: kSubCategoryColor,
                         fontWeight: FontWeight.w400),
@@ -521,12 +565,12 @@ class _myPropertyState extends State<myProperty> {
                     onTap: () {
                       Navigator.pushNamed(context, profileScreen.id);
                     },
-                    child: Text(
+                    child: const Text(
                       'View Details',
                       style: TextStyle(color: kPrimaryButtonColor),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
                     onPressed: () {
                       setState(() {
@@ -541,9 +585,9 @@ class _myPropertyState extends State<myProperty> {
                                 backgroundColor: kPageBackgroundColor,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15)),
-                                title: Text(
+                                title: const Text(
                                   "Delete Property ?",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: kHighlightedTextColor,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 25,
@@ -555,7 +599,7 @@ class _myPropertyState extends State<myProperty> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        Spacer(),
+                                        const Spacer(),
                                         ElevatedButton(
                                           onPressed: () async {},
                                           style: ElevatedButton.styleFrom(
@@ -573,7 +617,7 @@ class _myPropertyState extends State<myProperty> {
                                                 fontSize: 20),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         ElevatedButton(
@@ -592,7 +636,7 @@ class _myPropertyState extends State<myProperty> {
                                                 fontSize: 20),
                                           ),
                                         ),
-                                        Spacer(),
+                                        const Spacer(),
                                       ],
                                     ),
                                   ),
@@ -601,7 +645,7 @@ class _myPropertyState extends State<myProperty> {
                             });
                       });
                     },
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                   ),
                 ],
               ),

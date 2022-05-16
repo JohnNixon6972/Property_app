@@ -55,9 +55,13 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
   }
 
   Future<void> selectImages() async {
-    final List<XFile>? selectedImages =
-        await imagePicker.pickMultiImage(imageQuality: 80);
-    if (selectedImages!.isNotEmpty) {
+    List<XFile>? selectedImages = null;
+
+    selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
+    if (selectedImages == null) {
+      return;
+    }
+    if (selectedImages.isNotEmpty) {
       imageFileList!.addAll(selectedImages);
       print("Image List Length:" + imageFileList!.length.toString());
       setState(() {});
@@ -129,7 +133,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                    children: const [
                       Center(
                         child: Text(
                           "Please Wait until your add gets posted",
@@ -191,7 +195,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10.0),
                         child: Row(
-                          children: [
+                          children: const [
                             Text(
                               'Edit Property',
                               style: TextStyle(
@@ -338,7 +342,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                               ),
                               Spacer(),
                               PropertyDetailTile(
-                                HintText: "Price (USD)",
+                                HintText: "Price (INR)",
                                 onChange: (newValue) {
                                   setState(() {
                                     Price = newValue;

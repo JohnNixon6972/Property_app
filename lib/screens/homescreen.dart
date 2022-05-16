@@ -2,17 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
-import 'package:property_app/screens/addPopertiesScreen2.dart';
-import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
 import '../components/bottomNavigationBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:property_app/currentUserInformation.dart';
 
 late User loggedInUser;
 bool displayAdminProperties = true;
@@ -93,8 +89,11 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var propertyType = property["PropertyType"];
               var area = property["SquareFit"];
               var ownerEmail = property["PropertyBy"];
+              var ownerPhno = property["PhNo"];
 
               final Property = PropertyCard(
+                ownerMail: ownerEmail,
+                ownerPhoneNo: ownerPhno,
                 imageloc: imageloc,
                 price: price,
                 propertyAddress: propertyAddress,
@@ -253,8 +252,11 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var propertyType = property["PropertyType"];
               var area = property["SquareFit"];
               var ownerEmail = property["PropertyBy"];
+              var ownerPhno = property["Phno"];
 
               final Property = PropertyCard(
+                ownerMail: ownerEmail,
+                ownerPhoneNo: ownerPhno,
                 imageloc: imageloc,
                 price: price,
                 propertyAddress: propertyAddress,
@@ -673,9 +675,13 @@ class PropertyCard extends StatefulWidget {
   final String bathRoom;
   final String propertyCategory;
   final String area;
+  final String ownerMail;
+  final String ownerPhoneNo;
   final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
+      required this.ownerMail,
+      required this.ownerPhoneNo,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -764,7 +770,7 @@ class _PropertyCardState extends State<PropertyCard> {
               Row(
                 children: [
                   Text(
-                    widget.price + "\$",
+                    widget.price + " \u{20B9}",
                     style: TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,
@@ -791,6 +797,10 @@ class _PropertyCardState extends State<PropertyCard> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                              ownerMail: widget.ownerMail,
+                              ownerPhoneNo: widget.ownerPhoneNo,
+                              type: widget.propertyType,
+                              category: widget.propertyCategory,
                               propertyAddress: widget.propertyAddress,
                               propertyTitle: widget.propertyName,
                               to: widget.to,

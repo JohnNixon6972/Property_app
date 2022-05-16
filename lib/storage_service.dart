@@ -103,10 +103,17 @@ class Storage {
       // print(collection);
       // print(propertyTitle);
       print("Deleting Duplicate");
-      await _firestore
-          .collection(collection)
-          .doc(propertyTitle)
-          .delete();
+      await _firestore.collection(collection).doc(propertyTitle).delete();
+      await firebase_storage.FirebaseStorage.instance
+          .ref("asset/propertyImages/${userInfo.email}/$propertyTitle")
+          .listAll()
+          .then((value) {
+        value.items.forEach((element) {
+          firebase_storage.FirebaseStorage.instance
+              .ref(element.fullPath)
+              .delete();
+        });
+      });
     }
     !isUpdate
         ? _firestore.collection('Properties' + to).doc(propertyTitle).set({
@@ -123,6 +130,7 @@ class Storage {
             "BathRoom": bathRoom,
             "isSetImages": "False",
             "Price": price,
+            "PhNo":userInfo.mobileNumber,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",

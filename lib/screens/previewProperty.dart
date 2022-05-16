@@ -18,7 +18,8 @@ class PreviewProperty extends StatefulWidget {
   String BedRoom;
   String Area;
   PreviewProperty(
-      {Key? key, required this.imageFileList,
+      {Key? key,
+      required this.imageFileList,
       required this.PropertyTitle,
       required this.PropertyAddress,
       required this.PropertyDescription,
@@ -26,7 +27,8 @@ class PreviewProperty extends StatefulWidget {
       required this.BathRoom,
       required this.BedRoom,
       required this.Price,
-      required this.to}) : super(key: key);
+      required this.to})
+      : super(key: key);
   @override
   State<PreviewProperty> createState() => _PreviewPropertyState();
 }
@@ -137,7 +139,7 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        "\$${widget.Price}",
+                        "\u{20B9} ${widget.Price}",
                         style: const TextStyle(
                             fontSize: 18,
                             color: kHighlightedTextColor,
@@ -235,8 +237,7 @@ class _PreviewPropertyState extends State<PreviewProperty> {
                     height: 130,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
-                        borderRadius:
-                            BorderRadius.all((Radius.circular(15)))),
+                        borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: Column(

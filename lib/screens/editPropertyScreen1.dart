@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/addPopertiesScreen2.dart';
-import 'package:property_app/screens/homescreen.dart';
+import 'editPropertyScreen2.dart';
+import 'myPropertiesScreen.dart';
 import '../constants.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }
 enum propertyCategory { Penthouse, Apartment, Building }
 
-propertyTo? _to = propertyTo.Sell;
+propertyTo? _to;
 
-propertyCategory? _category = propertyCategory.Penthouse;
+propertyCategory? _category;
 
-propertyType? _type = propertyType.Residental;
+propertyType? _type;
 
-class AddPropertiesScreen extends StatefulWidget {
-  static const String id = 'addPropertiesScreen';
+class EditPropertyScreen1 extends StatefulWidget {
+  final myProperty propertyToEdit;
+  EditPropertyScreen1({required this.propertyToEdit});
 
   @override
-  State<AddPropertiesScreen> createState() => _AddPropertiesScreenState();
+  State<EditPropertyScreen1> createState() =>
+      _EditPropertyScreen1State(propertyToEdit: propertyToEdit);
 }
 
 String getCategory() {
@@ -52,14 +54,44 @@ String getTo() {
 
 late String PropertyTitle;
 late String PropertyAddress;
+void readDetails(myProperty propertyToEdit) {
+  _to = propertyToEdit.to == "Sell" ? propertyTo.Sell : propertyTo.Rent;
+  if (propertyToEdit.propertyCategory == "PentHouse") {
+    _category = propertyCategory.Penthouse;
+  } else if (propertyToEdit.propertyCategory == "Apartment") {
+    _category = propertyCategory.Apartment;
+  } else {
+    _category = propertyCategory.Building;
+  }
 
-class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
-  var _PropertyTitleController = TextEditingController();
-  var _PropertyAddressController = TextEditingController();
+  PropertyTitle = propertyToEdit.propertyName;
+  PropertyAddress = propertyToEdit.propertyAddress;
+
+  _type = propertyToEdit.propertyType == "Residental"
+      ? propertyType.Residental
+      : propertyType.Commercial;
+
+  _PropertyAddressController.text = propertyToEdit.propertyAddress;
+  _PropertyTitleController.text = propertyToEdit.propertyName;
+}
+
+var _PropertyTitleController = TextEditingController();
+var _PropertyAddressController = TextEditingController();
+
+class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
+  myProperty propertyToEdit;
+  _EditPropertyScreen1State({required this.propertyToEdit});
+  @override
+  void initState() {
+    // TODO: implement initState
+    readDetails(propertyToEdit);
+
+    super.initState();
+  }
+
   bool uselastusedaddress = false;
   final _auth = FirebaseAuth.instance;
   final _firstore = FirebaseFirestore.instance;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +107,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   angle: 270 * pi / 180,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, HomeScreen.id);
+                      Navigator.pop(context);
                     },
                     child: Icon(
                       Icons.expand_less_rounded,
@@ -89,7 +121,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   child: Row(
                     children: [
                       Text(
-                        'Add Properties',
+                        'Edit Property',
                         style: TextStyle(
                             color: kHighlightedTextColor,
                             fontSize: 28,
@@ -590,8 +622,11 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         angle: 90 * pi / 180,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(
-                                context, AddPropertiesScreen2.id);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => editPropertyScreen2(
+                                        propertyToEdit: propertyToEdit)));
                           },
                           child: Icon(
                             Icons.expand_less_rounded,

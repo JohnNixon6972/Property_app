@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/myProperties.dart';
+import 'package:property_app/screens/myPropertiesScreen.dart';
 // import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
@@ -298,7 +298,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 child: GestureDetector(
                   onTap: () {
                     widget.Title == "My Properties"
-                        ? Navigator.pushNamed(context, myProperties.id)
+                        ? Navigator.pushNamed(context, myPropertiesScreen.id)
                         : showDialog(
                             context: context,
                             builder: (_) => editDetailsPopup(widget.Title,

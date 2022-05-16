@@ -1,26 +1,12 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:email_auth/email_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
-import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
-import 'package:property_app/currentUserInformation.dart';
 import 'package:property_app/main.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'alertPopUp.dart';
-
-final TextEditingController _otpController = TextEditingController();
 
 class loginScreen extends StatefulWidget {
   static const String id = 'login';
@@ -47,8 +33,6 @@ class _loginScreenState extends State<loginScreen> {
               padding: EdgeInsets.all(12),
               child: SingleChildScrollView(
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Hero(
                       tag: 'logo',
@@ -271,7 +255,6 @@ class _loginScreenState extends State<loginScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             final prefs = await SharedPreferences.getInstance();
-                            // Validate returns true if the form is valid, or false otherwise.
                             if (_loginFormKey.currentState!.validate()) {
                               print(userInfo.email);
                               print(userInfo.password);

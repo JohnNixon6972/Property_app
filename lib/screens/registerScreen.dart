@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:otp_text_field/otp_field_style.dart';
@@ -15,7 +14,11 @@ import 'alertPopUp.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-final TextEditingController _otpController = TextEditingController();
+// final TextEditingController _otpController = TextEditingController();
+
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
+final _formKey = GlobalKey<FormState>();
 
 class registerScreen extends StatefulWidget {
   static const String id = 'register';
@@ -25,12 +28,9 @@ class registerScreen extends StatefulWidget {
 }
 
 class _registerScreenState extends State<registerScreen> {
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
-  final _formKey = GlobalKey<FormState>();
-
   bool showSpinner = false;
   bool _isHidden = true;
+
   @override
   Widget build(BuildContext context) {
     var _passwordController;
@@ -184,144 +184,7 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          var validateStatus;
-                          if (_formKey.currentState!.validate()) {
-                            try {
-                              print(userInfo.email);
-                              print(userInfo.password);
-
-                              EmailAuth emailAuth =
-                                  new EmailAuth(sessionName: "Sample Session");
-
-                              bool result = await emailAuth.sendOtp(
-                                  recipientMail: userInfo.email, otpLength: 5);
-
-                              Timer _timer;
-                              var pin;
-                              var finalresult;
-
-                              var otp;
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext builderContext) {
-                                  _timer = Timer(Duration(seconds: 30), () {
-                                    Navigator.of(context).pop();
-                                  });
-                                  return Column(
-                                    children: [
-                                      Card(
-                                        child: OTPTextField(
-                                          length: 6,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          fieldWidth: 50,
-                                          otpFieldStyle: OtpFieldStyle(
-                                            borderColor: kNavigationIconColor,
-                                          ),
-                                          style: TextStyle(fontSize: 17),
-                                          textFieldAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          fieldStyle: FieldStyle.underline,
-                                          onCompleted: (pin) {
-                                            otp = pin;
-                                            print("Completed: " + pin);
-                                          },
-                                          onChanged: (pin) {},
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          finalresult =
-                                              await emailAuth.validateOtp(
-                                                  recipientMail: userInfo.email,
-                                                  userOtp: otp);
-                                          validateStatus = finalresult;
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary: kPrimaryButtonColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Verify OTP',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              await Future.delayed(Duration(seconds: 20));
-
-                              if (validateStatus == true) {
-                                _firestore
-                                    .collection("Users")
-                                    .doc(userInfo.email)
-                                    .set({
-                                  "email": userInfo.email,
-                                  "name": userInfo.name,
-                                  "number": userInfo.mobileNumber
-                                });
-                                try {
-                                  final newUser = await _auth
-                                      .createUserWithEmailAndPassword(
-                                          email: userInfo.email,
-                                          password: userInfo.password);
-                                  Navigator.pushNamed(context, HomeScreen.id);
-                                } on FirebaseAuthException catch (error) {
-                                  switch (error.message) {
-                                    case 'The email address is badly formatted.':
-                                      popUpAlertDialogBox(
-                                          context, "Invalid Email");
-                                      break;
-                                    case 'The email address is already in use by another account.':
-                                      popUpAlertDialogBox(
-                                          context, "User Already exists");
-                                      break;
-                                    case 'Password should be at least 6 characters':
-                                      popUpAlertDialogBox(context,
-                                          "Password should be atleast 6 characters");
-                                      break;
-
-                                    default:
-                                      popUpAlertDialogBox(
-                                          context, "Invalid Email");
-                                      break;
-                                  }
-                                } catch (e) {
-                                  print(e);
-                                }
-                              } else {
-                                popUpAlertDialogBox(
-                                    context, "Session Time Out");
-                              }
-                            } on FirebaseAuthException catch (error) {
-                              switch (error.message) {
-                                case 'The email address is badly formatted.':
-                                  popUpAlertDialogBox(context, "Invalid Email");
-                                  break;
-                                case 'The email address is already in use by another account.':
-                                  popUpAlertDialogBox(
-                                      context, "User Already exists");
-                                  break;
-                                case 'Password should be at least 6 characters':
-                                  popUpAlertDialogBox(context,
-                                      "Password should be atleast 6 characters");
-                                  break;
-
-                                default:
-                                  print('Case ${error} is not yet implemented');
-                                  break;
-                              }
-                            } catch (e) {
-                              popUpAlertDialogBox(context, "Invalid Email");
-                            }
-                            ;
-                          }
+                          
                         },
                         style: ElevatedButton.styleFrom(
                           primary: kPrimaryButtonColor,
@@ -372,3 +235,227 @@ class _registerScreenState extends State<registerScreen> {
     );
   }
 }
+
+
+// String otp, authStatus = "";
+//                           String phoneNumber, verificationId;
+
+//                           await FirebaseAuth.instance.verifyPhoneNumber(
+//                               phoneNumber: userInfo.mobileNumber,
+//                               verificationCompleted:
+//                                   (AuthCredential authCredential) {
+//                                 setState(() {
+//                                   authStatus =
+//                                       "Your account is successfully verified";
+//                                 });
+//                               },
+//                               verificationFailed:
+//                                   (FirebaseAuthException authException) {
+//                                 setState(() {
+//                                   authStatus = "Authentication failed";
+//                                 });
+//                               },
+//                               codeSent: (String verId, int? forceCodeResent) {
+//                                 verificationId = verId;
+//                                 setState(() {
+//                                   authStatus = "OTP has been successfully send";
+//                                 });
+//                               },
+//                               codeAutoRetrievalTimeout: (String verId) {
+//                                 verificationId = verId;
+//                                 setState(() {
+//                                   authStatus = "TIMEOUT";
+//                                 });
+//                               });
+
+
+
+
+  // Future signUp() async {
+  //   final isValid = _formKey.currentState!.validate();
+  //   if (!isValid) return;
+
+  //   popUpAlertDialogBox(context, "Invalid cerdentials");
+
+  //   // }
+  //   try {
+  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //         email: userInfo.email, password: userInfo.password);
+  //   } on FirebaseAuthException catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+
+                          // var validateStatus = false;
+                          // if (_formKey.currentState!.validate()) {
+                          //   // Timer _timer = Timer(Duration(seconds: 30), () {
+                          //   //   Navigator.of(context).pop();
+                          //   // });
+                          //   // var user = _auth.currentUser!;
+                          //   // await user.reload();
+                          //   // if (user.emailVerified) {
+                          //   //   _timer.cancel();
+                          //   //   Navigator.pushNamed(context, HomeScreen.id);
+                          //   // }
+                          //   try {
+                          //     // Timer _timer = Timer(Duration(seconds: 30), () {
+                          //     //   Navigator.of(context).pop();
+                          //     // });
+                          //     // // Future<void> checkEmailVerified() async {
+                          //     // var user = _auth.currentUser!;
+                          //     // await user.reload();
+                          //     // if (user.emailVerified) {
+                          //     //   _timer.cancel();
+                          //     //   Navigator.pushNamed(context, HomeScreen.id);
+                          //     // }
+                          //     // }
+
+                          //     print(userInfo.email);
+                          //     print(userInfo.password);
+
+                          //     // EmailAuth emailAuth =
+                          //     //     new EmailAuth(sessionName: "Sample Session");
+
+                          //     // bool result = await emailAuth.sendOtp(
+                          //     //     recipientMail: userInfo.email, otpLength: 6);
+
+                          //     // if (result == true) {
+                          //     //   Timer _timer;
+                          //     //   var pin;
+                          //     //   var finalresult;
+                          //     //   var otp;
+                          //     //   showDialog(
+                          //     //     context: context,
+                          //     //     builder: (BuildContext builderContext) {
+                          //     //       return Column(
+                          //     //         children: [
+                          //     //           Card(
+                          //     //             child: OTPTextField(
+                          //     //               length: 6,
+                          //     //               width: MediaQuery.of(context)
+                          //     //                   .size
+                          //     //                   .width,
+                          //     //               fieldWidth: 50,
+                          //     //               otpFieldStyle: OtpFieldStyle(
+                          //     //                 borderColor: kNavigationIconColor,
+                          //     //               ),
+                          //     //               style: TextStyle(fontSize: 17),
+                          //     //               textFieldAlignment:
+                          //     //                   MainAxisAlignment.spaceAround,
+                          //     //               fieldStyle: FieldStyle.underline,
+                          //     //               onCompleted: (pin) {
+                          //     //                 otp = pin;
+                          //     //                 print("Completed: " + pin);
+                          //     //               },
+                          //     //               onChanged: (pin) {
+                          //     //                 otp = pin;
+                          //     //               },
+                          //     //             ),
+                          //     //           ),
+                          //     //           ElevatedButton(
+                          //     //             onPressed: () async {
+                          //     //               Navigator.pop(context);
+                          //     //               try {
+                          //     //                 finalresult =
+                          //     //                     await emailAuth.validateOtp(
+                          //     //                         recipientMail:
+                          //     //                             userInfo.email,
+                          //     //                         userOtp: otp);
+                          //     //                 Navigator.pushNamed(
+                          //     //                     context, HomeScreen.id);
+                          //     //                 setState(() {
+                          //     //                   validateStatus = finalresult;
+                          //     //                 });
+                          //     //               } on FirebaseAuthException catch (error) {
+                          //     //                 switch (error.message) {
+                          //     //                   case 'The email address is badly formatted.':
+                          //     //                     popUpAlertDialogBox(
+                          //     //                         context, "Invalid Email");
+                          //     //                     break;
+                          //     //                   case 'The email address is already in use by another account.':
+                          //     //                     popUpAlertDialogBox(context,
+                          //     //                         "User Already exists");
+                          //     //                     break;
+                          //     //                   case 'Password should be at least 6 characters':
+                          //     //                     popUpAlertDialogBox(context,
+                          //     //                         "Password should be atleast 6 characters");
+                          //     //                     break;
+
+                          //     //                   default:
+                          //     //                     print(
+                          //     //                         'Case ${error} is not yet implemented');
+                          //     //                     break;
+                          //     //                 }
+                          //     //               } catch (e) {
+                          //     //                 popUpAlertDialogBox(
+                          //     //                     context, "Invalid OTP");
+                          //     //                 // popUpAlertDialogBox(context, "Invalid Email");
+                          //     //                 print("here = $e");
+                          //     //               }
+                          //     //             },
+                          //     //             style: ElevatedButton.styleFrom(
+                          //     //               primary: kPrimaryButtonColor,
+                          //     //               shape: RoundedRectangleBorder(
+                          //     //                 borderRadius:
+                          //     //                     BorderRadius.circular(25),
+                          //     //               ),
+                          //     //             ),
+                          //     //             child: const Text(
+                          //     //               'Verify OTP',
+                          //     //               style: TextStyle(
+                          //     //                   color: Colors.white,
+                          //     //                   fontSize: 20),
+                          //     //             ),
+                          //     //           ),
+                          //     //         ],
+                          //     //       );
+                          //     //     },
+                          //     //   );
+                          //     //   // await Future.delayed(Duration(seconds: 30));
+                          //     // }
+
+                          //     // if (validateStatus == true) {
+                          //     _firestore
+                          //         .collection("Users")
+                          //         .doc(userInfo.email)
+                          //         .set({
+                          //       "email": userInfo.email,
+                          //       "name": userInfo.name,
+                          //       "number": userInfo.mobileNumber
+                          //     });
+                          //     print("hey");
+                          //     final newUser =
+                          //         await _auth.createUserWithEmailAndPassword(
+                          //             email: userInfo.email,
+                          //             password: userInfo.password);
+                          //     Navigator.pushNamed(context, HomeScreen.id);
+                          //     // } else {
+                          //     //   popUpAlertDialogBox(context, "Invalid Email");
+                          //     // }
+                          //   } on FirebaseAuthException catch (error) {
+                          //     switch (error.message) {
+                          //       case 'The email address is badly formatted.':
+                          //         popUpAlertDialogBox(context, "Invalid Email");
+                          //         break;
+
+                          //       case 'The email address is already in use by another account.':
+                          //         popUpAlertDialogBox(
+                          //             context, "User Already exists");
+                          //         break;
+
+                          //       case 'Password should be at least 6 characters':
+                          //         popUpAlertDialogBox(context,
+                          //             "Password should be atleast 6 characters");
+                          //         break;
+
+                          //       default:
+                          //         print('Case ${error} is not yet implemented');
+                          //         break;
+                          //     }
+                          //   } catch (e) {
+                          //     // popUpAlertDialogBox(context, "Invalid Email");
+                          //     print("only here = $e");
+                          //   }
+                          //   ;
+                          // }

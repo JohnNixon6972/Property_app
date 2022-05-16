@@ -125,6 +125,11 @@ class _searchScreenState extends State<searchScreen> {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       appBar: AppBar(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(25),
+          ),
+        ),
         automaticallyImplyLeading: false,
         backgroundColor: kBottomNavigationBackgroundColor,
         title: Container(
@@ -159,8 +164,7 @@ class _searchScreenState extends State<searchScreen> {
                   border: InputBorder.none),
               onChanged: (value) {
                 setState(() {
-                  
-                query = value;
+                  query = value;
                 });
                 // print(query);
                 buildResults(context);

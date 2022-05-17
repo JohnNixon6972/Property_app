@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
@@ -28,6 +29,12 @@ class registerScreen extends StatefulWidget {
 }
 
 class _registerScreenState extends State<registerScreen> {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  final _formKey = GlobalKey<FormState>();
+  late String phoneNumber, verificationId;
+  late String otp = " ", authStatus = "";
+
   bool showSpinner = false;
   bool _isHidden = true;
 
@@ -120,31 +127,31 @@ class _registerScreenState extends State<registerScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      TextFormField(
-                        onChanged: (value) {
-                          userInfo.email = value;
-                        },
-                        cursorColor: kPrimaryButtonColor,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(color: kPrimaryButtonColor),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter valid text';
-                          } else {
-                            userInfo.email = value;
-                          }
+                      // TextFormField(
+                      //   onChanged: (value) {
+                      //     userInfo.email = value;
+                      //   },
+                      //   cursorColor: kPrimaryButtonColor,
+                      //   textAlign: TextAlign.left,
+                      //   style: TextStyle(color: kPrimaryButtonColor),
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter valid text';
+                      //     } else {
+                      //       userInfo.email = value;
+                      //     }
 
-                          return null;
-                        },
-                        decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Enter your Email Address.',
-                          prefixIcon:
-                              Icon(Icons.email, color: kNavigationIconColor),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      //     return null;
+                      //   },
+                      //   decoration: kTextFieldDecoration.copyWith(
+                      //     hintText: 'Enter your Email Address.',
+                      //     prefixIcon:
+                      //         Icon(Icons.email, color: kNavigationIconColor),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
                       TextFormField(
                         onChanged: (value) {
                           userInfo.password = value;
@@ -184,7 +191,45 @@ class _registerScreenState extends State<registerScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          
+                          // otpDialogBox(BuildContext context) {
+                          //   return
+                          verifyPhoneNumber(context);
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return new AlertDialog(
+                                  title: Text('Enter your OTP'),
+                                  content: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                        border: new OutlineInputBorder(
+                                          borderRadius: const BorderRadius.all(
+                                            const Radius.circular(30),
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        otp = value;
+                                      },
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.all(10.0),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        signIn(otp);
+                                      },
+                                      child: Text(
+                                        'Submit',
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              });
+                          // }
                         },
                         style: ElevatedButton.styleFrom(
                           primary: kPrimaryButtonColor,
@@ -232,6 +277,44 @@ class _registerScreenState extends State<registerScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> signIn(String otp) async {
+    await FirebaseAuth.instance
+        .signInWithCredential(PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: otp,
+    ));
+  }
+
+  Future<void> verifyPhoneNumber(BuildContext context) async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: userInfo.mobileNumber,
+      timeout: Duration(seconds: 15),
+      verificationCompleted: (AuthCredential authCredential) {
+        setState(() {
+          authStatus = "Your account is successfully verified";
+        });
+      },
+      verificationFailed: (FirebaseAuthException authException) {
+        setState(() {
+          authStatus = "Authentication failed";
+        });
+      },
+      codeSent: (String verId, int? forceCodeResent) {
+        verificationId = verId;
+        setState(() {
+          authStatus = "OTP has been successfully send";
+        });
+        // otpDialogBox(context).then((value) {});
+      },
+      codeAutoRetrievalTimeout: (String verId) {
+        verificationId = verId;
+        setState(() {
+          authStatus = "TIMEOUT";
+        });
+      },
     );
   }
 }

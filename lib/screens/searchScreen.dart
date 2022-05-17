@@ -129,6 +129,7 @@ class _searchScreenState extends State<searchScreen> {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       appBar: AppBar(
+        toolbarHeight: 80,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(25),
@@ -138,7 +139,7 @@ class _searchScreenState extends State<searchScreen> {
         backgroundColor: kBottomNavigationBackgroundColor,
         title: Container(
           width: double.infinity,
-          height: 40,
+          height: 50,
           decoration: BoxDecoration(
               color: kPageBackgroundColor,
               borderRadius: BorderRadius.circular(50)),
@@ -179,6 +180,7 @@ class _searchScreenState extends State<searchScreen> {
       ),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -237,7 +239,7 @@ class _searchScreenState extends State<searchScreen> {
               ],
             ),
             Expanded(
-              flex: 15,
+              flex: 20,
               child: Stack(children: [
                 Opacity(
                   opacity: 0.5,

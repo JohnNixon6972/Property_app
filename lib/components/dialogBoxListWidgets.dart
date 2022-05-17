@@ -59,8 +59,8 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             onChanged: (newValue) {
-              userInfo.mobileNumber = newValue;
-              print(userInfo.mobileNumber);
+              userInfo.email = newValue;
+              print(userInfo.email);
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.phone,
@@ -70,14 +70,14 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else {
-                userInfo.mobileNumber = value;
+                userInfo.email = value;
               }
 
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Enter your Mobile Number.',
-              prefixIcon: const Icon(Icons.lock, color: kPrimaryButtonColor),
+              hintText: 'Enter your Email Address.',
+              prefixIcon: const Icon(Icons.mail, color: kPrimaryButtonColor),
             ),
           ),
           const SizedBox(
@@ -121,7 +121,6 @@ List<List<Widget>> fields = [
               hintText: 'Current Password.',
               prefixIcon:
                   const Icon(Icons.lock_outline, color: kPrimaryButtonColor),
-              
             ),
           ),
           const SizedBox(

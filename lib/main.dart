@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPopertiesScreen2.dart';
@@ -16,6 +17,7 @@ import './screens/addPopertiesScreen2.dart';
 import './screens/previewProperty.dart';
 import 'currentUserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import './screens/otpVerification.dart';
 
 getUserDetails userInfo = getUserDetails();
 
@@ -55,22 +57,25 @@ class _PropertyAppState extends State<PropertyApp> {
   Widget build(BuildContext context) {
     print(userAvailable);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: userAvailable ? HomeScreen.id : loginScreen.id,
-      routes: {
-        loginScreen.id: (context) => loginScreen(),
-        registerScreen.id: (context) => registerScreen(),
-        profileScreen.id: (context) => profileScreen(),
-        HomeScreen.id: (context) => HomeScreen(),
-        myPropertiesScreen.id: (context) => myPropertiesScreen(),
-        // PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
-        BookmarkedPropertiesScreen.id: (context) =>
-            BookmarkedPropertiesScreen(),
-        AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
-        searchScreen.id: (context) => searchScreen(),
-        AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
-      },
+    return FirebasePhoneAuthProvider(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: userAvailable ? HomeScreen.id : loginScreen.id,
+        routes: {
+          loginScreen.id: (context) => loginScreen(),
+          registerScreen.id: (context) => registerScreen(),
+          profileScreen.id: (context) => profileScreen(),
+          HomeScreen.id: (context) => HomeScreen(),
+          myPropertiesScreen.id: (context) => myPropertiesScreen(),
+          // PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
+          BookmarkedPropertiesScreen.id: (context) =>
+              BookmarkedPropertiesScreen(),
+          AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
+          searchScreen.id: (context) => searchScreen(),
+          AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
+          VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
+        },
+      ),
     );
   }
 }

@@ -22,8 +22,8 @@ class profileScreen extends StatefulWidget {
 
 List<String> option_titles = [
   "Personal Information",
-  // "Email",
-  "Phone",
+  "Email",
+  // "Phone",
   "Password",
   "Address",
 ];
@@ -72,6 +72,8 @@ class _profileScreenState extends State<profileScreen> {
   }
 
   Widget build(BuildContext context) {
+    physics:
+    const BouncingScrollPhysics();
     double width = MediaQuery.of(context).size.width;
 
     print(width);
@@ -92,14 +94,19 @@ class _profileScreenState extends State<profileScreen> {
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
                     ),
-                    child: Image(
-                      // width: 800,
-                      // height: 500,
-                      image: AssetImage('images/backgroundProfileImage3.png'),
+                    child: Opacity(
+                      opacity: 0.80,
+                      child: Image(
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 215,
+                        image:
+                            AssetImage('images/profileBackgroundImage11.jpg'),
+                      ),
                     ),
                   ),
                   Positioned(
-                    top: 115,
+                    top: 155,
 
                     left: (width / 2) - 53,
 
@@ -182,10 +189,15 @@ class _profileScreenState extends State<profileScreen> {
                       Title: "Personal Information",
                       SubTitle: userInfo.name,
                     ),
+                    // ProfileDetailsContainer(
+                    //   icon: Icons.call_outlined,
+                    //   Title: "Phone",
+                    //   SubTitle: userInfo.mobileNumber,
+                    // ),
                     ProfileDetailsContainer(
                       icon: Icons.call_outlined,
-                      Title: "Phone",
-                      SubTitle: userInfo.mobileNumber,
+                      Title: "Email",
+                      SubTitle: userInfo.email,
                     ),
                     ProfileDetailsContainer(
                       icon: Icons.lock_outlined,

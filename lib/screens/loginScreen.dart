@@ -22,6 +22,8 @@ class _loginScreenState extends State<loginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    physics:
+    const BouncingScrollPhysics();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -83,7 +85,7 @@ class _loginScreenState extends State<loginScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter valid Moible Number';
                             } else {
-                              userInfo.mobileNumber = value;
+                              userInfo.email = value;
                             }
                             return null;
                           },
@@ -264,35 +266,37 @@ class _loginScreenState extends State<loginScreen> {
                                 await prefs.setString(
                                     'Password', userInfo.password);
                                 Navigator.pushNamed(context, HomeScreen.id);
-                              } on FirebaseAuthException catch (error) {
-                                switch (error.message) {
-                                  case 'The email address is badly formatted.':
-                                    popUpAlertDialogBox(
-                                        context, "Invalid Email");
-                                    break;
+                              }
+                              //on FirebaseAuthException catch (error) {
+                              //   switch (error.message) {
+                              //     // case 'The email address is badly formatted.':
+                              //     //   popUpAlertDialogBox(
+                              //     //       context, "Invalid Email");
+                              //     //   break;
 
-                                  case 'There is no user record corresponding to this identifier. The user may have been deleted.':
-                                    popUpAlertDialogBox(
-                                        context, "User Not Registered");
-                                    break;
+                              //     case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+                              //       popUpAlertDialogBox(
+                              //           context, "User Not Registered");
+                              //       break;
 
-                                  case 'The password is invalid or the user does not have a password.':
-                                    popUpAlertDialogBox(
-                                        context, "Invalid Password");
-                                    break;
+                              //     case 'The password is invalid or the user does not have a password.':
+                              //       popUpAlertDialogBox(
+                              //           context, "Invalid Password");
+                              //       break;
 
-                                  case 'We have blocked all requests from this device due to unusual activity. Try again later.':
-                                    popUpAlertDialogBox(context,
-                                        "Session Time Out.\nTry again later.");
-                                    break;
+                              //     case 'We have blocked all requests from this device due to unusual activity. Try again later.':
+                              //       popUpAlertDialogBox(context,
+                              //           "Session Time Out.\nTry again later.");
+                              //       break;
 
-                                  default:
-                                    print(
-                                        'Case ${error} is not yet implemented');
+                              //     default:
+                              //       print(
+                              //           'Case ${error} is not yet implemented');
 
-                                    break;
-                                }
-                              } catch (e) {
+                              //       break;
+                              //   }
+                              // }
+                              catch (e) {
                                 print(e);
                               }
                             }

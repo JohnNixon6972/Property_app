@@ -118,8 +118,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Center(
+                    children: const [
+                      Center(
                         child: Text(
                           "Please Wait until your add gets posted",
                           style: TextStyle(
@@ -128,19 +128,19 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                               color: kSubCategoryColor),
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 30,
                       ),
-                      const Center(
+                      Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 5,
                           color: kHighlightedTextColor,
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 50,
                       ),
-                      const Center(
+                      Center(
                         child: Text(
                           "You will be redirected once the add is posted",
                           style: TextStyle(

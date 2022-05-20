@@ -8,6 +8,7 @@ import '../components/dialogBoxListWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:property_app/currentUserInformation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:property_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import '../screens/registerScreen.dart';
@@ -31,6 +32,16 @@ List<String> option_titles = [
 final _firestore = FirebaseFirestore.instance;
 
 class _profileScreenState extends State<profileScreen> {
+  _getFromGallery() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+        source: ImageSource.gallery,
+        maxWidth: 1800,
+        maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+        XFile imageFile = XFile(pickedFile.path);
+    }
+}
   final meaageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final messageTextController = TextEditingController();
@@ -116,7 +127,18 @@ class _profileScreenState extends State<profileScreen> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  Positioned(
+                      top: 190,
+                      left: (width / 2) + 30,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.edit,
+                          color: kHighlightedTextColor,
+                          size: 25,
+                        ),
+                      ))
                 ],
               ),
             ),

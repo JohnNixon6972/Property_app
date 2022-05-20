@@ -6,7 +6,6 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }
 enum propertyCategory { Penthouse, Apartment, Building }
@@ -68,6 +67,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
         child: Padding(
           padding: const EdgeInsets.all(14.0),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

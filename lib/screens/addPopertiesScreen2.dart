@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter/foundation.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/previewProperty.dart';
 import 'package:property_app/storage_service.dart';
@@ -107,56 +108,54 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   Widget build(BuildContext context) {
     final Storage storage = Storage();
     return Scaffold(
+      
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
+        
         child: isloading
-            ? Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: kPageBackgroundColor,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Center(
-                        child: Text(
-                          "Please Wait until your add gets posted",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                              color: kSubCategoryColor),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 5,
-                          color: kHighlightedTextColor,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      const Center(
-                        child: Text(
-                          "You will be redirected once the add is posted",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: kBottomNavigationBackgroundColor),
-                        ),
-                      ),
-                    ],
+            ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Center(
+                  child: Text(
+                    "Please Wait until your add gets posted",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        color: kSubCategoryColor),
                   ),
                 ),
-              )
+                const SizedBox(
+                  height: 30,
+                ),
+                const Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 5,
+                    color: kHighlightedTextColor,
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                const Center(
+                  child: Text(
+                    "You will be redirected once the add is posted",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: kBottomNavigationBackgroundColor),
+                  ),
+                ),
+              ],
+            )
             : Padding(
                 padding: const EdgeInsets.all(14.0),
-                child: Stack(children: [
-                  Column(
+                child: 
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Transform.rotate(
@@ -245,14 +244,12 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 5),
-                          child: Container(
-                            height: 100,
-                            child: buildListView(),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 5),
+                        child: Container(
+                          height: 100,
+                          child: buildListView(),
                         ),
                       ),
                       Padding(
@@ -336,7 +333,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           )
                         ],
                       ),
-                      const Spacer(),
+                      // const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 25.0),
                         child: Row(
@@ -396,7 +393,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     String bedRoom = BedRoom;
                                     String bathRoom = BathRoom;
                                     String price = Price;
-
+                            
                                     print("loading");
                                     _storage.uploadPropertyDetails(
                                         context,
@@ -443,23 +440,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                       )
                     ],
                   ),
-                  isloading
-                      ? Container(
-                          color: Colors.black.withOpacity(0.5),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                const Center(
-                                  child: Text(
-                                      "Please Wait until your add gets posted"),
-                                ),
-                                const CircularProgressIndicator(),
-                              ],
-                            ),
-                          ),
-                        )
-                      : Container()
-                ]),
+                ),
               ),
       ),
     );

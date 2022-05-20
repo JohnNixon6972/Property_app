@@ -100,6 +100,7 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
         child: Padding(
           padding: const EdgeInsets.all(14.0),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

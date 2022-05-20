@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/main.dart';
@@ -19,30 +20,35 @@ class BookmarkedPropertiesScreen extends StatefulWidget {
 }
 
 List<BookmarkedProperties> bookMarkedProperties = [];
-void getBookMarkedPropertiesCards() {
+List<String> availableBookmarkedProperties = [];
+void getBookMarkedPropertiesCards() async{
   bookMarkedProperties = [];
+  availableBookmarkedProperties = [];
   // print(bookmarkedPropertyNames);
   // print(PropertiesOnRentAll);
   // print(PropertiesOnSaleAll);
   for (PropertyCard property in PropertiesOnRentAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
-      bookMarkedProperties.add(BookmarkedProperties(
-        ownerMail: property.ownerMail,
-        ownerPhNo: property.ownerPhoneNo,
-        imageloc: property.imageloc,
-        price: property.price,
-        propertyAddress: property.propertyAddress,
-        propertyName: property.propertyName,
-        propertyImages: property.propertyImages,
-        propertyCategory: property.propertyCategory,
-        propertyDescription: property.propertyDescription,
-        propertyType: property.propertyType,
-        bedRoom: property.bedRoom,
-        bathRoom: property.bathRoom,
-        ownerName: property.ownerName,
-        to: property.to,
-        area: property.area,
-      ));
+      bookMarkedProperties.add(
+        BookmarkedProperties(
+          ownerMail: property.ownerMail,
+          ownerPhNo: property.ownerPhoneNo,
+          imageloc: property.imageloc,
+          price: property.price,
+          propertyAddress: property.propertyAddress,
+          propertyName: property.propertyName,
+          propertyImages: property.propertyImages,
+          propertyCategory: property.propertyCategory,
+          propertyDescription: property.propertyDescription,
+          propertyType: property.propertyType,
+          bedRoom: property.bedRoom,
+          bathRoom: property.bathRoom,
+          ownerName: property.ownerName,
+          to: property.to,
+          area: property.area,
+        ),
+      );
+      availableBookmarkedProperties.add(property.propertyName);
     }
   }
   for (PropertyCard property in PropertiesOnSaleAll) {
@@ -64,9 +70,23 @@ void getBookMarkedPropertiesCards() {
         to: property.to,
         area: property.area,
       ));
+      availableBookmarkedProperties.add(property.propertyName);
     }
   }
   print(bookMarkedProperties);
+  if (availableBookmarkedProperties.length != bookmarkedPropertyNames.length) {
+    final firestore = FirebaseFirestore.instance;
+    for (String propertyName in bookmarkedPropertyNames) {
+      if (!availableBookmarkedProperties.contains(propertyName)) {
+        await firestore
+            .collection("Users")
+            .doc(userInfo.email)
+            .collection("BookMarkedProperties")
+            .doc(propertyName)
+            .delete();
+      }
+    }
+  }
 }
 
 class _BookmarkedPropertiesScreenState

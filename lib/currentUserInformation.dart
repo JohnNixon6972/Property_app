@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+
 class getUserDetails {
   late String name = "not saved ";
   late String email = "not saved ";
@@ -9,4 +11,5 @@ class getUserDetails {
   late String state = "not saved";
   late String country = "not saved";
   late String postalCode = "not saved";
+  late String profileImgUrl = "";
 }

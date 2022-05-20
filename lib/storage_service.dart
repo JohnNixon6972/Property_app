@@ -131,6 +131,7 @@ class Storage {
             "isSetImages": "False",
             "Price": price,
             "PhNo":userInfo.mobileNumber,
+            "profileImgUrl":"",
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",

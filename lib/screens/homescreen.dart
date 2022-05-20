@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -408,6 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           userInfo.name = await data?['name'];
           userInfo.mobileNumber = await data?['number'];
+          userInfo.profileImgUrl = await data?['profileImgUrl'];
           // print(userInfo.name);
           // print(userInfo.mobileNumber);
 
@@ -458,11 +461,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(25),
-                    child: const Image(
-                      image: AssetImage('images/profile_img1.jpg'),
-                      height: 70,
-                      width: 70,
-                    ),
+                    child: userInfo.profileImgUrl == ""
+                        ? const Image(
+                            height: 70,
+                            width: 70,
+                            image: const AssetImage('images/profile_img1.jpg'))
+                        : CachedNetworkImage(
+                            cacheManager: customCacheManager,
+                            key: UniqueKey(),
+                            imageUrl: userInfo.profileImgUrl,
+                            height: 70,
+                            width: 70,
+                            // maxHeightDiskCache: 230,
+                            // maxWidthDiskCache: 190,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(
+                                color: kHighlightedTextColor,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.black12,
+                              child: const Icon(
+                                Icons.error,
+                                color: kHighlightedTextColor,
+                              ),
+                            ),
+                          ),
                   )
                 ],
               ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/addPopertiesScreen2.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'editPropertyScreen2.dart';
 import 'myPropertiesScreen.dart';
 import '../constants.dart';

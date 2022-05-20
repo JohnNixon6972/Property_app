@@ -221,7 +221,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 children: [
                   Container(
                     width: 110,
-                    height: 130,
+                    height: 140,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -255,7 +255,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                   Container(
                     width: 110,
-                    height: 130,
+                    height: 140,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -289,7 +289,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                   Container(
                     width: 110,
-                    height: 130,
+                    height: 140,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -332,7 +332,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 children: [
                   Container(
                     width: 110,
-                    height: 130,
+                    height: 140,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -366,7 +366,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                   Container(
                     width: 110,
-                    height: 130,
+                    height: 140,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -400,7 +400,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                   Container(
                     width: 110,
-                    height: 130,
+                    height: 140,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -504,7 +504,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          var url = 'tel:'+ownerPhoneNo.toString();
+                          var url = 'tel:' + ownerPhoneNo.toString();
                           if (await canLaunchUrl(Uri.parse(url))) {
                             await launchUrl(Uri.parse(url));
                           } else {

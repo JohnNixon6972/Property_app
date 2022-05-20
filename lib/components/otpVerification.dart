@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/pinInputField.dart';
-import '../components/customLoader.dart';
+import 'customLoader.dart';
 
 import '../main.dart';
-import 'homescreen.dart';
+import '../screens/homescreen.dart';
 
 class VerifyPhoneNumberScreen extends StatefulWidget {
   static const String id = 'otpVerification';

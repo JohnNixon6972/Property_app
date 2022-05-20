@@ -93,7 +93,7 @@ class _BookmarkedPropertiesScreenState
                   Radius.circular(20),
                 ),
               ),
-              height: 352,
+              // height: 352,
               // width: 300,
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -359,13 +359,15 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
             Radius.circular(20),
           ),
         ),
-        height: 352,
+        height: 1800,
         // width: 300,
+
         child: Padding(
           padding: const EdgeInsets.only(
               left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -464,7 +466,7 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                       style: TextStyle(color: kPrimaryButtonColor),
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   IconButton(
                     onPressed: () {
                       setState(() {

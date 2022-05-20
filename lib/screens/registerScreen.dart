@@ -11,13 +11,13 @@ import 'package:property_app/main.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/currentUserInformation.dart';
-import 'alertPopUp.dart';
+import '../components/alertPopUp.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
-import './otpVerification.dart';
+import '../components/otpVerification.dart';
 
 // final TextEditingController _otpController = TextEditingController();
 

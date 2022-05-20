@@ -421,6 +421,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Color SelectedToggleBottonColor = Color.fromARGB(255, 7, 91, 10);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -580,7 +582,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             Spacer(),
                             ToggleButtons(
                               constraints: BoxConstraints(minHeight: 8),
-                              fillColor: kHighlightedTextColor,
+                              fillColor: SelectedToggleBottonColor,
+                              // disabledColor: Colors.green,
+                              // focusColor: Colors.green,
+
                               borderWidth: 2,
                               selectedColor: Colors.white,
                               borderRadius: BorderRadius.circular(35),
@@ -602,6 +607,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                               onPressed: (int index) {
                                 setState(() {
+                                  if (index == 0) {
+                                    SelectedToggleBottonColor =
+                                        Color.fromARGB(255, 7, 91, 10);
+                                  } else if (index == 1) {
+                                    SelectedToggleBottonColor =
+                                        Color.fromARGB(255, 147, 20, 11);
+                                  }
+
                                   displayAdminProperties =
                                       index == 0 ? true : false;
                                   print(displayAdminProperties);

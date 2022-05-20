@@ -6,7 +6,7 @@ import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
 import 'package:property_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'alertPopUp.dart';
+import '../components/alertPopUp.dart';
 
 class loginScreen extends StatefulWidget {
   static const String id = 'login';

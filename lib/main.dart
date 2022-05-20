@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
-import 'package:property_app/screens/addPopertiesScreen2.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/editPropertyScreen1.dart';
 import 'package:property_app/screens/loginScreen.dart';
@@ -13,11 +13,11 @@ import 'screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/homescreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
-import './screens/addPopertiesScreen2.dart';
+import 'screens/addPropertiesScreen2.dart';
 import './screens/previewProperty.dart';
 import 'currentUserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './screens/otpVerification.dart';
+import 'components/otpVerification.dart';
 
 getUserDetails userInfo = getUserDetails();
 

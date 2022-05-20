@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:property_app/screens/searchScreen.dart';
 import '../screens/loginScreen.dart';
 import '../components/scaffoldBottomAppBar.dart';
+
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';
 
@@ -84,6 +85,7 @@ class _profileScreenState extends State<profileScreen> {
     double width = MediaQuery.of(context).size.width;
 
     print(width);
+    double backgroundImageHeight = 215;
 
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
@@ -92,7 +94,7 @@ class _profileScreenState extends State<profileScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: 6,
+              flex: 11,
               child: Stack(
                 overflow: Overflow.visible,
                 children: [
@@ -106,17 +108,15 @@ class _profileScreenState extends State<profileScreen> {
                       child: Image(
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        height: 215,
+                        height: backgroundImageHeight,
                         image:
                             AssetImage('images/profileBackgroundImage11.jpg'),
                       ),
                     ),
                   ),
                   Positioned(
-                    top: 155,
-
+                    top: backgroundImageHeight - 53,
                     left: (width / 2) - 53,
-
                     // ignore: prefer_const_constructors
                     child: CircleAvatar(
                       backgroundColor: kPageBackgroundColor,
@@ -130,56 +130,56 @@ class _profileScreenState extends State<profileScreen> {
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 30),
-              child: Center(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Text(
-                        userInfo.name,
-                        style: TextStyle(
-                            color: kHighlightedTextColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            wordSpacing: -1),
-                      ),
-                      Text(
-                        userInfo.email,
-                        style: TextStyle(
-                            color: kSubCategoryColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          await FirebaseAuth.instance.signOut();
-                          await prefs.clear();
-                          Navigator.pushNamed(context, loginScreen.id);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 10,
-                          primary: kPrimaryButtonColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          'Log Out',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
                   ),
-                ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: backgroundImageHeight + 53 + 5, bottom: 1),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            userInfo.name,
+                            style: TextStyle(
+                                color: kHighlightedTextColor,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                wordSpacing: -1),
+                          ),
+                          Text(
+                            userInfo.mobileNumber,
+                            style: TextStyle(
+                                color: kSubCategoryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              await FirebaseAuth.instance.signOut();
+                              await prefs.clear();
+                              Navigator.pushNamed(context, loginScreen.id);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              primary: kPrimaryButtonColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                            child: const Text(
+                              'Log Out',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -188,9 +188,6 @@ class _profileScreenState extends State<profileScreen> {
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 10,
-                    ),
                     ProfileDetailsContainer(
                       icon: Icons.account_circle_outlined,
                       Title: "Personal Information",
@@ -246,8 +243,6 @@ class _profileScreenState extends State<profileScreen> {
     );
   }
 }
-
-
 
 class ProfileDetailsContainer extends StatefulWidget {
   final IconData icon;

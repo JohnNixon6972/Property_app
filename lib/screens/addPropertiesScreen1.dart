@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/addPopertiesScreen2.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/homescreen.dart';
 import '../constants.dart';
 import 'dart:math';
@@ -121,14 +121,18 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              child: Padding(
+                        child: Container(
+                          height: 75,
+                          child: ListView(
+                            physics: BouncingScrollPhysics(),
+                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Container(
+                                  width: 160,
                                   decoration: BoxDecoration(
                                     border: _to == propertyTo.Sell
                                         ? Border.all(
@@ -165,14 +169,12 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                   ),
                                 ),
                               ),
-                            ),
-                            // Spacer(),
-                            Expanded(
-                              child: Padding(
+                              // Spacer(),
+                              Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Container(
-                                  width: 100,
+                                  width: 160,
                                   decoration: BoxDecoration(
                                     border: _to == propertyTo.Rent
                                         ? Border.all(
@@ -208,9 +210,9 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -231,14 +233,18 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              child: Padding(
+                        child: Container(
+                          height: 75,
+                          child: ListView(
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Container(
+                                  width: 165,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     border: _type == propertyType.Residental
@@ -275,14 +281,13 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                   ),
                                 ),
                               ),
-                            ),
-                            // Spacer(),
-                            Expanded(
-                              child: Padding(
+                              // Spacer(),
+
+                              Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Container(
-                                  width: 100,
+                                  width: 165,
                                   decoration: BoxDecoration(
                                     border: _type == propertyType.Commercial
                                         ? Border.all(
@@ -319,9 +324,9 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ],

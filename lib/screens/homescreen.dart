@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
+import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
 import '../constants.dart';
@@ -420,6 +421,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Color SelectedToggleBottonColor = Color.fromARGB(255, 7, 91, 10);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -579,7 +582,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             Spacer(),
                             ToggleButtons(
                               constraints: BoxConstraints(minHeight: 8),
-                              fillColor: kHighlightedTextColor,
+                              fillColor: SelectedToggleBottonColor,
+                              // disabledColor: Colors.green,
+                              // focusColor: Colors.green,
+
                               borderWidth: 2,
                               selectedColor: Colors.white,
                               borderRadius: BorderRadius.circular(35),
@@ -601,6 +607,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                               onPressed: (int index) {
                                 setState(() {
+                                  if (index == 0) {
+                                    SelectedToggleBottonColor =
+                                        Color.fromARGB(255, 7, 91, 10);
+                                  } else if (index == 1) {
+                                    SelectedToggleBottonColor =
+                                        Color.fromARGB(255, 147, 20, 11);
+                                  }
+
                                   displayAdminProperties =
                                       index == 0 ? true : false;
                                   print(displayAdminProperties);
@@ -651,12 +665,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            BottomPageNavigationBar(
-              flex_by: 4,
-              page: HomeScreen.id,
-            ),
+            // BottomPageNavigationBar(
+            //   flex_by: 4,
+            //   page: HomeScreen.id,
+            // ),
           ],
         ),
+      ),
+      bottomNavigationBar: scaffoldBottomAppBar(
+        flex_by: 2,
+        page: HomeScreen.id,
       ),
     );
   }

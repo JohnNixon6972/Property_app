@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/addPopertiesScreen2.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'editPropertyScreen2.dart';
 import 'myPropertiesScreen.dart';
 import '../constants.dart';
@@ -100,6 +100,7 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
         child: Padding(
           padding: const EdgeInsets.all(14.0),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

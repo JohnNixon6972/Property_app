@@ -100,7 +100,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                   const Radius.circular(20),
                 ),
               ),
-              height: 352,
+              // height: 352,
               // width: 300,
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -111,7 +111,8 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: ClipRRect(
-                        borderRadius: const BorderRadius.all(const Radius.circular(20)),
+                        borderRadius:
+                            const BorderRadius.all(const Radius.circular(20)),
                         child: CachedNetworkImage(
                           cacheManager: customCacheManager,
                           key: UniqueKey(),
@@ -176,26 +177,31 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                             Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PropertyDetailsScreen(
-                            ownerMail: myProperties[index].ownerMail,
-                            ownerPhoneNo: myProperties[index].ownerPhno,
-                            type: myProperties[index].propertyType,
-                            category: myProperties[index].propertyCategory,
-                              propertyAddress: myProperties[index].propertyAddress,
-                              propertyTitle: myProperties[index].propertyName,
-                              to: myProperties[index].to,
-                              ownerName: myProperties[index].ownerName,
-                              propertyDescription: myProperties[index].propertyDescription,
-                              noBathroom: myProperties[index].bathRoom,
-                              noBedroom: myProperties[index].bedRoom,
-                              area:myProperties[index].area,
-                              propertyImages: myProperties[index].propertyImages,
-                              price:myProperties[index].price),
-                        ),
-                      );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PropertyDetailsScreen(
+                                    ownerMail: myProperties[index].ownerMail,
+                                    ownerPhoneNo: myProperties[index].ownerPhno,
+                                    type: myProperties[index].propertyType,
+                                    category:
+                                        myProperties[index].propertyCategory,
+                                    propertyAddress:
+                                        myProperties[index].propertyAddress,
+                                    propertyTitle:
+                                        myProperties[index].propertyName,
+                                    to: myProperties[index].to,
+                                    ownerName: myProperties[index].ownerName,
+                                    propertyDescription:
+                                        myProperties[index].propertyDescription,
+                                    noBathroom: myProperties[index].bathRoom,
+                                    noBedroom: myProperties[index].bedRoom,
+                                    area: myProperties[index].area,
+                                    propertyImages:
+                                        myProperties[index].propertyImages,
+                                    price: myProperties[index].price),
+                              ),
+                            );
                           },
                           child: const Text(
                             'View Details',
@@ -293,7 +299,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                                     index]
                                                                 .propertyName);
                                                       }
-                                                      
+
                                                       print(
                                                           "asset/propertyImages/${userInfo.email}/${myProperties[index].propertyName}");
                                                       FirebaseStorage.instance
@@ -499,7 +505,8 @@ class _myPropertyState extends State<myProperty> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.all(const Radius.circular(20)),
+                  borderRadius:
+                      const BorderRadius.all(const Radius.circular(20)),
                   child: CachedNetworkImage(
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
@@ -529,7 +536,8 @@ class _myPropertyState extends State<myProperty> {
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Text(
                   widget.propertyName,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/homescreen.dart';
 // import 'package:sticky_headers/sticky_headers.dart';
@@ -178,8 +179,10 @@ class _BookmarkedPropertiesScreenState
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
-                                  ownerMail: bookMarkedProperties[index].ownerMail,
-                                  ownerPhoneNo: bookMarkedProperties[index].ownerPhNo,
+                                    ownerMail:
+                                        bookMarkedProperties[index].ownerMail,
+                                    ownerPhoneNo:
+                                        bookMarkedProperties[index].ownerPhNo,
                                     type: bookMarkedProperties[index]
                                         .propertyType,
                                     category: bookMarkedProperties[index]
@@ -289,12 +292,16 @@ class _BookmarkedPropertiesScreenState
               color: kHighlightedTextColor,
             ),
             Expanded(flex: 10, child: buildBookMarks()),
-            const BottomPageNavigationBar(
-              flex_by: 1,
-              page: BookmarkedPropertiesScreen.id,
-            ),
+            // const BottomPageNavigationBar(
+            //   flex_by: 1,
+            //   page: BookmarkedPropertiesScreen.id,
+            // ),
           ],
         ),
+      ),
+      bottomNavigationBar: scaffoldBottomAppBar(
+        flex_by: 2,
+        page: BookmarkedPropertiesScreen.id,
       ),
     );
   }
@@ -435,8 +442,8 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
-                            ownerMail: widget.ownerMail,
-                            ownerPhoneNo: widget.ownerPhNo,
+                              ownerMail: widget.ownerMail,
+                              ownerPhoneNo: widget.ownerPhNo,
                               type: widget.propertyType,
                               category: widget.propertyCategory,
                               propertyAddress: widget.propertyAddress,

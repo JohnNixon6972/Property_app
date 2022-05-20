@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
+import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
 import '../constants.dart';
@@ -651,12 +652,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            BottomPageNavigationBar(
-              flex_by: 4,
-              page: HomeScreen.id,
-            ),
+            // BottomPageNavigationBar(
+            //   flex_by: 4,
+            //   page: HomeScreen.id,
+            // ),
           ],
         ),
+      ),
+      bottomNavigationBar: scaffoldBottomAppBar(
+        flex_by: 2,
+        page: HomeScreen.id,
       ),
     );
   }

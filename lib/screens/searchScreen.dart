@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import '../components/bottomNavigationBar.dart';
@@ -254,12 +255,16 @@ class _searchScreenState extends State<searchScreen> {
                 buildResults(context)
               ]),
             ),
-            BottomPageNavigationBar(
-              flex_by: 2,
-              page: searchScreen.id,
-            ),
+            // BottomPageNavigationBar(
+            //   flex_by: 2,
+            //   page: searchScreen.id,
+            // ),
           ],
         ),
+      ),
+      bottomNavigationBar: scaffoldBottomAppBar(
+        flex_by: 2,
+        page: searchScreen.id,
       ),
     );
   }

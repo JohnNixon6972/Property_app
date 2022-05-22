@@ -80,7 +80,7 @@ class _profileScreenState extends State<profileScreen> {
         Map<String, dynamic>? data = docSanpshot.data();
         setState(
           () {
-            userInfo.name =data?['name'];
+            userInfo.name = data?['name'];
             userInfo.mobileNumber = data?['number'];
             userInfo.profileImgUrl = data?['profileImgUrl'];
             print(userInfo.name);
@@ -161,8 +161,8 @@ class _profileScreenState extends State<profileScreen> {
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: backgroundImageHeight,
-                        image:
-                            const AssetImage('images/profileBackgroundImage11.jpg'),
+                        image: const AssetImage(
+                            'images/profileBackgroundImage11.jpg'),
                       ),
                     ),
                   ),
@@ -179,7 +179,8 @@ class _profileScreenState extends State<profileScreen> {
                             ? const Image(
                                 height: 100,
                                 width: 100,
-                                image: const AssetImage('images/profile_img1.jpg'))
+                                image:
+                                    const AssetImage('images/profile_img1.jpg'))
                             : CachedNetworkImage(
                                 cacheManager: customCacheManager,
                                 key: UniqueKey(),
@@ -263,58 +264,58 @@ class _profileScreenState extends State<profileScreen> {
                           const SizedBox(
                             height: 10,
                           ),
+                          Expanded(
+                            flex: 10,
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  ProfileDetailsContainer(
+                                    icon: Icons.account_circle_outlined,
+                                    Title: "Personal Information",
+                                    SubTitle: userInfo.name,
+                                  ),
+                                  // ProfileDetailsContainer(
+                                  //   icon: Icons.call_outlined,
+                                  //   Title: "Phone",
+                                  //   SubTitle: userInfo.mobileNumber,
+                                  // ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.call_outlined,
+                                    Title: "Email",
+                                    SubTitle: userInfo.email,
+                                  ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.lock_outlined,
+                                    Title: "Password",
+                                    SubTitle: "",
+                                    // SubTitle: userInfo.password,
+                                  ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.add_location_outlined,
+                                    Title: "Address",
+                                    SubTitle: "Residential Address",
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.house,
+                                    Title: "My Properties",
+                                    SubTitle: "",
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ],
-              ),
-            ),
-            Expanded(
-              flex: 10,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    ProfileDetailsContainer(
-                      icon: Icons.account_circle_outlined,
-                      Title: "Personal Information",
-                      SubTitle: userInfo.name,
-                    ),
-                    // ProfileDetailsContainer(
-                    //   icon: Icons.call_outlined,
-                    //   Title: "Phone",
-                    //   SubTitle: userInfo.mobileNumber,
-                    // ),
-                    ProfileDetailsContainer(
-                      icon: Icons.call_outlined,
-                      Title: "Email",
-                      SubTitle: userInfo.email,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.lock_outlined,
-                      Title: "Password",
-                      SubTitle: "",
-                      // SubTitle: userInfo.password,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.add_location_outlined,
-                      Title: "Address",
-                      SubTitle: "Residential Address",
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.house,
-                      Title: "My Properties",
-                      SubTitle: "",
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                  ],
-                ),
               ),
             ),
             // BottomPageNavigationBar(

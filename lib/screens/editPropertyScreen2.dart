@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'dart:io';
 import 'myPropertiesScreen.dart';
 import 'editPropertyScreen1.dart';
@@ -18,21 +19,30 @@ class editPropertyScreen2 extends StatefulWidget {
 }
 
 late String PropertyDescription = "";
-late String SquareFit = "";
+late String plotArea = "";
+late String constructionArea = "";
+late String lenght = "";
+late String width = "";
+late String cent = "";
 late String BedRoom = "";
 late String BathRoom = "";
 late String Price = "";
+late String face = "";
 var _controller = TextEditingController();
 TextEditingController _areaController = TextEditingController();
 TextEditingController _priceController = TextEditingController();
 TextEditingController _bedRoomController = TextEditingController();
 TextEditingController _bathRoomController = TextEditingController();
+TextEditingController _constructionAreaController = TextEditingController();
+TextEditingController _lenghtController = TextEditingController();
+TextEditingController _widthController = TextEditingController();
+
 
 List<XFile>? imageFileList = [];
 
 void readDetails(myProperty propertyToEdit) {
   PropertyDescription = propertyToEdit.propertyDescription;
-  SquareFit = propertyToEdit.area;
+  plotArea = propertyToEdit.area;
   BedRoom = propertyToEdit.bedRoom;
   Price = propertyToEdit.price;
   BathRoom = propertyToEdit.bathRoom;
@@ -306,11 +316,11 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 HintText: "Square Fit",
                                 onChange: (newValue) {
                                   setState(() {
-                                    SquareFit = newValue;
+                                    plotArea = newValue;
                                     // _areaController.text = newValue;
                                   });
                                 },
-                                currValue: SquareFit,
+                                currValue: plotArea,
                                 textcontroller: _areaController,
                               ),
                               Spacer(),
@@ -365,38 +375,46 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                             child: GestureDetector(
                               onTap: () {
                                 Storage _storage = Storage();
-                                setState(() {
-                                  isloading = true;
-                                  print("loading");
-                                  String propertyAddress = PropertyAddress;
-                                  String propertyTitle = PropertyTitle;
-                                  String category = getCategory();
-                                  String to = getTo();
-                                  String type = getType();
-                                  String propertyDescription =
-                                      PropertyDescription;
-                                  String squareFit = SquareFit;
-                                  String bedRoom = BedRoom;
-                                  String bathRoom = BathRoom;
-                                  String price = Price;
-                                  isloading = true;
-                                  print("loading");
-                                  _storage.uploadPropertyDetails(
-                                      context,
-                                      propertyAddress,
-                                      propertyTitle,
-                                      category,
-                                      to,
-                                      type,
-                                      propertyDescription,
-                                      squareFit,
-                                      bedRoom,
-                                      bathRoom,
-                                      price,
-                                      to == widget.propertyToEdit.to && true);
-                                  _storage.uploadPropertyImages(context,
-                                      imageFileList, propertyTitle, to, true);
-                                });
+                                setState(
+                                  () {
+                                    isloading = true;
+                                    print("loading");
+                                    String propertyAddress = PropertyAddress;
+                                    String propertyTitle = PropertyTitle;
+                                    String category = getCategory();
+                                    String to = getTo();
+                                    String type = getType();
+                                    String propertyDescription =
+                                        PropertyDescription;
+                                    String PlotArea = plotArea;
+                                    String bedRoom = BedRoom;
+                                    String bathRoom = BathRoom;
+                                    String price = Price;
+                                    String Face = face;
+                                    isloading = true;
+                                    print("loading");
+                                    _storage.uploadPropertyDetails(
+                                        context,
+                                        propertyAddress,
+                                        propertyTitle,
+                                        category,
+                                        to,
+                                        Face,
+                                        type,
+                                        propertyDescription,
+                                        PlotArea,
+                                        cent,
+                                        lenght,
+                                        width,
+                                        constructionArea,
+                                        bedRoom,
+                                        bathRoom,
+                                        price,
+                                        to == widget.propertyToEdit.to && true);
+                                    _storage.uploadPropertyImages(context,
+                                        imageFileList, propertyTitle, to, true);
+                                  },
+                                );
                               },
                               child: Container(
                                 height: 70,

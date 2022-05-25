@@ -141,8 +141,7 @@ class Storage {
             "isSetImages": "False",
             "Price": price,
             "PhNo":userInfo.mobileNumber,
-            "PlotFace"
-            "profileImgUrl":"",
+            "profileImgUrl":userInfo.profileImgUrl,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -153,7 +152,7 @@ class Storage {
             "imgUrl8": "",
             "imgUrl9": "",
             "imgUrl10": "",
-            "isApproved":"False"
+            "isApproved":userInfo.name != "john"?"False":"True"
           }).then((_) {
             print("Data Added Sucessfully");
           }).catchError((_) {
@@ -178,8 +177,7 @@ class Storage {
             "isSetImages": "False",
             "Price": price,
             "PhNo":userInfo.mobileNumber,
-            "PlotFace"
-            "profileImgUrl":"",
+            "profileImgUrl":userInfo.profileImgUrl,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",

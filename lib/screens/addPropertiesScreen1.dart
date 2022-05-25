@@ -8,11 +8,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }
-enum propertyCategory { Penthouse, Apartment, Building }
+enum propertyCategory { Plot, Land, House, Apartment, Building }
 
 propertyTo? _to = propertyTo.Sell;
 
-propertyCategory? _category = propertyCategory.Penthouse;
+propertyCategory? _category = propertyCategory.Plot;
 
 propertyType? _type = propertyType.Residental;
 
@@ -28,8 +28,12 @@ String getCategory() {
     return "Apartment";
   } else if (_category == propertyCategory.Building) {
     return "Building";
+  } else if (_category == propertyCategory.Plot) {
+    return "Plot";
+  } else if (_category == propertyCategory.Land) {
+    return "Land";
   } else {
-    return "PentHouse";
+    return "House";
   }
 }
 
@@ -360,15 +364,99 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
-                                    border:
-                                        _category == propertyCategory.Penthouse
-                                            ? Border.all(
-                                                color: kHighlightedTextColor)
-                                            : null,
-                                    color:
-                                        _category == propertyCategory.Penthouse
-                                            ? kPropertyCardColor
-                                            : kTextFieldFillColor,
+                                    border: _category == propertyCategory.Plot
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
+                                    color: _category == propertyCategory.Plot
+                                        ? kPropertyCardColor
+                                        : kTextFieldFillColor,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Icon(
+                                              Icons.crop_square,
+                                              size: 50,
+                                              color: kHighlightedTextColor,
+                                            ),
+                                            Text('Plot')
+                                          ],
+                                        ),
+                                        Radio(
+                                          value: propertyCategory.Plot,
+                                          activeColor: kHighlightedTextColor,
+                                          groupValue: _category,
+                                          onChanged: (propertyCategory? value) {
+                                            setState(() {
+                                              _category = value;
+                                            });
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: _category == propertyCategory.Land
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
+                                    color: _category == propertyCategory.Land
+                                        ? kPropertyCardColor
+                                        : kTextFieldFillColor,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Icon(
+                                              Icons.landscape_outlined,
+                                              size: 50,
+                                              color: kHighlightedTextColor,
+                                            ),
+                                            Text('Land')
+                                          ],
+                                        ),
+                                        Radio(
+                                          value: propertyCategory.Land,
+                                          activeColor: kHighlightedTextColor,
+                                          groupValue: _category,
+                                          onChanged: (propertyCategory? value) {
+                                            setState(() {
+                                              _category = value;
+                                            });
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: _category == propertyCategory.House
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
+                                    color: _category == propertyCategory.House
+                                        ? kPropertyCardColor
+                                        : kTextFieldFillColor,
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
@@ -381,11 +469,11 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                               size: 50,
                                               color: kHighlightedTextColor,
                                             ),
-                                            Text('PentHouses')
+                                            Text('House')
                                           ],
                                         ),
                                         Radio(
-                                          value: propertyCategory.Penthouse,
+                                          value: propertyCategory.House,
                                           activeColor: kHighlightedTextColor,
                                           groupValue: _category,
                                           onChanged: (propertyCategory? value) {
@@ -565,25 +653,8 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      activeColor: kHighlightedTextColor,
-                      //  fillColor: ,
-                      value: uselastusedaddress,
-                      onChanged: (bool? value) {
-                        setState(
-                          () {
-                            uselastusedaddress = value!;
-                          },
-                        );
-                      },
-                    ),
-                    Text(
-                      'Use last used address',
-                      style: TextStyle(fontSize: 15),
-                    )
-                  ],
+                SizedBox(
+                  height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

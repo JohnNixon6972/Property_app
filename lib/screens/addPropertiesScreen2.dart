@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/previewProperty.dart';
@@ -20,10 +21,15 @@ class AddPropertiesScreen2 extends StatefulWidget {
 }
 
 late String PropertyDescription = "";
-late String SquareFit = "";
+late String PlotArea = "";
+late String ConstructionArea = "";
+late String Facing = "";
 late String BedRoom = "";
 late String BathRoom = "";
 late String Price = "";
+late String lenght = "";
+late String width = "";
+late String cent = "";
 
 List<XFile>? imageFileList = [];
 
@@ -33,6 +39,26 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   void initState() {
     imageFileList = [];
     super.initState();
+  }
+
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => Container(
+              height: 216,
+              padding: const EdgeInsets.only(top: 6.0),
+              // The Bottom margin is provided to align the popup above the system navigation bar.
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              // Provide a background color for the popup.
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              // Use a SafeArea widget to avoid system overlaps.
+              child: SafeArea(
+                top: false,
+                child: child,
+              ),
+            ));
   }
 
   Future<void> selectImages() async {
@@ -100,57 +126,56 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   List<ImagesFromGallery> PickedImages = [];
 
   var _controller = TextEditingController();
-
+  double _kItemExtent = 32.0;
   bool isloading = false;
+  int selectedFace = 0;
   @override
   Widget build(BuildContext context) {
+    const List<String> directions = ["North", "South", "East", "West"];
     final Storage storage = Storage();
     return Scaffold(
-      
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
-        
         child: isloading
             ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Center(
-                  child: Text(
-                    "Please Wait until your add gets posted",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                        color: kSubCategoryColor),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Center(
+                    child: Text(
+                      "Please Wait until your add gets posted",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          color: kSubCategoryColor),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 5,
-                    color: kHighlightedTextColor,
+                  const SizedBox(
+                    height: 30,
                   ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                const Center(
-                  child: Text(
-                    "You will be redirected once the add is posted",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: kBottomNavigationBackgroundColor),
+                  const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 5,
+                      color: kHighlightedTextColor,
+                    ),
                   ),
-                ),
-              ],
-            )
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  const Center(
+                    child: Text(
+                      "You will be redirected once the add is posted",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: kBottomNavigationBackgroundColor),
+                    ),
+                  ),
+                ],
+              )
             : Padding(
                 padding: const EdgeInsets.all(14.0),
-                child: 
-                SingleChildScrollView(
+                child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   child: Column(
@@ -290,12 +315,76 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           Row(
                             children: [
                               PropertyDetailTile(
-                                HintText: "Square Fit",
+                                HintText: "Plot Area(Sqft)",
                                 onChange: (newValue) {
                                   setState(() {
-                                    SquareFit = newValue;
+                                    PlotArea = newValue;
                                   });
                                 },
+                              ),
+                              const Spacer(),
+                              PropertyDetailTile(
+                                HintText: "Building Area(Sqft)",
+                                onChange: (newValue) {
+                                  setState(() {
+                                    ConstructionArea = newValue;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 6),
+                                child: GestureDetector(
+                                  onTap: () => _showDialog(
+                                    CupertinoPicker(
+                                      magnification: 1.22,
+                                      squeeze: 1.2,
+                                      useMagnifier: true,
+                                      itemExtent: _kItemExtent,
+                                      // This is called when selected item is changed.
+                                      onSelectedItemChanged:
+                                          (int selectedItem) {
+                                        setState(() {
+                                          selectedFace = selectedItem;
+                                          Facing = directions[selectedFace];
+                                        });
+                                      },
+                                      children: List<Widget>.generate(
+                                          directions.length, (int index) {
+                                        return Center(
+                                          child: Text(
+                                            directions[index],
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                                  child: Container(
+                                    height: 70,
+                                    width: 165,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: kHighlightedTextColor),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 20),
+                                      child: Text(
+                                        "Facing : " + Facing,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            color: Colors.grey[700],
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                               const Spacer(),
                               PropertyDetailTile(
@@ -349,7 +438,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                               PropertyAddress: PropertyAddress,
                                               PropertyDescription:
                                                   PropertyDescription,
-                                              Area: SquareFit,
+                                              Area: PlotArea,
                                               BathRoom: BathRoom,
                                               BedRoom: BedRoom,
                                               Price: Price,
@@ -387,11 +476,11 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     String type = getType();
                                     String propertyDescription =
                                         PropertyDescription;
-                                    String squareFit = SquareFit;
+                                    String squareFit = PlotArea;
                                     String bedRoom = BedRoom;
                                     String bathRoom = BathRoom;
                                     String price = Price;
-                            
+
                                     print("loading");
                                     _storage.uploadPropertyDetails(
                                         context,
@@ -399,8 +488,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         propertyTitle,
                                         category,
                                         to,
+                                        Facing,
                                         type,
                                         propertyDescription,
+                                        PlotArea,
+                                        cent,
+                                        lenght,
+                                        width,
                                         squareFit,
                                         bedRoom,
                                         bathRoom,
@@ -453,10 +547,10 @@ class PropertyDetailTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 6),
       child: Container(
         height: 70,
-        width: 160,
+        width: 165,
         decoration: BoxDecoration(
           border: Border.all(color: kHighlightedTextColor),
           borderRadius: BorderRadius.circular(15),

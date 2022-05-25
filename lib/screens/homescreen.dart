@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
+import 'package:property_app/screens/aboutUs.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
 import '../constants.dart';
@@ -10,6 +11,7 @@ import '../constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'aboutUs.dart';
 
 late User loggedInUser;
 bool displayAdminProperties = true;
@@ -594,11 +596,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 20, left: 15, right: 15),
-              child: Text(
-                'Category',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              child: Row(
+                children: [
+                  Text(
+                    'Category',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, aboutUs.id);
+                    },
+                    child: Icon(
+                      Icons.people,
+                      color: kHighlightedTextColor,
+                    ),
+                  )
+                ],
               ),
             ),
             Expanded(

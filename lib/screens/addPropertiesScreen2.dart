@@ -131,6 +131,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   int selectedFace = 0;
   @override
   Widget build(BuildContext context) {
+    bool isLand = getCategory() == "Land" || getCategory() == "Plot";
     const List<String> directions = ["North", "South", "East", "West"];
     final Storage storage = Storage();
     return Scaffold(

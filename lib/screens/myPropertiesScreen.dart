@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/editPropertyScreen1.dart';
+import 'package:property_app/screens/editPropertyScreen2.dart';
 // import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
@@ -47,6 +48,12 @@ void getMyPropertiesCards() {
         ownerName: property.ownerName,
         to: property.to,
         area: property.area,
+        lenght: property.lenght,
+        width: property.width,
+        constructionArea: property.constructionArea,
+        ownerImgUrl: property.ownerImgUrl,
+        cent: property.cent,
+        face: property.direction,
       ));
     }
   }
@@ -68,6 +75,12 @@ void getMyPropertiesCards() {
         ownerName: property.ownerName,
         to: property.to,
         area: property.area,
+        lenght: property.lenght,
+        width: property.width,
+        constructionArea: property.constructionArea,
+        ownerImgUrl: property.ownerImgUrl,
+        cent: property.cent,
+        face: property.direction,
       ));
     }
   }
@@ -181,25 +194,33 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
-                                    ownerMail: myProperties[index].ownerMail,
-                                    ownerPhoneNo: myProperties[index].ownerPhno,
-                                    type: myProperties[index].propertyType,
-                                    category:
-                                        myProperties[index].propertyCategory,
-                                    propertyAddress:
-                                        myProperties[index].propertyAddress,
-                                    propertyTitle:
-                                        myProperties[index].propertyName,
-                                    to: myProperties[index].to,
-                                    ownerName: myProperties[index].ownerName,
-                                    propertyDescription:
-                                        myProperties[index].propertyDescription,
-                                    noBathroom: myProperties[index].bathRoom,
-                                    noBedroom: myProperties[index].bedRoom,
-                                    area: myProperties[index].area,
-                                    propertyImages:
-                                        myProperties[index].propertyImages,
-                                    price: myProperties[index].price),
+                                  ownerMail: myProperties[index].ownerMail,
+                                  ownerPhoneNo: myProperties[index].ownerPhno,
+                                  type: myProperties[index].propertyType,
+                                  category:
+                                      myProperties[index].propertyCategory,
+                                  propertyAddress:
+                                      myProperties[index].propertyAddress,
+                                  propertyTitle:
+                                      myProperties[index].propertyName,
+                                  to: myProperties[index].to,
+                                  ownerName: myProperties[index].ownerName,
+                                  propertyDescription:
+                                      myProperties[index].propertyDescription,
+                                  noBathroom: myProperties[index].bathRoom,
+                                  noBedroom: myProperties[index].bedRoom,
+                                  area: myProperties[index].area,
+                                  propertyImages:
+                                      myProperties[index].propertyImages,
+                                  price: myProperties[index].price,
+                                  lenght: myProperties[index].lenght,
+                                  width: myProperties[index].width,
+                                  constructionArea:
+                                      myProperties[index].constructionArea,
+                                  ownerImgUrl: myProperties[index].ownerImgUrl,
+                                  cent: myProperties[index].cent,
+                                  face: myProperties[index].face,
+                                ),
                               ),
                             );
                           },
@@ -460,10 +481,21 @@ class myProperty extends StatefulWidget {
   final String bathRoom;
   final String propertyCategory;
   final String area;
+  final String lenght;
+  final String width;
+  final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
+  final String face;
   final List<String> propertyImages;
   const myProperty(
       {required this.imageloc,
+      required this.lenght,
+      required this.face,
+      required this.width,
+      required this.constructionArea,
       required this.ownerMail,
+      required this.cent,
       required this.ownerPhno,
       required this.price,
       required this.propertyAddress,
@@ -476,6 +508,7 @@ class myProperty extends StatefulWidget {
       required this.propertyType,
       required this.to,
       required this.propertyImages,
+      required this.ownerImgUrl,
       required this.area});
   @override
   State<myProperty> createState() => _myPropertyState();

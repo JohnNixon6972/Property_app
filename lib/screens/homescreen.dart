@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_const
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +111,8 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var facing = property["PropertyDirection"];
               var lenght = property["LandLength"];
               var width = property["LandWidth"];
+              var ownerImgUrl = property["profileImgUrl"];
+              var cent = property["Cent"];
 
               final Property = PropertyCard(
                 ownerMail: ownerEmail,
@@ -134,6 +134,8 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                 lenght: lenght,
                 width: width,
                 direction: facing,
+                ownerImgUrl: ownerImgUrl,
+                cent: cent,
               );
               if (isApproved == "True") {
                 PropertiesOnSaleAll.add(Property);
@@ -318,10 +320,12 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var area = property["PlotArea"];
               var constructionArea = property["ConstructionArea"];
               var ownerEmail = property["PropertyBy"];
-              var ownerPhno = property["Phno"];
+              var ownerPhno = property["PhNo"];
               var facing = property["PropertyDirection"];
               var lenght = property["LandLength"];
               var width = property["LandWidth"];
+              var ownerImgUrl = property["profileImgUrl"];
+              var cent = property["Cent"];
 
               final Property = PropertyCard(
                 ownerMail: ownerEmail,
@@ -343,6 +347,8 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                 lenght: lenght,
                 width: width,
                 direction: facing,
+                ownerImgUrl: ownerImgUrl,
+                cent: cent,
               );
 
               if (isApproved == "True") {
@@ -855,6 +861,8 @@ class PropertyCard extends StatefulWidget {
   final String width;
   final String direction;
   final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
   final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
@@ -875,6 +883,8 @@ class PropertyCard extends StatefulWidget {
       required this.area,
       required this.direction,
       required this.lenght,
+      required this.ownerImgUrl,
+      required this.cent,
       required this.width});
 
   @override
@@ -980,20 +990,27 @@ class _PropertyCardState extends State<PropertyCard> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
-                              ownerMail: widget.ownerMail,
-                              ownerPhoneNo: widget.ownerPhoneNo,
-                              type: widget.propertyType,
-                              category: widget.propertyCategory,
-                              propertyAddress: widget.propertyAddress,
-                              propertyTitle: widget.propertyName,
-                              to: widget.to,
-                              ownerName: widget.ownerName,
-                              propertyDescription: widget.propertyDescription,
-                              noBathroom: widget.bathRoom,
-                              noBedroom: widget.bedRoom,
-                              area: widget.area,
-                              propertyImages: widget.propertyImages,
-                              price: widget.price),
+                            ownerMail: widget.ownerMail,
+                            ownerPhoneNo: widget.ownerPhoneNo,
+                            type: widget.propertyType,
+                            category: widget.propertyCategory,
+                            propertyAddress: widget.propertyAddress,
+                            propertyTitle: widget.propertyName,
+                            to: widget.to,
+                            ownerName: widget.ownerName,
+                            propertyDescription: widget.propertyDescription,
+                            noBathroom: widget.bathRoom,
+                            noBedroom: widget.bedRoom,
+                            area: widget.area,
+                            propertyImages: widget.propertyImages,
+                            price: widget.price,
+                            lenght: widget.lenght,
+                            width: widget.width,
+                            constructionArea: widget.constructionArea,
+                            ownerImgUrl: widget.ownerImgUrl,
+                            cent: widget.cent,
+                            face: widget.direction,
+                          ),
                         ),
                       );
                     },

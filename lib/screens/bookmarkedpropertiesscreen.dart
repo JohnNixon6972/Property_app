@@ -21,7 +21,7 @@ class BookmarkedPropertiesScreen extends StatefulWidget {
 
 List<BookmarkedProperties> bookMarkedProperties = [];
 List<String> availableBookmarkedProperties = [];
-void getBookMarkedPropertiesCards() async{
+void getBookMarkedPropertiesCards() async {
   bookMarkedProperties = [];
   availableBookmarkedProperties = [];
   // print(bookmarkedPropertyNames);
@@ -46,6 +46,12 @@ void getBookMarkedPropertiesCards() async{
           ownerName: property.ownerName,
           to: property.to,
           area: property.area,
+          lenght: property.lenght,
+          width: property.width,
+          constructionArea: property.constructionArea,
+          ownerImgUrl: property.ownerImgUrl,
+          cent: property.cent,
+          face: property.direction,
         ),
       );
       availableBookmarkedProperties.add(property.propertyName);
@@ -69,6 +75,12 @@ void getBookMarkedPropertiesCards() async{
         ownerName: property.ownerName,
         to: property.to,
         area: property.area,
+        lenght: property.lenght,
+        width: property.width,
+        constructionArea: property.constructionArea,
+        ownerImgUrl: property.ownerImgUrl,
+        cent: property.cent,
+        face: property.direction,
       ));
       availableBookmarkedProperties.add(property.propertyName);
     }
@@ -199,32 +211,41 @@ class _BookmarkedPropertiesScreenState
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
-                                    ownerMail:
-                                        bookMarkedProperties[index].ownerMail,
-                                    ownerPhoneNo:
-                                        bookMarkedProperties[index].ownerPhNo,
-                                    type: bookMarkedProperties[index]
-                                        .propertyType,
-                                    category: bookMarkedProperties[index]
-                                        .propertyCategory,
-                                    propertyAddress: bookMarkedProperties[index]
-                                        .propertyAddress,
-                                    propertyTitle: bookMarkedProperties[index]
-                                        .propertyName,
-                                    to: bookMarkedProperties[index].to,
-                                    ownerName:
-                                        bookMarkedProperties[index].ownerName,
-                                    propertyDescription:
-                                        bookMarkedProperties[index]
-                                            .propertyDescription,
-                                    noBathroom:
-                                        bookMarkedProperties[index].bathRoom,
-                                    noBedroom:
-                                        bookMarkedProperties[index].bedRoom,
-                                    area: bookMarkedProperties[index].area,
-                                    propertyImages: bookMarkedProperties[index]
-                                        .propertyImages,
-                                    price: bookMarkedProperties[index].price),
+                                  ownerMail:
+                                      bookMarkedProperties[index].ownerMail,
+                                  ownerPhoneNo:
+                                      bookMarkedProperties[index].ownerPhNo,
+                                  type:
+                                      bookMarkedProperties[index].propertyType,
+                                  category: bookMarkedProperties[index]
+                                      .propertyCategory,
+                                  propertyAddress: bookMarkedProperties[index]
+                                      .propertyAddress,
+                                  propertyTitle:
+                                      bookMarkedProperties[index].propertyName,
+                                  to: bookMarkedProperties[index].to,
+                                  ownerName:
+                                      bookMarkedProperties[index].ownerName,
+                                  propertyDescription:
+                                      bookMarkedProperties[index]
+                                          .propertyDescription,
+                                  noBathroom:
+                                      bookMarkedProperties[index].bathRoom,
+                                  noBedroom:
+                                      bookMarkedProperties[index].bedRoom,
+                                  area: bookMarkedProperties[index].area,
+                                  propertyImages: bookMarkedProperties[index]
+                                      .propertyImages,
+                                  price: bookMarkedProperties[index].price,
+                                  lenght: bookMarkedProperties[index].lenght,
+                                  width: bookMarkedProperties[index].width,
+                                  constructionArea: bookMarkedProperties[index]
+                                      .constructionArea,
+                                  ownerImgUrl:
+                                      bookMarkedProperties[index].ownerImgUrl,
+                                  cent: bookMarkedProperties[index].cent,
+                                  face: bookMarkedProperties[index].face,
+                                ),
                               ),
                             );
                           },
@@ -342,12 +363,21 @@ class BookmarkedProperties extends StatefulWidget {
   final String bathRoom;
   final String propertyCategory;
   final String area;
+  final String lenght;
+  final String width;
+  final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
+  final String face;
   final List<String> propertyImages;
+
   const BookmarkedProperties(
       {Key? key,
       required this.ownerPhNo,
+      required this.ownerImgUrl,
       required this.ownerMail,
       required this.imageloc,
+      required this.face,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -359,6 +389,10 @@ class BookmarkedProperties extends StatefulWidget {
       required this.propertyType,
       required this.to,
       required this.propertyImages,
+      required this.lenght,
+      required this.width,
+      required this.constructionArea,
+      required this.cent,
       required this.area})
       : super(key: key);
   @override
@@ -464,20 +498,27 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
-                              ownerMail: widget.ownerMail,
-                              ownerPhoneNo: widget.ownerPhNo,
-                              type: widget.propertyType,
-                              category: widget.propertyCategory,
-                              propertyAddress: widget.propertyAddress,
-                              propertyTitle: widget.propertyName,
-                              to: widget.to,
-                              ownerName: widget.ownerName,
-                              propertyDescription: widget.propertyDescription,
-                              noBathroom: widget.bathRoom,
-                              noBedroom: widget.bedRoom,
-                              area: widget.area,
-                              propertyImages: widget.propertyImages,
-                              price: widget.price),
+                            ownerMail: widget.ownerMail,
+                            ownerPhoneNo: widget.ownerPhNo,
+                            type: widget.propertyType,
+                            category: widget.propertyCategory,
+                            propertyAddress: widget.propertyAddress,
+                            propertyTitle: widget.propertyName,
+                            to: widget.to,
+                            ownerName: widget.ownerName,
+                            propertyDescription: widget.propertyDescription,
+                            noBathroom: widget.bathRoom,
+                            noBedroom: widget.bedRoom,
+                            area: widget.area,
+                            propertyImages: widget.propertyImages,
+                            price: widget.price,
+                            lenght: widget.lenght,
+                            width: widget.width,
+                            constructionArea: widget.constructionArea,
+                            ownerImgUrl: widget.ownerImgUrl,
+                            cent: widget.cent,
+                            face: widget.face,
+                          ),
                         ),
                       );
                     },

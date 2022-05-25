@@ -3,8 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/constants.dart';
+
 import 'package:property_app/screens/propertyDetailsScreen.dart';
-import '../components/bottomNavigationBar.dart';
+
 import './homescreen.dart';
 
 final myController = TextEditingController();
@@ -94,10 +95,16 @@ class _searchScreenState extends State<searchScreen> {
                     var BathRoom = property["BathRoom"];
                     var propertyCategory = property["PropertyCategory"];
                     var ownerName = property["OwnerName"];
-                    var ownerPhno = property["Phno"];
+                    var ownerPhno = property["PhNo"];
                     var ownerMail = property["PropertyBy"];
                     var propertyType = property["PropertyType"];
-                    var area = property["SquareFit"];
+                    var area = property["PlotArea"];
+                    var lenght = property["LandLength"];
+                    var width = property["LandWidth"];
+                    var constructionArea = property["ConstructionArea"];
+                    var ownerImgUrl = property["profileImgUrl"];
+                    var cent = property["Cent"];
+                    var face = property["PropertyDirection"];
 
                     return SearchedProperties(
                       ownerMail: ownerMail,
@@ -115,6 +122,12 @@ class _searchScreenState extends State<searchScreen> {
                       ownerName: ownerName,
                       to: to,
                       area: area,
+                      lenght: lenght,
+                      width: width,
+                      constructionArea: constructionArea,
+                      ownerImgUrl: ownerImgUrl,
+                      cent: cent,
+                      face: face,
                     );
                   })
                 ],
@@ -285,11 +298,18 @@ class SearchedProperties extends StatefulWidget {
   final String bathRoom;
   final String propertyCategory;
   final String area;
+  final String lenght;
+  final String width;
+  final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
+  final String face;
   final List<String> propertyImages;
   const SearchedProperties(
       {required this.imageloc,
       required this.ownerMail,
       required this.ownerPhno,
+      required this.ownerImgUrl,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -301,6 +321,11 @@ class SearchedProperties extends StatefulWidget {
       required this.propertyType,
       required this.to,
       required this.propertyImages,
+      required this.lenght,
+      required this.width,
+      required this.constructionArea,
+      required this.cent,
+      required this.face,
       required this.area});
   @override
   State<SearchedProperties> createState() => _SearchedPropertiesState();
@@ -411,21 +436,27 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => PropertyDetailsScreen(
-                                  ownerMail: widget.ownerMail,
-                                  ownerPhoneNo: widget.ownerPhno,
-                                  type: widget.propertyType,
-                                  category: widget.propertyCategory,
-                                  propertyAddress: widget.propertyAddress,
-                                  propertyTitle: widget.propertyName,
-                                  to: widget.to,
-                                  ownerName: widget.ownerName,
-                                  propertyDescription:
-                                      widget.propertyDescription,
-                                  noBathroom: widget.bathRoom,
-                                  noBedroom: widget.bedRoom,
-                                  area: widget.area,
-                                  propertyImages: widget.propertyImages,
-                                  price: widget.price),
+                                ownerMail: widget.ownerMail,
+                                ownerPhoneNo: widget.ownerPhno,
+                                type: widget.propertyType,
+                                category: widget.propertyCategory,
+                                propertyAddress: widget.propertyAddress,
+                                propertyTitle: widget.propertyName,
+                                to: widget.to,
+                                ownerName: widget.ownerName,
+                                propertyDescription: widget.propertyDescription,
+                                noBathroom: widget.bathRoom,
+                                noBedroom: widget.bedRoom,
+                                area: widget.area,
+                                propertyImages: widget.propertyImages,
+                                price: widget.price,
+                                lenght: widget.lenght,
+                                width: widget.width,
+                                constructionArea: widget.constructionArea,
+                                ownerImgUrl: widget.ownerImgUrl,
+                                cent: widget.cent,
+                                face: widget.face,
+                              ),
                             ),
                           );
                         },

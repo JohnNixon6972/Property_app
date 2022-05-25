@@ -2,6 +2,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
+import 'package:property_app/screens/editPropertyScreen2.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import '../constants.dart';
@@ -23,9 +25,18 @@ class PropertyDetailsScreen extends StatelessWidget {
   final String price;
   final String category;
   final String type;
+  final String lenght;
+  final String width;
+  final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
+  final String face;
   final List<String> propertyImages;
   const PropertyDetailsScreen(
       {Key? key,
+      required this.constructionArea,
+      required this.lenght,
+      required this.width,
       required this.ownerMail,
       required this.ownerPhoneNo,
       required this.propertyTitle,
@@ -39,6 +50,9 @@ class PropertyDetailsScreen extends StatelessWidget {
       required this.price,
       required this.category,
       required this.type,
+      required this.cent,
+      required this.ownerImgUrl,
+      required this.face,
       required this.propertyImages})
       : super(key: key);
 
@@ -86,6 +100,11 @@ class PropertyDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String overView = to == "Sell" ? "Sale" : to;
+    overView = 'Property On :' + overView;
+
+    bool isLand = category == "Land" || category == "Plot";
+
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -193,24 +212,61 @@ class PropertyDetailsScreen extends StatelessWidget {
                 height: 20,
               ),
               Center(
-                child: Container(
-                  height: 40,
-                  width: 170,
-                  decoration: const BoxDecoration(
-                    color: kHighlightedTextColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: !isLand
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 40,
+                      width: 180,
+                      decoration: const BoxDecoration(
+                        color: kHighlightedTextColor,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          overView,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Overview',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white),
-                    ),
-                  ),
+                    !isLand
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                              height: 60,
+                              width: 130,
+                              decoration: const BoxDecoration(
+                                color: kSecondaryButtonColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Text(
+                                    "Property Facing : " + face,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center()
+                  ],
                 ),
               ),
               const SizedBox(
@@ -221,41 +277,42 @@ class PropertyDetailsScreen extends StatelessWidget {
                 children: [
                   Container(
                     width: 110,
-                    height: 140,
+                    height: 130,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15.0),
                       child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.currency_rupee_sharp,
-                              color: kHighlightedTextColor,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              'Property On',
-                              style: TextStyle(
-                                  color: kHighlightedTextColor, fontSize: 15),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              to,
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )
-                          ]),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.crop_square_rounded,
+                            color: kHighlightedTextColor,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text(
+                            'Total Area',
+                            style: TextStyle(
+                                color: kHighlightedTextColor, fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '$area SqFt.',
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   Container(
                     width: 110,
-                    height: 140,
+                    height: 130,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -289,7 +346,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                   Container(
                     width: 110,
-                    height: 140,
+                    height: 130,
                     decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
@@ -329,120 +386,269 @@ class PropertyDetailsScreen extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 110,
-                    height: 140,
-                    decoration: const BoxDecoration(
-                        color: kSecondaryButtonColor,
-                        borderRadius: BorderRadius.all((Radius.circular(15)))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.bathtub_outlined,
-                              color: kHighlightedTextColor,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              'Bathroom',
-                              style: TextStyle(
-                                  color: kHighlightedTextColor, fontSize: 15),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              noBathroom,
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )
-                          ]),
-                    ),
-                  ),
-                  Container(
-                    width: 110,
-                    height: 140,
-                    decoration: const BoxDecoration(
-                        color: kSecondaryButtonColor,
-                        borderRadius: BorderRadius.all((Radius.circular(15)))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.bed_rounded,
-                              color: kHighlightedTextColor,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              'Bedroom',
-                              style: TextStyle(
-                                  color: kHighlightedTextColor, fontSize: 15),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              noBedroom,
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )
-                          ]),
-                    ),
-                  ),
-                  Container(
-                    width: 110,
-                    height: 140,
-                    decoration: const BoxDecoration(
-                        color: kSecondaryButtonColor,
-                        borderRadius: BorderRadius.all((Radius.circular(15)))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Icon(
-                            Icons.crop_square_rounded,
-                            color: kHighlightedTextColor,
+                children: !isLand
+                    ? [
+                        Container(
+                          width: 110,
+                          height: 120,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.bathtub_outlined,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Bathroom',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    noBathroom,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
                           ),
-                          const SizedBox(
-                            height: 10,
+                        ),
+                        Container(
+                          width: 110,
+                          height: 120,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.bed_rounded,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Bedroom',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    noBedroom,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
                           ),
-                          const Text(
-                            'Area',
-                            style: TextStyle(
-                                color: kHighlightedTextColor, fontSize: 15),
+                        ),
+                        Container(
+                          width: 110,
+                          height: 120,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.area_chart_outlined,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Build Area',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    constructionArea + "SqFt.",
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
                           ),
-                          const SizedBox(
-                            height: 10,
+                        ),
+                      ]
+                    : [
+                        Container(
+                          width: 110,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.photo_size_select_large,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Plot Length',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    lenght + " Ft.",
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
                           ),
-                          Text(
-                            '$area SqFt.',
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+                        ),
+                        Container(
+                          width: 110,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.height,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Plot Width',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    width + " Ft.",
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                        Container(
+                          width: 110,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.area_chart_outlined,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Area Cent',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    cent,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                      ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Padding(
+                  Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('images/profile_img2.jpg'),
+                      radius: 25,
+                      child: ownerImgUrl == ""
+                          ? Image(image: AssetImage('images/profile_img2.jpg'))
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: CachedNetworkImage(
+                                // cacheManager: customCacheManager,
+                                key: UniqueKey(),
+                                imageUrl: ownerImgUrl,
+                                height: 50,
+                                width: 50,
+                                // maxHeightDiskCache: 230,
+                                // maxWidthDiskCache: 190,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.black12,
+                                  child: const Icon(
+                                    Icons.error,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   Column(

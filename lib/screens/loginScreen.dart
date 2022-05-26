@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -85,7 +88,7 @@ class _loginScreenState extends State<loginScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter valid Moible Number';
                             } else {
-                              userInfo.email = value;
+                              userInfo.mobileNumber = value;
                             }
                             return null;
                           },
@@ -262,11 +265,14 @@ class _loginScreenState extends State<loginScreen> {
                                 //   await _auth.signInWithEmailAndPassword(
                                 //       email: userInfo.email,
                                 //       password: userInfo.password);
+                                final _firestore = FirebaseFirestore.instance;
+                                
+
                                 await prefs.setString(
                                     'User', userInfo.mobileNumber);
                                 await prefs.setString(
                                     'Password', userInfo.password);
-                               
+
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, HomeScreen.id, (route) => false);
                               }

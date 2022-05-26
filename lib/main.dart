@@ -62,6 +62,7 @@ class _PropertyAppState extends State<PropertyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: userAvailable ? HomeScreen.id : loginScreen.id,
+        // initialRoute: VerifyPhoneNumberScreen.id,
         routes: {
           loginScreen.id: (context) => loginScreen(),
           registerScreen.id: (context) => registerScreen(),
@@ -76,6 +77,7 @@ class _PropertyAppState extends State<PropertyApp> {
           AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
           aboutUs.id : (context) => aboutUs(), 
+          
         },
       ),
     );

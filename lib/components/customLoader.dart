@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/constants.dart';
 
 class CustomLoader extends StatelessWidget {
   static const id = 'CustomLoader';
@@ -9,7 +10,7 @@ class CustomLoader extends StatelessWidget {
 
   const CustomLoader({
     Key? key,
-    this.color,
+    this.color = kHighlightedTextColor,
     this.radius = 15,
     this.padding = 5,
   }) : super(key: key);

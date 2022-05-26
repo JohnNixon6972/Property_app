@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:property_app/constants.dart';
 
 class PinInputField extends StatefulWidget {
   final int length;
@@ -8,7 +9,7 @@ class PinInputField extends StatefulWidget {
 
   const PinInputField({
     Key? key,
-    this.length = 4,
+    this.length = 6,
     this.onFocusChange,
     required this.onSubmit,
   }) : super(key: key);
@@ -66,7 +67,8 @@ class _PinInputFieldState extends State<PinInputField> {
         fontWeight: FontWeight.bold,
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: kPageBackgroundColor,
+        border: Border.all(color: kBottomNavigationBackgroundColor),
         borderRadius: BorderRadius.circular(7.5),
       ),
     );
@@ -88,12 +90,12 @@ class _PinInputFieldState extends State<PinInputField> {
           height: size.height * _focusScaleFactor,
           width: size.width * _focusScaleFactor,
           decoration: defaultPinTheme.decoration!.copyWith(
-            border: Border.all(color: Theme.of(context).colorScheme.secondary),
+            border: Border.all(color: kHighlightedTextColor),
           ),
         ),
         errorPinTheme: defaultPinTheme.copyWith(
           decoration: BoxDecoration(
-            color: Theme.of(context).errorColor,
+            color: kNo,
             borderRadius: BorderRadius.circular(8),
           ),
         ),

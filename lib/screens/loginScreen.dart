@@ -256,15 +256,17 @@ class _loginScreenState extends State<loginScreen> {
                           onPressed: () async {
                             final prefs = await SharedPreferences.getInstance();
                             if (_loginFormKey.currentState!.validate()) {
-                              print(userInfo.email);
+                              print(userInfo.mobileNumber);
                               print(userInfo.password);
                               try {
-                                await _auth.signInWithEmailAndPassword(
-                                    email: userInfo.email,
-                                    password: userInfo.password);
-                                await prefs.setString('User', userInfo.email);
+                                //   await _auth.signInWithEmailAndPassword(
+                                //       email: userInfo.email,
+                                //       password: userInfo.password);
+                                await prefs.setString(
+                                    'User', userInfo.mobileNumber);
                                 await prefs.setString(
                                     'Password', userInfo.password);
+                                
                                 Navigator.pushNamed(context, HomeScreen.id);
                               }
                               //on FirebaseAuthException catch (error) {

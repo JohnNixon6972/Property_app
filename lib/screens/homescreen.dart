@@ -569,7 +569,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? const Image(
                             height: 70,
                             width: 70,
-                            image: const AssetImage('images/profile_img1.jpg'))
+                            image: const AssetImage('images/profile_img9.png'))
                         : CachedNetworkImage(
                             cacheManager: customCacheManager,
                             key: UniqueKey(),
@@ -784,11 +784,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed: (int index) {
                                 setState(() {
                                   if (index == 0) {
-                                    SelectedToggleBottonColor =
-                                        const Color.fromARGB(255, 7, 91, 10);
+                                    SelectedToggleBottonColor = kYes;
                                   } else if (index == 1) {
-                                    SelectedToggleBottonColor =
-                                        const Color.fromARGB(255, 147, 20, 11);
+                                    SelectedToggleBottonColor = kNo;
                                   }
 
                                   displayAdminProperties =

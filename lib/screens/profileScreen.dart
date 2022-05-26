@@ -180,7 +180,7 @@ class _profileScreenState extends State<profileScreen> {
                                 height: 100,
                                 width: 100,
                                 image:
-                                    const AssetImage('images/profile_img1.jpg'))
+                                    const AssetImage('images/profile_img9.png'))
                             : CachedNetworkImage(
                                 cacheManager: customCacheManager,
                                 key: UniqueKey(),
@@ -216,7 +216,7 @@ class _profileScreenState extends State<profileScreen> {
                           });
                         },
                         child: const Icon(
-                          Icons.edit,
+                          Icons.flip_camera_ios,
                           color: kHighlightedTextColor,
                         ),
                       )),

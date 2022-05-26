@@ -199,10 +199,10 @@ class _searchScreenState extends State<searchScreen> {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 25.0),
+                  padding: const EdgeInsets.only(left: 12.0),
                   child: Center(
                     child: Text(
-                      "Show Properties On ",
+                      "Let's see Properties On ",
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -210,9 +210,7 @@ class _searchScreenState extends State<searchScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 15,
-                ),
+                Spacer(),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),

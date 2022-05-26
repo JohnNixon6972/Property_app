@@ -503,7 +503,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     String type = getType();
                                     String propertyDescription =
                                         PropertyDescription;
-                                    String squareFit = PlotArea;
+                                    String squareFit = ConstructionArea;
                                     String bedRoom = BedRoom;
                                     String bathRoom = BathRoom;
                                     String price = Price;

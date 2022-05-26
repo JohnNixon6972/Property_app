@@ -266,8 +266,9 @@ class _loginScreenState extends State<loginScreen> {
                                     'User', userInfo.mobileNumber);
                                 await prefs.setString(
                                     'Password', userInfo.password);
-                                
-                                Navigator.pushNamed(context, HomeScreen.id);
+                               
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, HomeScreen.id, (route) => false);
                               }
                               //on FirebaseAuthException catch (error) {
                               //   switch (error.message) {

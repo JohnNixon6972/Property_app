@@ -1,25 +1,21 @@
 import 'dart:io';
 
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/addPropertiesScreen1.dart';
-import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
+import 'package:property_app/screens/approvedPropertiesScreen.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
+import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 // import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
-import '../components/bottomNavigationBar.dart';
 import '../components/dialogBoxListWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:property_app/currentUserInformation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:property_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import '../screens/registerScreen.dart';
-import 'package:property_app/screens/searchScreen.dart';
 import '../screens/loginScreen.dart';
 import '../components/scaffoldBottomAppBar.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -246,6 +242,8 @@ class _profileScreenState extends State<profileScreen> {
                                   await SharedPreferences.getInstance();
                               await FirebaseAuth.instance.signOut();
                               await prefs.clear();
+                              myPropertiesAdv = [];
+                              bookmarkedPropertyNames = [];
                               Navigator.pushNamed(context, loginScreen.id);
                             },
                             style: ElevatedButton.styleFrom(
@@ -291,11 +289,24 @@ class _profileScreenState extends State<profileScreen> {
                                     SubTitle: "",
                                     // SubTitle: userInfo.password,
                                   ),
-                                  ProfileDetailsContainer(
-                                    icon: Icons.add_location_outlined,
-                                    Title: "Address",
-                                    SubTitle: "Residential Address",
-                                  ),
+                                  userInfo.name == "john"
+                                      ? ProfileDetailsContainer(
+                                          icon: Icons.approval_outlined,
+                                          Title: "Un-Approved Properties",
+                                          SubTitle: "",
+                                        )
+                                      : Center(),
+
+                                  userInfo.name != "john"
+                                      ? ProfileDetailsContainer(
+                                          icon: Icons.add_location_outlined,
+                                          Title: "Address",
+                                          SubTitle: "Residential Address",
+                                        )
+                                      : ProfileDetailsContainer(
+                                          icon: Icons.home_work_sharp,
+                                          Title: "Approved Properties",
+                                          SubTitle: ""),
                                   const SizedBox(
                                     height: 8,
                                   ),
@@ -407,19 +418,27 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    widget.Title == "My Properties"
-                        ? Navigator.pushNamed(context, myPropertiesScreen.id)
-                        : showDialog(
-                            context: context,
-                            builder: (_) => editDetailsPopup(widget.Title,
-                                fields[option_titles.indexOf(widget.Title)]));
+                    if (widget.Title == "Approved Properties") {
+                      Navigator.pushNamed(context, ApprovedPropertiesScreen.id);
+                    } else if (widget.Title == "Un-Approved Properties") {
+                      Navigator.pushNamed(
+                          context, UnApprovedPropertiesScreen.id);
+                    } else if (widget.Title == "My Properties") {
+                      Navigator.pushNamed(context, myPropertiesScreen.id);
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (_) => editDetailsPopup(widget.Title,
+                              fields[option_titles.indexOf(widget.Title)]));
+                    }
+
                     setState(() {
                       // Navigator.pop(context);
                     });
                   },
                   child: const Icon(
                     Icons.expand_less_rounded,
-                    color: kNavigationIconColor,
+                    color: kHighlightedTextColor,
                     size: 30,
                   ),
                 ),

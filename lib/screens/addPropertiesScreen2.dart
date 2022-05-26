@@ -141,8 +141,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Center(
+                children: const [
+                  Center(
                     child: Text(
                       "Please Wait until your add gets posted",
                       style: TextStyle(
@@ -151,19 +151,19 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           color: kSubCategoryColor),
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 30,
                   ),
-                  const Center(
+                  Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 5,
                       color: kHighlightedTextColor,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 50,
                   ),
-                  const Center(
+                  Center(
                     child: Text(
                       "You will be redirected once the add is posted",
                       style: TextStyle(
@@ -199,16 +199,16 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10.0),
                         child: Row(
-                          children: [
-                            const Text(
+                          children: const [
+                            Text(
                               'Add Properties',
                               style: TextStyle(
                                   color: kHighlightedTextColor,
                                   fontSize: 28,
                                   fontWeight: FontWeight.w700),
                             ),
-                            const Spacer(),
-                            const Text(
+                            Spacer(),
+                            Text(
                               'Step 2/2',
                               style: TextStyle(
                                   color: kSubCategoryColor,
@@ -316,7 +316,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           Row(
                             children: [
                               PropertyDetailTile(
-                                HintText: "Plot Area(Sqft)",
+                                HintText: "Plot Area(SqFt.)",
                                 onChange: (newValue) {
                                   setState(() {
                                     PlotArea = newValue;
@@ -325,7 +325,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                               ),
                               const Spacer(),
                               PropertyDetailTile(
-                                HintText: "Building Area(Sqft)",
+                                HintText: "Building Area(SqFt.)",
                                 onChange: (newValue) {
                                   setState(() {
                                     ConstructionArea = newValue;
@@ -336,78 +336,104 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           ),
                           Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 6),
-                                child: GestureDetector(
-                                  onTap: () => _showDialog(
-                                    CupertinoPicker(
-                                      magnification: 1.22,
-                                      squeeze: 1.2,
-                                      useMagnifier: true,
-                                      itemExtent: _kItemExtent,
-                                      // This is called when selected item is changed.
-                                      onSelectedItemChanged:
-                                          (int selectedItem) {
+                              !isLand
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 6),
+                                      child: GestureDetector(
+                                        onTap: () => _showDialog(
+                                          CupertinoPicker(
+                                            magnification: 1.22,
+                                            squeeze: 1.2,
+                                            useMagnifier: true,
+                                            itemExtent: _kItemExtent,
+                                            // This is called when selected item is changed.
+                                            onSelectedItemChanged:
+                                                (int selectedItem) {
+                                              setState(() {
+                                                selectedFace = selectedItem;
+                                                Facing =
+                                                    directions[selectedFace];
+                                              });
+                                            },
+                                            children: List<Widget>.generate(
+                                                directions.length, (int index) {
+                                              return Center(
+                                                child: Text(
+                                                  directions[index],
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          height: 70,
+                                          width: 165,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: kHighlightedTextColor),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 20),
+                                            child: Text(
+                                              "Facing : " + Facing,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  color: Colors.grey[700],
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : PropertyDetailTile(
+                                      HintText: "Width(Ft.)",
+                                      onChange: (newValue) {
                                         setState(() {
-                                          selectedFace = selectedItem;
-                                          Facing = directions[selectedFace];
+                                          width = newValue;
+                                        });
+                                      }),
+                              const Spacer(),
+                              !isLand
+                                  ? PropertyDetailTile(
+                                      HintText: "Bed Room",
+                                      onChange: (newValue) {
+                                        setState(() {
+                                          BedRoom = newValue;
                                         });
                                       },
-                                      children: List<Widget>.generate(
-                                          directions.length, (int index) {
-                                        return Center(
-                                          child: Text(
-                                            directions[index],
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                                  ),
-                                  child: Container(
-                                    height: 70,
-                                    width: 165,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: kHighlightedTextColor),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 20),
-                                      child: Text(
-                                        "Facing : " + Facing,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              PropertyDetailTile(
-                                HintText: "Bed Room",
-                                onChange: (newValue) {
-                                  setState(() {
-                                    BedRoom = newValue;
-                                  });
-                                },
-                              )
+                                    )
+                                  : PropertyDetailTile(
+                                      HintText: "Length",
+                                      onChange: (newValue) {
+                                        setState(() {
+                                          lenght = newValue;
+                                        });
+                                      })
                             ],
                           ),
                           Row(
                             children: [
-                              PropertyDetailTile(
-                                HintText: "Bathroom",
-                                onChange: (newValue) {
-                                  setState(() {
-                                    BathRoom = newValue;
-                                  });
-                                },
-                              ),
+                              !isLand
+                                  ? PropertyDetailTile(
+                                      HintText: "Bathroom",
+                                      onChange: (newValue) {
+                                        setState(() {
+                                          BathRoom = newValue;
+                                        });
+                                      },
+                                    )
+                                  : PropertyDetailTile(
+                                      HintText: "Cent",
+                                      onChange: (newValue) {
+                                        setState(() {
+                                          cent = newValue;
+                                        });
+                                      }),
                               const Spacer(),
                               PropertyDetailTile(
                                 HintText: "Price (INR)",
@@ -477,7 +503,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     String type = getType();
                                     String propertyDescription =
                                         PropertyDescription;
-                                    String squareFit = PlotArea;
+                                    String squareFit = ConstructionArea;
                                     String bedRoom = BedRoom;
                                     String bathRoom = BathRoom;
                                     String price = Price;
@@ -569,7 +595,7 @@ class PropertyDetailTile extends StatelessWidget {
               border: InputBorder.none,
               hintText: HintText,
               hintStyle:
-                  const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
         ),

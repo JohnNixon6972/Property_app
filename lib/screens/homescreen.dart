@@ -32,8 +32,10 @@ class PropertiesOnSaleAdv extends StatefulWidget {
 }
 
 List<PropertyCard> PropertiesOnSaleAll = [];
-List<PropertyCard> allApprovedProperties = [];
+List<PropertyCard> approvedProperties = [];
 List<PropertyCard> unApprovedProperties = [];
+List<String> approvedPropertiesNames = [];
+List<String> unApprovedPropertiesNames = [];
 
 class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
   List<PropertyCard> PropertiesOnSaleAdmin = [];
@@ -141,7 +143,10 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               );
               if (isApproved == "True") {
                 PropertiesOnSaleAll.add(Property);
-                allApprovedProperties.add(Property);
+                if (!approvedPropertiesNames.contains(Property.propertyName)) {
+                  approvedPropertiesNames.add(Property.propertyName);
+                  approvedProperties.add(Property);
+                }
                 // print(propertyName);
                 // if (bookmarkedPropertyNames.contains(propertyName.toString())) {
                 //   bookmarkedProperties.add(Property);
@@ -185,7 +190,11 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                   }
                 }
               } else {
-                unApprovedProperties.add(Property);
+                if (!unApprovedPropertiesNames
+                    .contains(Property.propertyName)) {
+                  unApprovedPropertiesNames.add(Property.propertyName);
+                  unApprovedProperties.add(Property);
+                }
               }
             } catch (e) {
               print(e);
@@ -355,7 +364,10 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
 
               if (isApproved == "True") {
                 PropertiesOnRentAll.add(Property);
-                allApprovedProperties.add(Property);
+                if (!approvedPropertiesNames.contains(Property.propertyName)) {
+                  approvedPropertiesNames.add(Property.propertyName);
+                  approvedProperties.add(Property);
+                }
                 if (ownerEmail.toString() == userInfo.email &&
                     !myPropertiesAdv.contains(Property.propertyName)) {
                   myPropertiesAdv.add(Property.propertyName);
@@ -395,7 +407,11 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                   }
                 }
               } else {
-                unApprovedProperties.add(Property);
+                if (!unApprovedPropertiesNames
+                    .contains(Property.propertyName)) {
+                  unApprovedPropertiesNames.add(Property.propertyName);
+                  unApprovedProperties.add(Property);
+                }
               }
             } catch (e) {
               print(e);

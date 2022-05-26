@@ -75,6 +75,8 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
               .doc(userInfo.mobileNumber)
               .set({"name ": userInfo.name, "password": userInfo.password});
 
+          // };
+
           log(
             VerifyPhoneNumberScreen.id,
             name: autoVerified
@@ -237,3 +239,29 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
     );
   }
 }
+
+                          // await _auth.verifyPhoneNumber(
+                          //   phoneNumber: "+91 " + userInfo.mobileNumber,
+                          //   timeout: const Duration(seconds: 60),
+                          //   verificationCompleted:
+                          //       (PhoneAuthCredential credential) async {
+                          //     await _auth.signInWithCredential(credential);
+                          //   },
+                          //   verificationFailed: (FirebaseAuthException e) {
+                          //     if (e.code == 'invalid-phone-number') {
+                          //       print(
+                          //           'The provided phone number is not valid.');
+                          //     }
+                          //   },
+                          //   codeSent: (String verificationId,
+                          //       int? resendToken) async {
+                          //     String smsCode = 'xxxx';
+                          //     PhoneAuthCredential credential =
+                          //         PhoneAuthProvider.credential(
+                          //             verificationId: verificationId,
+                          //             smsCode: smsCode);
+                          //     await _auth.signInWithCredential(credential);
+                          //   },
+                          //   codeAutoRetrievalTimeout:
+                          //       (String verificationId) {},
+                          // );

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -265,8 +263,24 @@ class _loginScreenState extends State<loginScreen> {
                                 //   await _auth.signInWithEmailAndPassword(
                                 //       email: userInfo.email,
                                 //       password: userInfo.password);
+
                                 final _firestore = FirebaseFirestore.instance;
-                                
+                                Object? data;
+                                _firestore
+                                    .collection('Users')
+                                    .doc(userInfo.mobileNumber)
+                                    .get()
+                                    .then((DocumentSnapshot documentSnapshot) => {
+                                          if (documentSnapshot.exists)
+                              
+                                            {
+                                              data = documentSnapshot.data(),
+                                               _firestore
+                                                  .collection('Users')
+                                                  .doc(userInfo.mobileNumber)
+                                                  
+                                            }
+                                        });
 
                                 await prefs.setString(
                                     'User', userInfo.mobileNumber);

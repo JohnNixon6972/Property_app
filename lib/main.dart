@@ -1,6 +1,7 @@
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/approvedPropertiesScreen.dart';
+import 'package:property_app/screens/aboutUs.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
@@ -75,6 +76,7 @@ class _PropertyAppState extends State<PropertyApp> {
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
           ApprovedPropertiesScreen.id : (context) => ApprovedPropertiesScreen(),
           UnApprovedPropertiesScreen.id : (context) => UnApprovedPropertiesScreen(), 
+          aboutUs.id : (context) => aboutUs(), 
         },
       ),
     );

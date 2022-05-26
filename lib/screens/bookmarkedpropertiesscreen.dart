@@ -308,6 +308,7 @@ class _BookmarkedPropertiesScreenState
                       child: const Icon(
                         Icons.expand_less_rounded,
                         size: 30,
+                        color: kHighlightedTextColor,
                       ),
                     ),
                   ),
@@ -326,10 +327,11 @@ class _BookmarkedPropertiesScreenState
                 ],
               ),
             ),
+            // ignore: prefer_const_constructors
             const Divider(
               thickness: 1,
-              indent: 60,
-              endIndent: 60,
+              // indent: 50,
+              // endIndent: 40,
               color: kHighlightedTextColor,
             ),
             Expanded(flex: 10, child: buildBookMarks()),

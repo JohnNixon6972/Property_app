@@ -1,20 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/approvedPropertiesScreen.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
-import 'package:property_app/screens/editPropertyScreen1.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/searchScreen.dart';
+import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 import 'screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/homescreen.dart';
 import './screens/bookmarkedpropertiesscreen.dart';
 import 'screens/addPropertiesScreen2.dart';
-import './screens/previewProperty.dart';
 import 'currentUserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/otpVerification.dart';
@@ -74,6 +73,8 @@ class _PropertyAppState extends State<PropertyApp> {
           searchScreen.id: (context) => searchScreen(),
           AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
+          ApprovedPropertiesScreen.id : (context) => ApprovedPropertiesScreen(),
+          UnApprovedPropertiesScreen.id : (context) => UnApprovedPropertiesScreen(), 
         },
       ),
     );

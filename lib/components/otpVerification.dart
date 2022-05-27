@@ -73,7 +73,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
           _firestore
               .collection('Users')
               .doc(userInfo.mobileNumber)
-              .set({"name ": userInfo.name, "password": userInfo.password});
+              .set({"name": userInfo.name, "password": userInfo.password});
 
           // };
 
@@ -207,13 +207,13 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                             final isValidOTP = await controller.verifyOTP(
                               otp: enteredOTP,
                             );
-                            PhoneAuthCredential phoneAuthCredential =
-                                PhoneAuthProvider.credential(
-                                    verificationId: userInfo.mobileNumber,
-                                    smsCode: enteredOTP);
+                            // PhoneAuthCredential phoneAuthCredential =
+                            //     PhoneAuthProvider.credential(
+                            //         verificationId: userInfo.mobileNumber,
+                            //         smsCode: enteredOTP);
 
-                            await _auth
-                                .signInWithCredential(phoneAuthCredential);
+                            // await _auth
+                            //     .signInWithCredential(phoneAuthCredential);
                             // Incorrect OTP
                             if (!isValidOTP) {
                               // showSnackBar('The entered OTP is invalid!');

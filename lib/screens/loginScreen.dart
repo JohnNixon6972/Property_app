@@ -220,6 +220,8 @@ class _loginScreenState extends State<loginScreen> {
                                                           .sendPasswordResetEmail(
                                                               email: userInfo
                                                                   .email);
+
+                                                      // FirebaseAuth.instance.send
                                                     },
                                                   );
                                                   Navigator.pop(context);
@@ -275,6 +277,17 @@ class _loginScreenState extends State<loginScreen> {
                                           if (userInfo.password ==
                                               (value.data()!["password"]))
                                             {
+  // late String password = "not saved";
+  // late String city = "not saved";
+  // late String state = "not saved";
+  // late String country = "not saved";
+  // late String postalCode = "not saved";
+  // late String profileImgUrl = "";
+                                              userInfo.name = value.data()!["name"],
+                                              userInfo.email = value.data()!["email"],
+                                              userInfo.mobileNumber = value.data()!["mobileNumber"],
+                                              userInfo.addressLine1 = value.data()!["addressLine1"],
+                                              userInfo.addressLine2 = value.data()!["addressLine2"],
                                               print("Login Successful"),
                                               Navigator.pushNamedAndRemoveUntil(
                                                   context,

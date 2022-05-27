@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 
 final dialogKey = GlobalKey<FormState>();
 final passwordKey = GlobalKey<FormState>();
-final TextEditingController _currentPassowrd = TextEditingController();
-late String newPassword = "";
-late String confirmNewPassword = "";
+late String currentPassowrd;
+late String newPassword = userInfo.password;
+late String confirmNewPassword = userInfo.password;
 // bool _isHidden = true;
 
 List<List<Widget>> fields = [
@@ -63,7 +64,7 @@ List<List<Widget>> fields = [
               print(userInfo.email);
             },
             cursorColor: kPrimaryButtonColor,
-            keyboardType: TextInputType.phone,
+            keyboardType: TextInputType.emailAddress,
             textAlign: TextAlign.left,
             style: const TextStyle(color: kPrimaryButtonColor),
             validator: (value) {
@@ -99,7 +100,8 @@ List<List<Widget>> fields = [
             // controller: _currentPassowrd,
             obscureText: true,
             onChanged: (value) {
-              userInfo.password = value;
+              currentPassowrd = value;
+              // userInfo.password = value;
             },
             cursorColor: kPrimaryButtonColor,
             keyboardType: TextInputType.visiblePassword,
@@ -108,11 +110,12 @@ List<List<Widget>> fields = [
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
-              } else {
+              } else if (userInfo.password != currentPassowrd) {
                 // password = currentPassowrd;
-                if (userInfo.password != _currentPassowrd) {
-                  print("Invalid Password");
-                }
+                // print(userInfo.password);
+                print("Invalid Password");
+                
+                // print(currentPassowrd);
               }
 
               // return null;

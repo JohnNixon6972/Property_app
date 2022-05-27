@@ -270,15 +270,21 @@ class _loginScreenState extends State<loginScreen> {
                                     .collection('Users')
                                     .doc(userInfo.mobileNumber)
                                     .get()
-                                    .then((DocumentSnapshot documentSnapshot) => {
-                                          if (documentSnapshot.exists)
-                              
+                                    .then((value) => {
+                                          // print(value.data()!["password"]),
+                                          if (userInfo.password ==
+                                              (value.data()!["password"]))
                                             {
-                                              data = documentSnapshot.data(),
-                                               _firestore
-                                                  .collection('Users')
-                                                  .doc(userInfo.mobileNumber)
-                                                  
+                                              print("Login Successful"),
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  HomeScreen.id,
+                                                  (route) => false),
+                                            }
+                                          else
+                                            {
+                                              popUpAlertDialogBox(
+                                                  context, "Login Failed"),
                                             }
                                         });
 
@@ -287,8 +293,8 @@ class _loginScreenState extends State<loginScreen> {
                                 await prefs.setString(
                                     'Password', userInfo.password);
 
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, HomeScreen.id, (route) => false);
+                                // Navigator.pushNamedAndRemoveUntil(
+                                //     context, HomeScreen.id, (route) => false);
                               }
                               //on FirebaseAuthException catch (error) {
                               //   switch (error.message) {

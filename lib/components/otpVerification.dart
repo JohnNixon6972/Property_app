@@ -203,9 +203,17 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                             if (hasFocus) await _scrollToBottomOnKeyboardOpen();
                           },
                           onSubmit: (enteredOTP) async {
+                            var smsCode = "xxxx";
                             final isValidOTP = await controller.verifyOTP(
                               otp: enteredOTP,
                             );
+                            PhoneAuthCredential phoneAuthCredential =
+                                PhoneAuthProvider.credential(
+                                    verificationId: userInfo.mobileNumber,
+                                    smsCode: enteredOTP);
+
+                            await _auth
+                                .signInWithCredential(phoneAuthCredential);
                             // Incorrect OTP
                             if (!isValidOTP) {
                               // showSnackBar('The entered OTP is invalid!');

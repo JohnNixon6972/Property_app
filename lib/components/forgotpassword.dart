@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/components/pinInputField.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/loginScreen.dart';
@@ -12,19 +13,21 @@ import '../main.dart';
 import '../screens/homescreen.dart';
 import '../currentUserInformation.dart';
 
+late String newPassword = userInfo.password;
+late String confirmNewPassword = userInfo.password;
+
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
 final _formKey = GlobalKey<FormState>();
 
-class VerifyPhoneNumberScreen extends StatefulWidget {
-  static const String id = 'otpVerification';
+class forgotPasswordScreen extends StatefulWidget {
+  static const String id = 'forgotPasswordScreen';
 
   @override
-  State<VerifyPhoneNumberScreen> createState() =>
-      _VerifyPhoneNumberScreenState();
+  State<forgotPasswordScreen> createState() => _forgotPasswordScreenState();
 }
 
-class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
+class _forgotPasswordScreenState extends State<forgotPasswordScreen>
     with WidgetsBindingObserver {
   bool isKeyboardVisible = false;
   late final ScrollController scrollController;
@@ -70,22 +73,22 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
       child: FirebasePhoneAuthHandler(
         phoneNumber: "+91" + userInfo.mobileNumber,
         onLoginSuccess: (userCredential, autoVerified) async {
-          _firestore.collection('Users').doc(userInfo.mobileNumber).set({
-            "name": userInfo.name,
-            "password": userInfo.password,
-            "email": userInfo.email,
-            "mobileNumber": userInfo.mobileNumber,
-            "addressLine1": userInfo.addressLine1,
-            "addressLine2": userInfo.addressLine2,
-            "city": userInfo.city,
-            "state": userInfo.state,
-            "country": userInfo.country,
-            "postalcode": userInfo.postalCode,
-            "profileImgUrl": userInfo.profileImgUrl,
-          });
+          // _firestore.collection('Users').doc(userInfo.mobileNumber).set({
+          //   "name": userInfo.name,
+          //   "password": userInfo.password,
+          //   "email": userInfo.email,
+          //   "mobileNumber": userInfo.mobileNumber,
+          //   "addressLine1": userInfo.addressLine1,
+          //   "addressLine2": userInfo.addressLine2,
+          //   "city": userInfo.city,
+          //   "state": userInfo.state,
+          //   "country": userInfo.country,
+          //   "postalcode": userInfo.postalCode,
+          //   "profileImgUrl": userInfo.profileImgUrl,
+          // });
 
           log(
-            VerifyPhoneNumberScreen.id,
+            forgotPasswordScreen.id,
             name: autoVerified
                 ? 'OTP was fetched automatically!'
                 : 'OTP was verified manually!',
@@ -94,19 +97,159 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
           // showSnackBar('Phone number verified successfully!');
 
           log(
-            VerifyPhoneNumberScreen.id,
+            forgotPasswordScreen.id,
             name: 'Login Success UID: ${userCredential.user?.uid}',
           );
+          // Navigator.pushNamedAndRemoveUntil(
+          //   context,
+          //   loginScreen.id,
+          //   (route) => false,
+          // );
+          showDialog(
+            context: context,
+            builder: (_) => SimpleDialog(
+              backgroundColor: kPageBackgroundColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              title: const Text(
+                "Set New Password",
+                style: TextStyle(
+                  color: kHighlightedTextColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 25,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Form(
+                        // key: _loginFormKey,
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              obscureText: true,
+                              onChanged: (value) {
+                                newPassword = value;
+                                // print("New Password Entered");
+                              },
+                              cursorColor: kPrimaryButtonColor,
+                              keyboardType: TextInputType.visiblePassword,
+                              textAlign: TextAlign.left,
+                              style:
+                                  const TextStyle(color: kPrimaryButtonColor),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter valid text';
+                                }
+                              },
+                              decoration: kTextFieldDecoration.copyWith(
+                                hintText: 'Enter your new password.',
+                                prefixIcon: const Icon(Icons.lock,
+                                    color: kPrimaryButtonColor),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              obscureText: true,
+                              // controller: _confirmNewPassowrd,
+                              onChanged: (value) {
+                                confirmNewPassword = value;
+                              },
+                              cursorColor: kPrimaryButtonColor,
+                              keyboardType: TextInputType.visiblePassword,
+                              textAlign: TextAlign.left,
+                              style:
+                                  const TextStyle(color: kPrimaryButtonColor),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter valid text';
+                                }
+                              },
+                              decoration: kTextFieldDecoration.copyWith(
+                                hintText: 'Confirm your new password.',
+                                prefixIcon: const Icon(Icons.lock_open,
+                                    color: kPrimaryButtonColor),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                // Validate returns true if the form is valid, or false otherwise.
+                                setState(
+                                  () {
+                                    bool userExists = false;
 
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            HomeScreen.id,
-            (route) => false,
+                                    _firestore
+                                        .collection("Users")
+                                        .doc(userInfo.mobileNumber)
+                                        .get()
+                                        .then((value) => {
+                                              userExists = true,
+                                              if (newPassword ==
+                                                  confirmNewPassword)
+                                                {
+                                                  userInfo.password =
+                                                      newPassword,
+                                                  _firestore
+                                                      .collection("Users")
+                                                      .doc(
+                                                          userInfo.mobileNumber)
+                                                      .update({
+                                                    "password": newPassword
+                                                  }),
+                                                  Navigator.pushNamed(
+                                                      context, loginScreen.id),
+                                                }
+                                              else
+                                                {
+                                                  popUpAlertDialogBox(context,
+                                                      "Passwords Don't match"),
+                                                }
+                                            });
+
+                                    if (userExists == false) {
+                                      popUpAlertDialogBox(
+                                          context, "User is not registered");
+                                    }
+                                  },
+                                );
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: kPrimaryButtonColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ),
+                              child: const Text(
+                                'Save',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         },
         onLoginFailed: (authException) {
           // showSnackBar('Something went wrong!');
-          log(VerifyPhoneNumberScreen.id, error: authException.message);
+          log(forgotPasswordScreen.id, error: authException.message);
           // handle error further if needed
         },
         builder: (context, controller) {
@@ -140,8 +283,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                       onPressed: controller.timerIsActive
                           ? null
                           : () async {
-                              log(VerifyPhoneNumberScreen.id,
-                                  name: 'Resend OTP');
+                              log(forgotPasswordScreen.id, name: 'Resend OTP');
                               await controller.sendOTP();
                             },
                     ),
@@ -254,29 +396,3 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
     );
   }
 }
-
-                          // await _auth.verifyPhoneNumber(
-                          //   phoneNumber: "+91 " + userInfo.mobileNumber,
-                          //   timeout: const Duration(seconds: 60),
-                          //   verificationCompleted:
-                          //       (PhoneAuthCredential credential) async {
-                          //     await _auth.signInWithCredential(credential);
-                          //   },
-                          //   verificationFailed: (FirebaseAuthException e) {
-                          //     if (e.code == 'invalid-phone-number') {
-                          //       print(
-                          //           'The provided phone number is not valid.');
-                          //     }
-                          //   },
-                          //   codeSent: (String verificationId,
-                          //       int? resendToken) async {
-                          //     String smsCode = 'xxxx';
-                          //     PhoneAuthCredential credential =
-                          //         PhoneAuthProvider.credential(
-                          //             verificationId: verificationId,
-                          //             smsCode: smsCode);
-                          //     await _auth.signInWithCredential(credential);
-                          //   },
-                          //   codeAutoRetrievalTimeout:
-                          //       (String verificationId) {},
-                          // );

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/screens/approvedPropertiesScreen.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
@@ -68,23 +69,36 @@ class _profileScreenState extends State<profileScreen> {
 
   void getCurrentUser() async {
     try {
-      var currUserCollection = _firestore.collection("Users");
-      var docSanpshot =
-          await currUserCollection.doc(_auth.currentUser!.email).get();
+      // var currUserCollection = _firestore.collection("Users");
+      // var docSanpshot =
+      //     // await currUserCollection.doc(_auth.currentUser!.email).get();
+      //     await currUserCollection.doc(userInfo.mobileNumber).get();
 
-      if (docSanpshot.exists) {
-        Map<String, dynamic>? data = docSanpshot.data();
-        setState(
-          () {
-            userInfo.name = data?['name'];
-            userInfo.mobileNumber = data?['number'];
-            userInfo.profileImgUrl = data?['profileImgUrl'];
-            print(userInfo.name);
-            print(userInfo.mobileNumber);
-          },
-        );
-      }
-      print(userInfo.email);
+      // if (docSanpshot.exists) {
+      //   Map<String, dynamic>? data = docSanpshot.data();
+      //   setState(
+      //     () {
+      //       userInfo.name = data?['name'];
+      //       userInfo.mobileNumber = data?['number'];
+      //       userInfo.profileImgUrl = data?['profileImgUrl'];
+      //       print(userInfo.name);
+      //       print(userInfo.mobileNumber);
+      //     },
+      //   );
+      // }
+      print(userInfo.mobileNumber);
+      Object? data;
+      _firestore
+          .collection('Users')
+          .doc(userInfo.mobileNumber)
+          .get()
+          .then((value) => {
+                // print(value.data()!["password"]),
+                print(value.data()!["name"]),
+                userInfo.name = value.data()!["name"],
+                userInfo.password = value.data()!["password"],
+              });
+      // print(userInfo.name);
     } catch (e) {
       print(e);
     }
@@ -111,13 +125,13 @@ class _profileScreenState extends State<profileScreen> {
         // await storage.ref('test/$fileName').putFile(file);
         ref = storage
             .ref()
-            .child('asset/profileImages/${userInfo.email}/$fileName');
+            .child('asset/profileImages/${userInfo.mobileNumber}/$fileName');
         await ref.putFile(file).whenComplete(() async {
           await ref.getDownloadURL().then((value) async {
             // imgRef.add({'url': value});
             await _firestore
                 .collection('Users')
-                .doc(userInfo.email)
+                .doc(userInfo.mobileNumber)
                 .update({"profileImgUrl": value});
           });
         });
@@ -406,6 +420,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     widget.SubTitle,
                     style: const TextStyle(
                         color: kBottomNavigationBackgroundColor,
+                        fontSize: 13.5,
                         fontWeight: FontWeight.w500),
                   )
                 ],
@@ -475,7 +490,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                   onPressed: () async {
                     _firestore
                         .collection("Users")
-                        .doc(_auth.currentUser!.email)
+                        .doc(userInfo.mobileNumber)
                         .update({
                       "email": userInfo.email,
                       "name": userInfo.name,
@@ -490,26 +505,28 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     Navigator.pop(context);
                     setState(() {
                       try {
-                        if (passwordKey.currentState!.validate()) {}
-                        print(userInfo.password);
-                        userInfo.name = userInfo.name;
-                        if (newPassword == confirmNewPassword) {
-                          var loggedInUser = _auth.currentUser;
-                          loggedInUser
-                              ?.updatePassword(userInfo.password)
-                              .then((_) {
-                            userInfo.password = newPassword;
-                            print(userInfo.password);
-                            print("Successfully changed password");
-                          }).catchError((error) {
-                            print(
-                                "Password can't be changed" + error.toString());
-                          });
-                        } else {
-                          print("Reconfirm New Password");
+                        if (passwordKey.currentState!.validate()) {
+                          // print(userInfo.password);
+                          // userInfo.name = userInfo.name;
+                          print("Current Password" + currentPassowrd);
+                          print("User Password" + userInfo.password);
+                          if (userInfo.password == currentPassowrd) {
+                            if (newPassword == confirmNewPassword) {
+                              _firestore
+                                  .collection('Users')
+                                  .doc(userInfo.mobileNumber)
+                                  .update({"password": newPassword});
+
+                              popUpAlertDialogBox(
+                                  context, "Successfully changed Password");
+                            } else if (newPassword != confirmNewPassword) {
+                              popUpAlertDialogBox(
+                                  context, "Passwords don't match");
+                            }
+                          } else {
+                            popUpAlertDialogBox(context, "Invalid Password");
+                          }
                         }
-                        print("Process data");
-                        Navigator.pop(context);
                       } catch (e) {
                         print(e);
                       }

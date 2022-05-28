@@ -476,7 +476,7 @@ Future<void> getBookMarkedProperties() async {
   final db = FirebaseFirestore.instance;
   var result = await db
       .collection('Users')
-      .doc(userInfo.email)
+      .doc(userInfo.mobileNumber)
       .collection("BookMarkedProperties")
       .get();
   for (var res in result.docs) {
@@ -516,29 +516,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void getCurrentUser() async {
     try {
-      final user = await _auth.currentUser;
+      // final user = await _auth.currentUser;
 
-      if (user != null) {
-        loggedInUser = user;
-        // print(loggedInUser.email);
-        userInfo.email = loggedInUser.email!;
-        var currUserCollection = _firestore.collection("Users");
-        var docSanpshot = await currUserCollection.doc(userInfo.email).get();
+      // if (user != null) {
+      //   loggedInUser = user;
+      // print(loggedInUser.email);
+      // userInfo.email = loggedInUser.email!;
+      // var currUserCollection = _firestore.collection("Users");
+      // var docSanpshot =
+      // await currUserCollection.doc(userInfo.mobileNumber).get();
 
-        if (docSanpshot.exists) {
-          Map<String, dynamic>? data = docSanpshot.data();
+      // if (docSanpshot.exists) {
+      //   // print("hi");
+      //   Map<String, dynamic>? data = docSanpshot.data();
 
-          userInfo.name = await data?['name'];
-          userInfo.mobileNumber = await data?['number'];
-          userInfo.profileImgUrl = await data?['profileImgUrl'];
-          // print(userInfo.name);
-          // print(userInfo.mobileNumber);
+      //   userInfo.name = await data?['name'];
+      //   userInfo.mobileNumber = await data?['number'];
+      //   userInfo.profileImgUrl = await data?['profileImgUrl'];
+      //   print(userInfo.name);
+      //   print(userInfo.mobileNumber);
 
-          setState(() {});
-        }
-        print(userInfo.email);
-        getBookMarkedProperties();
-      }
+      //   setState(() {});
+      // }
+      // _firestore
+      //     .collection('Users')
+      //     .doc(userInfo.mobileNumber)
+      //     .get()
+      //     .then((value) => {
+      //           // print(value.data()!["password"]),
+      //           userInfo.name = value.data()!["name"],
+      //         });
+      print(userInfo.mobileNumber);
+      getBookMarkedProperties();
+      // }
     } catch (e) {
       print(e);
     }

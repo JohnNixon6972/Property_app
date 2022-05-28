@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:property_app/components/forgotpassword.dart';
+import 'package:property_app/components/otpVerification.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
 import 'package:property_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/alertPopUp.dart';
+
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class loginScreen extends StatefulWidget {
   static const String id = 'login';
@@ -22,8 +28,6 @@ class _loginScreenState extends State<loginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    physics:
-    const BouncingScrollPhysics();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -34,6 +38,7 @@ class _loginScreenState extends State<loginScreen> {
             child: Padding(
               padding: EdgeInsets.all(12),
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: <Widget>[
                     Hero(
@@ -78,21 +83,21 @@ class _loginScreenState extends State<loginScreen> {
                         ),
                         TextFormField(
                           cursorColor: kPrimaryButtonColor,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.phone,
                           textAlign: TextAlign.left,
                           style: TextStyle(color: kPrimaryButtonColor),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter valid Moible Number';
                             } else {
-                              userInfo.email = value;
+                              userInfo.mobileNumber = value;
                             }
                             return null;
                           },
                           decoration: kTextFieldDecoration.copyWith(
                             hintText: 'Enter your registered Mobile Number',
-                            prefixIcon:
-                                Icon(Icons.phone, color: kNavigationIconColor),
+                            prefixIcon: Icon(Icons.phone,
+                                color: kBottomNavigationBackgroundColor),
                           ),
                         ),
                         SizedBox(
@@ -114,8 +119,8 @@ class _loginScreenState extends State<loginScreen> {
                           },
                           decoration: kTextFieldDecoration.copyWith(
                             hintText: 'Enter your Password.',
-                            prefixIcon:
-                                Icon(Icons.lock, color: kNavigationIconColor),
+                            prefixIcon: Icon(Icons.lock,
+                                color: kBottomNavigationBackgroundColor),
                             suffix: InkWell(
                               onTap: () {
                                 setState(() {
@@ -152,7 +157,7 @@ class _loginScreenState extends State<loginScreen> {
                                 backgroundColor: kPageBackgroundColor,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15)),
-                                title: Text(
+                                title: const Text(
                                   "Reset password",
                                   style: TextStyle(
                                     color: kHighlightedTextColor,
@@ -175,13 +180,14 @@ class _loginScreenState extends State<loginScreen> {
                                               ),
                                               TextFormField(
                                                 onChanged: (newValue) {
-                                                  userInfo.email = newValue;
-                                                  print(userInfo.email);
+                                                  userInfo.mobileNumber =
+                                                      newValue;
+                                                  print(userInfo.mobileNumber);
                                                 },
                                                 cursorColor:
                                                     kPrimaryButtonColor,
                                                 keyboardType:
-                                                    TextInputType.emailAddress,
+                                                    TextInputType.phone,
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                     color: kPrimaryButtonColor),
@@ -189,17 +195,13 @@ class _loginScreenState extends State<loginScreen> {
                                                   if (value == null ||
                                                       value.isEmpty) {
                                                     return 'Please enter valid text';
-                                                  } else {
-                                                    userInfo.email = value;
                                                   }
-
-                                                  // return null;
                                                 },
                                                 decoration: kTextFieldDecoration
                                                     .copyWith(
                                                   hintText:
-                                                      'Enter your Email Address.',
-                                                  prefixIcon: Icon(Icons.email,
+                                                      'Enter your Mobile Number.',
+                                                  prefixIcon: Icon(Icons.phone,
                                                       color:
                                                           kPrimaryButtonColor),
                                                 ),
@@ -209,19 +211,36 @@ class _loginScreenState extends State<loginScreen> {
                                               ),
                                               ElevatedButton(
                                                 onPressed: () async {
-                                                  // Validate returns true if the form is valid, or false otherwise.
-                                                  setState(
-                                                    () {
-                                                      if (_loginFormKey
-                                                          .currentState!
-                                                          .validate()) {}
-                                                      FirebaseAuth.instance
-                                                          .sendPasswordResetEmail(
-                                                              email: userInfo
-                                                                  .email);
-                                                    },
-                                                  );
+                                                  bool userExists = false;
+                                                  _firestore
+                                                      .collection("Users")
+                                                      .doc(
+                                                          userInfo.mobileNumber)
+                                                      .get()
+                                                      .then((value) => {
+                                                            print("hi"),
+                                                            userExists = true,
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                forgotPasswordScreen
+                                                                    .id)
+                                                          });
+                                                  if (userExists == false) {
+                                                    popUpAlertDialogBox(context,
+                                                        "User is not registered");
+                                                  }
+                                                  // if (_loginFormKey
+                                                  //     .currentState!
+                                                  //     .validate()) {}
+                                                  // FirebaseAuth.instance
+                                                  //     .sendPasswordResetEmail(
+                                                  //         email: userInfo
+                                                  //             .email);
+
+                                                  // FirebaseAuth.instance.send
+
                                                   Navigator.pop(context);
+                                                  print(userInfo.mobileNumber);
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   primary: kPrimaryButtonColor,
@@ -232,7 +251,7 @@ class _loginScreenState extends State<loginScreen> {
                                                   ),
                                                 ),
                                                 child: const Text(
-                                                  'Request link',
+                                                  'Request OTP',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 20),
@@ -262,44 +281,58 @@ class _loginScreenState extends State<loginScreen> {
                                 //   await _auth.signInWithEmailAndPassword(
                                 //       email: userInfo.email,
                                 //       password: userInfo.password);
+
+                                final _firestore = FirebaseFirestore.instance;
+                                Object? data;
+                                _firestore
+                                    .collection('Users')
+                                    .doc(userInfo.mobileNumber)
+                                    .get()
+                                    .then((value) => {
+                                          // print(value.data()!["password"]),
+                                          if (userInfo.password ==
+                                              (value.data()!["password"]))
+                                            {
+                                              userInfo.name =
+                                                  value.data()!["name"],
+                                              userInfo.password =
+                                                  value.data()!["password"],
+                                              userInfo.email =
+                                                  value.data()!["email"],
+                                              userInfo.mobileNumber =
+                                                  value.data()!["mobileNumber"],
+                                              userInfo.addressLine1 =
+                                                  value.data()!["addressLine1"],
+                                              userInfo.addressLine2 =
+                                                  value.data()!["addressLine2"],
+                                              userInfo.state =
+                                                  value.data()!["state"],
+                                              userInfo.country =
+                                                  value.data()!["country"],
+                                              userInfo.postalCode =
+                                                  value.data()!["postalcode"],
+                                              userInfo.profileImgUrl = value
+                                                  .data()!["profileImgUrl"],
+                                              print("Login Successful"),
+                                              // Navigator.pushNamedAndRemoveUntil(
+                                              //     context,
+                                              //     HomeScreen.id,
+                                              //     (route) => false),
+                                              Navigator.pushNamed(
+                                                  context, HomeScreen.id),
+                                            }
+                                          else
+                                            {
+                                              popUpAlertDialogBox(
+                                                  context, "Login Failed"),
+                                            }
+                                        });
+
                                 await prefs.setString(
                                     'User', userInfo.mobileNumber);
                                 await prefs.setString(
                                     'Password', userInfo.password);
-                               
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, HomeScreen.id, (route) => false);
-                              }
-                              //on FirebaseAuthException catch (error) {
-                              //   switch (error.message) {
-                              //     // case 'The email address is badly formatted.':
-                              //     //   popUpAlertDialogBox(
-                              //     //       context, "Invalid Email");
-                              //     //   break;
-
-                              //     case 'There is no user record corresponding to this identifier. The user may have been deleted.':
-                              //       popUpAlertDialogBox(
-                              //           context, "User Not Registered");
-                              //       break;
-
-                              //     case 'The password is invalid or the user does not have a password.':
-                              //       popUpAlertDialogBox(
-                              //           context, "Invalid Password");
-                              //       break;
-
-                              //     case 'We have blocked all requests from this device due to unusual activity. Try again later.':
-                              //       popUpAlertDialogBox(context,
-                              //           "Session Time Out.\nTry again later.");
-                              //       break;
-
-                              //     default:
-                              //       print(
-                              //           'Case ${error} is not yet implemented');
-
-                              //       break;
-                              //   }
-                              // }
-                              catch (e) {
+                              } catch (e) {
                                 print(e);
                               }
                             }
@@ -329,8 +362,9 @@ class _loginScreenState extends State<loginScreen> {
                               ),
                               simpleTexts(
                                 texts: 'Sign Up',
-                                styleConstant:
-                                    kTextTitleStyle.copyWith(fontSize: 18),
+                                styleConstant: kTextTitleStyle.copyWith(
+                                  fontSize: 18,
+                                ),
                                 align: TextAlign.center,
                               ),
                             ],
@@ -371,143 +405,3 @@ class simpleTexts extends StatelessWidget {
     );
   }
 }
-
-
-// var validateStatus;
-//                           if (_formKey.currentState!.validate()) {
-//                             try {
-//                               print(userInfo.email);
-//                               print(userInfo.password);
-
-//                               EmailAuth emailAuth =
-//                                   new EmailAuth(sessionName: "Sample Session");
-
-//                               bool result = await emailAuth.sendOtp(
-//                                   recipientMail: userInfo.email, otpLength: 5);
-
-//                               Timer _timer;
-//                               var pin;
-//                               var finalresult;
-
-//                               var otp;
-//                               showDialog(
-//                                 context: context,
-//                                 builder: (BuildContext builderContext) {
-//                                   _timer = Timer(Duration(seconds: 30), () {
-//                                     Navigator.of(context).pop();
-//                                   });
-//                                   return Column(
-//                                     children: [
-//                                       Card(
-//                                         child: OTPTextField(
-//                                           length: 6,
-//                                           width:
-//                                               MediaQuery.of(context).size.width,
-//                                           fieldWidth: 50,
-//                                           otpFieldStyle: OtpFieldStyle(
-//                                             borderColor: kNavigationIconColor,
-//                                           ),
-//                                           style: TextStyle(fontSize: 17),
-//                                           textFieldAlignment:
-//                                               MainAxisAlignment.spaceAround,
-//                                           fieldStyle: FieldStyle.underline,
-//                                           onCompleted: (pin) {
-//                                             otp = pin;
-//                                             print("Completed: " + pin);
-//                                           },
-//                                           onChanged: (pin) {},
-//                                         ),
-//                                       ),
-//                                       ElevatedButton(
-//                                         onPressed: () async {
-//                                           finalresult =
-//                                               await emailAuth.validateOtp(
-//                                                   recipientMail: userInfo.email,
-//                                                   userOtp: otp);
-//                                           validateStatus = finalresult;
-//                                         },
-//                                         style: ElevatedButton.styleFrom(
-//                                           primary: kPrimaryButtonColor,
-//                                           shape: RoundedRectangleBorder(
-//                                             borderRadius:
-//                                                 BorderRadius.circular(25),
-//                                           ),
-//                                         ),
-//                                         child: const Text(
-//                                           'Verify OTP',
-//                                           style: TextStyle(
-//                                               color: Colors.white,
-//                                               fontSize: 20),
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   );
-//                                 },
-//                               );
-//                               await Future.delayed(Duration(seconds: 20));
-
-//                               if (validateStatus == true) {
-//                                 _firestore
-//                                     .collection("Users")
-//                                     .doc(userInfo.email)
-//                                     .set({
-//                                   "email": userInfo.email,
-//                                   "name": userInfo.name,
-//                                   "number": userInfo.mobileNumber
-//                                 });
-//                                 try {
-//                                   final newUser = await _auth
-//                                       .createUserWithEmailAndPassword(
-//                                           email: userInfo.email,
-//                                           password: userInfo.password);
-//                                   Navigator.pushNamed(context, HomeScreen.id);
-//                                 } on FirebaseAuthException catch (error) {
-//                                   switch (error.message) {
-//                                     case 'The email address is badly formatted.':
-//                                       popUpAlertDialogBox(
-//                                           context, "Invalid Email");
-//                                       break;
-//                                     case 'The email address is already in use by another account.':
-//                                       popUpAlertDialogBox(
-//                                           context, "User Already exists");
-//                                       break;
-//                                     case 'Password should be at least 6 characters':
-//                                       popUpAlertDialogBox(context,
-//                                           "Password should be atleast 6 characters");
-//                                       break;
-
-//                                     default:
-//                                       popUpAlertDialogBox(
-//                                           context, "Invalid Email");
-//                                       break;
-//                                   }
-//                                 } catch (e) {
-//                                   print(e);
-//                                 }
-//                               } else {
-//                                 popUpAlertDialogBox(
-//                                     context, "Session Time Out");
-//                               }
-//                             } on FirebaseAuthException catch (error) {
-//                               switch (error.message) {
-//                                 case 'The email address is badly formatted.':
-//                                   popUpAlertDialogBox(context, "Invalid Email");
-//                                   break;
-//                                 case 'The email address is already in use by another account.':
-//                                   popUpAlertDialogBox(
-//                                       context, "User Already exists");
-//                                   break;
-//                                 case 'Password should be at least 6 characters':
-//                                   popUpAlertDialogBox(context,
-//                                       "Password should be atleast 6 characters");
-//                                   break;
-
-//                                 default:
-//                                   print('Case ${error} is not yet implemented');
-//                                   break;
-//                               }
-//                             } catch (e) {
-//                               popUpAlertDialogBox(context, "Invalid Email");
-//                             }
-//                             ;
-//                           }

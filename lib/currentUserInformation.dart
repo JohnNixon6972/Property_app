@@ -11,5 +11,6 @@ class getUserDetails {
   late String state = "not saved";
   late String country = "not saved";
   late String postalCode = "not saved";
-  late String profileImgUrl = "";
+  late String profileImgUrl =
+      "https://cdn.iconscout.com/icon/free/png-256/user-avatar-contact-portfolio-personal-portrait-profile-4-5447.png";
 }

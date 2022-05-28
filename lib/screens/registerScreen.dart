@@ -84,9 +84,6 @@ class _registerScreenState extends State<registerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    physics:
-    const BouncingScrollPhysics();
-    var _passwordController;
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -95,6 +92,7 @@ class _registerScreenState extends State<registerScreen> {
           child: Padding(
             padding: EdgeInsets.all(12),
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -102,7 +100,7 @@ class _registerScreenState extends State<registerScreen> {
                   Hero(
                     tag: 'logo',
                     child: Container(
-                      height: 400,
+                      height: 350,
                       child: Image.asset(
                         'images/try11.png',
                       ),
@@ -113,7 +111,7 @@ class _registerScreenState extends State<registerScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       simpleTexts(
-                        texts: 'Personal Details :',
+                        texts: 'Personal Details',
                         styleConstant: kTextTitleStyle.copyWith(fontSize: 25),
                         align: TextAlign.center,
                       ),
@@ -140,8 +138,8 @@ class _registerScreenState extends State<registerScreen> {
                         textInputAction: TextInputAction.done,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your Name.',
-                          prefixIcon:
-                              Icon(Icons.badge, color: kNavigationIconColor),
+                          prefixIcon: Icon(Icons.badge,
+                              color: kBottomNavigationBackgroundColor),
                         ),
                       ),
                       SizedBox(
@@ -166,38 +164,13 @@ class _registerScreenState extends State<registerScreen> {
                         },
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your Mobile Number.',
-                          prefixIcon:
-                              Icon(Icons.phone, color: kNavigationIconColor),
+                          prefixIcon: Icon(Icons.phone,
+                              color: kBottomNavigationBackgroundColor),
                         ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      // TextFormField(
-                      //   onChanged: (value) {
-                      //     userInfo.email = value;
-                      //   },
-                      //   cursorColor: kPrimaryButtonColor,
-                      //   textAlign: TextAlign.left,
-                      //   style: TextStyle(color: kPrimaryButtonColor),
-                      //   validator: (value) {
-                      //     if (value == null || value.isEmpty) {
-                      //       return 'Please enter valid text';
-                      //     } else {
-                      //       userInfo.email = value;
-                      //     }
-
-                      //     return null;
-                      //   },
-                      //   decoration: kTextFieldDecoration.copyWith(
-                      //     hintText: 'Enter your Email Address.',
-                      //     prefixIcon:
-                      //         Icon(Icons.email, color: kNavigationIconColor),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
                       TextFormField(
                         onChanged: (value) {
                           userInfo.password = value;
@@ -218,8 +191,8 @@ class _registerScreenState extends State<registerScreen> {
                         },
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your Password.',
-                          prefixIcon:
-                              Icon(Icons.lock, color: kNavigationIconColor),
+                          prefixIcon: Icon(Icons.lock,
+                              color: kBottomNavigationBackgroundColor),
                           suffix: InkWell(
                             onTap: () {
                               setState(() {

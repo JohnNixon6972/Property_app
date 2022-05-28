@@ -19,7 +19,7 @@ import './screens/previewProperty.dart';
 import 'currentUserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/otpVerification.dart';
-
+import 'components/forgotpassword.dart';
 getUserDetails userInfo = getUserDetails();
 
 void main() async {
@@ -35,7 +35,7 @@ final _auth = FirebaseAuth.instance;
 Future<void> getUser() async {
   final prefs = await SharedPreferences.getInstance();
 
-  // await prefs.clear();
+  await prefs.clear();
   String? savedUser = await prefs.getString("User");
   String? savedPassword = await prefs.getString("Password");
 
@@ -77,7 +77,7 @@ class _PropertyAppState extends State<PropertyApp> {
           AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
           aboutUs.id : (context) => aboutUs(), 
-          
+          forgotPasswordScreen.id :(context) => forgotPasswordScreen(),
         },
       ),
     );

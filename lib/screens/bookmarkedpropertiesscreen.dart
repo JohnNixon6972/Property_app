@@ -330,8 +330,8 @@ class _BookmarkedPropertiesScreenState
             // ignore: prefer_const_constructors
             const Divider(
               thickness: 1,
-              // indent: 50,
-              // endIndent: 40,
+              indent: 50,
+              endIndent: 40,
               color: kHighlightedTextColor,
             ),
             Expanded(flex: 10, child: buildBookMarks()),

@@ -11,5 +11,5 @@ class getUserDetails {
   late String state = "not saved";
   late String country = "not saved";
   late String postalCode = "not saved";
-  late String profileImgUrl = "";
+  late String profileImgUrl = "not saved";
 }

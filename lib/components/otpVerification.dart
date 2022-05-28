@@ -69,13 +69,19 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
       child: FirebasePhoneAuthHandler(
         phoneNumber: "+91" + userInfo.mobileNumber,
         onLoginSuccess: (userCredential, autoVerified) async {
-          // _firestore.collection('Users').add({"name": userInfo.name});
-          _firestore
-              .collection('Users')
-              .doc(userInfo.mobileNumber)
-              .set({"name": userInfo.name, "password": userInfo.password});
-
-          // };
+          _firestore.collection('Users').doc(userInfo.mobileNumber).set({
+            "name": userInfo.name,
+            "password": userInfo.password,
+            "email": userInfo.email,
+            "mobileNumber": userInfo.mobileNumber,
+            "addressLine1": userInfo.addressLine1,
+            "addressLine2": userInfo.addressLine2,
+            "city": userInfo.city,
+            "state": userInfo.state,
+            "country": userInfo.country,
+            "postalcode": userInfo.postalCode,
+            "profileImgUrl": userInfo.profileImgUrl,
+          });
 
           log(
             VerifyPhoneNumberScreen.id,

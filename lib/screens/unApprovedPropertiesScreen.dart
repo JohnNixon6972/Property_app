@@ -345,7 +345,7 @@ class _UnApprovedPropertiesScreenState
 
                                                         _firestore
                                                             .collection("Users")
-                                                            .doc(userInfo.email)
+                                                            .doc(userInfo.mobileNumber)
                                                             .collection(
                                                                 "BookMarkedProperties")
                                                             .doc(unApprovedProperties[
@@ -359,10 +359,10 @@ class _UnApprovedPropertiesScreenState
                                                       }
 
                                                       print(
-                                                          "asset/propertyImages/${userInfo.email}/${unApprovedProperties[index].propertyName}");
+                                                          "asset/propertyImages/${userInfo.mobileNumber}/${unApprovedProperties[index].propertyName}");
                                                       FirebaseStorage.instance
                                                           .ref(
-                                                              "asset/propertyImages/${userInfo.email}/${unApprovedProperties[index].propertyName}")
+                                                              "asset/propertyImages/${userInfo.mobileNumber}/${unApprovedProperties[index].propertyName}")
                                                           .listAll()
                                                           .then((value) {
                                                         value.items

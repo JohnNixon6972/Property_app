@@ -223,7 +223,7 @@ class _ApprovedPropertiesScreenState extends State<ApprovedPropertiesScreen> {
 
                                                         _firestore
                                                             .collection("Users")
-                                                            .doc(userInfo.email)
+                                                            .doc(userInfo.mobileNumber)
                                                             .collection(
                                                                 "BookMarkedProperties")
                                                             .doc(approvedProperties[
@@ -239,7 +239,7 @@ class _ApprovedPropertiesScreenState extends State<ApprovedPropertiesScreen> {
 
                                                       FirebaseStorage.instance
                                                           .ref(
-                                                              "asset/propertyImages/${userInfo.email}/${approvedProperties[index].propertyName}")
+                                                              "asset/propertyImages/${userInfo.mobileNumber}/${approvedProperties[index].propertyName}")
                                                           .listAll()
                                                           .then((value) {
                                                         value.items

@@ -92,7 +92,7 @@ void getBookMarkedPropertiesCards() async {
       if (!availableBookmarkedProperties.contains(propertyName)) {
         await firestore
             .collection("Users")
-            .doc(userInfo.email)
+            .doc(userInfo.mobileNumber)
             .collection("BookMarkedProperties")
             .doc(propertyName)
             .delete();
@@ -261,7 +261,7 @@ class _BookmarkedPropertiesScreenState
                               final firestore = FirebaseFirestore.instance;
                               firestore
                                   .collection("Users")
-                                  .doc(userInfo.email)
+                                  .doc(userInfo.mobileNumber)
                                   .collection("BookMarkedProperties")
                                   .doc(bookMarkedProperties[index].propertyName)
                                   .delete();

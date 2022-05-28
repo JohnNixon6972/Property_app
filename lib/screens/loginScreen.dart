@@ -277,17 +277,26 @@ class _loginScreenState extends State<loginScreen> {
                                           if (userInfo.password ==
                                               (value.data()!["password"]))
                                             {
-  // late String password = "not saved";
-  // late String city = "not saved";
-  // late String state = "not saved";
-  // late String country = "not saved";
-  // late String postalCode = "not saved";
-  // late String profileImgUrl = "";
-                                              userInfo.name = value.data()!["name"],
-                                              userInfo.email = value.data()!["email"],
-                                              userInfo.mobileNumber = value.data()!["mobileNumber"],
-                                              userInfo.addressLine1 = value.data()!["addressLine1"],
-                                              userInfo.addressLine2 = value.data()!["addressLine2"],
+                                              userInfo.name =
+                                                  value.data()!["name"],
+                                              userInfo.password =
+                                                  value.data()!["password"],
+                                              userInfo.email =
+                                                  value.data()!["email"],
+                                              userInfo.mobileNumber =
+                                                  value.data()!["mobileNumber"],
+                                              userInfo.addressLine1 =
+                                                  value.data()!["addressLine1"],
+                                              userInfo.addressLine2 =
+                                                  value.data()!["addressLine2"],
+                                              userInfo.state =
+                                                  value.data()!["state"],
+                                              userInfo.country =
+                                                  value.data()!["country"],
+                                              userInfo.postalCode =
+                                                  value.data()!["postalcode"],
+                                              // userInfo.profileImgUrl = value
+                                              //     .data()!["profileImgUrl"],
                                               print("Login Successful"),
                                               Navigator.pushNamedAndRemoveUntil(
                                                   context,

@@ -304,7 +304,8 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
 
                                                         _firestore
                                                             .collection("Users")
-                                                            .doc(userInfo.email)
+                                                            .doc(userInfo
+                                                                .mobileNumber)
                                                             .collection(
                                                                 "BookMarkedProperties")
                                                             .doc(myProperties[
@@ -318,10 +319,10 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                       }
 
                                                       print(
-                                                          "asset/propertyImages/${userInfo.email}/${myProperties[index].propertyName}");
+                                                          "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}");
                                                       FirebaseStorage.instance
                                                           .ref(
-                                                              "asset/propertyImages/${userInfo.email}/${myProperties[index].propertyName}")
+                                                              "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}")
                                                           .listAll()
                                                           .then((value) {
                                                         value.items

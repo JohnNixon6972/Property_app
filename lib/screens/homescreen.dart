@@ -538,14 +538,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
       //   setState(() {});
       // }
-      _firestore
-          .collection('Users')
-          .doc(userInfo.mobileNumber)
-          .get()
-          .then((value) => {
-                // print(value.data()!["password"]),
-                userInfo.name = value.data()!["name"],
-              });
+      // _firestore
+      //     .collection('Users')
+      //     .doc(userInfo.mobileNumber)
+      //     .get()
+      //     .then((value) => {
+      //           // print(value.data()!["password"]),
+      //           userInfo.name = value.data()!["name"],
+      //         });
       print(userInfo.mobileNumber);
       getBookMarkedProperties();
       // }

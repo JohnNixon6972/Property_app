@@ -19,7 +19,7 @@ import './screens/previewProperty.dart';
 import 'currentUserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/otpVerification.dart';
-
+import 'components/forgotpassword.dart';
 getUserDetails userInfo = getUserDetails();
 
 void main() async {
@@ -77,7 +77,7 @@ class _PropertyAppState extends State<PropertyApp> {
           AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
           aboutUs.id : (context) => aboutUs(), 
-          
+          forgotPasswordScreen.id :(context) => forgotPasswordScreen(),
         },
       ),
     );

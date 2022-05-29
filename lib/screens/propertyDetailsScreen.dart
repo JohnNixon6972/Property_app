@@ -2,12 +2,18 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
+import 'package:property_app/screens/editPropertyScreen2.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import '../constants.dart';
+import 'package:open_mail_app/open_mail_app.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   static const id = 'propertyDetailsScreen';
+  final String ownerMail;
+  final String ownerPhoneNo;
   final String propertyTitle;
   final String propertyAddress;
   final String propertyDescription;
@@ -17,9 +23,23 @@ class PropertyDetailsScreen extends StatelessWidget {
   final String ownerName;
   final String to;
   final String price;
+  final String category;
+  final String type;
+  final String lenght;
+  final String width;
+  final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
+  final String face;
   final List<String> propertyImages;
-  PropertyDetailsScreen(
-      {required this.propertyTitle,
+  const PropertyDetailsScreen(
+      {Key? key,
+      required this.constructionArea,
+      required this.lenght,
+      required this.width,
+      required this.ownerMail,
+      required this.ownerPhoneNo,
+      required this.propertyTitle,
       required this.propertyAddress,
       required this.propertyDescription,
       required this.noBathroom,
@@ -28,24 +48,19 @@ class PropertyDetailsScreen extends StatelessWidget {
       required this.ownerName,
       required this.to,
       required this.price,
-      required this.propertyImages});
+      required this.category,
+      required this.type,
+      required this.cent,
+      required this.ownerImgUrl,
+      required this.face,
+      required this.propertyImages})
+      : super(key: key);
 
-  // Completer<GoogleMapController> _controller = Completer();
-  // static final CameraPosition _kGooglePlex = CameraPosition(
-  //   target: LatLng(37.42796133580664, -122.085749655962),
-  //   zoom: 14.4746,
-  // );
-
-  // static final CameraPosition _kLake = CameraPosition(
-  //     bearing: 192.8334901395799,
-  //     target: LatLng(37.43296265331129, -122.08832357078792),
-  //     tilt: 59.440717697143555,
-  //     zoom: 19.151926040649414);
   Widget buildListView(List<String> propertyImages, BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return ListView.builder(
         // scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: propertyImages.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
@@ -56,7 +71,7 @@ class PropertyDetailsScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ClipRRect(
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(25),
               ),
               child: CachedNetworkImage(
@@ -72,7 +87,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.black12,
-                  child: Icon(
+                  child: const Icon(
                     Icons.error,
                     color: kHighlightedTextColor,
                   ),
@@ -85,6 +100,11 @@ class PropertyDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String overView = to == "Sell" ? "Sale" : to;
+    overView = 'Property On :' + overView;
+
+    bool isLand = category == "Land" || category == "Plot";
+
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -104,16 +124,16 @@ class PropertyDetailsScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.expand_less_rounded,
                         size: 30,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 115,
                   ),
-                  Center(
+                  const Center(
                     child: Text(
                       'Details',
                       style: TextStyle(
@@ -125,7 +145,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: EdgeInsets.only(top: 18, bottom: 18),
+                padding: const EdgeInsets.only(top: 18, bottom: 18),
                 height: 250,
                 child: buildListView(propertyImages, context),
               ),
@@ -137,37 +157,37 @@ class PropertyDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         propertyTitle,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: kHighlightedTextColor),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Text(
                         propertyAddress,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.w500),
                       )
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        "\$$price ",
-                        style: TextStyle(
+                        "\u{20B9} $price ",
+                        style: const TextStyle(
                             fontSize: 18,
                             color: kHighlightedTextColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
                         to == "Rent" ? " / Month" : "",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.w400),
@@ -181,33 +201,27 @@ class PropertyDetailsScreen extends StatelessWidget {
                     const EdgeInsets.only(top: 10.0, left: 10.0, right: 15),
                 child: Text(
                   propertyDescription,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 15,
                       color: kHighlightedTextColor,
                       fontWeight: FontWeight.w400),
                   // textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(
-                height: 15,
+              const SizedBox(
+                height: 20,
               ),
-              Container(
-                height: 50,
-                width: 340,
-                decoration: BoxDecoration(
-                  color: kSecondaryButtonColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
+              Center(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: !isLand
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.start,
                   children: [
                     Container(
                       height: 40,
-                      width: 170,
-                      decoration: BoxDecoration(
+                      width: 180,
+                      decoration: const BoxDecoration(
                         color: kHighlightedTextColor,
                         borderRadius: BorderRadius.all(
                           Radius.circular(10),
@@ -215,7 +229,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          'Overview',
+                          overView,
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -223,31 +237,40 @@ class PropertyDetailsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      height: 40,
-                      width: 170,
-                      decoration: BoxDecoration(
-                        color: kSecondaryButtonColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Review',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: kSubCategoryColor,
-                          ),
-                        ),
-                      ),
-                    )
+                    !isLand
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                              height: 60,
+                              width: 130,
+                              decoration: const BoxDecoration(
+                                color: kSecondaryButtonColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Text(
+                                    "Property Facing : " + face,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center()
                   ],
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,75 +278,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   Container(
                     width: 110,
                     height: 130,
-                    decoration: BoxDecoration(
-                        color: kSecondaryButtonColor,
-                        borderRadius: BorderRadius.all((Radius.circular(15)))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.bathtub_outlined,
-                              color: kHighlightedTextColor,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Bathroom',
-                              style: TextStyle(
-                                  color: kHighlightedTextColor, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              noBathroom,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )
-                          ]),
-                    ),
-                  ),
-                  Container(
-                    width: 110,
-                    height: 130,
-                    decoration: BoxDecoration(
-                        color: kSecondaryButtonColor,
-                        borderRadius: BorderRadius.all((Radius.circular(15)))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.bed_rounded,
-                              color: kHighlightedTextColor,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Bedroom',
-                              style: TextStyle(
-                                  color: kHighlightedTextColor, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              noBedroom,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )
-                          ]),
-                    ),
-                  ),
-                  Container(
-                    width: 110,
-                    height: 130,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
@@ -331,24 +286,93 @@ class PropertyDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.crop_square_rounded,
                             color: kHighlightedTextColor,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            'Area',
+                          const Text(
+                            'Total Area',
                             style: TextStyle(
                                 color: kHighlightedTextColor, fontSize: 15),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
-                            '$area FT.',
+                            '$area SqFt.',
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 110,
+                    height: 130,
+                    decoration: const BoxDecoration(
+                        color: kSecondaryButtonColor,
+                        borderRadius: BorderRadius.all((Radius.circular(15)))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.home_work_outlined,
+                              color: kHighlightedTextColor,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              'Category',
+                              style: TextStyle(
+                                  color: kHighlightedTextColor, fontSize: 15),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              category,
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            )
+                          ]),
+                    ),
+                  ),
+                  Container(
+                    width: 110,
+                    height: 130,
+                    decoration: const BoxDecoration(
+                        color: kSecondaryButtonColor,
+                        borderRadius: BorderRadius.all((Radius.circular(15)))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.landscape,
+                            color: kHighlightedTextColor,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text(
+                            'Type',
                             style: TextStyle(
+                                color: kHighlightedTextColor, fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            type,
+                            style: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           )
                         ],
@@ -357,14 +381,274 @@ class PropertyDetailsScreen extends StatelessWidget {
                   )
                 ],
               ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: !isLand
+                    ? [
+                        Container(
+                          width: 110,
+                          height: 120,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.bathtub_outlined,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Bathroom',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    noBathroom,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                        Container(
+                          width: 110,
+                          height: 120,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.bed_rounded,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Bedroom',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    noBedroom,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                        Container(
+                          width: 110,
+                          height: 120,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.area_chart_outlined,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Build Area',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    constructionArea + "SqFt.",
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                      ]
+                    : [
+                        Container(
+                          width: 110,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.photo_size_select_large,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Plot Length',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    lenght + " Ft.",
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                        Container(
+                          width: 110,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.height,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Plot Width',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    width + " Ft.",
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                        Container(
+                          width: 110,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                              color: kSecondaryButtonColor,
+                              borderRadius:
+                                  BorderRadius.all((Radius.circular(15)))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.area_chart_outlined,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    'Area Cent',
+                                    style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontSize: 15),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    cent,
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ),
+                      ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 20),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('images/profile_img2.jpg'),
+                      radius: 25,
+                      child: ownerImgUrl == ""
+                          ? Image(image: AssetImage('images/profile_img2.jpg'))
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: CachedNetworkImage(
+                                // cacheManager: customCacheManager,
+                                key: UniqueKey(),
+                                imageUrl: ownerImgUrl,
+                                height: 50,
+                                width: 50,
+                                // maxHeightDiskCache: 230,
+                                // maxWidthDiskCache: 190,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.black12,
+                                  child: const Icon(
+                                    Icons.error,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   Column(
@@ -372,70 +656,80 @@ class PropertyDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         ownerName,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: kHighlightedTextColor),
                       ),
                       Text(
                         ownerName != "admin" ? 'Owner' : "Admin",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color.fromARGB(255, 141, 141, 141),
                         ),
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.mail,
-                          size: 30,
-                          color: kHighlightedTextColor,
+                      GestureDetector(
+                        onTap: () async {
+                          EmailContent email = EmailContent(
+                            to: [
+                              ownerMail,
+                            ],
+                          );
+
+                          OpenMailAppResult result =
+                              await OpenMailApp.composeNewEmailInMailApp(
+                                  nativePickerTitle:
+                                      'Select email app to compose',
+                                  emailContent: email);
+                          if (!result.didOpen && !result.canOpen) {
+                            // showNoMailAppsDialog(context);
+                          } else if (!result.didOpen && result.canOpen) {
+                            showDialog(
+                              context: context,
+                              builder: (_) => MailAppPickerDialog(
+                                mailApps: result.options,
+                                emailContent: email,
+                              ),
+                            );
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.mail,
+                            size: 30,
+                            color: kHighlightedTextColor,
+                          ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.call,
-                          size: 30,
-                          color: kHighlightedTextColor,
+                      GestureDetector(
+                        onTap: () async {
+                          var url = 'tel:' + ownerPhoneNo.toString();
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.call,
+                            size: 30,
+                            color: kHighlightedTextColor,
+                          ),
                         ),
                       )
                     ],
                   )
                 ],
               ),
-              Container(
-                child: Container(
-                  padding: EdgeInsets.only(top: 8, bottom: 18),
-                  height: 250,
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25),
-                    ),
-                    child: Image(
-                      fit: BoxFit.cover,
-                      // height: 400,
-                      width: double.infinity,
-                      height: 250,
-                      image: AssetImage('images/propertyDetailed1.jpg'),
-                    ),
-                  ),
-                ),
-              ),
-              // Container(
-              //   height: 200,
-              //   width: 400,
-              //   child: GoogleMap(
-              //       initialCameraPosition: CameraPosition(
-              //           target: LatLng(-33.870840, 151.206286), zoom: 12)),
-              // ),
             ],
           ),
         ),

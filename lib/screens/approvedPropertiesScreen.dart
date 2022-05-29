@@ -4,99 +4,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:property_app/constants.dart';
-import 'package:property_app/main.dart';
-import 'package:property_app/screens/editPropertyScreen1.dart';
-// import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
-import 'package:property_app/screens/homescreen.dart';
-import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import '../components/bottomNavigationBar.dart';
+import '../constants.dart';
+import '../main.dart';
+import './homescreen.dart';
 
-class myPropertiesScreen extends StatefulWidget {
-  static const id = 'myProperties';
-
+class ApprovedPropertiesScreen extends StatefulWidget {
+  static const id = 'approvedPropertiesScreen';
   @override
-  State<myPropertiesScreen> createState() => _myPropertiesScreenState();
+  State<ApprovedPropertiesScreen> createState() =>
+      _ApprovedPropertiesScreenState();
 }
 
-List<myProperty> myProperties = [];
-void getMyPropertiesCards() {
-  myProperties = [];
-  // print(bookmarkedPropertyNames);
-  // print(PropertiesOnRentAll);
-  // print(PropertiesOnSaleAll);
-  for (PropertyCard property in PropertiesOnRentAll) {
-    if (myPropertiesAdv.contains(property.propertyName)) {
-      myProperties.add(myProperty(
-        ownerMail: property.ownerMail,
-        ownerPhno: property.ownerPhoneNo,
-        imageloc: property.imageloc,
-        price: property.price,
-        propertyAddress: property.propertyAddress,
-        propertyName: property.propertyName,
-        propertyImages: property.propertyImages,
-        propertyCategory: property.propertyCategory,
-        propertyDescription: property.propertyDescription,
-        propertyType: property.propertyType,
-        bedRoom: property.bedRoom,
-        bathRoom: property.bathRoom,
-        ownerName: property.ownerName,
-        to: property.to,
-        area: property.area,
-        lenght: property.lenght,
-        width: property.width,
-        constructionArea: property.constructionArea,
-        ownerImgUrl: property.ownerImgUrl,
-        cent: property.cent,
-        face: property.direction,
-      ));
-    }
-  }
-  for (PropertyCard property in PropertiesOnSaleAll) {
-    if (myPropertiesAdv.contains(property.propertyName)) {
-      myProperties.add(myProperty(
-        ownerMail: property.ownerMail,
-        ownerPhno: property.ownerPhoneNo,
-        imageloc: property.imageloc,
-        price: property.price,
-        propertyAddress: property.propertyAddress,
-        propertyName: property.propertyName,
-        propertyImages: property.propertyImages,
-        propertyCategory: property.propertyCategory,
-        propertyDescription: property.propertyDescription,
-        propertyType: property.propertyType,
-        bedRoom: property.bedRoom,
-        bathRoom: property.bathRoom,
-        ownerName: property.ownerName,
-        to: property.to,
-        area: property.area,
-        lenght: property.lenght,
-        width: property.width,
-        constructionArea: property.constructionArea,
-        ownerImgUrl: property.ownerImgUrl,
-        cent: property.cent,
-        face: property.direction,
-      ));
-    }
-  }
-  print(myProperties);
-  print(bookmarkedPropertyNames);
-}
-
-class _myPropertiesScreenState extends State<myPropertiesScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getMyPropertiesCards();
-    // print(myPropertiesAdv);
-  }
-
-  Widget buildMyProperties() {
+class _ApprovedPropertiesScreenState extends State<ApprovedPropertiesScreen> {
+  Widget buildapprovedProperties() {
     return ListView.builder(
         physics: const BouncingScrollPhysics(),
-        itemCount: myPropertiesAdv.length,
+        itemCount: approvedProperties.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
@@ -125,7 +50,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                         child: CachedNetworkImage(
                           cacheManager: customCacheManager,
                           key: UniqueKey(),
-                          imageUrl: myProperties[index].imageloc,
+                          imageUrl: approvedProperties[index].imageloc,
                           height: 200,
                           width: double.infinity,
 
@@ -150,7 +75,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
-                        myProperties[index].propertyName,
+                        approvedProperties[index].propertyName,
                         style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
@@ -158,7 +83,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Text(
-                        myProperties[index].propertyAddress,
+                        approvedProperties[index].propertyAddress,
                         style: const TextStyle(
                           color: kSubCategoryColor,
                         ),
@@ -167,14 +92,16 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                     Row(
                       children: [
                         Text(
-                          "\u{20B9} ${myProperties[index].price} ",
+                          "\u{20B9} ${approvedProperties[index].price} ",
                           style: const TextStyle(
                               fontSize: 18,
                               color: kHighlightedTextColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          myProperties[index].to == "Rent" ? " / Month" : "",
+                          approvedProperties[index].to == "Rent"
+                              ? " / Month"
+                              : "",
                           style: const TextStyle(
                               fontSize: 12,
                               color: kSubCategoryColor,
@@ -190,32 +117,37 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
-                                  ownerMail: myProperties[index].ownerMail,
-                                  ownerPhoneNo: myProperties[index].ownerPhno,
-                                  type: myProperties[index].propertyType,
-                                  category:
-                                      myProperties[index].propertyCategory,
+                                  ownerMail:
+                                      approvedProperties[index].ownerMail,
+                                  ownerPhoneNo:
+                                      approvedProperties[index].ownerPhoneNo,
+                                  type: approvedProperties[index].propertyType,
+                                  category: approvedProperties[index]
+                                      .propertyCategory,
                                   propertyAddress:
-                                      myProperties[index].propertyAddress,
+                                      approvedProperties[index].propertyAddress,
                                   propertyTitle:
-                                      myProperties[index].propertyName,
-                                  to: myProperties[index].to,
-                                  ownerName: myProperties[index].ownerName,
-                                  propertyDescription:
-                                      myProperties[index].propertyDescription,
-                                  noBathroom: myProperties[index].bathRoom,
-                                  noBedroom: myProperties[index].bedRoom,
-                                  area: myProperties[index].area,
+                                      approvedProperties[index].propertyName,
+                                  to: approvedProperties[index].to,
+                                  ownerName:
+                                      approvedProperties[index].ownerName,
+                                  propertyDescription: approvedProperties[index]
+                                      .propertyDescription,
+                                  noBathroom:
+                                      approvedProperties[index].bathRoom,
+                                  noBedroom: approvedProperties[index].bedRoom,
+                                  area: approvedProperties[index].area,
                                   propertyImages:
-                                      myProperties[index].propertyImages,
-                                  price: myProperties[index].price,
-                                  lenght: myProperties[index].lenght,
-                                  width: myProperties[index].width,
-                                  constructionArea:
-                                      myProperties[index].constructionArea,
-                                  ownerImgUrl: myProperties[index].ownerImgUrl,
-                                  cent: myProperties[index].cent,
-                                  face: myProperties[index].face,
+                                      approvedProperties[index].propertyImages,
+                                  price: approvedProperties[index].price,
+                                  lenght: approvedProperties[index].lenght,
+                                  width: approvedProperties[index].width,
+                                  constructionArea: approvedProperties[index]
+                                      .constructionArea,
+                                  ownerImgUrl:
+                                      approvedProperties[index].ownerImgUrl,
+                                  cent: approvedProperties[index].cent,
+                                  face: approvedProperties[index].direction,
                                 ),
                               ),
                             );
@@ -226,22 +158,6 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                           ),
                         ),
                         const Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditPropertyScreen1(
-                                  propertyToEdit: myProperties[index],
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: kHighlightedTextColor,
-                          ),
-                        ),
                         IconButton(
                           onPressed: () {
                             setState(() {
@@ -277,7 +193,8 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                   setState(() {
                                                     String collection =
                                                         "Properties" +
-                                                            myProperties[index]
+                                                            approvedProperties[
+                                                                    index]
                                                                 .to;
                                                     setState(() {
                                                       final firestore =
@@ -287,15 +204,17 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                       firestore
                                                           .collection(
                                                               collection)
-                                                          .doc(myProperties[
-                                                                  index]
-                                                              .propertyName)
+                                                          .doc(
+                                                              approvedProperties[
+                                                                      index]
+                                                                  .propertyName)
                                                           .delete();
 
                                                       if (bookmarkedPropertyNames
-                                                          .contains(myProperties[
-                                                                  index]
-                                                              .propertyName)) {
+                                                          .contains(
+                                                              approvedProperties[
+                                                                      index]
+                                                                  .propertyName)) {
                                                         print("Hi");
 
                                                         final _firestore =
@@ -304,25 +223,23 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
 
                                                         _firestore
                                                             .collection("Users")
-                                                            .doc(userInfo
-                                                                .mobileNumber)
+                                                            .doc(userInfo.mobileNumber)
                                                             .collection(
                                                                 "BookMarkedProperties")
-                                                            .doc(myProperties[
+                                                            .doc(approvedProperties[
                                                                     index]
                                                                 .propertyName)
                                                             .delete();
                                                         bookmarkedPropertyNames
-                                                            .remove(myProperties[
-                                                                    index]
-                                                                .propertyName);
+                                                            .remove(
+                                                                approvedProperties[
+                                                                        index]
+                                                                    .propertyName);
                                                       }
 
-                                                      print(
-                                                          "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}");
                                                       FirebaseStorage.instance
                                                           .ref(
-                                                              "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}")
+                                                              "asset/propertyImages/${userInfo.mobileNumber}/${approvedProperties[index].propertyName}")
                                                           .listAll()
                                                           .then((value) {
                                                         value.items
@@ -334,11 +251,15 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                                               .delete();
                                                         });
                                                       });
-                                                      myPropertiesAdv.remove(
-                                                          myProperties[index]
-                                                              .propertyName);
-                                                      myProperties.remove(
-                                                          myProperties[index]);
+                                                      approvedPropertiesNames
+                                                          .remove(
+                                                              approvedProperties[
+                                                                      index]
+                                                                  .propertyName);
+                                                      approvedProperties.remove(
+                                                          approvedProperties[
+                                                              index]);
+
                                                       Navigator.pop(context);
                                                     });
                                                   });
@@ -430,11 +351,11 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                     ),
                   ),
                   const SizedBox(
-                    width: 100,
+                    width: 55,
                   ),
                   const Center(
                     child: const Text(
-                      'My Properties',
+                      'All Approved Properties',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -451,10 +372,10 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
               endIndent: 60,
               color: kHighlightedTextColor,
             ),
-            Expanded(flex: 10, child: buildMyProperties()),
+            Expanded(flex: 10, child: buildapprovedProperties()),
             const BottomPageNavigationBar(
               flex_by: 1,
-              page: myPropertiesScreen.id,
+              page: ApprovedPropertiesScreen.id,
             ),
           ],
         ),
@@ -463,7 +384,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
   }
 }
 
-class myProperty extends StatefulWidget {
+class approvedProperty extends StatefulWidget {
   final String imageloc;
   final String propertyName;
   final String propertyAddress;
@@ -485,7 +406,7 @@ class myProperty extends StatefulWidget {
   final String cent;
   final String face;
   final List<String> propertyImages;
-  const myProperty(
+  const approvedProperty(
       {required this.imageloc,
       required this.lenght,
       required this.face,
@@ -508,10 +429,10 @@ class myProperty extends StatefulWidget {
       required this.ownerImgUrl,
       required this.area});
   @override
-  State<myProperty> createState() => _myPropertyState();
+  State<approvedProperty> createState() => _approvedPropertyState();
 }
 
-class _myPropertyState extends State<myProperty> {
+class _approvedPropertyState extends State<approvedProperty> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -538,7 +459,6 @@ class _myPropertyState extends State<myProperty> {
                   borderRadius:
                       const BorderRadius.all(const Radius.circular(20)),
                   child: CachedNetworkImage(
-                    cacheManager: customCacheManager,
                     key: UniqueKey(),
                     imageUrl: widget.imageloc,
                     height: 200,
@@ -601,7 +521,7 @@ class _myPropertyState extends State<myProperty> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, profileScreen.id);
+                      // Navigator.pushNamed(context, profileScreen.id);
                     },
                     child: const Text(
                       'View Details',

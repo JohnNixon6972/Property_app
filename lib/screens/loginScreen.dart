@@ -1,26 +1,18 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:email_auth/email_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:property_app/components/forgotpassword.dart';
+import 'package:property_app/components/otpVerification.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
-import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
-import 'package:property_app/currentUserInformation.dart';
 import 'package:property_app/main.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_logs/flutter_logs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'alertPopUp.dart';
+import '../components/alertPopUp.dart';
 
-final TextEditingController _otpController = TextEditingController();
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class loginScreen extends StatefulWidget {
   static const String id = 'login';
@@ -28,7 +20,50 @@ class loginScreen extends StatefulWidget {
   State<loginScreen> createState() => _loginScreenState();
 }
 
+Future<void> checkSavedUser(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  final _firestore = FirebaseFirestore.instance;
+
+  String? SavedUserNum = prefs.getString("UserNum");
+  String? SavedPassword = prefs.getString("SavedPassword");
+  print(SavedUserNum);
+  print(SavedPassword);
+
+  await _firestore.collection('Users').doc(SavedUserNum).get().then((value) => {
+        // print(value.data()!["password"]),
+        if (value.exists)
+          {
+            if (SavedPassword == (value.data()!["password"]))
+              {
+                userInfo.name = value.data()!["name"],
+                userInfo.password = value.data()!["password"],
+                userInfo.email = value.data()!["email"],
+              userInfo.mobileNumber = value.data()!["mobileNumber"],
+                userInfo.addressLine1 = value.data()!["addressLine1"],
+                userInfo.addressLine2 = value.data()!["addressLine2"],
+                userInfo.state = value.data()!["state"],
+                userInfo.country = value.data()!["country"],
+                userInfo.postalCode = value.data()!["postalcode"],
+                userInfo.profileImgUrl = value.data()!["profileImgUrl"],
+                print("Login Successful"),
+                print("Set Local Storage"),
+                print(prefs.getString("UserNum")),
+                print(prefs.getString("SavedPassword")),
+                Navigator.pushNamedAndRemoveUntil(
+                    context, HomeScreen.id, (route) => false),
+              }
+          }
+      });
+}
+
 class _loginScreenState extends State<loginScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    checkSavedUser(context);
+    super.initState();
+  }
+
   final _auth = FirebaseAuth.instance;
   final _loginFormKey = GlobalKey<FormState>();
   bool showSpinner = false;
@@ -46,9 +81,8 @@ class _loginScreenState extends State<loginScreen> {
             child: Padding(
               padding: EdgeInsets.all(12),
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Hero(
                       tag: 'logo',
@@ -92,7 +126,7 @@ class _loginScreenState extends State<loginScreen> {
                         ),
                         TextFormField(
                           cursorColor: kPrimaryButtonColor,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.phone,
                           textAlign: TextAlign.left,
                           style: TextStyle(color: kPrimaryButtonColor),
                           validator: (value) {
@@ -105,8 +139,8 @@ class _loginScreenState extends State<loginScreen> {
                           },
                           decoration: kTextFieldDecoration.copyWith(
                             hintText: 'Enter your registered Mobile Number',
-                            prefixIcon:
-                                Icon(Icons.phone, color: kNavigationIconColor),
+                            prefixIcon: Icon(Icons.phone,
+                                color: kBottomNavigationBackgroundColor),
                           ),
                         ),
                         SizedBox(
@@ -128,8 +162,8 @@ class _loginScreenState extends State<loginScreen> {
                           },
                           decoration: kTextFieldDecoration.copyWith(
                             hintText: 'Enter your Password.',
-                            prefixIcon:
-                                Icon(Icons.lock, color: kNavigationIconColor),
+                            prefixIcon: Icon(Icons.lock,
+                                color: kBottomNavigationBackgroundColor),
                             suffix: InkWell(
                               onTap: () {
                                 setState(() {
@@ -166,7 +200,7 @@ class _loginScreenState extends State<loginScreen> {
                                 backgroundColor: kPageBackgroundColor,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15)),
-                                title: Text(
+                                title: const Text(
                                   "Reset password",
                                   style: TextStyle(
                                     color: kHighlightedTextColor,
@@ -189,13 +223,14 @@ class _loginScreenState extends State<loginScreen> {
                                               ),
                                               TextFormField(
                                                 onChanged: (newValue) {
-                                                  userInfo.email = newValue;
-                                                  print(userInfo.email);
+                                                  userInfo.mobileNumber =
+                                                      newValue;
+                                                  print(userInfo.mobileNumber);
                                                 },
                                                 cursorColor:
                                                     kPrimaryButtonColor,
                                                 keyboardType:
-                                                    TextInputType.emailAddress,
+                                                    TextInputType.phone,
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                     color: kPrimaryButtonColor),
@@ -203,17 +238,13 @@ class _loginScreenState extends State<loginScreen> {
                                                   if (value == null ||
                                                       value.isEmpty) {
                                                     return 'Please enter valid text';
-                                                  } else {
-                                                    userInfo.email = value;
                                                   }
-
-                                                  // return null;
                                                 },
                                                 decoration: kTextFieldDecoration
                                                     .copyWith(
                                                   hintText:
-                                                      'Enter your Email Address.',
-                                                  prefixIcon: Icon(Icons.email,
+                                                      'Enter your Mobile Number.',
+                                                  prefixIcon: Icon(Icons.phone,
                                                       color:
                                                           kPrimaryButtonColor),
                                                 ),
@@ -223,19 +254,36 @@ class _loginScreenState extends State<loginScreen> {
                                               ),
                                               ElevatedButton(
                                                 onPressed: () async {
-                                                  // Validate returns true if the form is valid, or false otherwise.
-                                                  setState(
-                                                    () {
-                                                      if (_loginFormKey
-                                                          .currentState!
-                                                          .validate()) {}
-                                                      FirebaseAuth.instance
-                                                          .sendPasswordResetEmail(
-                                                              email: userInfo
-                                                                  .email);
-                                                    },
-                                                  );
+                                                  bool userExists = false;
+                                                  _firestore
+                                                      .collection("Users")
+                                                      .doc(
+                                                          userInfo.mobileNumber)
+                                                      .get()
+                                                      .then((value) => {
+                                                            print("hi"),
+                                                            userExists = true,
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                forgotPasswordScreen
+                                                                    .id)
+                                                          });
+                                                  if (userExists == false) {
+                                                    popUpAlertDialogBox(context,
+                                                        "User is not registered");
+                                                  }
+                                                  // if (_loginFormKey
+                                                  //     .currentState!
+                                                  //     .validate()) {}
+                                                  // FirebaseAuth.instance
+                                                  //     .sendPasswordResetEmail(
+                                                  //         email: userInfo
+                                                  //             .email);
+
+                                                  // FirebaseAuth.instance.send
+
                                                   Navigator.pop(context);
+                                                  print(userInfo.mobileNumber);
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   primary: kPrimaryButtonColor,
@@ -246,7 +294,7 @@ class _loginScreenState extends State<loginScreen> {
                                                   ),
                                                 ),
                                                 child: const Text(
-                                                  'Request link',
+                                                  'Request OTP',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 20),
@@ -269,46 +317,81 @@ class _loginScreenState extends State<loginScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             final prefs = await SharedPreferences.getInstance();
-                            // Validate returns true if the form is valid, or false otherwise.
                             if (_loginFormKey.currentState!.validate()) {
-                              print(userInfo.email);
+                              print(userInfo.mobileNumber);
                               print(userInfo.password);
                               try {
-                                await _auth.signInWithEmailAndPassword(
-                                    email: userInfo.email,
-                                    password: userInfo.password);
-                                await prefs.setString('User', userInfo.email);
+                                //   await _auth.signInWithEmailAndPassword(
+                                //       email: userInfo.email,
+                                //       password: userInfo.password);
+
+                                final _firestore = FirebaseFirestore.instance;
+
+                                _firestore
+                                    .collection('Users')
+                                    .doc(userInfo.mobileNumber)
+                                    .get()
+                                    .then((value) => {
+                                          // print(value.data()!["password"]),
+                                          if (value.exists)
+                                            {
+                                              if (userInfo.password ==
+                                                  (value.data()!["password"]))
+                                                {
+                                                  userInfo.name =
+                                                      value.data()!["name"],
+                                                  userInfo.password =
+                                                      value.data()!["password"],
+                                                  userInfo.email =
+                                                      value.data()!["email"],
+                                                  userInfo.mobileNumber = value
+                                                      .data()!["mobileNumber"],
+                                                  userInfo.addressLine1 = value
+                                                      .data()!["addressLine1"],
+                                                  userInfo.addressLine2 = value
+                                                      .data()!["addressLine2"],
+                                                  userInfo.state =
+                                                      value.data()!["state"],
+                                                  userInfo.country =
+                                                      value.data()!["country"],
+                                                  userInfo.postalCode = value
+                                                      .data()!["postalcode"],
+                                                  userInfo.profileImgUrl = value
+                                                      .data()!["profileImgUrl"],
+                                                  print("Login Successful"),
+                                                  print("Set Local Storage"),
+                                                  prefs.setString('UserNum',
+                                                      userInfo.mobileNumber),
+                                                  prefs.setString(
+                                                      'SavedPassword',
+                                                      userInfo.password),
+                                                  print(prefs
+                                                      .getString("UserNum")),
+                                                  print(prefs.getString(
+                                                      "SavedPassword")),
+                                                  Navigator
+                                                      .pushNamedAndRemoveUntil(
+                                                          context,
+                                                          HomeScreen.id,
+                                                          (route) => false),
+                                                }
+                                              else
+                                                {
+                                                  popUpAlertDialogBox(
+                                                      context, "Login Failed"),
+                                                }
+                                            }
+                                          else
+                                            {
+                                              popUpAlertDialogBox(context,
+                                                  "${userInfo.mobileNumber} is not registered"),
+                                            }
+                                        });
+
+                                await prefs.setString(
+                                    'User', userInfo.mobileNumber);
                                 await prefs.setString(
                                     'Password', userInfo.password);
-                                Navigator.pushNamed(context, HomeScreen.id);
-                              } on FirebaseAuthException catch (error) {
-                                switch (error.message) {
-                                  case 'The email address is badly formatted.':
-                                    popUpAlertDialogBox(
-                                        context, "Invalid Email");
-                                    break;
-
-                                  case 'There is no user record corresponding to this identifier. The user may have been deleted.':
-                                    popUpAlertDialogBox(
-                                        context, "User Not Registered");
-                                    break;
-
-                                  case 'The password is invalid or the user does not have a password.':
-                                    popUpAlertDialogBox(
-                                        context, "Invalid Password");
-                                    break;
-
-                                  case 'We have blocked all requests from this device due to unusual activity. Try again later.':
-                                    popUpAlertDialogBox(context,
-                                        "Session Time Out.\nTry again later.");
-                                    break;
-
-                                  default:
-                                    print(
-                                        'Case ${error} is not yet implemented');
-
-                                    break;
-                                }
                               } catch (e) {
                                 print(e);
                               }
@@ -339,8 +422,9 @@ class _loginScreenState extends State<loginScreen> {
                               ),
                               simpleTexts(
                                 texts: 'Sign Up',
-                                styleConstant:
-                                    kTextTitleStyle.copyWith(fontSize: 18),
+                                styleConstant: kTextTitleStyle.copyWith(
+                                  fontSize: 18,
+                                ),
                                 align: TextAlign.center,
                               ),
                             ],
@@ -381,143 +465,3 @@ class simpleTexts extends StatelessWidget {
     );
   }
 }
-
-
-// var validateStatus;
-//                           if (_formKey.currentState!.validate()) {
-//                             try {
-//                               print(userInfo.email);
-//                               print(userInfo.password);
-
-//                               EmailAuth emailAuth =
-//                                   new EmailAuth(sessionName: "Sample Session");
-
-//                               bool result = await emailAuth.sendOtp(
-//                                   recipientMail: userInfo.email, otpLength: 5);
-
-//                               Timer _timer;
-//                               var pin;
-//                               var finalresult;
-
-//                               var otp;
-//                               showDialog(
-//                                 context: context,
-//                                 builder: (BuildContext builderContext) {
-//                                   _timer = Timer(Duration(seconds: 30), () {
-//                                     Navigator.of(context).pop();
-//                                   });
-//                                   return Column(
-//                                     children: [
-//                                       Card(
-//                                         child: OTPTextField(
-//                                           length: 6,
-//                                           width:
-//                                               MediaQuery.of(context).size.width,
-//                                           fieldWidth: 50,
-//                                           otpFieldStyle: OtpFieldStyle(
-//                                             borderColor: kNavigationIconColor,
-//                                           ),
-//                                           style: TextStyle(fontSize: 17),
-//                                           textFieldAlignment:
-//                                               MainAxisAlignment.spaceAround,
-//                                           fieldStyle: FieldStyle.underline,
-//                                           onCompleted: (pin) {
-//                                             otp = pin;
-//                                             print("Completed: " + pin);
-//                                           },
-//                                           onChanged: (pin) {},
-//                                         ),
-//                                       ),
-//                                       ElevatedButton(
-//                                         onPressed: () async {
-//                                           finalresult =
-//                                               await emailAuth.validateOtp(
-//                                                   recipientMail: userInfo.email,
-//                                                   userOtp: otp);
-//                                           validateStatus = finalresult;
-//                                         },
-//                                         style: ElevatedButton.styleFrom(
-//                                           primary: kPrimaryButtonColor,
-//                                           shape: RoundedRectangleBorder(
-//                                             borderRadius:
-//                                                 BorderRadius.circular(25),
-//                                           ),
-//                                         ),
-//                                         child: const Text(
-//                                           'Verify OTP',
-//                                           style: TextStyle(
-//                                               color: Colors.white,
-//                                               fontSize: 20),
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   );
-//                                 },
-//                               );
-//                               await Future.delayed(Duration(seconds: 20));
-
-//                               if (validateStatus == true) {
-//                                 _firestore
-//                                     .collection("Users")
-//                                     .doc(userInfo.email)
-//                                     .set({
-//                                   "email": userInfo.email,
-//                                   "name": userInfo.name,
-//                                   "number": userInfo.mobileNumber
-//                                 });
-//                                 try {
-//                                   final newUser = await _auth
-//                                       .createUserWithEmailAndPassword(
-//                                           email: userInfo.email,
-//                                           password: userInfo.password);
-//                                   Navigator.pushNamed(context, HomeScreen.id);
-//                                 } on FirebaseAuthException catch (error) {
-//                                   switch (error.message) {
-//                                     case 'The email address is badly formatted.':
-//                                       popUpAlertDialogBox(
-//                                           context, "Invalid Email");
-//                                       break;
-//                                     case 'The email address is already in use by another account.':
-//                                       popUpAlertDialogBox(
-//                                           context, "User Already exists");
-//                                       break;
-//                                     case 'Password should be at least 6 characters':
-//                                       popUpAlertDialogBox(context,
-//                                           "Password should be atleast 6 characters");
-//                                       break;
-
-//                                     default:
-//                                       popUpAlertDialogBox(
-//                                           context, "Invalid Email");
-//                                       break;
-//                                   }
-//                                 } catch (e) {
-//                                   print(e);
-//                                 }
-//                               } else {
-//                                 popUpAlertDialogBox(
-//                                     context, "Session Time Out");
-//                               }
-//                             } on FirebaseAuthException catch (error) {
-//                               switch (error.message) {
-//                                 case 'The email address is badly formatted.':
-//                                   popUpAlertDialogBox(context, "Invalid Email");
-//                                   break;
-//                                 case 'The email address is already in use by another account.':
-//                                   popUpAlertDialogBox(
-//                                       context, "User Already exists");
-//                                   break;
-//                                 case 'Password should be at least 6 characters':
-//                                   popUpAlertDialogBox(context,
-//                                       "Password should be atleast 6 characters");
-//                                   break;
-
-//                                 default:
-//                                   print('Case ${error} is not yet implemented');
-//                                   break;
-//                               }
-//                             } catch (e) {
-//                               popUpAlertDialogBox(context, "Invalid Email");
-//                             }
-//                             ;
-//                           }

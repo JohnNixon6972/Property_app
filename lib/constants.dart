@@ -49,5 +49,7 @@ const kNavigationIconColor = Color.fromARGB(255, 211, 199, 199);
 const kBottomNavigationBackgroundColor = Color.fromARGB(255, 190, 157, 170);
 const kPropertyCardColor = Color(0xffDAD8D9);
 const kTextFieldFillColor = Color.fromARGB(255, 211, 199, 199);
+const kYes =  Color.fromARGB(255, 7, 91, 10);
+const kNo = Color.fromARGB(255, 147, 20, 11);
 
 

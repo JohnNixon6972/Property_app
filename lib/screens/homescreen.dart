@@ -2,20 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
-import 'package:property_app/screens/addPopertiesScreen2.dart';
-import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
+import 'package:property_app/components/scaffoldBottomAppBar.dart';
+import 'package:property_app/screens/aboutUs.dart';
+import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import '../constants.dart';
-import '../components/bottomNavigationBar.dart';
+// import '../components/bottomNavigationBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:property_app/currentUserInformation.dart';
+import 'aboutUs.dart';
 
 late User loggedInUser;
-bool displayAdminProperties = true;
+bool displayAdminProperties = false;
 List<String> bookmarkedPropertyNames = [];
 List<String> myPropertiesAdv = [];
 
@@ -33,6 +33,10 @@ class PropertiesOnSaleAdv extends StatefulWidget {
 }
 
 List<PropertyCard> PropertiesOnSaleAll = [];
+List<PropertyCard> approvedProperties = [];
+List<PropertyCard> unApprovedProperties = [];
+List<String> approvedPropertiesNames = [];
+List<String> unApprovedPropertiesNames = [];
 
 class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
   List<PropertyCard> PropertiesOnSaleAdmin = [];
@@ -41,9 +45,17 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
 
   List<PropertyCard> ApartmentOnSale = [];
 
-  List<PropertyCard> PentHouseOnSaleAdmin = [];
+  List<PropertyCard> HouseOnSaleAdmin = [];
 
-  List<PropertyCard> PentHouseOnSale = [];
+  List<PropertyCard> HouseOnSale = [];
+
+  List<PropertyCard> PlotOnSale = [];
+
+  List<PropertyCard> PlotOnSaleAdmin = [];
+
+  List<PropertyCard> LandOnSale = [];
+
+  List<PropertyCard> LandOnSaleAdmin = [];
 
   List<PropertyCard> BuildingOnSaleAdmin = [];
 
@@ -58,8 +70,12 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
         PropertiesOnSaleAdmin = [];
         ApartmentOnSaleAdmin = [];
         ApartmentOnSale = [];
-        PentHouseOnSaleAdmin = [];
-        PentHouseOnSale = [];
+        HouseOnSaleAdmin = [];
+        HouseOnSale = [];
+        LandOnSale = [];
+        LandOnSaleAdmin = [];
+        PlotOnSale = [];
+        PlotOnSaleAdmin = [];
         BuildingOnSaleAdmin = [];
         BuildingOnSale = [];
         if (!snapshot.hasData) {
@@ -70,6 +86,8 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
         final properties = snapshot.data!.docs;
         for (var property in properties) {
           var isSet = property["isSetImages"].toString();
+          var isApproved = property["isApproved"].toString();
+
           if (isSet == "True") {
             try {
               List<String> propertyImages = [];
@@ -91,10 +109,20 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var propertyCategory = property["PropertyCategory"];
               var ownerName = property["OwnerName"];
               var propertyType = property["PropertyType"];
-              var area = property["SquareFit"];
+              var area = property["PlotArea"];
+              var constructionArea = property["ConstructionArea"];
               var ownerEmail = property["PropertyBy"];
+              var ownerPhno = property["PhNo"];
+              var facing = property["PropertyDirection"];
+              var lenght = property["LandLength"];
+              var width = property["LandWidth"];
+              var ownerImgUrl = property["profileImgUrl"];
+              var cent = property["Cent"];
 
               final Property = PropertyCard(
+                ownerMail: ownerEmail,
+                ownerPhoneNo: ownerPhno,
+                constructionArea: constructionArea,
                 imageloc: imageloc,
                 price: price,
                 propertyAddress: propertyAddress,
@@ -108,36 +136,65 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                 ownerName: ownerName,
                 to: to,
                 area: area,
+                lenght: lenght,
+                width: width,
+                direction: facing,
+                ownerImgUrl: ownerImgUrl,
+                cent: cent,
               );
-              PropertiesOnSaleAll.add(Property);
-              // print(propertyName);
-              // if (bookmarkedPropertyNames.contains(propertyName.toString())) {
-              //   bookmarkedProperties.add(Property);
-              // }
-              if (ownerEmail.toString() == userInfo.email &&
-                  !myPropertiesAdv.contains(Property.propertyName)) {
-                print(Property.propertyName);
-                myPropertiesAdv.add(Property.propertyName);
-              }
-              if (ownerName.toString() == "john") {
-                PropertiesOnSaleAdmin.add(Property);
-              }
-              if (propertyCategory.toString() == "Apartment") {
-                ApartmentOnSale.add(Property);
-                if (ownerName.toString() == "john") {
-                  ApartmentOnSaleAdmin.add(Property);
+              if (isApproved == "True") {
+                PropertiesOnSaleAll.add(Property);
+                if (!approvedPropertiesNames.contains(Property.propertyName)) {
+                  approvedPropertiesNames.add(Property.propertyName);
+                  approvedProperties.add(Property);
                 }
-              }
-              if (propertyCategory.toString() == "PentHouse") {
-                PentHouseOnSale.add(Property);
-                if (ownerName.toString() == "john") {
-                  PentHouseOnSaleAdmin.add(Property);
+                // print(propertyName);
+                // if (bookmarkedPropertyNames.contains(propertyName.toString())) {
+                //   bookmarkedProperties.add(Property);
+                // }
+                if (ownerEmail.toString() == userInfo.email &&
+                    !myPropertiesAdv.contains(Property.propertyName)) {
+                  print(Property.propertyName);
+                  myPropertiesAdv.add(Property.propertyName);
                 }
-              }
-              if (propertyCategory.toString() == "Building") {
-                BuildingOnSale.add(Property);
                 if (ownerName.toString() == "john") {
-                  BuildingOnSaleAdmin.add(Property);
+                  PropertiesOnSaleAdmin.add(Property);
+                }
+                if (propertyCategory.toString() == "Apartment") {
+                  ApartmentOnSale.add(Property);
+                  if (ownerName.toString() == "john") {
+                    ApartmentOnSaleAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "House") {
+                  HouseOnSale.add(Property);
+                  if (ownerName.toString() == "john") {
+                    HouseOnSaleAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "Plot") {
+                  PlotOnSale.add(Property);
+                  if (ownerName.toString() == "john") {
+                    PlotOnSaleAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "Land") {
+                  LandOnSale.add(Property);
+                  if (ownerName.toString() == "john") {
+                    LandOnSaleAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "Building") {
+                  BuildingOnSale.add(Property);
+                  if (ownerName.toString() == "john") {
+                    BuildingOnSaleAdmin.add(Property);
+                  }
+                }
+              } else {
+                if (!unApprovedPropertiesNames
+                    .contains(Property.propertyName)) {
+                  unApprovedPropertiesNames.add(Property.propertyName);
+                  unApprovedProperties.add(Property);
                 }
               }
             } catch (e) {
@@ -157,8 +214,12 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
         if (displayAdminProperties) {
           if (categorySelected == "Appartment") {
             displaySaleProperties = ApartmentOnSaleAdmin;
-          } else if (categorySelected == "PentHouse") {
-            displaySaleProperties = PentHouseOnSaleAdmin;
+          } else if (categorySelected == "House") {
+            displaySaleProperties = HouseOnSaleAdmin;
+          } else if (categorySelected == "Plot") {
+            displaySaleProperties = PlotOnSaleAdmin;
+          } else if (categorySelected == "Land") {
+            displaySaleProperties = LandOnSaleAdmin;
           } else if (categorySelected == "Building") {
             displaySaleProperties = BuildingOnSaleAdmin;
           } else {
@@ -167,20 +228,24 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
         } else {
           if (categorySelected == "Appartment") {
             displaySaleProperties = ApartmentOnSale;
-          } else if (categorySelected == "PentHouse") {
-            displaySaleProperties = PentHouseOnSale;
+          } else if (categorySelected == "House") {
+            displaySaleProperties = HouseOnSale;
+          } else if (categorySelected == "Plot") {
+            displaySaleProperties = PlotOnSale;
+          } else if (categorySelected == "Land") {
+            displaySaleProperties = LandOnSale;
           } else if (categorySelected == "Building") {
             displaySaleProperties = BuildingOnSale;
           } else {
             displaySaleProperties = PropertiesOnSaleAll;
           }
         }
-
+        print(displaySaleProperties);
         return ListView(
             // reverse: true,
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             // shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             children: displaySaleProperties);
       },
@@ -202,9 +267,17 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
 
   List<PropertyCard> ApartmentOnRent = [];
 
-  List<PropertyCard> PentHouseOnRentAdmin = [];
+  List<PropertyCard> HouseOnRentAdmin = [];
 
-  List<PropertyCard> PentHouseOnRent = [];
+  List<PropertyCard> HouseOnRent = [];
+
+  List<PropertyCard> LandOnRentAdmin = [];
+
+  List<PropertyCard> LandOnRent = [];
+
+  List<PropertyCard> PlotOnRentAdmin = [];
+
+  List<PropertyCard> PlotOnRent = [];
 
   List<PropertyCard> BuildingOnRentAdmin = [];
 
@@ -219,18 +292,23 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
         PropertiesOnRentAdmin = [];
         ApartmentOnRentAdmin = [];
         ApartmentOnRent = [];
-        PentHouseOnRentAdmin = [];
-        PentHouseOnRent = [];
+        HouseOnRentAdmin = [];
+        HouseOnRent = [];
+        LandOnRentAdmin = [];
+        LandOnRent = [];
+        PlotOnRentAdmin = [];
+        PlotOnRent = [];
         BuildingOnRentAdmin = [];
         BuildingOnRent = [];
         if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
+          return const Center(
+            child: const CircularProgressIndicator(),
           );
         }
         final properties = snapshot.data!.docs;
         for (var property in properties) {
           var isSet = property["isSetImages"].toString();
+          var isApproved = property["isApproved"].toString();
           if (isSet == "True") {
             try {
               List<String> propertyImages = [];
@@ -251,10 +329,20 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var propertyCategory = property["PropertyCategory"];
               var ownerName = property["OwnerName"];
               var propertyType = property["PropertyType"];
-              var area = property["SquareFit"];
+              var area = property["PlotArea"];
+              var constructionArea = property["ConstructionArea"];
               var ownerEmail = property["PropertyBy"];
+              var ownerPhno = property["PhNo"];
+              var facing = property["PropertyDirection"];
+              var lenght = property["LandLength"];
+              var width = property["LandWidth"];
+              var ownerImgUrl = property["profileImgUrl"];
+              var cent = property["Cent"];
 
               final Property = PropertyCard(
+                ownerMail: ownerEmail,
+                constructionArea: constructionArea,
+                ownerPhoneNo: ownerPhno,
                 imageloc: imageloc,
                 price: price,
                 propertyAddress: propertyAddress,
@@ -268,32 +356,62 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                 ownerName: ownerName,
                 to: to,
                 area: area,
+                lenght: lenght,
+                width: width,
+                direction: facing,
+                ownerImgUrl: ownerImgUrl,
+                cent: cent,
               );
-              PropertiesOnRentAll.add(Property);
-              if (ownerEmail.toString() == userInfo.email &&
-                  !myPropertiesAdv.contains(Property.propertyName)) {
-                myPropertiesAdv.add(Property.propertyName);
-              }
-              if (ownerName.toString() == "john") {
-                PropertiesOnRentAdmin.add(Property);
-              }
 
-              if (propertyCategory.toString() == "Apartment") {
-                ApartmentOnRent.add(Property);
-                if (ownerName.toString() == "john") {
-                  ApartmentOnRentAdmin.add(Property);
+              if (isApproved == "True") {
+                PropertiesOnRentAll.add(Property);
+                if (!approvedPropertiesNames.contains(Property.propertyName)) {
+                  approvedPropertiesNames.add(Property.propertyName);
+                  approvedProperties.add(Property);
                 }
-              }
-              if (propertyCategory.toString() == "PentHouse") {
-                PentHouseOnRent.add(Property);
-                if (ownerName.toString() == "john") {
-                  PentHouseOnRentAdmin.add(Property);
+                if (ownerEmail.toString() == userInfo.email &&
+                    !myPropertiesAdv.contains(Property.propertyName)) {
+                  myPropertiesAdv.add(Property.propertyName);
                 }
-              }
-              if (propertyCategory.toString() == "Building") {
-                BuildingOnRent.add(Property);
                 if (ownerName.toString() == "john") {
-                  BuildingOnRentAdmin.add(Property);
+                  PropertiesOnRentAdmin.add(Property);
+                }
+
+                if (propertyCategory.toString() == "Apartment") {
+                  ApartmentOnRent.add(Property);
+                  if (ownerName.toString() == "john") {
+                    ApartmentOnRentAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "House") {
+                  HouseOnRent.add(Property);
+                  if (ownerName.toString() == "john") {
+                    HouseOnRentAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "Plot") {
+                  PlotOnRent.add(Property);
+                  if (ownerName.toString() == "john") {
+                    PlotOnRentAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "Land") {
+                  LandOnRent.add(Property);
+                  if (ownerName.toString() == "john") {
+                    LandOnRentAdmin.add(Property);
+                  }
+                }
+                if (propertyCategory.toString() == "Building") {
+                  BuildingOnRent.add(Property);
+                  if (ownerName.toString() == "john") {
+                    BuildingOnRentAdmin.add(Property);
+                  }
+                }
+              } else {
+                if (!unApprovedPropertiesNames
+                    .contains(Property.propertyName)) {
+                  unApprovedPropertiesNames.add(Property.propertyName);
+                  unApprovedProperties.add(Property);
                 }
               }
             } catch (e) {
@@ -313,8 +431,12 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
         if (displayAdminProperties) {
           if (categorySelected == "Appartment") {
             displayRentProperties = ApartmentOnRentAdmin;
-          } else if (categorySelected == "PentHouse") {
-            displayRentProperties = PentHouseOnRentAdmin;
+          } else if (categorySelected == "House") {
+            displayRentProperties = HouseOnRentAdmin;
+          } else if (categorySelected == "Plot") {
+            displayRentProperties = PlotOnRentAdmin;
+          } else if (categorySelected == "Land") {
+            displayRentProperties = LandOnRentAdmin;
           } else if (categorySelected == "Building") {
             displayRentProperties = BuildingOnRentAdmin;
           } else {
@@ -323,8 +445,12 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
         } else {
           if (categorySelected == "Appartment") {
             displayRentProperties = ApartmentOnRent;
-          } else if (categorySelected == "PentHouse") {
-            displayRentProperties = PentHouseOnRent;
+          } else if (categorySelected == "House") {
+            displayRentProperties = HouseOnRent;
+          } else if (categorySelected == "Land") {
+            displayRentProperties = LandOnRent;
+          } else if (categorySelected == "Plot") {
+            displayRentProperties = PlotOnRent;
           } else if (categorySelected == "Building") {
             displayRentProperties = BuildingOnRent;
           } else {
@@ -334,9 +460,9 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
 
         return ListView(
             // reverse: true,
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             // shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             children: displayRentProperties);
       },
@@ -351,7 +477,7 @@ Future<void> getBookMarkedProperties() async {
   final db = FirebaseFirestore.instance;
   var result = await db
       .collection('Users')
-      .doc(userInfo.email)
+      .doc(userInfo.mobileNumber)
       .collection("BookMarkedProperties")
       .get();
   for (var res in result.docs) {
@@ -375,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     isSelected = [true, false];
-    getCurrentUser();
+    getBookMarkedProperties();
     super.initState();
   }
 
@@ -389,34 +515,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late IconData icn;
 
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser;
-
-      if (user != null) {
-        loggedInUser = user;
-        // print(loggedInUser.email);
-        userInfo.email = loggedInUser.email!;
-        var currUserCollection = _firestore.collection("Users");
-        var docSanpshot = await currUserCollection.doc(userInfo.email).get();
-
-        if (docSanpshot.exists) {
-          Map<String, dynamic>? data = docSanpshot.data();
-
-          userInfo.name = await data?['name'];
-          userInfo.mobileNumber = await data?['number'];
-          // print(userInfo.name);
-          // print(userInfo.mobileNumber);
-
-          setState(() {});
-        }
-        print(userInfo.email);
-        getBookMarkedProperties();
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  Color SelectedToggleBottonColor = kNo;
 
   @override
   Widget build(BuildContext context) {
@@ -437,13 +536,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           'Hey ${userInfo.name} ${Emojis.wavingHandLightSkinTone}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
                             color: kBottomNavigationBackgroundColor,
                           ),
                         ),
-                        Text(
+                        const Text(
                           "Let's find your best residence!",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.bold),
@@ -451,30 +550,75 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: const Image(
-                      image: AssetImage('images/profile_img1.jpg'),
-                      height: 70,
-                      width: 70,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, profileScreen.id);
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: userInfo.profileImgUrl == ""
+                          ? const Image(
+                              height: 70,
+                              width: 70,
+                              image:
+                                  const AssetImage('images/profile_img9.png'))
+                          : CachedNetworkImage(
+                              cacheManager: customCacheManager,
+                              key: UniqueKey(),
+                              imageUrl: userInfo.profileImgUrl,
+                              height: 70,
+                              width: 70,
+                              // maxHeightDiskCache: 230,
+                              // maxWidthDiskCache: 190,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: kHighlightedTextColor,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: Colors.black12,
+                                child: const Icon(
+                                  Icons.error,
+                                  color: kHighlightedTextColor,
+                                ),
+                              ),
+                            ),
                     ),
                   )
                 ],
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 20, left: 15, right: 15),
-              child: Text(
-                'Category',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              child: Row(
+                children: [
+                  Text(
+                    'Category',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, aboutUs.id);
+                    },
+                    child: Icon(
+                      Icons.people,
+                      color: kHighlightedTextColor,
+                    ),
+                  )
+                ],
               ),
             ),
             Expanded(
               flex: 4,
               child: Padding(
                 padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: ListView(
+                  clipBehavior: Clip.none,
+                  physics: const BouncingScrollPhysics(),
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  scrollDirection: Axis.horizontal,
                   children: [
                     CategoryCard(
                       onTap: () {
@@ -494,30 +638,45 @@ class _HomeScreenState extends State<HomeScreen> {
                     CategoryCard(
                       onTap: () {
                         setState(() {
-                          categorySelected = "Appartment";
+                          categorySelected = "Plot";
                         });
                       },
-                      btn_color: categorySelected == "Appartment"
+                      btn_color: categorySelected == "Plot"
                           ? kPrimaryButtonColor
                           : kSecondaryButtonColor,
-                      text: 'Appartment',
-                      width: 90,
-                      text_color: categorySelected == "Appartment"
+                      text: 'Plot',
+                      width: 80,
+                      text_color: categorySelected == "Plot"
                           ? Colors.white
                           : kSubCategoryColor,
                     ),
                     CategoryCard(
                       onTap: () {
                         setState(() {
-                          categorySelected = "PentHouse";
+                          categorySelected = "Land";
                         });
                       },
-                      btn_color: categorySelected == "PentHouse"
+                      btn_color: categorySelected == "Land"
                           ? kPrimaryButtonColor
                           : kSecondaryButtonColor,
-                      text: 'PentHouse',
-                      width: 90,
-                      text_color: categorySelected == "PentHouse"
+                      text: 'Land',
+                      width: 80,
+                      text_color: categorySelected == "Land"
+                          ? Colors.white
+                          : kSubCategoryColor,
+                    ),
+                    CategoryCard(
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "House";
+                        });
+                      },
+                      btn_color: categorySelected == "House"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
+                      text: 'House',
+                      width: 80,
+                      text_color: categorySelected == "House"
                           ? Colors.white
                           : kSubCategoryColor,
                     ),
@@ -531,8 +690,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? kPrimaryButtonColor
                           : kSecondaryButtonColor,
                       text: 'Building',
-                      width: 60,
+                      width: 90,
                       text_color: categorySelected == "Building"
+                          ? Colors.white
+                          : kSubCategoryColor,
+                    ),
+                    CategoryCard(
+                      onTap: () {
+                        setState(() {
+                          categorySelected = "Appartment";
+                        });
+                      },
+                      btn_color: categorySelected == "Appartment"
+                          ? kPrimaryButtonColor
+                          : kSecondaryButtonColor,
+                      text: 'Appartment',
+                      width: 90,
+                      text_color: categorySelected == "Appartment"
                           ? Colors.white
                           : kSubCategoryColor,
                     ),
@@ -559,13 +733,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
+                        padding: const EdgeInsets.only(
+                            top: 15.0, left: 15.0, right: 15.0),
                         child: Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Center(
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: const Center(
                                 child: Text(
                                   "Show admin Only Properties",
                                   style: TextStyle(
@@ -574,33 +748,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             ToggleButtons(
-                              constraints: BoxConstraints(minHeight: 8),
-                              fillColor: kHighlightedTextColor,
+                              constraints: const BoxConstraints(minHeight: 8),
+                              fillColor: SelectedToggleBottonColor,
+                              // disabledColor: Colors.green,
+                              // focusColor: Colors.green,
+
                               borderWidth: 2,
                               selectedColor: Colors.white,
                               borderRadius: BorderRadius.circular(35),
                               children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Yes',
+                                    'No',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'No',
+                                    'Yes',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ),
                               ],
                               onPressed: (int index) {
                                 setState(() {
+                                  if (index == 0) {
+                                    SelectedToggleBottonColor = kNo;
+                                  } else if (index == 1) {
+                                    SelectedToggleBottonColor = kYes;
+                                  }
+
                                   displayAdminProperties =
-                                      index == 0 ? true : false;
+                                      index != 0 ? true : false;
                                   print(displayAdminProperties);
                                   for (int i = 0; i < isSelected.length; i++) {
                                     isSelected[i] = i == index;
@@ -612,8 +795,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                      const Padding(
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 15, right: 15),
                         child: Text(
                           'Properties on Sale ${Emojis.buildingConstruction}',
                           style: TextStyle(
@@ -626,12 +810,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 415,
                         child: PropertiesOnSaleAdv(),
                       ),
-                      Divider(
+                      const Divider(
                         thickness: 1,
                         color: kHighlightedTextColor,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5, left: 15, right: 15),
+                      const Padding(
+                        padding:
+                            const EdgeInsets.only(top: 5, left: 15, right: 15),
                         child: Text(
                           'Properties on Rent ${Emojis.moneyBag}',
                           style: TextStyle(
@@ -649,12 +834,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            BottomPageNavigationBar(
-              flex_by: 4,
-              page: HomeScreen.id,
-            ),
+            // BottomPageNavigationBar(
+            //   flex_by: 4,
+            //   page: HomeScreen.id,
+            // ),
           ],
         ),
+      ),
+      bottomNavigationBar: const scaffoldBottomAppBar(
+        flex_by: 2,
+        page: HomeScreen.id,
       ),
     );
   }
@@ -673,9 +862,20 @@ class PropertyCard extends StatefulWidget {
   final String bathRoom;
   final String propertyCategory;
   final String area;
+  final String ownerMail;
+  final String ownerPhoneNo;
+  final String lenght;
+  final String width;
+  final String direction;
+  final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
   final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
+      required this.constructionArea,
+      required this.ownerMail,
+      required this.ownerPhoneNo,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -687,7 +887,12 @@ class PropertyCard extends StatefulWidget {
       required this.propertyType,
       required this.to,
       required this.propertyImages,
-      required this.area});
+      required this.area,
+      required this.direction,
+      required this.lenght,
+      required this.ownerImgUrl,
+      required this.cent,
+      required this.width});
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -737,7 +942,7 @@ class _PropertyCardState extends State<PropertyCard> {
                     ),
                     errorWidget: (context, url, error) => Container(
                       color: Colors.black12,
-                      child: Icon(
+                      child: const Icon(
                         Icons.error,
                         color: kHighlightedTextColor,
                       ),
@@ -746,17 +951,18 @@ class _PropertyCardState extends State<PropertyCard> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: Text(
                   widget.propertyName,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.only(bottom: 8.0),
                 child: Text(
                   widget.propertyAddress,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: kSubCategoryColor,
                   ),
                 ),
@@ -764,15 +970,15 @@ class _PropertyCardState extends State<PropertyCard> {
               Row(
                 children: [
                   Text(
-                    widget.price + "\$",
-                    style: TextStyle(
+                    widget.price + " \u{20B9}",
+                    style: const TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     widget.to == "Rent" ? " / Month" : "",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         color: kSubCategoryColor,
                         fontWeight: FontWeight.w400),
@@ -791,25 +997,36 @@ class _PropertyCardState extends State<PropertyCard> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
-                              propertyAddress: widget.propertyAddress,
-                              propertyTitle: widget.propertyName,
-                              to: widget.to,
-                              ownerName: widget.ownerName,
-                              propertyDescription: widget.propertyDescription,
-                              noBathroom: widget.bathRoom,
-                              noBedroom: widget.bedRoom,
-                              area: widget.area,
-                              propertyImages: widget.propertyImages,
-                              price: widget.price),
+                            ownerMail: widget.ownerMail,
+                            ownerPhoneNo: widget.ownerPhoneNo,
+                            type: widget.propertyType,
+                            category: widget.propertyCategory,
+                            propertyAddress: widget.propertyAddress,
+                            propertyTitle: widget.propertyName,
+                            to: widget.to,
+                            ownerName: widget.ownerName,
+                            propertyDescription: widget.propertyDescription,
+                            noBathroom: widget.bathRoom,
+                            noBedroom: widget.bedRoom,
+                            area: widget.area,
+                            propertyImages: widget.propertyImages,
+                            price: widget.price,
+                            lenght: widget.lenght,
+                            width: widget.width,
+                            constructionArea: widget.constructionArea,
+                            ownerImgUrl: widget.ownerImgUrl,
+                            cent: widget.cent,
+                            face: widget.direction,
+                          ),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'View Details',
                       style: TextStyle(color: kPrimaryButtonColor),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
                     onPressed: () {
                       setState(() {
@@ -817,7 +1034,7 @@ class _PropertyCardState extends State<PropertyCard> {
                         if (bookedmark) {
                           _firestore
                               .collection("Users")
-                              .doc(loggedInUser.email)
+                              .doc(userInfo.mobileNumber)
                               .collection("BookMarkedProperties")
                               .doc(widget.propertyName)
                               .set({"PropertyName": widget.propertyName});
@@ -826,7 +1043,7 @@ class _PropertyCardState extends State<PropertyCard> {
                         } else {
                           _firestore
                               .collection("Users")
-                              .doc(userInfo.email)
+                              .doc(userInfo.mobileNumber)
                               .collection("BookMarkedProperties")
                               .doc(widget.propertyName)
                               .delete();
@@ -869,28 +1086,32 @@ class CategoryCard extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 5,
-      borderRadius: const BorderRadius.all(Radius.circular(12)),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: 45,
-          width: width,
-          // margin: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: kSecondaryButtonColor,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Material(
+        elevation: 5,
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: 45,
+            width: width,
+            // margin: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: kSecondaryButtonColor,
+              ),
+              color: btn_color,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(12),
+              ),
             ),
-            color: btn_color,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(12),
-            ),
-          ),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(color: text_color, fontWeight: FontWeight.w500),
+            child: Center(
+              child: Text(
+                text,
+                style:
+                    TextStyle(color: text_color, fontWeight: FontWeight.w500),
+              ),
             ),
           ),
         ),

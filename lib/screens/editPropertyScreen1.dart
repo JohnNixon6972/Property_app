@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:property_app/screens/addPopertiesScreen2.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'editPropertyScreen2.dart';
 import 'myPropertiesScreen.dart';
 import '../constants.dart';
@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 enum propertyTo { Sell, Rent }
 enum propertyType { Residental, Commercial }
-enum propertyCategory { Penthouse, Apartment, Building }
+enum propertyCategory { Plot, Land, House, Apartment, Building }
 
 propertyTo? _to;
 
@@ -56,8 +56,13 @@ late String PropertyTitle;
 late String PropertyAddress;
 void readDetails(myProperty propertyToEdit) {
   _to = propertyToEdit.to == "Sell" ? propertyTo.Sell : propertyTo.Rent;
+  print(propertyToEdit.propertyCategory);
   if (propertyToEdit.propertyCategory == "PentHouse") {
-    _category = propertyCategory.Penthouse;
+    _category = propertyCategory.House;
+  } else if (propertyToEdit.propertyCategory == "Land") {
+    _category = propertyCategory.Land;
+  } else if (propertyToEdit.propertyCategory == "Plot") {
+    _category = propertyCategory.Plot;
   } else if (propertyToEdit.propertyCategory == "Apartment") {
     _category = propertyCategory.Apartment;
   } else {
@@ -100,6 +105,7 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
         child: Padding(
           padding: const EdgeInsets.all(14.0),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -387,15 +393,99 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
-                                    border:
-                                        _category == propertyCategory.Penthouse
-                                            ? Border.all(
-                                                color: kHighlightedTextColor)
-                                            : null,
-                                    color:
-                                        _category == propertyCategory.Penthouse
-                                            ? kPropertyCardColor
-                                            : kTextFieldFillColor,
+                                    border: _category == propertyCategory.Plot
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
+                                    color: _category == propertyCategory.Plot
+                                        ? kPropertyCardColor
+                                        : kTextFieldFillColor,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Icon(
+                                              Icons.crop_square,
+                                              size: 50,
+                                              color: kHighlightedTextColor,
+                                            ),
+                                            Text('Plot')
+                                          ],
+                                        ),
+                                        Radio(
+                                          value: propertyCategory.Plot,
+                                          activeColor: kHighlightedTextColor,
+                                          groupValue: _category,
+                                          onChanged: (propertyCategory? value) {
+                                            setState(() {
+                                              _category = value;
+                                            });
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: _category == propertyCategory.Land
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
+                                    color: _category == propertyCategory.Land
+                                        ? kPropertyCardColor
+                                        : kTextFieldFillColor,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Icon(
+                                              Icons.landscape_outlined,
+                                              size: 50,
+                                              color: kHighlightedTextColor,
+                                            ),
+                                            Text('Land')
+                                          ],
+                                        ),
+                                        Radio(
+                                          value: propertyCategory.Land,
+                                          activeColor: kHighlightedTextColor,
+                                          groupValue: _category,
+                                          onChanged: (propertyCategory? value) {
+                                            setState(() {
+                                              _category = value;
+                                            });
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: _category == propertyCategory.House
+                                        ? Border.all(
+                                            color: kHighlightedTextColor)
+                                        : null,
+                                    color: _category == propertyCategory.House
+                                        ? kPropertyCardColor
+                                        : kTextFieldFillColor,
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
@@ -408,11 +498,11 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                                               size: 50,
                                               color: kHighlightedTextColor,
                                             ),
-                                            Text('PentHouses')
+                                            Text('House')
                                           ],
                                         ),
                                         Radio(
-                                          value: propertyCategory.Penthouse,
+                                          value: propertyCategory.House,
                                           activeColor: kHighlightedTextColor,
                                           groupValue: _category,
                                           onChanged: (propertyCategory? value) {
@@ -592,25 +682,8 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      activeColor: kHighlightedTextColor,
-                      //  fillColor: ,
-                      value: uselastusedaddress,
-                      onChanged: (bool? value) {
-                        setState(
-                          () {
-                            uselastusedaddress = value!;
-                          },
-                        );
-                      },
-                    ),
-                    Text(
-                      'Use last used address',
-                      style: TextStyle(fontSize: 15),
-                    )
-                  ],
+                SizedBox(
+                  height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

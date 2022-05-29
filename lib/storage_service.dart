@@ -40,7 +40,6 @@ class Storage {
       String PropertyTitle,
       String to,
       bool isUpdate) async {
-    var loggedIn_mail = await _auth.currentUser!.email;
     for (int i = 0; i < imageFileList!.length; i++) {
       String filePath, fileName;
 
@@ -52,7 +51,7 @@ class Storage {
       try {
         // await storage.ref('test/$fileName').putFile(file);
         ref = storage.ref().child(
-            'asset/propertyImages/$loggedIn_mail/$PropertyTitle/$fileName');
+            'asset/propertyImages/${userInfo.mobileNumber}/$PropertyTitle/$fileName');
         await ref.putFile(file).whenComplete(() async {
           await ref.getDownloadURL().then((value) async {
             // imgRef.add({'url': value});
@@ -82,18 +81,23 @@ class Storage {
       String propertyTitle,
       String category,
       String to,
+      String face,
       String type,
       String propertyDescription,
-      String squareFit,
+      String plotArea,
+      String Cent,
+      String Lenght,
+      String Width,
+      String constructionArea,
       String bedRoom,
       String bathRoom,
       String price,
       bool isUpdate) async {
-    print(propertyAddress);
-    print(propertyTitle);
-    print(type);
-    print(to);
-    print(userInfo.email);
+    // print(propertyAddress);
+    // print(propertyTitle);
+    // print(type);
+    // print(to);
+    // print(userInfo.email);
 
     // print(uselastusedaddress);
     if (!isUpdate) {
@@ -103,10 +107,17 @@ class Storage {
       // print(collection);
       // print(propertyTitle);
       print("Deleting Duplicate");
-      await _firestore
-          .collection(collection)
-          .doc(propertyTitle)
-          .delete();
+      await _firestore.collection(collection).doc(propertyTitle).delete();
+      await firebase_storage.FirebaseStorage.instance
+          .ref("asset/propertyImages/${userInfo.mobileNumber}/$propertyTitle")
+          .listAll()
+          .then((value) {
+        value.items.forEach((element) {
+          firebase_storage.FirebaseStorage.instance
+              .ref(element.fullPath)
+              .delete();
+        });
+      });
     }
     !isUpdate
         ? _firestore.collection('Properties' + to).doc(propertyTitle).set({
@@ -114,15 +125,22 @@ class Storage {
             "OwnerName": userInfo.name,
             "PropertyTitle": propertyTitle,
             "PropertyAddress": propertyAddress,
+            "LandLength":Lenght,
+            "LandWidth":Width,
+            "Cent":Cent,
             "PropertyTo": to,
             "PropertyCategory": category,
+            "PropertyDirection":face,
             "PropertyType": type,
             "PropertyDescription": propertyDescription,
-            "SquareFit": squareFit,
+            "PlotArea":plotArea,
+            "ConstructionArea":constructionArea,
             "BedRoom": bedRoom,
             "BathRoom": bathRoom,
             "isSetImages": "False",
             "Price": price,
+            "PhNo":userInfo.mobileNumber,
+            "profileImgUrl":userInfo.profileImgUrl,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -133,6 +151,7 @@ class Storage {
             "imgUrl8": "",
             "imgUrl9": "",
             "imgUrl10": "",
+            "isApproved":userInfo.name != "john"?"False":"True"
           }).then((_) {
             print("Data Added Sucessfully");
           }).catchError((_) {
@@ -143,15 +162,21 @@ class Storage {
             "OwnerName": userInfo.name,
             "PropertyTitle": propertyTitle,
             "PropertyAddress": propertyAddress,
+            "LandLength":Lenght,
+            "LandWidth":Width,
+            "Cent":Cent,
             "PropertyTo": to,
             "PropertyCategory": category,
             "PropertyType": type,
             "PropertyDescription": propertyDescription,
-            "SquareFit": squareFit,
+            "PlotArea":plotArea,
+            "ConstructionArea":constructionArea,
             "BedRoom": bedRoom,
             "BathRoom": bathRoom,
             "isSetImages": "False",
             "Price": price,
+            "PhNo":userInfo.mobileNumber,
+            "profileImgUrl":userInfo.profileImgUrl,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -162,6 +187,7 @@ class Storage {
             "imgUrl8": "",
             "imgUrl9": "",
             "imgUrl10": "",
+            "isApproved":"False"
           }).then((_) {
             print("Data Added Sucessfully");
           }).catchError((_) {

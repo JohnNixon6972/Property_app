@@ -1,96 +1,44 @@
+import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:property_app/screens/addPropertiesScreen2.dart';
-import 'dart:io';
-import 'myPropertiesScreen.dart';
-import 'editPropertyScreen1.dart';
+import 'package:flutter/foundation.dart';
+import 'package:property_app/screens/addPropertiesScreen1.dart';
+import 'package:property_app/screens/previewProperty.dart';
 import 'package:property_app/storage_service.dart';
 import '../constants.dart';
+import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import '../storage_service.dart';
 
-class editPropertyScreen2 extends StatefulWidget {
-  myProperty propertyToEdit;
-  editPropertyScreen2({required this.propertyToEdit});
+class AddPropertiesScreen2 extends StatefulWidget {
+  static const String id = 'addPropertiesScreen2';
+
   @override
-  State<editPropertyScreen2> createState() => _editPropertyScreen2State();
+  State<AddPropertiesScreen2> createState() => _AddPropertiesScreen2State();
 }
 
 late String PropertyDescription = "";
-late String plotArea = "";
-late String constructionArea = "";
-late String lenght = "";
-late String width = "";
-late String cent = "";
+late String PlotArea = "";
+late String ConstructionArea = "";
+late String Facing = "";
 late String BedRoom = "";
 late String BathRoom = "";
 late String Price = "";
-late String face = "";
-var _controller = TextEditingController();
-TextEditingController _areaController = TextEditingController();
-TextEditingController _priceController = TextEditingController();
-TextEditingController _bedRoomController = TextEditingController();
-TextEditingController _bathRoomController = TextEditingController();
-TextEditingController _constructionAreaController = TextEditingController();
-TextEditingController _lenghtController = TextEditingController();
-TextEditingController _widthController = TextEditingController();
-TextEditingController _centController = TextEditingController();
-late int selectedFace;
-List<String> directions = ["North", "South", "East", "West"];
+late String lenght = "";
+late String width = "";
+late String cent = "";
 
 List<XFile>? imageFileList = [];
-late bool isLand;
 
-void readDetails(myProperty propertyToEdit) {
-  selectedFace = directions.indexOf(propertyToEdit.face);
-  isLand = propertyToEdit.propertyCategory == "Land" ||
-      propertyToEdit.propertyCategory == "Plot";
-  print(selectedFace);
-  face = propertyToEdit.face;
-  PropertyDescription = propertyToEdit.propertyDescription;
-  plotArea = propertyToEdit.area;
-  BedRoom = propertyToEdit.bedRoom;
-  Price = propertyToEdit.price;
-  BathRoom = propertyToEdit.bathRoom;
-  _controller.text = propertyToEdit.propertyDescription;
-  _areaController.text = propertyToEdit.area;
-  _priceController.text = propertyToEdit.price;
-  _bedRoomController.text = propertyToEdit.bedRoom;
-  _bathRoomController.text = propertyToEdit.bathRoom;
-  _lenghtController.text = propertyToEdit.lenght;
-  _widthController.text = propertyToEdit.width;
-  _centController.text = propertyToEdit.cent;
-  _constructionAreaController.text = propertyToEdit.constructionArea;
-}
-
-class _editPropertyScreen2State extends State<editPropertyScreen2> {
+class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   final ImagePicker imagePicker = ImagePicker();
-  _editPropertyScreen2State();
   @override
   void initState() {
-    // TODO: implement initState
-    readDetails(widget.propertyToEdit);
     imageFileList = [];
     super.initState();
-  }
-
-  Future<void> selectImages() async {
-    List<XFile>? selectedImages = null;
-
-    selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
-    if (selectedImages == null) {
-      return;
-    }
-    if (selectedImages.isNotEmpty) {
-      imageFileList!.addAll(selectedImages);
-      print("Image List Length:" + imageFileList!.length.toString());
-      setState(() {});
-    }
   }
 
   void _showDialog(Widget child) {
@@ -111,6 +59,20 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                 child: child,
               ),
             ));
+  }
+
+  Future<void> selectImages() async {
+    List<XFile>? selectedImages = null;
+
+    selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
+    if (selectedImages == null) {
+      return;
+    }
+    if (selectedImages.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
+      print("Image List Length:" + imageFileList!.length.toString());
+      setState(() {});
+    }
   }
 
   Widget buildListView() {
@@ -160,62 +122,62 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
         });
   }
 
-  bool isloading = false;
+  // List<String> ImagePaths = [];
   List<ImagesFromGallery> PickedImages = [];
+
+  var _controller = TextEditingController();
   double _kItemExtent = 32.0;
+  bool isloading = false;
+  int selectedFace = 0;
   @override
   Widget build(BuildContext context) {
+    bool isLand = getCategory() == "Land" || getCategory() == "Plot";
+    const List<String> directions = ["North", "South", "East", "West"];
     final Storage storage = Storage();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
         child: isloading
-            ? Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: kPageBackgroundColor,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Center(
-                        child: Text(
-                          "Please Wait until your add gets posted",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                              color: kSubCategoryColor),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 5,
-                          color: kHighlightedTextColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Center(
-                        child: Text(
-                          "You will be redirected once the add is posted",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: kBottomNavigationBackgroundColor),
-                        ),
-                      ),
-                    ],
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Center(
+                    child: Text(
+                      "Please Wait until your add gets posted",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          color: kSubCategoryColor),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 5,
+                      color: kHighlightedTextColor,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Center(
+                    child: Text(
+                      "You will be redirected once the add is posted",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: kBottomNavigationBackgroundColor),
+                    ),
+                  ),
+                ],
               )
             : Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +186,8 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                         angle: 270 * pi / 180,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.pushNamed(
+                                context, AddPropertiesScreen.id);
                           },
                           child: const Icon(
                             Icons.expand_less_rounded,
@@ -238,7 +201,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                         child: Row(
                           children: const [
                             Text(
-                              'Edit Property',
+                              'Add Properties',
                               style: TextStyle(
                                   color: kHighlightedTextColor,
                                   fontSize: 28,
@@ -274,7 +237,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 children: [
                                   const Text(
                                     'Upload Image',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18),
                                   ),
@@ -292,7 +255,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       onTap: selectImages,
                                       child: const CircleAvatar(
                                         backgroundColor: kPageBackgroundColor,
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.photo_library_sharp,
                                           color: kHighlightedTextColor,
                                         ),
@@ -356,25 +319,19 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 HintText: "Plot Area(SqFt.)",
                                 onChange: (newValue) {
                                   setState(() {
-                                    plotArea = newValue;
-                                    // _areaController.text = newValue;
+                                    PlotArea = newValue;
                                   });
                                 },
-                                currValue: plotArea,
-                                textcontroller: _areaController,
                               ),
                               const Spacer(),
                               PropertyDetailTile(
                                 HintText: "Building Area(SqFt.)",
                                 onChange: (newValue) {
                                   setState(() {
-                                    constructionArea = newValue;
-                                    // _bedRoomController.text = newValue;
+                                    ConstructionArea = newValue;
                                   });
                                 },
-                                currValue: BedRoom,
-                                textcontroller: _constructionAreaController,
-                              ),
+                              )
                             ],
                           ),
                           Row(
@@ -395,7 +352,8 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                                 (int selectedItem) {
                                               setState(() {
                                                 selectedFace = selectedItem;
-                                                face = directions[selectedFace];
+                                                Facing =
+                                                    directions[selectedFace];
                                               });
                                             },
                                             children: List<Widget>.generate(
@@ -421,7 +379,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0, vertical: 20),
                                             child: Text(
-                                              "Facing : " + face,
+                                              "Facing : " + Facing,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color: Colors.grey[700],
@@ -437,17 +395,11 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       onChange: (newValue) {
                                         setState(() {
                                           width = newValue;
-                                          // _bathRoomController.text = newValue;
                                         });
-                                      },
-                                      currValue: width,
-                                      textcontroller: _widthController,
-                                    ),
+                                      }),
                               const Spacer(),
                               !isLand
                                   ? PropertyDetailTile(
-                                      textcontroller: _bedRoomController,
-                                      currValue: BedRoom,
                                       HintText: "Bed Room",
                                       onChange: (newValue) {
                                         setState(() {
@@ -456,8 +408,6 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       },
                                     )
                                   : PropertyDetailTile(
-                                      textcontroller: _lenghtController,
-                                      currValue: lenght,
                                       HintText: "Length",
                                       onChange: (newValue) {
                                         setState(() {
@@ -470,8 +420,6 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                             children: [
                               !isLand
                                   ? PropertyDetailTile(
-                                      textcontroller: _bathRoomController,
-                                      currValue: BathRoom,
                                       HintText: "Bathroom",
                                       onChange: (newValue) {
                                         setState(() {
@@ -480,8 +428,6 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       },
                                     )
                                   : PropertyDetailTile(
-                                      currValue: cent,
-                                      textcontroller: _centController,
                                       HintText: "Cent",
                                       onChange: (newValue) {
                                         setState(() {
@@ -490,8 +436,6 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       }),
                               const Spacer(),
                               PropertyDetailTile(
-                                textcontroller: _priceController,
-                                currValue: Price,
                                 HintText: "Price (INR)",
                                 onChange: (newValue) {
                                   setState(() {
@@ -504,71 +448,113 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                         ],
                       ),
                       // const Spacer(),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Storage _storage = Storage();
-                              setState(
-                                () {
-                                  isloading = true;
-                                  print("loading");
-                                  String propertyAddress = PropertyAddress;
-                                  String propertyTitle = PropertyTitle;
-                                  String category = getCategory();
-                                  String to = getTo();
-                                  String type = getType();
-                                  String propertyDescription =
-                                      PropertyDescription;
-                                  String PlotArea = plotArea;
-                                  String bedRoom = BedRoom;
-                                  String bathRoom = BathRoom;
-                                  String price = Price;
-                                  String Face = face;
-                                  isloading = true;
-                                  print("loading");
-                                  _storage.uploadPropertyDetails(
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 25.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
                                       context,
-                                      propertyAddress,
-                                      propertyTitle,
-                                      category,
-                                      to,
-                                      Face,
-                                      type,
-                                      propertyDescription,
-                                      PlotArea,
-                                      cent,
-                                      lenght,
-                                      width,
-                                      constructionArea,
-                                      bedRoom,
-                                      bathRoom,
-                                      price,
-                                      to == widget.propertyToEdit.to && true);
-                                  _storage.uploadPropertyImages(context,
-                                      imageFileList, propertyTitle, to, true);
+                                      MaterialPageRoute(
+                                          builder: (context) => PreviewProperty(
+                                              imageFileList: imageFileList,
+                                              PropertyTitle: PropertyTitle,
+                                              PropertyAddress: PropertyAddress,
+                                              PropertyDescription:
+                                                  PropertyDescription,
+                                              Area: PlotArea,
+                                              BathRoom: BathRoom,
+                                              BedRoom: BedRoom,
+                                              Price: Price,
+                                              to: getTo())));
                                 },
-                              );
-                            },
-                            child: Container(
-                              height: 70,
-                              width: 160,
-                              decoration: BoxDecoration(
-                                color: kHighlightedTextColor,
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Save',
-                                  style: const TextStyle(
-                                      color: kSubCategoryColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400),
+                                child: Container(
+                                  height: 70,
+                                  width: 160,
+                                  decoration: BoxDecoration(
+                                    color: kNavigationIconColor,
+                                    borderRadius: BorderRadius.circular(35),
+                                  ),
+                                  child: const Center(
+                                    child: Text('Preview',
+                                        style: TextStyle(
+                                            color: kHighlightedTextColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400)),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Storage _storage = Storage();
+                                  setState(() {
+                                    isloading = true;
+                                    String propertyAddress = PropertyAddress;
+                                    String propertyTitle = PropertyTitle;
+                                    String category = getCategory();
+                                    String to = getTo();
+                                    String type = getType();
+                                    String propertyDescription =
+                                        PropertyDescription;
+                                    String squareFit = ConstructionArea;
+                                    String bedRoom = BedRoom;
+                                    String bathRoom = BathRoom;
+                                    String price = Price;
+
+                                    print("loading");
+                                    _storage.uploadPropertyDetails(
+                                        context,
+                                        propertyAddress,
+                                        propertyTitle,
+                                        category,
+                                        to,
+                                        Facing,
+                                        type,
+                                        propertyDescription,
+                                        PlotArea,
+                                        cent,
+                                        lenght,
+                                        width,
+                                        squareFit,
+                                        bedRoom,
+                                        bathRoom,
+                                        price,
+                                        false);
+                                    _storage.uploadPropertyImages(
+                                        context,
+                                        imageFileList,
+                                        propertyTitle,
+                                        to,
+                                        false);
+                                  });
+                                },
+                                child: Container(
+                                  height: 70,
+                                  width: 160,
+                                  decoration: BoxDecoration(
+                                    color: kHighlightedTextColor,
+                                    borderRadius: BorderRadius.circular(35),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Submit',
+                                      style: TextStyle(
+                                          color: kSubCategoryColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       )
                     ],
@@ -583,13 +569,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
 class PropertyDetailTile extends StatelessWidget {
   final String HintText;
   final Function(String) onChange;
-  final String currValue;
-  final TextEditingController textcontroller;
-  PropertyDetailTile(
-      {required this.HintText,
-      required this.onChange,
-      required this.currValue,
-      required this.textcontroller});
+  PropertyDetailTile({required this.HintText, required this.onChange});
 
   @override
   Widget build(BuildContext context) {
@@ -605,7 +585,6 @@ class PropertyDetailTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
-            controller: textcontroller,
             onChanged: onChange,
             keyboardType: TextInputType.number,
             maxLines: 1,
@@ -616,7 +595,7 @@ class PropertyDetailTile extends StatelessWidget {
               border: InputBorder.none,
               hintText: HintText,
               hintStyle:
-                  const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
         ),

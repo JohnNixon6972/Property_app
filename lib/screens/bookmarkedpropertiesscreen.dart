@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/homescreen.dart';
 // import 'package:sticky_headers/sticky_headers.dart';
@@ -18,33 +20,48 @@ class BookmarkedPropertiesScreen extends StatefulWidget {
 }
 
 List<BookmarkedProperties> bookMarkedProperties = [];
-void getBookMarkedPropertiesCards() {
+List<String> availableBookmarkedProperties = [];
+void getBookMarkedPropertiesCards() async {
   bookMarkedProperties = [];
+  availableBookmarkedProperties = [];
   // print(bookmarkedPropertyNames);
   // print(PropertiesOnRentAll);
   // print(PropertiesOnSaleAll);
   for (PropertyCard property in PropertiesOnRentAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
-      bookMarkedProperties.add(BookmarkedProperties(
-        imageloc: property.imageloc,
-        price: property.price,
-        propertyAddress: property.propertyAddress,
-        propertyName: property.propertyName,
-        propertyImages: property.propertyImages,
-        propertyCategory: property.propertyCategory,
-        propertyDescription: property.propertyDescription,
-        propertyType: property.propertyType,
-        bedRoom: property.bedRoom,
-        bathRoom: property.bathRoom,
-        ownerName: property.ownerName,
-        to: property.to,
-        area: property.area,
-      ));
+      bookMarkedProperties.add(
+        BookmarkedProperties(
+          ownerMail: property.ownerMail,
+          ownerPhNo: property.ownerPhoneNo,
+          imageloc: property.imageloc,
+          price: property.price,
+          propertyAddress: property.propertyAddress,
+          propertyName: property.propertyName,
+          propertyImages: property.propertyImages,
+          propertyCategory: property.propertyCategory,
+          propertyDescription: property.propertyDescription,
+          propertyType: property.propertyType,
+          bedRoom: property.bedRoom,
+          bathRoom: property.bathRoom,
+          ownerName: property.ownerName,
+          to: property.to,
+          area: property.area,
+          lenght: property.lenght,
+          width: property.width,
+          constructionArea: property.constructionArea,
+          ownerImgUrl: property.ownerImgUrl,
+          cent: property.cent,
+          face: property.direction,
+        ),
+      );
+      availableBookmarkedProperties.add(property.propertyName);
     }
   }
   for (PropertyCard property in PropertiesOnSaleAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(BookmarkedProperties(
+        ownerMail: property.ownerMail,
+        ownerPhNo: property.ownerPhoneNo,
         imageloc: property.imageloc,
         price: property.price,
         propertyAddress: property.propertyAddress,
@@ -58,11 +75,30 @@ void getBookMarkedPropertiesCards() {
         ownerName: property.ownerName,
         to: property.to,
         area: property.area,
+        lenght: property.lenght,
+        width: property.width,
+        constructionArea: property.constructionArea,
+        ownerImgUrl: property.ownerImgUrl,
+        cent: property.cent,
+        face: property.direction,
       ));
+      availableBookmarkedProperties.add(property.propertyName);
     }
   }
   print(bookMarkedProperties);
-  
+  if (availableBookmarkedProperties.length != bookmarkedPropertyNames.length) {
+    final firestore = FirebaseFirestore.instance;
+    for (String propertyName in bookmarkedPropertyNames) {
+      if (!availableBookmarkedProperties.contains(propertyName)) {
+        await firestore
+            .collection("Users")
+            .doc(userInfo.mobileNumber)
+            .collection("BookMarkedProperties")
+            .doc(propertyName)
+            .delete();
+      }
+    }
+  }
 }
 
 class _BookmarkedPropertiesScreenState
@@ -75,7 +111,7 @@ class _BookmarkedPropertiesScreenState
 
   Widget buildBookMarks() {
     return ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         itemCount: bookmarkedPropertyNames.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
@@ -85,11 +121,11 @@ class _BookmarkedPropertiesScreenState
               decoration: BoxDecoration(
                 color: kPropertyCardColor,
                 border: Border.all(color: kHighlightedTextColor),
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(20),
                 ),
               ),
-              height: 352,
+              // height: 352,
               // width: 300,
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -98,9 +134,10 @@ class _BookmarkedPropertiesScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
                         child: CachedNetworkImage(
                           cacheManager: customCacheManager,
                           key: UniqueKey(),
@@ -118,7 +155,7 @@ class _BookmarkedPropertiesScreenState
                           ),
                           errorWidget: (context, url, error) => Container(
                             color: Colors.black12,
-                            child: Icon(
+                            child: const Icon(
                               Icons.error,
                               color: kHighlightedTextColor,
                             ),
@@ -127,18 +164,18 @@ class _BookmarkedPropertiesScreenState
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         bookMarkedProperties[index].propertyName,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
+                      padding: const EdgeInsets.only(bottom: 8.0),
                       child: Text(
                         bookMarkedProperties[index].propertyAddress,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: kSubCategoryColor,
                         ),
                       ),
@@ -147,7 +184,7 @@ class _BookmarkedPropertiesScreenState
                       children: [
                         Text(
                           "\$${bookMarkedProperties[index].price}",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 18,
                               color: kHighlightedTextColor,
                               fontWeight: FontWeight.bold),
@@ -156,7 +193,7 @@ class _BookmarkedPropertiesScreenState
                           bookMarkedProperties[index].to == "Rent"
                               ? " / Month"
                               : "",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 12,
                               color: kSubCategoryColor,
                               fontWeight: FontWeight.w400),
@@ -174,40 +211,57 @@ class _BookmarkedPropertiesScreenState
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
-                                    propertyAddress: bookMarkedProperties[index]
-                                        .propertyAddress,
-                                    propertyTitle: bookMarkedProperties[index]
-                                        .propertyName,
-                                    to: bookMarkedProperties[index].to,
-                                    ownerName:
-                                        bookMarkedProperties[index].ownerName,
-                                    propertyDescription:
-                                        bookMarkedProperties[index]
-                                            .propertyDescription,
-                                    noBathroom:
-                                        bookMarkedProperties[index].bathRoom,
-                                    noBedroom:
-                                        bookMarkedProperties[index].bedRoom,
-                                    area: bookMarkedProperties[index].area,
-                                    propertyImages: bookMarkedProperties[index]
-                                        .propertyImages,
-                                    price: bookMarkedProperties[index].price),
+                                  ownerMail:
+                                      bookMarkedProperties[index].ownerMail,
+                                  ownerPhoneNo:
+                                      bookMarkedProperties[index].ownerPhNo,
+                                  type:
+                                      bookMarkedProperties[index].propertyType,
+                                  category: bookMarkedProperties[index]
+                                      .propertyCategory,
+                                  propertyAddress: bookMarkedProperties[index]
+                                      .propertyAddress,
+                                  propertyTitle:
+                                      bookMarkedProperties[index].propertyName,
+                                  to: bookMarkedProperties[index].to,
+                                  ownerName:
+                                      bookMarkedProperties[index].ownerName,
+                                  propertyDescription:
+                                      bookMarkedProperties[index]
+                                          .propertyDescription,
+                                  noBathroom:
+                                      bookMarkedProperties[index].bathRoom,
+                                  noBedroom:
+                                      bookMarkedProperties[index].bedRoom,
+                                  area: bookMarkedProperties[index].area,
+                                  propertyImages: bookMarkedProperties[index]
+                                      .propertyImages,
+                                  price: bookMarkedProperties[index].price,
+                                  lenght: bookMarkedProperties[index].lenght,
+                                  width: bookMarkedProperties[index].width,
+                                  constructionArea: bookMarkedProperties[index]
+                                      .constructionArea,
+                                  ownerImgUrl:
+                                      bookMarkedProperties[index].ownerImgUrl,
+                                  cent: bookMarkedProperties[index].cent,
+                                  face: bookMarkedProperties[index].face,
+                                ),
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'View Details',
                             style: TextStyle(color: kPrimaryButtonColor),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
                           onPressed: () {
                             setState(() {
                               final firestore = FirebaseFirestore.instance;
                               firestore
                                   .collection("Users")
-                                  .doc(userInfo.email)
+                                  .doc(userInfo.mobileNumber)
                                   .collection("BookMarkedProperties")
                                   .doc(bookMarkedProperties[index].propertyName)
                                   .delete();
@@ -215,11 +269,11 @@ class _BookmarkedPropertiesScreenState
                                   bookMarkedProperties[index].propertyName);
                               bookMarkedProperties.removeAt(index);
                               print(bookMarkedProperties);
-                        
+
                               // getBookMarkedProperties();
                             });
                           },
-                          icon: Icon(Icons.bookmark,
+                          icon: const Icon(Icons.bookmark,
                               color: kHighlightedTextColor),
                         ),
                       ],
@@ -254,6 +308,7 @@ class _BookmarkedPropertiesScreenState
                       child: const Icon(
                         Icons.expand_less_rounded,
                         size: 30,
+                        color: kHighlightedTextColor,
                       ),
                     ),
                   ),
@@ -272,30 +327,24 @@ class _BookmarkedPropertiesScreenState
                 ],
               ),
             ),
-            Divider(
+            // ignore: prefer_const_constructors
+            const Divider(
               thickness: 1,
-              indent: 60,
-              endIndent: 60,
+              // indent: 50,
+              // endIndent: 40,
               color: kHighlightedTextColor,
             ),
-            Expanded(
-                flex: 10,
-                // child: SingleChildScrollView(
-                //   physics: BouncingScrollPhysics(),
-                //   child: Padding(
-                //     padding: EdgeInsets.all(12),
-                //     child: Column(
-                //         mainAxisSize: MainAxisSize.max,
-                //         children: bookMarkedProperties),
-                //   ),
-                // ),
-                child: buildBookMarks()),
-            BottomPageNavigationBar(
-              flex_by: 1,
-              page: BookmarkedPropertiesScreen.id,
-            ),
+            Expanded(flex: 10, child: buildBookMarks()),
+            // const BottomPageNavigationBar(
+            //   flex_by: 1,
+            //   page: BookmarkedPropertiesScreen.id,
+            // ),
           ],
         ),
+      ),
+      bottomNavigationBar: scaffoldBottomAppBar(
+        flex_by: 2,
+        page: BookmarkedPropertiesScreen.id,
       ),
     );
   }
@@ -309,14 +358,28 @@ class BookmarkedProperties extends StatefulWidget {
   final String propertyDescription;
   final String to;
   final String ownerName;
+  final String ownerMail;
+  final String ownerPhNo;
   final String propertyType;
   final String bedRoom;
   final String bathRoom;
   final String propertyCategory;
   final String area;
+  final String lenght;
+  final String width;
+  final String constructionArea;
+  final String ownerImgUrl;
+  final String cent;
+  final String face;
   final List<String> propertyImages;
+
   const BookmarkedProperties(
-      {required this.imageloc,
+      {Key? key,
+      required this.ownerPhNo,
+      required this.ownerImgUrl,
+      required this.ownerMail,
+      required this.imageloc,
+      required this.face,
       required this.price,
       required this.propertyAddress,
       required this.propertyName,
@@ -328,7 +391,12 @@ class BookmarkedProperties extends StatefulWidget {
       required this.propertyType,
       required this.to,
       required this.propertyImages,
-      required this.area});
+      required this.lenght,
+      required this.width,
+      required this.constructionArea,
+      required this.cent,
+      required this.area})
+      : super(key: key);
   @override
   State<BookmarkedProperties> createState() => _BookmarkedPropertiesState();
 }
@@ -343,22 +411,24 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
         decoration: BoxDecoration(
           color: kPropertyCardColor,
           border: Border.all(color: kHighlightedTextColor),
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(20),
           ),
         ),
-        height: 352,
+        height: 1800,
         // width: 300,
+
         child: Padding(
           padding: const EdgeInsets.only(
               left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                   child: CachedNetworkImage(
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
@@ -376,7 +446,7 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                     ),
                     errorWidget: (context, url, error) => Container(
                       color: Colors.black12,
-                      child: Icon(
+                      child: const Icon(
                         Icons.error,
                         color: kHighlightedTextColor,
                       ),
@@ -385,17 +455,18 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: Text(
                   widget.propertyName,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.only(bottom: 8.0),
                 child: Text(
                   widget.propertyAddress,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: kSubCategoryColor,
                   ),
                 ),
@@ -404,14 +475,14 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                 children: [
                   Text(
                     "\$${widget.price}",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     widget.to == "Rent" ? " / Month" : "",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         color: kSubCategoryColor,
                         fontWeight: FontWeight.w400),
@@ -429,20 +500,31 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
-                              propertyAddress: widget.propertyAddress,
-                              propertyTitle: widget.propertyName,
-                              to: widget.to,
-                              ownerName: widget.ownerName,
-                              propertyDescription: widget.propertyDescription,
-                              noBathroom: widget.bathRoom,
-                              noBedroom: widget.bedRoom,
-                              area: widget.area,
-                              propertyImages: widget.propertyImages,
-                              price: widget.price),
+                            ownerMail: widget.ownerMail,
+                            ownerPhoneNo: widget.ownerPhNo,
+                            type: widget.propertyType,
+                            category: widget.propertyCategory,
+                            propertyAddress: widget.propertyAddress,
+                            propertyTitle: widget.propertyName,
+                            to: widget.to,
+                            ownerName: widget.ownerName,
+                            propertyDescription: widget.propertyDescription,
+                            noBathroom: widget.bathRoom,
+                            noBedroom: widget.bedRoom,
+                            area: widget.area,
+                            propertyImages: widget.propertyImages,
+                            price: widget.price,
+                            lenght: widget.lenght,
+                            width: widget.width,
+                            constructionArea: widget.constructionArea,
+                            ownerImgUrl: widget.ownerImgUrl,
+                            cent: widget.cent,
+                            face: widget.face,
+                          ),
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'View Details',
                       style: TextStyle(color: kPrimaryButtonColor),
                     ),

@@ -1,17 +1,26 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types, use_key_in_widget_constructors
+
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/alertPopUp.dart';
+import 'package:property_app/screens/approvedPropertiesScreen.dart';
+import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
+import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 // import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
-import '../components/bottomNavigationBar.dart';
 import '../components/dialogBoxListWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:property_app/currentUserInformation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:property_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import '../screens/registerScreen.dart';
 import '../screens/loginScreen.dart';
+import '../components/scaffoldBottomAppBar.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class profileScreen extends StatefulWidget {
   static const String id = 'profileScreen';
@@ -22,16 +31,26 @@ class profileScreen extends StatefulWidget {
 
 List<String> option_titles = [
   "Personal Information",
-  // "Email",
-  "Phone",
+  "Email",
+  // "Phone",
   "Password",
   "Address",
 ];
 
 final _firestore = FirebaseFirestore.instance;
-final _formKey = GlobalKey<FormState>();
 
 class _profileScreenState extends State<profileScreen> {
+  _getFromGallery() async {
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      XFile imageFile = XFile(pickedFile.path);
+    }
+  }
+
   final meaageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   final messageTextController = TextEditingController();
@@ -39,7 +58,7 @@ class _profileScreenState extends State<profileScreen> {
   @override
   void initState() {
     // print("Hi");
-    getCurrentUser();
+    // getCurrentUser();
     super.initState();
   }
 
@@ -51,30 +70,86 @@ class _profileScreenState extends State<profileScreen> {
 
   void getCurrentUser() async {
     try {
-      var currUserCollection = _firestore.collection("Users");
-      var docSanpshot =
-          await currUserCollection.doc(_auth.currentUser!.email).get();
+      // var currUserCollection = _firestore.collection("Users");
+      // var docSanpshot =
+      //     // await currUserCollection.doc(_auth.currentUser!.email).get();
+      //     await currUserCollection.doc(userInfo.mobileNumber).get();
 
-      if (docSanpshot.exists) {
-        Map<String, dynamic>? data = docSanpshot.data();
-        setState(
-          () {
-            userInfo.name = data?['name'];
-            userInfo.mobileNumber = data?['number'];
-            print(userInfo.name);
-            print(userInfo.mobileNumber);
-          },
-        );
-      }
-      print(userInfo.email);
+      // if (docSanpshot.exists) {
+      //   Map<String, dynamic>? data = docSanpshot.data();
+      //   setState(
+      //     () {
+      //       userInfo.name = data?['name'];
+      //       userInfo.mobileNumber = data?['number'];
+      //       userInfo.profileImgUrl = data?['profileImgUrl'];
+      //       print(userInfo.name);
+      //       print(userInfo.mobileNumber);
+      //     },
+      //   );
+      // }
+      print(userInfo.mobileNumber);
+      Object? data;
+      _firestore
+          .collection('Users')
+          .doc(userInfo.mobileNumber)
+          .get()
+          .then((value) => {
+                // print(value.data()!["password"]),
+                print(value.data()!["name"]),
+                userInfo.name = value.data()!["name"],
+                userInfo.password = value.data()!["password"],
+              });
+      // print(userInfo.name);
     } catch (e) {
       print(e);
     }
   }
 
+  void pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final firebase_storage.FirebaseStorage storage =
+          firebase_storage.FirebaseStorage.instance;
+
+      final _auth = FirebaseAuth.instance;
+      final _firestore = FirebaseFirestore.instance;
+      late firebase_storage.Reference ref;
+      late CollectionReference imgRef;
+      String filePath, fileName;
+
+      filePath = image.path;
+      fileName = image.name;
+      File file = File(filePath);
+
+      try {
+        // await storage.ref('test/$fileName').putFile(file);
+        ref = storage
+            .ref()
+            .child('asset/profileImages/${userInfo.mobileNumber}/$fileName');
+        await ref.putFile(file).whenComplete(() async {
+          await ref.getDownloadURL().then((value) async {
+            // imgRef.add({'url': value});
+            await _firestore
+                .collection('Users')
+                .doc(userInfo.mobileNumber)
+                .update({"profileImgUrl": value});
+          });
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
+    physics:
+    const BouncingScrollPhysics();
     double width = MediaQuery.of(context).size.width;
+
     print(width);
+    double backgroundImageHeight = 215;
+
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -82,142 +157,203 @@ class _profileScreenState extends State<profileScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: 6,
+              flex: 11,
               child: Stack(
                 overflow: Overflow.visible,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
                     ),
-                    child: Image(
-                      // width: 800,
-                      // height: 500,
-                      image: AssetImage('images/backgroundProfileImage3.png'),
+                    child: Opacity(
+                      opacity: 0.80,
+                      child: Image(
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: backgroundImageHeight,
+                        image: const AssetImage(
+                            'images/profileBackgroundImage11.jpg'),
+                      ),
                     ),
                   ),
                   Positioned(
-                    bottom: -20,
-
+                    top: backgroundImageHeight - 53,
                     left: (width / 2) - 53,
-
                     // ignore: prefer_const_constructors
                     child: CircleAvatar(
                       backgroundColor: kPageBackgroundColor,
                       radius: 53,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Image(
-                          height: 100,
-                          width: 100,
-                          image: AssetImage('images/profile_img1.jpg'),
-                        ),
+                        child: userInfo.profileImgUrl == ""
+                            ? const Image(
+                                height: 100,
+                                width: 100,
+                                image:
+                                    const AssetImage('images/profile_img9.png'))
+                            : CachedNetworkImage(
+                                cacheManager: customCacheManager,
+                                key: UniqueKey(),
+                                imageUrl: userInfo.profileImgUrl,
+                                height: 100,
+                                width: 100,
+                                // maxHeightDiskCache: 230,
+                                // maxWidthDiskCache: 190,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.black12,
+                                  child: const Icon(
+                                    Icons.error,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
-                  )
+                  ),
+                  Positioned(
+                      top: backgroundImageHeight + 20,
+                      left: (width / 2) + 35,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            pickImage();
+                          });
+                        },
+                        child: const Icon(
+                          Icons.flip_camera_ios,
+                          color: kHighlightedTextColor,
+                        ),
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: backgroundImageHeight + 53 + 5, bottom: 1),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            userInfo.name,
+                            style: const TextStyle(
+                                color: kHighlightedTextColor,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                wordSpacing: -1),
+                          ),
+                          Text(
+                            userInfo.mobileNumber,
+                            style: const TextStyle(
+                                color: kSubCategoryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              await FirebaseAuth.instance.signOut();
+                              await prefs.clear();
+                              myPropertiesAdv = [];
+                              bookmarkedPropertyNames = [];
+                              Navigator.pushNamed(context, loginScreen.id);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              primary: kPrimaryButtonColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                            child: const Text(
+                              'Log Out',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                            flex: 10,
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  ProfileDetailsContainer(
+                                    icon: Icons.account_circle_outlined,
+                                    Title: "Personal Information",
+                                    SubTitle: userInfo.name,
+                                  ),
+                                  // ProfileDetailsContainer(
+                                  //   icon: Icons.call_outlined,
+                                  //   Title: "Phone",
+                                  //   SubTitle: userInfo.mobileNumber,
+                                  // ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.call_outlined,
+                                    Title: "Email",
+                                    SubTitle: userInfo.email,
+                                  ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.lock_outlined,
+                                    Title: "Password",
+                                    SubTitle: "",
+                                    // SubTitle: userInfo.password,
+                                  ),
+                                  userInfo.name == "john"
+                                      ? ProfileDetailsContainer(
+                                          icon: Icons.approval_outlined,
+                                          Title: "Un-Approved Properties",
+                                          SubTitle: "",
+                                        )
+                                      : Center(),
+
+                                  userInfo.name != "john"
+                                      ? ProfileDetailsContainer(
+                                          icon: Icons.add_location_outlined,
+                                          Title: "Address",
+                                          SubTitle: "Residential Address",
+                                        )
+                                      : ProfileDetailsContainer(
+                                          icon: Icons.home_work_sharp,
+                                          Title: "Approved Properties",
+                                          SubTitle: ""),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.house,
+                                    Title: "My Properties",
+                                    SubTitle: "",
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 30),
-              child: Center(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Text(
-                        userInfo.name,
-                        style: TextStyle(
-                            color: kHighlightedTextColor,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            wordSpacing: -1),
-                      ),
-                      Text(
-                        userInfo.email,
-                        style: TextStyle(
-                            color: kSubCategoryColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          await FirebaseAuth.instance.signOut();
-                          await prefs.clear();
-                          Navigator.pushNamed(context, loginScreen.id);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 10,
-                          primary: kPrimaryButtonColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          'Log Out',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 10,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.account_circle_outlined,
-                      Title: "Personal Information",
-                      SubTitle: userInfo.name,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.call_outlined,
-                      Title: "Phone",
-                      SubTitle: userInfo.mobileNumber,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.lock_outlined,
-                      Title: "Password",
-                      SubTitle: "",
-                      // SubTitle: userInfo.password,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.add_location_outlined,
-                      Title: "Address",
-                      SubTitle: "Residential Address",
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    ProfileDetailsContainer(
-                      icon: Icons.house,
-                      Title: "My Properties",
-                      SubTitle: "",
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            BottomPageNavigationBar(
-              flex_by: 2,
-              page: profileScreen.id,
-            ),
+            // BottomPageNavigationBar(
+            //   flex_by: 2,
+            //   page: profileScreen.id,
+            // ),
           ],
         ),
+      ),
+      bottomNavigationBar: const scaffoldBottomAppBar(
+        flex_by: 2,
+        page: profileScreen.id,
       ),
     );
   }
@@ -240,12 +376,12 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: kHighlightedTextColor),
           color: kPropertyCardColor,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(15),
           ),
         ),
@@ -262,7 +398,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 child: Icon(
                   widget.icon,
                   size: 32,
-                  color: kNavigationIconColor,
+                  color: kBottomNavigationBackgroundColor,
                 ),
               ),
             ),
@@ -275,7 +411,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     padding: const EdgeInsets.all(2.0),
                     child: Text(
                       widget.Title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: kHighlightedTextColor,
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
@@ -283,33 +419,42 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                   ),
                   Text(
                     widget.SubTitle,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: kBottomNavigationBackgroundColor,
+                        fontSize: 13.5,
                         fontWeight: FontWeight.w500),
                   )
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
               child: Transform.rotate(
                 angle: 90 * pi / 180,
                 child: GestureDetector(
                   onTap: () {
-                    widget.Title == "My Properties"
-                        ? Navigator.pushNamed(context, myPropertiesScreen.id)
-                        : showDialog(
-                            context: context,
-                            builder: (_) => editDetailsPopup(widget.Title,
-                                fields[option_titles.indexOf(widget.Title)]));
+                    if (widget.Title == "Approved Properties") {
+                      Navigator.pushNamed(context, ApprovedPropertiesScreen.id);
+                    } else if (widget.Title == "Un-Approved Properties") {
+                      Navigator.pushNamed(
+                          context, UnApprovedPropertiesScreen.id);
+                    } else if (widget.Title == "My Properties") {
+                      Navigator.pushNamed(context, myPropertiesScreen.id);
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (_) => editDetailsPopup(widget.Title,
+                              fields[option_titles.indexOf(widget.Title)]));
+                    }
+
                     setState(() {
                       // Navigator.pop(context);
                     });
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.expand_less_rounded,
-                    color: kNavigationIconColor,
+                    color: kHighlightedTextColor,
                     size: 30,
                   ),
                 ),
@@ -328,7 +473,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       title: Text(
         boxTitle,
-        style: TextStyle(
+        style: const TextStyle(
           color: kHighlightedTextColor,
           fontWeight: FontWeight.w500,
           fontSize: 25,
@@ -346,7 +491,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                   onPressed: () async {
                     _firestore
                         .collection("Users")
-                        .doc(_auth.currentUser!.email)
+                        .doc(userInfo.mobileNumber)
                         .update({
                       "email": userInfo.email,
                       "name": userInfo.name,
@@ -361,26 +506,28 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     Navigator.pop(context);
                     setState(() {
                       try {
-                        if (passwordKey.currentState!.validate()) {}
-                        print(userInfo.password);
-                        userInfo.name = userInfo.name;
-                        if (newPassword == confirmNewPassword) {
-                          var loggedInUser = _auth.currentUser;
-                          loggedInUser
-                              ?.updatePassword(userInfo.password)
-                              .then((_) {
-                            userInfo.password = newPassword;
-                            print(userInfo.password);
-                            print("Successfully changed password");
-                          }).catchError((error) {
-                            print(
-                                "Password can't be changed" + error.toString());
-                          });
-                        } else {
-                          print("Reconfirm New Password");
+                        if (passwordKey.currentState!.validate()) {
+                          // print(userInfo.password);
+                          // userInfo.name = userInfo.name;
+                          print("Current Password" + currentPassowrd);
+                          print("User Password" + userInfo.password);
+                          if (userInfo.password == currentPassowrd) {
+                            if (newPassword == confirmNewPassword) {
+                              _firestore
+                                  .collection('Users')
+                                  .doc(userInfo.mobileNumber)
+                                  .update({"password": newPassword});
+
+                              popUpAlertDialogBox(
+                                  context, "Successfully changed Password");
+                            } else if (newPassword != confirmNewPassword) {
+                              popUpAlertDialogBox(
+                                  context, "Passwords don't match");
+                            }
+                          } else {
+                            popUpAlertDialogBox(context, "Invalid Password");
+                          }
                         }
-                        print("Process data");
-                        Navigator.pop(context);
                       } catch (e) {
                         print(e);
                       }

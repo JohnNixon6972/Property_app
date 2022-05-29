@@ -284,47 +284,52 @@ class _loginScreenState extends State<loginScreen> {
 
                                 final _firestore = FirebaseFirestore.instance;
                                 Object? data;
+
                                 _firestore
                                     .collection('Users')
                                     .doc(userInfo.mobileNumber)
                                     .get()
                                     .then((value) => {
                                           // print(value.data()!["password"]),
-                                          if (userInfo.password ==
-                                              (value.data()!["password"]))
+                                          if (value.exists)
                                             {
-                                              userInfo.name =
-                                                  value.data()!["name"],
-                                              userInfo.password =
-                                                  value.data()!["password"],
-                                              userInfo.email =
-                                                  value.data()!["email"],
-                                              userInfo.mobileNumber =
-                                                  value.data()!["mobileNumber"],
-                                              userInfo.addressLine1 =
-                                                  value.data()!["addressLine1"],
-                                              userInfo.addressLine2 =
-                                                  value.data()!["addressLine2"],
-                                              userInfo.state =
-                                                  value.data()!["state"],
-                                              userInfo.country =
-                                                  value.data()!["country"],
-                                              userInfo.postalCode =
-                                                  value.data()!["postalcode"],
-                                              userInfo.profileImgUrl = value
-                                                  .data()!["profileImgUrl"],
-                                              print("Login Successful"),
-                                              // Navigator.pushNamedAndRemoveUntil(
-                                              //     context,
-                                              //     HomeScreen.id,
-                                              //     (route) => false),
-                                              Navigator.pushNamed(
-                                                  context, HomeScreen.id),
+                                              if (userInfo.password ==
+                                                  (value.data()!["password"]))
+                                                {
+                                                  userInfo.name =
+                                                      value.data()!["name"],
+                                                  userInfo.password =
+                                                      value.data()!["password"],
+                                                  userInfo.email =
+                                                      value.data()!["email"],
+                                                  userInfo.mobileNumber = value
+                                                      .data()!["mobileNumber"],
+                                                  userInfo.addressLine1 = value
+                                                      .data()!["addressLine1"],
+                                                  userInfo.addressLine2 = value
+                                                      .data()!["addressLine2"],
+                                                  userInfo.state =
+                                                      value.data()!["state"],
+                                                  userInfo.country =
+                                                      value.data()!["country"],
+                                                  userInfo.postalCode = value
+                                                      .data()!["postalcode"],
+                                                  userInfo.profileImgUrl = value
+                                                      .data()!["profileImgUrl"],
+                                                  print("Login Successful"),
+                                                  Navigator.pushNamed(
+                                                      context, HomeScreen.id),
+                                                }
+                                              else
+                                                {
+                                                  popUpAlertDialogBox(
+                                                      context, "Login Failed"),
+                                                }
                                             }
                                           else
                                             {
-                                              popUpAlertDialogBox(
-                                                  context, "Login Failed"),
+                                              popUpAlertDialogBox(context,
+                                                  "${userInfo.mobileNumber} is not registered"),
                                             }
                                         });
 

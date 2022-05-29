@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/components/pinInputField.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/loginScreen.dart';
@@ -92,6 +93,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
           );
 
           // showSnackBar('Phone number verified successfully!');
+          popUpAlertDialogBox(context, 'Phone number verified successfully!');
 
           log(
             VerifyPhoneNumberScreen.id,
@@ -106,7 +108,9 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
         },
         onLoginFailed: (authException) {
           // showSnackBar('Something went wrong!');
+          popUpAlertDialogBox(context, 'Something went wrong!');
           log(VerifyPhoneNumberScreen.id, error: authException.message);
+
           // handle error further if needed
         },
         builder: (context, controller) {
@@ -118,7 +122,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                 backgroundColor: kBottomNavigationBackgroundColor,
                 leadingWidth: 0,
                 leading: const SizedBox.shrink(),
-                title: Center(
+                title: const Center(
                   child: Text(
                     'Verify Phone Number',
                     style: TextStyle(
@@ -157,7 +161,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                           "We've sent an SMS with a verification code to " +
                               userInfo.mobileNumber,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style:const TextStyle(
                               fontSize: 20, color: kHighlightedTextColor),
                         ),
                         const SizedBox(height: 10),
@@ -210,7 +214,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                             if (hasFocus) await _scrollToBottomOnKeyboardOpen();
                           },
                           onSubmit: (enteredOTP) async {
-                            var smsCode = "xxxx";
+                            // var smsCode = "xxxx";
                             final isValidOTP = await controller.verifyOTP(
                               otp: enteredOTP,
                             );
@@ -224,6 +228,8 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                             // Incorrect OTP
                             if (!isValidOTP) {
                               // showSnackBar('The entered OTP is invalid!');
+                              popUpAlertDialogBox(
+                                  context, 'The entered OTP is invalid!');
                             }
                           },
                         ),

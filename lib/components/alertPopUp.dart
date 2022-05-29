@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:property_app/constants.dart';
 
 Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
@@ -10,16 +8,25 @@ Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
   return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
-        _timer = Timer(Duration(seconds: 3), () {
+        _timer = Timer(const Duration(seconds: 3), () {
           Navigator.of(context).pop();
         });
         return AlertDialog(
           elevation: 30,
-          backgroundColor: kPageBackgroundColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+            side: BorderSide(
+              color: kPageBackgroundColor,
+              width: 4,
+            ),
+          ),
+          backgroundColor: kBottomNavigationBackgroundColor,
           title: Text(
-            "⚠️ $title",
+            "$title",
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: kPrimaryButtonColor,
             ),
           ),

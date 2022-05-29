@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'dart:math';
+import 'package:flutter_switch/flutter_switch.dart';
 
 // ignore: camel_case_types
 class aboutUs extends StatefulWidget {
@@ -13,6 +14,8 @@ class aboutUs extends StatefulWidget {
 }
 
 class _aboutUsState extends State<aboutUs> {
+  bool admin = false;
+  bool developers = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +59,74 @@ class _aboutUsState extends State<aboutUs> {
               endIndent: 50,
               color: kHighlightedTextColor,
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Text(
+                    "Admin",
+                    style: TextStyle(
+                        color: kHighlightedTextColor,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  FlutterSwitch(
+                    activeColor: kBottomNavigationBackgroundColor,
+                    inactiveColor: kNavigationIconColor,
+                    width: 70.0,
+                    height: 35.0,
+                    // valueFontSize: 25.0,
+                    toggleSize: 25.0,
+                    value: admin,
+                    borderRadius: 30.0,
+                    padding: 8.0,
+                    // showOnOff: true,
+                    onToggle: (val) {
+                      setState(() {
+                        admin = val;
+                        developers = !val;
+                        // val1 = false;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Text(
+                    "Developers",
+                    style: TextStyle(
+                        color: kHighlightedTextColor,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  FlutterSwitch(
+                    activeColor: kBottomNavigationBackgroundColor,
+                    inactiveColor: kNavigationIconColor,
+                    width: 70.0,
+                    height: 35.0,
+                    // valueFontSize: 25.0,
+                    toggleSize: 25.0,
+                    value: developers,
+                    borderRadius: 30.0,
+                    padding: 8.0,
+                    // showOnOff: true,
+                    onToggle: (val1) {
+                      setState(() {
+                        developers = val1;
+                        admin = !val1;
+                        // val = false;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

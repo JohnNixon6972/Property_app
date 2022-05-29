@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types, use_key_in_widget_constructors
+
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -396,7 +398,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 child: Icon(
                   widget.icon,
                   size: 32,
-                  color: kNavigationIconColor,
+                  color: kBottomNavigationBackgroundColor,
                 ),
               ),
             ),

@@ -39,7 +39,7 @@ List<List<Widget>> fields = [
               // return firstName;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Enter your Full Name.',
+              hintText: userInfo.name,
               prefixIcon: const Icon(Icons.badge, color: kPrimaryButtonColor),
             ),
           ),
@@ -77,7 +77,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Enter your Email Address.',
+              hintText: userInfo.email,
               prefixIcon: const Icon(Icons.mail, color: kPrimaryButtonColor),
             ),
           ),
@@ -98,7 +98,7 @@ List<List<Widget>> fields = [
           ),
           TextFormField(
             // controller: _currentPassowrd,
-            obscureText: true,
+            // obscureText: true,
             onChanged: (value) {
               currentPassowrd = value;
               // userInfo.password = value;
@@ -111,11 +111,7 @@ List<List<Widget>> fields = [
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
               } else if (userInfo.password != currentPassowrd) {
-                // password = currentPassowrd;
-                // print(userInfo.password);
                 print("Invalid Password");
-                
-                // print(currentPassowrd);
               }
 
               // return null;
@@ -130,7 +126,7 @@ List<List<Widget>> fields = [
             height: 10,
           ),
           TextFormField(
-            obscureText: true,
+            // obscureText: true,
             onChanged: (value) {
               newPassword = value;
               // print("New Password Entered");
@@ -142,15 +138,10 @@ List<List<Widget>> fields = [
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid text';
-              } else {
-                // password = _newPassowrd as String;
-                // print("New Password Entered");
               }
-
-              // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Enter your new password.',
+              hintText: 'New password.',
               prefixIcon: const Icon(Icons.lock, color: kPrimaryButtonColor),
             ),
           ),
@@ -158,7 +149,7 @@ List<List<Widget>> fields = [
             height: 10,
           ),
           TextFormField(
-            obscureText: true,
+            // obscureText: true,
             // controller: _confirmNewPassowrd,
             onChanged: (value) {
               confirmNewPassword = value;
@@ -177,7 +168,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Confirm your new password.',
+              hintText: 'Confirm new password.',
               prefixIcon:
                   const Icon(Icons.lock_open, color: kPrimaryButtonColor),
             ),
@@ -216,7 +207,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Address line 1',
+              hintText: userInfo.addressLine1,
               prefixIcon: const Icon(Icons.home, color: kPrimaryButtonColor),
             ),
           ),
@@ -242,7 +233,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Address line 2',
+              hintText: userInfo.addressLine2,
               prefixIcon: const Icon(Icons.house, color: kPrimaryButtonColor),
             ),
           ),
@@ -268,7 +259,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'City',
+              hintText: userInfo.city,
               prefixIcon:
                   const Icon(Icons.location_city, color: kPrimaryButtonColor),
             ),
@@ -295,7 +286,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'State',
+              hintText: userInfo.state,
               prefixIcon: const Icon(Icons.cabin, color: kPrimaryButtonColor),
             ),
           ),
@@ -321,7 +312,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Country',
+              hintText: userInfo.country,
               prefixIcon:
                   const Icon(Icons.countertops, color: kPrimaryButtonColor),
             ),
@@ -348,7 +339,7 @@ List<List<Widget>> fields = [
               // return null;
             },
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Postal code',
+              hintText: userInfo.postalCode,
               prefixIcon: const Icon(Icons.code, color: kPrimaryButtonColor),
             ),
           ),

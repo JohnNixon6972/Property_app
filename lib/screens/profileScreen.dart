@@ -58,7 +58,7 @@ class _profileScreenState extends State<profileScreen> {
   @override
   void initState() {
     // print("Hi");
-    getCurrentUser();
+    // getCurrentUser();
     super.initState();
   }
 

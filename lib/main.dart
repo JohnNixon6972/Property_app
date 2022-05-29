@@ -1,3 +1,5 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
@@ -20,48 +22,34 @@ import 'currentUserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/otpVerification.dart';
 import 'components/forgotpassword.dart';
+
 getUserDetails userInfo = getUserDetails();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await getUser();
-  runApp(PropertyApp());
-}
 
-bool userAvailable = false;
-final _auth = FirebaseAuth.instance;
-
-Future<void> getUser() async {
   final prefs = await SharedPreferences.getInstance();
-
-  await prefs.clear();
-  String? savedUser = await prefs.getString("User");
-  String? savedPassword = await prefs.getString("Password");
-
-  if (savedUser != null && savedPassword != null) {
-    print("Saved User :" + savedUser);
-    print("Saved Password :" + savedPassword);
-    _auth.signInWithEmailAndPassword(
-        email: savedUser.toString(), password: savedPassword.toString());
-    userAvailable = true;
-  }
+  runApp(PropertyApp(prefs: prefs));
 }
+
 
 class PropertyApp extends StatefulWidget {
+  SharedPreferences prefs;
+  PropertyApp({required this.prefs});
   @override
-  State<PropertyApp> createState() => _PropertyAppState();
+  State<PropertyApp> createState() => _PropertyAppState(prefs:prefs);
 }
 
 class _PropertyAppState extends State<PropertyApp> {
+  SharedPreferences prefs;
+  _PropertyAppState({required this.prefs});
   @override
   Widget build(BuildContext context) {
-    print(userAvailable);
-
     return FirebasePhoneAuthProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: userAvailable ? HomeScreen.id : loginScreen.id,
+        initialRoute: loginScreen.id,
         // initialRoute: VerifyPhoneNumberScreen.id,
         routes: {
           loginScreen.id: (context) => loginScreen(),
@@ -76,8 +64,8 @@ class _PropertyAppState extends State<PropertyApp> {
           searchScreen.id: (context) => searchScreen(),
           AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
-          aboutUs.id : (context) => aboutUs(), 
-          forgotPasswordScreen.id :(context) => forgotPasswordScreen(),
+          aboutUs.id: (context) => aboutUs(),
+          forgotPasswordScreen.id: (context) => forgotPasswordScreen(),
         },
       ),
     );

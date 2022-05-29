@@ -40,7 +40,6 @@ class Storage {
       String PropertyTitle,
       String to,
       bool isUpdate) async {
-    var loggedIn_mail = await _auth.currentUser!.email;
     for (int i = 0; i < imageFileList!.length; i++) {
       String filePath, fileName;
 
@@ -52,7 +51,7 @@ class Storage {
       try {
         // await storage.ref('test/$fileName').putFile(file);
         ref = storage.ref().child(
-            'asset/propertyImages/$loggedIn_mail/$PropertyTitle/$fileName');
+            'asset/propertyImages/${userInfo.mobileNumber}/$PropertyTitle/$fileName');
         await ref.putFile(file).whenComplete(() async {
           await ref.getDownloadURL().then((value) async {
             // imgRef.add({'url': value});
@@ -94,11 +93,11 @@ class Storage {
       String bathRoom,
       String price,
       bool isUpdate) async {
-    print(propertyAddress);
-    print(propertyTitle);
-    print(type);
-    print(to);
-    print(userInfo.email);
+    // print(propertyAddress);
+    // print(propertyTitle);
+    // print(type);
+    // print(to);
+    // print(userInfo.email);
 
     // print(uselastusedaddress);
     if (!isUpdate) {
@@ -110,7 +109,7 @@ class Storage {
       print("Deleting Duplicate");
       await _firestore.collection(collection).doc(propertyTitle).delete();
       await firebase_storage.FirebaseStorage.instance
-          .ref("asset/propertyImages/${userInfo.email}/$propertyTitle")
+          .ref("asset/propertyImages/${userInfo.mobileNumber}/$propertyTitle")
           .listAll()
           .then((value) {
         value.items.forEach((element) {

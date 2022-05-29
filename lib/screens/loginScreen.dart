@@ -20,7 +20,50 @@ class loginScreen extends StatefulWidget {
   State<loginScreen> createState() => _loginScreenState();
 }
 
+Future<void> checkSavedUser(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  final _firestore = FirebaseFirestore.instance;
+
+  String? SavedUserNum = prefs.getString("UserNum");
+  String? SavedPassword = prefs.getString("SavedPassword");
+  print(SavedUserNum);
+  print(SavedPassword);
+
+  await _firestore.collection('Users').doc(SavedUserNum).get().then((value) => {
+        // print(value.data()!["password"]),
+        if (value.exists)
+          {
+            if (SavedPassword == (value.data()!["password"]))
+              {
+                userInfo.name = value.data()!["name"],
+                userInfo.password = value.data()!["password"],
+                userInfo.email = value.data()!["email"],
+              userInfo.mobileNumber = value.data()!["mobileNumber"],
+                userInfo.addressLine1 = value.data()!["addressLine1"],
+                userInfo.addressLine2 = value.data()!["addressLine2"],
+                userInfo.state = value.data()!["state"],
+                userInfo.country = value.data()!["country"],
+                userInfo.postalCode = value.data()!["postalcode"],
+                userInfo.profileImgUrl = value.data()!["profileImgUrl"],
+                print("Login Successful"),
+                print("Set Local Storage"),
+                print(prefs.getString("UserNum")),
+                print(prefs.getString("SavedPassword")),
+                Navigator.pushNamedAndRemoveUntil(
+                    context, HomeScreen.id, (route) => false),
+              }
+          }
+      });
+}
+
 class _loginScreenState extends State<loginScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    checkSavedUser(context);
+    super.initState();
+  }
+
   final _auth = FirebaseAuth.instance;
   final _loginFormKey = GlobalKey<FormState>();
   bool showSpinner = false;
@@ -283,7 +326,6 @@ class _loginScreenState extends State<loginScreen> {
                                 //       password: userInfo.password);
 
                                 final _firestore = FirebaseFirestore.instance;
-                                Object? data;
 
                                 _firestore
                                     .collection('Users')
@@ -317,8 +359,21 @@ class _loginScreenState extends State<loginScreen> {
                                                   userInfo.profileImgUrl = value
                                                       .data()!["profileImgUrl"],
                                                   print("Login Successful"),
-                                                  Navigator.pushNamed(
-                                                      context, HomeScreen.id),
+                                                  print("Set Local Storage"),
+                                                  prefs.setString('UserNum',
+                                                      userInfo.mobileNumber),
+                                                  prefs.setString(
+                                                      'SavedPassword',
+                                                      userInfo.password),
+                                                  print(prefs
+                                                      .getString("UserNum")),
+                                                  print(prefs.getString(
+                                                      "SavedPassword")),
+                                                  Navigator
+                                                      .pushNamedAndRemoveUntil(
+                                                          context,
+                                                          HomeScreen.id,
+                                                          (route) => false),
                                                 }
                                               else
                                                 {

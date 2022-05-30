@@ -60,7 +60,7 @@ late String state = "";
 late String district = "";
 List<String> districts = [];
 
-bool isSelectedState = false;
+
 int selectedDistrict = 0;
 
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
@@ -903,7 +903,6 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
         districts = districtstobeset;
         selectedDistrict = 0;
         district = "";
-        isSelectedState = true;
       });
     }
 
@@ -1459,7 +1458,6 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     setState(() {
                                       selectedState = selectedItem;
                                       state = States[selectedState];
-                                      isSelectedState = true;
                                       setDistrict(Districts[state]);
                                     });
                                   },

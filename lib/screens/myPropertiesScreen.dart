@@ -194,6 +194,8 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
+                                  state: myProperties[index].state,
+                                  district: myProperties[index].district,
                                   ownerMail: myProperties[index].ownerMail,
                                   ownerPhoneNo: myProperties[index].ownerPhno,
                                   type: myProperties[index].propertyType,

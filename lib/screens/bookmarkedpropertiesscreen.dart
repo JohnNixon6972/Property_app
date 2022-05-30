@@ -31,6 +31,8 @@ void getBookMarkedPropertiesCards() async {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(
         BookmarkedProperties(
+          state: property.state,
+          district: property.district,
           ownerMail: property.ownerMail,
           ownerPhNo: property.ownerPhoneNo,
           imageloc: property.imageloc,
@@ -60,6 +62,8 @@ void getBookMarkedPropertiesCards() async {
   for (PropertyCard property in PropertiesOnSaleAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(BookmarkedProperties(
+        state: property.state,
+        district: property.district,
         ownerMail: property.ownerMail,
         ownerPhNo: property.ownerPhoneNo,
         imageloc: property.imageloc,
@@ -211,6 +215,9 @@ class _BookmarkedPropertiesScreenState
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
+                                  state: bookMarkedProperties[index].state,
+                                  district:
+                                      bookMarkedProperties[index].district,
                                   ownerMail:
                                       bookMarkedProperties[index].ownerMail,
                                   ownerPhoneNo:
@@ -371,10 +378,14 @@ class BookmarkedProperties extends StatefulWidget {
   final String ownerImgUrl;
   final String cent;
   final String face;
+  final String state;
+  final String district;
   final List<String> propertyImages;
 
   const BookmarkedProperties(
       {Key? key,
+      required this.state,
+      required this.district,
       required this.ownerPhNo,
       required this.ownerImgUrl,
       required this.ownerMail,
@@ -500,6 +511,8 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            state:  widget.state,
+                            district: widget.district,
                             ownerMail: widget.ownerMail,
                             ownerPhoneNo: widget.ownerPhNo,
                             type: widget.propertyType,

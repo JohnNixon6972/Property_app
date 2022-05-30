@@ -117,6 +117,8 @@ class _ApprovedPropertiesScreenState extends State<ApprovedPropertiesScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
+                                  state: approvedProperties[index].state,
+                                  district: approvedProperties[index].district,
                                   ownerMail:
                                       approvedProperties[index].ownerMail,
                                   ownerPhoneNo:

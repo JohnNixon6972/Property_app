@@ -118,6 +118,8 @@ class _UnApprovedPropertiesScreenState
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PropertyDetailsScreen(
+                                  state: unApprovedProperties[index].state,
+                                  district: unApprovedProperties[index].district,
                                   ownerMail:
                                       unApprovedProperties[index].ownerMail,
                                   ownerPhoneNo:

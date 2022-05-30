@@ -51,13 +51,14 @@ class _searchScreenState extends State<searchScreen> {
           } else if (query == "" && state == "" && district == "") {
             return Container();
           } else {
-            if (snapshot.data!.docs
-                .where((QueryDocumentSnapshot<Object?> element) =>
-                    element['PropertyAddress']
-                        .toString()
-                        .toLowerCase()
-                        .contains(query.toLowerCase()))
-                .isEmpty) {
+            if (query != "" &&
+                snapshot.data!.docs
+                    .where((QueryDocumentSnapshot<Object?> element) =>
+                        element['PropertyAddress']
+                            .toString()
+                            .toLowerCase()
+                            .contains(query.toLowerCase()))
+                    .isEmpty) {
               return Padding(
                 padding: const EdgeInsets.only(top: 430),
                 child: Center(
@@ -70,7 +71,7 @@ class _searchScreenState extends State<searchScreen> {
                   ),
                 ),
               );
-            } else {
+            } else if (query != "") {
               return ListView(
                 physics: BouncingScrollPhysics(),
                 children: [
@@ -80,14 +81,81 @@ class _searchScreenState extends State<searchScreen> {
                               .toString()
                               .toLowerCase()
                               .contains(query.toLowerCase()) ||
-                          element["State"]
-                              .toString()
-                              .toLowerCase()
-                              .contains(state.toLowerCase()) ||
-                          element["District"]
-                              .toString()
-                              .toLowerCase()
-                              .contains(district.toLowerCase()))
+                          element["State"].toString().toLowerCase() ==
+                              state.toLowerCase() ||
+                          element["District"].toString().toLowerCase() ==
+                              district.toLowerCase())
+                      .map((QueryDocumentSnapshot<Object?> property) {
+                    var isSet = property["isSetImages"].toString();
+
+                    List<String> propertyImages = [];
+                    for (int i = 1; i <= 10; i++) {
+                      if (property["imgUrl$i"] != "") {
+                        propertyImages.add(property["imgUrl$i"]);
+                      }
+                    }
+                    // print(propertyImages);
+                    var imageloc = property["imgUrl1"];
+                    // print(imageloc);
+                    var price = property["Price"];
+                    var propertyAddress = property["PropertyAddress"];
+                    var propertyName = property["PropertyTitle"];
+                    var propertyDescription = property["PropertyDescription"];
+                    var to = property["PropertyTo"];
+                    var bedRoom = property["BedRoom"];
+                    var BathRoom = property["BathRoom"];
+                    var propertyCategory = property["PropertyCategory"];
+                    var ownerName = property["OwnerName"];
+                    var ownerPhno = property["PhNo"];
+                    var ownerMail = property["PropertyBy"];
+                    var propertyType = property["PropertyType"];
+                    var area = property["PlotArea"];
+                    var lenght = property["LandLength"];
+                    var width = property["LandWidth"];
+                    var constructionArea = property["ConstructionArea"];
+                    var ownerImgUrl = property["profileImgUrl"];
+                    var cent = property["Cent"];
+                    var face = property["PropertyDirection"];
+                    var state = property["State"];
+                    var district = property["District"];
+                    return SearchedProperties(
+                      state: state,
+                      district: district,
+                      ownerMail: ownerMail,
+                      ownerPhno: ownerPhno,
+                      imageloc: imageloc,
+                      price: price,
+                      propertyAddress: propertyAddress,
+                      propertyName: propertyName,
+                      propertyImages: propertyImages,
+                      propertyCategory: propertyCategory,
+                      propertyDescription: propertyDescription,
+                      propertyType: propertyType,
+                      bedRoom: bedRoom,
+                      bathRoom: BathRoom,
+                      ownerName: ownerName,
+                      to: to,
+                      area: area,
+                      lenght: lenght,
+                      width: width,
+                      constructionArea: constructionArea,
+                      ownerImgUrl: ownerImgUrl,
+                      cent: cent,
+                      face: face,
+                    );
+                  })
+                ],
+              );
+            } else {
+              return ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  ...snapshot.data!.docs
+                      .where((QueryDocumentSnapshot<Object?> element) =>
+                          element["State"].toString().toLowerCase() ==
+                              state.toLowerCase() ||
+                          element["District"].toString().toLowerCase() ==
+                              district.toLowerCase())
                       .map((QueryDocumentSnapshot<Object?> property) {
                     var isSet = property["isSetImages"].toString();
 
@@ -1072,6 +1140,7 @@ class _searchScreenState extends State<searchScreen> {
                                 selectedState = selectedItem;
                                 state = States[selectedState];
                                 setDistrict(Districts[state]);
+                                buildResults(context);
                               });
                             },
                             children: List<Widget>.generate(States.length,
@@ -1123,6 +1192,7 @@ class _searchScreenState extends State<searchScreen> {
                                 selectedDistrict = selectedItem;
                                 district = districts[selectedDistrict];
                                 print(district);
+                                buildResults(context);
                               });
                             },
                             children: List<Widget>.generate(districts.length,
@@ -1346,7 +1416,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 30.0),
+              padding: const EdgeInsets.only(top: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1364,7 +1434,16 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                     widget.propertyAddress,
                     style: TextStyle(
                         color: kBottomNavigationBackgroundColor,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      widget.district + ",\n" + widget.state,
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                    ),
                   )
                 ],
               ),
@@ -1423,6 +1502,8 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                                 ownerImgUrl: widget.ownerImgUrl,
                                 cent: widget.cent,
                                 face: widget.face,
+                                state: widget.state,
+                                district: widget.district,
                               ),
                             ),
                           );

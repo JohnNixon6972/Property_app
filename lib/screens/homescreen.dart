@@ -1009,6 +1009,8 @@ class _PropertyCardState extends State<PropertyCard> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            state: widget.state,
+                            district: widget.district,
                             ownerMail: widget.ownerMail,
                             ownerPhoneNo: widget.ownerPhoneNo,
                             type: widget.propertyType,

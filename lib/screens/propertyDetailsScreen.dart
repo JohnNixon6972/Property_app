@@ -31,10 +31,14 @@ class PropertyDetailsScreen extends StatelessWidget {
   final String ownerImgUrl;
   final String cent;
   final String face;
+  final String state;
+  final String district;
   final List<String> propertyImages;
   const PropertyDetailsScreen(
       {Key? key,
       required this.constructionArea,
+      required this.state,
+      required this.district,
       required this.lenght,
       required this.width,
       required this.ownerMail,
@@ -174,24 +178,39 @@ class PropertyDetailsScreen extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  Row(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        "\u{20B9} $price ",
-                        style: const TextStyle(
-                            fontSize: 18,
-                            color: kHighlightedTextColor,
-                            fontWeight: FontWeight.bold),
+                        district + "," + state,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: kSubCategoryColor),
                       ),
-                      Text(
-                        to == "Rent" ? " / Month" : "",
-                        style: const TextStyle(
-                            fontSize: 12,
-                            color: kSubCategoryColor,
-                            fontWeight: FontWeight.w400),
-                      )
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "\u{20B9} $price ",
+                            style: const TextStyle(
+                                fontSize: 18,
+                                color: kHighlightedTextColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            to == "Rent" ? " / Month" : "",
+                            style: const TextStyle(
+                                fontSize: 12,
+                                color: kSubCategoryColor,
+                                fontWeight: FontWeight.w400),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -622,33 +641,31 @@ class PropertyDetailsScreen extends StatelessWidget {
                         EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
                     child: CircleAvatar(
                       radius: 25,
-                      child: ownerImgUrl == ""
-                          ? Image(image: AssetImage('images/profile_img2.jpg'))
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: CachedNetworkImage(
-                                // cacheManager: customCacheManager,
-                                key: UniqueKey(),
-                                imageUrl: ownerImgUrl,
-                                height: 50,
-                                width: 50,
-                                // maxHeightDiskCache: 230,
-                                // maxWidthDiskCache: 190,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator(
-                                    color: kHighlightedTextColor,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) => Container(
-                                  color: Colors.black12,
-                                  child: const Icon(
-                                    Icons.error,
-                                    color: kHighlightedTextColor,
-                                  ),
-                                ),
-                              ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: CachedNetworkImage(
+                          // cacheManager: customCacheManager,
+                          key: UniqueKey(),
+                          imageUrl: ownerImgUrl,
+                          height: 50,
+                          width: 50,
+                          // maxHeightDiskCache: 230,
+                          // maxWidthDiskCache: 190,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(
+                              color: kHighlightedTextColor,
                             ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: Colors.black12,
+                            child: const Icon(
+                              Icons.error,
+                              color: kHighlightedTextColor,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Column(

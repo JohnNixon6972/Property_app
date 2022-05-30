@@ -17,23 +17,6 @@ class Storage {
   late firebase_storage.Reference ref;
   late CollectionReference imgRef;
 
-  // Future<void> uploadFile(
-  //     String filePath, String fileName, String propertyName) async {
-  //   File file = File(filePath);
-  //   var loggedIn_mail = _auth.currentUser!.email;
-
-  //   try {
-  //     // await storage.ref('test/$fileName').putFile(file);
-  //     await storage
-  //         .ref('asset/propertyImages/$loggedIn_mail/$propertyName')
-  //         .putFile(file);
-  //   } catch (e) {
-  //     print(e);
-  //   } on FirebaseException catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   Future<void> uploadPropertyImages(
       BuildContext context,
       List<XFile>? imageFileList,

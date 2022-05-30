@@ -1,5 +1,6 @@
-import 'dart:io';
+// ignore_for_file: non_constant_identifier_names, camel_case_types, use_key_in_widget_constructors
 
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/alertPopUp.dart';
@@ -57,7 +58,7 @@ class _profileScreenState extends State<profileScreen> {
   @override
   void initState() {
     // print("Hi");
-    getCurrentUser();
+    // getCurrentUser();
     super.initState();
   }
 
@@ -163,7 +164,7 @@ class _profileScreenState extends State<profileScreen> {
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),
-                      bottomRight: const Radius.circular(30),
+                      bottomRight: Radius.circular(30),
                     ),
                     child: Opacity(
                       opacity: 0.80,
@@ -397,7 +398,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 child: Icon(
                   widget.icon,
                   size: 32,
-                  color: kNavigationIconColor,
+                  color: kBottomNavigationBackgroundColor,
                 ),
               ),
             ),

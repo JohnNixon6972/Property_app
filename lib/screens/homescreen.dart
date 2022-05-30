@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/screens/aboutUs.dart';
+import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
 import '../constants.dart';
@@ -14,7 +15,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'aboutUs.dart';
 
 late User loggedInUser;
-bool displayAdminProperties = true;
+bool displayAdminProperties = false;
 List<String> bookmarkedPropertyNames = [];
 List<String> myPropertiesAdv = [];
 
@@ -500,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     isSelected = [true, false];
-    getCurrentUser();
+    getBookMarkedProperties();
     super.initState();
   }
 
@@ -514,47 +515,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late IconData icn;
 
-  void getCurrentUser() async {
-    try {
-      // final user = await _auth.currentUser;
-
-      // if (user != null) {
-      //   loggedInUser = user;
-      // print(loggedInUser.email);
-      // userInfo.email = loggedInUser.email!;
-      // var currUserCollection = _firestore.collection("Users");
-      // var docSanpshot =
-      // await currUserCollection.doc(userInfo.mobileNumber).get();
-
-      // if (docSanpshot.exists) {
-      //   // print("hi");
-      //   Map<String, dynamic>? data = docSanpshot.data();
-
-      //   userInfo.name = await data?['name'];
-      //   userInfo.mobileNumber = await data?['number'];
-      //   userInfo.profileImgUrl = await data?['profileImgUrl'];
-      //   print(userInfo.name);
-      //   print(userInfo.mobileNumber);
-
-      //   setState(() {});
-      // }
-      // _firestore
-      //     .collection('Users')
-      //     .doc(userInfo.mobileNumber)
-      //     .get()
-      //     .then((value) => {
-      //           // print(value.data()!["password"]),
-      //           userInfo.name = value.data()!["name"],
-      //         });
-      print(userInfo.mobileNumber);
-      getBookMarkedProperties();
-      // }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Color SelectedToggleBottonColor = const Color.fromARGB(255, 7, 91, 10);
+  Color SelectedToggleBottonColor = kNo;
 
   @override
   Widget build(BuildContext context) {
@@ -589,35 +550,41 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: userInfo.profileImgUrl == ""
-                        ? const Image(
-                            height: 70,
-                            width: 70,
-                            image: const AssetImage('images/profile_img9.png'))
-                        : CachedNetworkImage(
-                            cacheManager: customCacheManager,
-                            key: UniqueKey(),
-                            imageUrl: userInfo.profileImgUrl,
-                            height: 70,
-                            width: 70,
-                            // maxHeightDiskCache: 230,
-                            // maxWidthDiskCache: 190,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(
-                                color: kHighlightedTextColor,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, profileScreen.id);
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: userInfo.profileImgUrl == ""
+                          ? const Image(
+                              height: 70,
+                              width: 70,
+                              image:
+                                  const AssetImage('images/profile_img9.png'))
+                          : CachedNetworkImage(
+                              cacheManager: customCacheManager,
+                              key: UniqueKey(),
+                              imageUrl: userInfo.profileImgUrl,
+                              height: 70,
+                              width: 70,
+                              // maxHeightDiskCache: 230,
+                              // maxWidthDiskCache: 190,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: kHighlightedTextColor,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: Colors.black12,
+                                child: const Icon(
+                                  Icons.error,
+                                  color: kHighlightedTextColor,
+                                ),
                               ),
                             ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.black12,
-                              child: const Icon(
-                                Icons.error,
-                                color: kHighlightedTextColor,
-                              ),
-                            ),
-                          ),
+                    ),
                   )
                 ],
               ),
@@ -795,14 +762,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Yes',
+                                    'No',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'No',
+                                    'Yes',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ),
@@ -810,13 +777,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed: (int index) {
                                 setState(() {
                                   if (index == 0) {
-                                    SelectedToggleBottonColor = kYes;
-                                  } else if (index == 1) {
                                     SelectedToggleBottonColor = kNo;
+                                  } else if (index == 1) {
+                                    SelectedToggleBottonColor = kYes;
                                   }
 
                                   displayAdminProperties =
-                                      index == 0 ? true : false;
+                                      index != 0 ? true : false;
                                   print(displayAdminProperties);
                                   for (int i = 0; i < isSelected.length; i++) {
                                     isSelected[i] = i == index;
@@ -1067,7 +1034,7 @@ class _PropertyCardState extends State<PropertyCard> {
                         if (bookedmark) {
                           _firestore
                               .collection("Users")
-                              .doc(loggedInUser.email)
+                              .doc(userInfo.mobileNumber)
                               .collection("BookMarkedProperties")
                               .doc(widget.propertyName)
                               .set({"PropertyName": widget.propertyName});
@@ -1076,7 +1043,7 @@ class _PropertyCardState extends State<PropertyCard> {
                         } else {
                           _firestore
                               .collection("Users")
-                              .doc(userInfo.email)
+                              .doc(userInfo.mobileNumber)
                               .collection("BookMarkedProperties")
                               .doc(widget.propertyName)
                               .delete();

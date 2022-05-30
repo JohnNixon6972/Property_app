@@ -1,30 +1,27 @@
+// ignore_for_file: camel_case_types, use_key_in_widget_constructors, override_on_non_overriding_member, unused_element
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_auth/email_auth.dart';
+// import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:otp_text_field/otp_field_style.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
-import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/loginScreen.dart';
-import 'package:property_app/currentUserInformation.dart';
 import '../components/alertPopUp.dart';
-import 'package:otp_text_field/otp_field.dart';
-import 'package:otp_text_field/style.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import '../components/otpVerification.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/services.dart';
+// import 'package:otp_text_field/otp_field_style.dart';
+// import 'package:property_app/screens/homescreen.dart';
+// import 'package:property_app/currentUserInformation.dart';
+// import 'package:otp_text_field/otp_field.dart';
+// import 'package:otp_text_field/style.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 // final TextEditingController _otpController = TextEditingController();
-
-final _auth = FirebaseAuth.instance;
-final _firestore = FirebaseFirestore.instance;
-final _formKey = GlobalKey<FormState>();
 
 class registerScreen extends StatefulWidget {
   static const String id = 'register';
@@ -34,7 +31,7 @@ class registerScreen extends StatefulWidget {
 }
 
 class _registerScreenState extends State<registerScreen> {
-  final _auth = FirebaseAuth.instance;
+  // final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
   // late String phoneNumber, verificationId = "";
@@ -90,7 +87,7 @@ class _registerScreenState extends State<registerScreen> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
@@ -99,7 +96,7 @@ class _registerScreenState extends State<registerScreen> {
                 children: <Widget>[
                   Hero(
                     tag: 'logo',
-                    child: Container(
+                    child: SizedBox(
                       height: 350,
                       child: Image.asset(
                         'images/try11.png',
@@ -115,7 +112,7 @@ class _registerScreenState extends State<registerScreen> {
                         styleConstant: kTextTitleStyle.copyWith(fontSize: 25),
                         align: TextAlign.center,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -125,7 +122,7 @@ class _registerScreenState extends State<registerScreen> {
                         cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.name,
                         textAlign: TextAlign.left,
-                        style: TextStyle(color: kPrimaryButtonColor),
+                        style: const TextStyle(color: kPrimaryButtonColor),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter valid text';
@@ -138,11 +135,11 @@ class _registerScreenState extends State<registerScreen> {
                         textInputAction: TextInputAction.done,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your Name.',
-                          prefixIcon: Icon(Icons.badge,
+                          prefixIcon: const Icon(Icons.badge,
                               color: kBottomNavigationBackgroundColor),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -152,7 +149,7 @@ class _registerScreenState extends State<registerScreen> {
                         cursorColor: kPrimaryButtonColor,
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.left,
-                        style: TextStyle(color: kPrimaryButtonColor),
+                        style: const TextStyle(color: kPrimaryButtonColor),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter valid text';
@@ -164,11 +161,11 @@ class _registerScreenState extends State<registerScreen> {
                         },
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your Mobile Number.',
-                          prefixIcon: Icon(Icons.phone,
+                          prefixIcon: const Icon(Icons.phone,
                               color: kBottomNavigationBackgroundColor),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -179,7 +176,7 @@ class _registerScreenState extends State<registerScreen> {
                         obscureText: _isHidden,
                         keyboardType: TextInputType.visiblePassword,
                         textAlign: TextAlign.left,
-                        style: TextStyle(color: kPrimaryButtonColor),
+                        style: const TextStyle(color: kPrimaryButtonColor),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter valid text';
@@ -191,7 +188,7 @@ class _registerScreenState extends State<registerScreen> {
                         },
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Enter your Password.',
-                          prefixIcon: Icon(Icons.lock,
+                          prefixIcon: const Icon(Icons.lock,
                               color: kBottomNavigationBackgroundColor),
                           suffix: InkWell(
                             onTap: () {
@@ -205,13 +202,29 @@ class _registerScreenState extends State<registerScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          Navigator.pushNamed(
-                              context, VerifyPhoneNumberScreen.id);
+                          _firestore
+                              .collection("Users")
+                              .doc(userInfo.mobileNumber)
+                              .get()
+                              .then((doc) => {
+                                    if (doc.exists)
+                                      {
+                                        popUpAlertDialogBox(context,
+                                            "${userInfo.mobileNumber} is already registered"),
+                                        // Navigator.pushNamed(
+                                        //     context, loginScreen.id),
+                                      }
+                                    else
+                                      {
+                                        Navigator.pushNamed(context,
+                                            VerifyPhoneNumberScreen.id),
+                                      }
+                                  });
                         },
                         style: ElevatedButton.styleFrom(
                           primary: kPrimaryButtonColor,
@@ -224,7 +237,7 @@ class _registerScreenState extends State<registerScreen> {
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       GestureDetector(
@@ -248,7 +261,7 @@ class _registerScreenState extends State<registerScreen> {
                           Navigator.pushNamed(context, loginScreen.id);
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ],

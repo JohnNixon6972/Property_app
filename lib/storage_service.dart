@@ -75,6 +75,8 @@ class Storage {
       String bedRoom,
       String bathRoom,
       String price,
+      String state,
+      String district,
       bool isUpdate) async {
     // print(propertyAddress);
     // print(propertyTitle);
@@ -124,6 +126,8 @@ class Storage {
             "Price": price,
             "PhNo":userInfo.mobileNumber,
             "profileImgUrl":userInfo.profileImgUrl,
+            "State":state,
+            "District":district,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -160,6 +164,8 @@ class Storage {
             "Price": price,
             "PhNo":userInfo.mobileNumber,
             "profileImgUrl":userInfo.profileImgUrl,
+            "State":state,
+            "District":district,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",

@@ -29,6 +29,8 @@ void getMyPropertiesCards() {
   for (PropertyCard property in PropertiesOnRentAll) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
+        state: property.state,
+        district: property.district,
         ownerMail: property.ownerMail,
         ownerPhno: property.ownerPhoneNo,
         imageloc: property.imageloc,
@@ -58,6 +60,8 @@ void getMyPropertiesCards() {
       myProperties.add(myProperty(
         ownerMail: property.ownerMail,
         ownerPhno: property.ownerPhoneNo,
+        district: property.district,
+        state: property.state,
         imageloc: property.imageloc,
         price: property.price,
         propertyAddress: property.propertyAddress,
@@ -484,9 +488,13 @@ class myProperty extends StatefulWidget {
   final String ownerImgUrl;
   final String cent;
   final String face;
+  final String district;
+  final String state;
   final List<String> propertyImages;
   const myProperty(
       {required this.imageloc,
+      required this.district,
+      required this.state,
       required this.lenght,
       required this.face,
       required this.width,

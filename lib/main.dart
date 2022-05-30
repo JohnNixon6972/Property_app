@@ -66,6 +66,7 @@ class _PropertyAppState extends State<PropertyApp> {
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
           aboutUs.id: (context) => aboutUs(),
           forgotPasswordScreen.id: (context) => forgotPasswordScreen(),
+          
         },
       ),
     );

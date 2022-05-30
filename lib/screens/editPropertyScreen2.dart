@@ -31,6 +31,8 @@ late String BedRoom = "";
 late String BathRoom = "";
 late String Price = "";
 late String face = "";
+late String state = "";
+late String district = "";
 var _controller = TextEditingController();
 TextEditingController _areaController = TextEditingController();
 TextEditingController _priceController = TextEditingController();
@@ -57,6 +59,8 @@ void readDetails(myProperty propertyToEdit) {
   BedRoom = propertyToEdit.bedRoom;
   Price = propertyToEdit.price;
   BathRoom = propertyToEdit.bathRoom;
+  district = propertyToEdit.district;
+  state = propertyToEdit.state;
   _controller.text = propertyToEdit.propertyDescription;
   _areaController.text = propertyToEdit.area;
   _priceController.text = propertyToEdit.price;
@@ -545,6 +549,8 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       bedRoom,
                                       bathRoom,
                                       price,
+                                      state,
+                                      district,
                                       to == widget.propertyToEdit.to && true);
                                   _storage.uploadPropertyImages(context,
                                       imageFileList, propertyTitle, to, true);

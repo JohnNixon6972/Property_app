@@ -526,6 +526,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         bedRoom,
                                         bathRoom,
                                         price,
+                                        state,
+                                        district,
                                         false);
                                     _storage.uploadPropertyImages(
                                         context,

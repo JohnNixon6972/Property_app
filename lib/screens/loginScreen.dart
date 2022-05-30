@@ -29,31 +29,37 @@ Future<void> checkSavedUser(BuildContext context) async {
   print(SavedUserNum);
   print(SavedPassword);
 
-  await _firestore.collection('Users').doc(SavedUserNum).get().then((value) => {
-        // print(value.data()!["password"]),
-        if (value.exists)
-          {
-            if (SavedPassword == (value.data()!["password"]))
-              {
-                userInfo.name = value.data()!["name"],
-                userInfo.password = value.data()!["password"],
-                userInfo.email = value.data()!["email"],
-              userInfo.mobileNumber = value.data()!["mobileNumber"],
-                userInfo.addressLine1 = value.data()!["addressLine1"],
-                userInfo.addressLine2 = value.data()!["addressLine2"],
-                userInfo.state = value.data()!["state"],
-                userInfo.country = value.data()!["country"],
-                userInfo.postalCode = value.data()!["postalcode"],
-                userInfo.profileImgUrl = value.data()!["profileImgUrl"],
-                print("Login Successful"),
-                print("Set Local Storage"),
-                print(prefs.getString("UserNum")),
-                print(prefs.getString("SavedPassword")),
-                Navigator.pushNamedAndRemoveUntil(
-                    context, HomeScreen.id, (route) => false),
-              }
-          }
-      });
+  if (SavedPassword != null && SavedUserNum != null) {
+    await _firestore
+        .collection('Users')
+        .doc(SavedUserNum)
+        .get()
+        .then((value) => {
+              // print(value.data()!["password"]),
+              if (value.exists)
+                {
+                  if (SavedPassword == (value.data()!["password"]))
+                    {
+                      userInfo.name = value.data()!["name"],
+                      userInfo.password = value.data()!["password"],
+                      userInfo.email = value.data()!["email"],
+                      userInfo.mobileNumber = value.data()!["mobileNumber"],
+                      userInfo.addressLine1 = value.data()!["addressLine1"],
+                      userInfo.addressLine2 = value.data()!["addressLine2"],
+                      userInfo.state = value.data()!["state"],
+                      userInfo.country = value.data()!["country"],
+                      userInfo.postalCode = value.data()!["postalcode"],
+                      userInfo.profileImgUrl = value.data()!["profileImgUrl"],
+                      print("Login Successful"),
+                      print("Set Local Storage"),
+                      print(prefs.getString("UserNum")),
+                      print(prefs.getString("SavedPassword")),
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, HomeScreen.id, (route) => false),
+                    }
+                }
+            });
+  }
 }
 
 class _loginScreenState extends State<loginScreen> {

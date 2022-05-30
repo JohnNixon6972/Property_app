@@ -118,8 +118,12 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var width = property["LandWidth"];
               var ownerImgUrl = property["profileImgUrl"];
               var cent = property["Cent"];
+              var district = property["District"];
+              var state = property["State"];
 
               final Property = PropertyCard(
+                state: state,
+                district: district,
                 ownerMail: ownerEmail,
                 ownerPhoneNo: ownerPhno,
                 constructionArea: constructionArea,
@@ -338,8 +342,12 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var width = property["LandWidth"];
               var ownerImgUrl = property["profileImgUrl"];
               var cent = property["Cent"];
+              var district = property["District"];
+              var state = property["State"];
 
               final Property = PropertyCard(
+                state: state,
+                district: district,
                 ownerMail: ownerEmail,
                 constructionArea: constructionArea,
                 ownerPhoneNo: ownerPhno,
@@ -870,6 +878,8 @@ class PropertyCard extends StatefulWidget {
   final String constructionArea;
   final String ownerImgUrl;
   final String cent;
+  final String district;
+  final String state;
   final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
@@ -892,6 +902,8 @@ class PropertyCard extends StatefulWidget {
       required this.lenght,
       required this.ownerImgUrl,
       required this.cent,
+      required this.state,
+      required this.district,
       required this.width});
 
   @override

@@ -31,8 +31,12 @@ String getCategory() {
     return "Apartment";
   } else if (_category == propertyCategory.Building) {
     return "Building";
+  } else if (_category == propertyCategory.Plot) {
+    return "Plot";
+  } else if (_category == propertyCategory.Land) {
+    return "Land";
   } else {
-    return "PentHouse";
+    return "House";
   }
 }
 
@@ -65,7 +69,7 @@ void readDetails(myProperty propertyToEdit, List<String> States,
     Map<String, List<String>> Districts) {
   _to = propertyToEdit.to == "Sell" ? propertyTo.Sell : propertyTo.Rent;
   print(propertyToEdit.propertyCategory);
-  if (propertyToEdit.propertyCategory == "PentHouse") {
+  if (propertyToEdit.propertyCategory == "House") {
     _category = propertyCategory.House;
   } else if (propertyToEdit.propertyCategory == "Land") {
     _category = propertyCategory.Land;

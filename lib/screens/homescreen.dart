@@ -306,7 +306,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
         BuildingOnRent = [];
         if (!snapshot.hasData) {
           return const Center(
-            child: const CircularProgressIndicator(),
+            child: CircularProgressIndicator(),
           );
         }
         final properties = snapshot.data!.docs;
@@ -569,7 +569,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 70,
                               width: 70,
                               image:
-                                  const AssetImage('images/profile_img9.png'))
+                                  AssetImage('images/profile_img9.png'))
                           : CachedNetworkImage(
                               cacheManager: customCacheManager,
                               key: UniqueKey(),
@@ -747,7 +747,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             const Padding(
                               padding: EdgeInsets.only(left: 8.0),
-                              child: const Center(
+                              child: Center(
                                 child: Text(
                                   "Show admin Only Properties",
                                   style: TextStyle(
@@ -771,14 +771,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'No',
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Yes',
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ],
@@ -805,7 +809,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const Padding(
                         padding:
-                            const EdgeInsets.only(top: 10, left: 15, right: 15),
+                            EdgeInsets.only(top: 10, left: 15, right: 15),
                         child: Text(
                           'Properties on Sale ${Emojis.buildingConstruction}',
                           style: TextStyle(
@@ -824,7 +828,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const Padding(
                         padding:
-                            const EdgeInsets.only(top: 5, left: 15, right: 15),
+                            EdgeInsets.only(top: 5, left: 15, right: 15),
                         child: Text(
                           'Properties on Rent ${Emojis.moneyBag}',
                           style: TextStyle(

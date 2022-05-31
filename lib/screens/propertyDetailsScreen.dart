@@ -233,58 +233,59 @@ class PropertyDetailsScreen extends StatelessWidget {
               Center(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: !isLand
-                      ? MainAxisAlignment.spaceEvenly
-                      : MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      height: 40,
-                      width: 180,
-                      decoration: const BoxDecoration(
-                        color: kHighlightedTextColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                    Expanded(
+                      flex: 8,
+                      child: Container(
+                        height: 40,
+                        // width: 180,
+                        decoration: const BoxDecoration(
+                          color: kHighlightedTextColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          overView,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                        child: Center(
+                          child: Text(
+                            overView,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
                         ),
                       ),
                     ),
-                    !isLand
-                        ? Padding(
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      flex: 10,
+                      child: Container(
+                        height: 40,
+                        // width: 150,
+                        decoration: const BoxDecoration(
+                          color: kSecondaryButtonColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        child: Center(
+                          child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Container(
-                              height: 60,
-                              width: 130,
-                              decoration: const BoxDecoration(
-                                color: kSecondaryButtonColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  child: Text(
-                                    "Property Facing : " + face,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
+                            child: Text(
+                              "Property Facing : " + "south",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
-                          )
-                        : Center()
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

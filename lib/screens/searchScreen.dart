@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/constants.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
@@ -72,150 +73,171 @@ class _searchScreenState extends State<searchScreen> {
                 ),
               );
             } else if (query != "") {
-              return ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  ...snapshot.data!.docs
-                      .where((QueryDocumentSnapshot<Object?> element) =>
-                          element['PropertyAddress']
-                              .toString()
-                              .toLowerCase()
-                              .contains(query.toLowerCase()) ||
-                          element["State"].toString().toLowerCase() ==
-                              state.toLowerCase() ||
-                          element["District"].toString().toLowerCase() ==
-                              district.toLowerCase())
-                      .map((QueryDocumentSnapshot<Object?> property) {
-                    var isSet = property["isSetImages"].toString();
+              return AnimationLimiter(
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: AnimationConfiguration.toStaggeredList(
+                    childAnimationBuilder: (widget) => SlideAnimation(
+                        horizontalOffset: 50.0,
+                        duration: Duration(seconds: 2),
+                        child: FadeInAnimation(
+                            duration: Duration(seconds: 2), child: widget)),
+                    children: [
+                      ...snapshot.data!.docs
+                          .where((QueryDocumentSnapshot<Object?> element) =>
+                              element['PropertyAddress']
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(query.toLowerCase()) ||
+                              element["State"].toString().toLowerCase() ==
+                                  state.toLowerCase() ||
+                              element["District"].toString().toLowerCase() ==
+                                  district.toLowerCase())
+                          .map((QueryDocumentSnapshot<Object?> property) {
+                        var isSet = property["isSetImages"].toString();
 
-                    List<String> propertyImages = [];
-                    for (int i = 1; i <= 10; i++) {
-                      if (property["imgUrl$i"] != "") {
-                        propertyImages.add(property["imgUrl$i"]);
-                      }
-                    }
-                    // print(propertyImages);
-                    var imageloc = property["imgUrl1"];
-                    // print(imageloc);
-                    var price = property["Price"];
-                    var propertyAddress = property["PropertyAddress"];
-                    var propertyName = property["PropertyTitle"];
-                    var propertyDescription = property["PropertyDescription"];
-                    var to = property["PropertyTo"];
-                    var bedRoom = property["BedRoom"];
-                    var BathRoom = property["BathRoom"];
-                    var propertyCategory = property["PropertyCategory"];
-                    var ownerName = property["OwnerName"];
-                    var ownerPhno = property["PhNo"];
-                    var ownerMail = property["PropertyBy"];
-                    var propertyType = property["PropertyType"];
-                    var area = property["PlotArea"];
-                    var lenght = property["LandLength"];
-                    var width = property["LandWidth"];
-                    var constructionArea = property["ConstructionArea"];
-                    var ownerImgUrl = property["profileImgUrl"];
-                    var cent = property["Cent"];
-                    var face = property["PropertyDirection"];
-                    var state = property["State"];
-                    var district = property["District"];
-                    return SearchedProperties(
-                      state: state,
-                      district: district,
-                      ownerMail: ownerMail,
-                      ownerPhno: ownerPhno,
-                      imageloc: imageloc,
-                      price: price,
-                      propertyAddress: propertyAddress,
-                      propertyName: propertyName,
-                      propertyImages: propertyImages,
-                      propertyCategory: propertyCategory,
-                      propertyDescription: propertyDescription,
-                      propertyType: propertyType,
-                      bedRoom: bedRoom,
-                      bathRoom: BathRoom,
-                      ownerName: ownerName,
-                      to: to,
-                      area: area,
-                      lenght: lenght,
-                      width: width,
-                      constructionArea: constructionArea,
-                      ownerImgUrl: ownerImgUrl,
-                      cent: cent,
-                      face: face,
-                    );
-                  })
-                ],
+                        List<String> propertyImages = [];
+                        for (int i = 1; i <= 10; i++) {
+                          if (property["imgUrl$i"] != "") {
+                            propertyImages.add(property["imgUrl$i"]);
+                          }
+                        }
+                        // print(propertyImages);
+                        var imageloc = property["imgUrl1"];
+                        // print(imageloc);
+                        var price = property["Price"];
+                        var propertyAddress = property["PropertyAddress"];
+                        var propertyName = property["PropertyTitle"];
+                        var propertyDescription =
+                            property["PropertyDescription"];
+                        var to = property["PropertyTo"];
+                        var bedRoom = property["BedRoom"];
+                        var BathRoom = property["BathRoom"];
+                        var propertyCategory = property["PropertyCategory"];
+                        var ownerName = property["OwnerName"];
+                        var ownerPhno = property["PhNo"];
+                        var ownerMail = property["PropertyBy"];
+                        var propertyType = property["PropertyType"];
+                        var area = property["PlotArea"];
+                        var lenght = property["LandLength"];
+                        var width = property["LandWidth"];
+                        var constructionArea = property["ConstructionArea"];
+                        var ownerImgUrl = property["profileImgUrl"];
+                        var cent = property["Cent"];
+                        var face = property["PropertyDirection"];
+                        var state = property["State"];
+                        var district = property["District"];
+                        return SearchedProperties(
+                          state: state,
+                          district: district,
+                          ownerMail: ownerMail,
+                          ownerPhno: ownerPhno,
+                          imageloc: imageloc,
+                          price: price,
+                          propertyAddress: propertyAddress,
+                          propertyName: propertyName,
+                          propertyImages: propertyImages,
+                          propertyCategory: propertyCategory,
+                          propertyDescription: propertyDescription,
+                          propertyType: propertyType,
+                          bedRoom: bedRoom,
+                          bathRoom: BathRoom,
+                          ownerName: ownerName,
+                          to: to,
+                          area: area,
+                          lenght: lenght,
+                          width: width,
+                          constructionArea: constructionArea,
+                          ownerImgUrl: ownerImgUrl,
+                          cent: cent,
+                          face: face,
+                        );
+                      })
+                    ],
+                  ),
+                ),
               );
             } else {
-              return ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  ...snapshot.data!.docs
-                      .where((QueryDocumentSnapshot<Object?> element) =>
-                          element["State"].toString().toLowerCase() ==
-                              state.toLowerCase() ||
-                          element["District"].toString().toLowerCase() ==
-                              district.toLowerCase())
-                      .map((QueryDocumentSnapshot<Object?> property) {
-                    var isSet = property["isSetImages"].toString();
+              return AnimationLimiter(
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: AnimationConfiguration.toStaggeredList(
+                    childAnimationBuilder: (widget) => SlideAnimation(
+                        duration: Duration(seconds: 2),
+                        horizontalOffset: 50.0,
+                        child: FadeInAnimation(
+                            duration: Duration(seconds: 2), child: widget)),
+                    children: [
+                      ...snapshot.data!.docs
+                          .where((QueryDocumentSnapshot<Object?> element) =>
+                              element["State"].toString().toLowerCase() ==
+                                  state.toLowerCase() ||
+                              element["District"].toString().toLowerCase() ==
+                                  district.toLowerCase())
+                          .map((QueryDocumentSnapshot<Object?> property) {
+                        var isSet = property["isSetImages"].toString();
 
-                    List<String> propertyImages = [];
-                    for (int i = 1; i <= 10; i++) {
-                      if (property["imgUrl$i"] != "") {
-                        propertyImages.add(property["imgUrl$i"]);
-                      }
-                    }
-                    // print(propertyImages);
-                    var imageloc = property["imgUrl1"];
-                    // print(imageloc);
-                    var price = property["Price"];
-                    var propertyAddress = property["PropertyAddress"];
-                    var propertyName = property["PropertyTitle"];
-                    var propertyDescription = property["PropertyDescription"];
-                    var to = property["PropertyTo"];
-                    var bedRoom = property["BedRoom"];
-                    var BathRoom = property["BathRoom"];
-                    var propertyCategory = property["PropertyCategory"];
-                    var ownerName = property["OwnerName"];
-                    var ownerPhno = property["PhNo"];
-                    var ownerMail = property["PropertyBy"];
-                    var propertyType = property["PropertyType"];
-                    var area = property["PlotArea"];
-                    var lenght = property["LandLength"];
-                    var width = property["LandWidth"];
-                    var constructionArea = property["ConstructionArea"];
-                    var ownerImgUrl = property["profileImgUrl"];
-                    var cent = property["Cent"];
-                    var face = property["PropertyDirection"];
-                    var state = property["State"];
-                    var district = property["District"];
-                    return SearchedProperties(
-                      state: state,
-                      district: district,
-                      ownerMail: ownerMail,
-                      ownerPhno: ownerPhno,
-                      imageloc: imageloc,
-                      price: price,
-                      propertyAddress: propertyAddress,
-                      propertyName: propertyName,
-                      propertyImages: propertyImages,
-                      propertyCategory: propertyCategory,
-                      propertyDescription: propertyDescription,
-                      propertyType: propertyType,
-                      bedRoom: bedRoom,
-                      bathRoom: BathRoom,
-                      ownerName: ownerName,
-                      to: to,
-                      area: area,
-                      lenght: lenght,
-                      width: width,
-                      constructionArea: constructionArea,
-                      ownerImgUrl: ownerImgUrl,
-                      cent: cent,
-                      face: face,
-                    );
-                  })
-                ],
+                        List<String> propertyImages = [];
+                        for (int i = 1; i <= 10; i++) {
+                          if (property["imgUrl$i"] != "") {
+                            propertyImages.add(property["imgUrl$i"]);
+                          }
+                        }
+                        // print(propertyImages);
+                        var imageloc = property["imgUrl1"];
+                        // print(imageloc);
+                        var price = property["Price"];
+                        var propertyAddress = property["PropertyAddress"];
+                        var propertyName = property["PropertyTitle"];
+                        var propertyDescription =
+                            property["PropertyDescription"];
+                        var to = property["PropertyTo"];
+                        var bedRoom = property["BedRoom"];
+                        var BathRoom = property["BathRoom"];
+                        var propertyCategory = property["PropertyCategory"];
+                        var ownerName = property["OwnerName"];
+                        var ownerPhno = property["PhNo"];
+                        var ownerMail = property["PropertyBy"];
+                        var propertyType = property["PropertyType"];
+                        var area = property["PlotArea"];
+                        var lenght = property["LandLength"];
+                        var width = property["LandWidth"];
+                        var constructionArea = property["ConstructionArea"];
+                        var ownerImgUrl = property["profileImgUrl"];
+                        var cent = property["Cent"];
+                        var face = property["PropertyDirection"];
+                        var state = property["State"];
+                        var district = property["District"];
+                        return SearchedProperties(
+                          state: state,
+                          district: district,
+                          ownerMail: ownerMail,
+                          ownerPhno: ownerPhno,
+                          imageloc: imageloc,
+                          price: price,
+                          propertyAddress: propertyAddress,
+                          propertyName: propertyName,
+                          propertyImages: propertyImages,
+                          propertyCategory: propertyCategory,
+                          propertyDescription: propertyDescription,
+                          propertyType: propertyType,
+                          bedRoom: bedRoom,
+                          bathRoom: BathRoom,
+                          ownerName: ownerName,
+                          to: to,
+                          area: area,
+                          lenght: lenght,
+                          width: width,
+                          constructionArea: constructionArea,
+                          ownerImgUrl: ownerImgUrl,
+                          cent: cent,
+                          face: face,
+                        );
+                      })
+                    ],
+                  ),
+                  
+                ),
               );
             }
           }

@@ -641,6 +641,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
                     child: CircleAvatar(
+                      backgroundColor: null,
                       radius: 25,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),

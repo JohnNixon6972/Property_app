@@ -97,7 +97,7 @@ class _registerScreenState extends State<registerScreen> {
                   Hero(
                     tag: 'logo',
                     child: SizedBox(
-                      height: 350,
+                      height: 450,
                       child: Image.asset(
                         'images/try11.png',
                       ),

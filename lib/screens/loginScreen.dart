@@ -278,15 +278,6 @@ class _loginScreenState extends State<loginScreen> {
                                                     popUpAlertDialogBox(context,
                                                         "User is not registered");
                                                   }
-                                                  // if (_loginFormKey
-                                                  //     .currentState!
-                                                  //     .validate()) {}
-                                                  // FirebaseAuth.instance
-                                                  //     .sendPasswordResetEmail(
-                                                  //         email: userInfo
-                                                  //             .email);
-
-                                                  // FirebaseAuth.instance.send
 
                                                   Navigator.pop(context);
                                                   print(userInfo.mobileNumber);
@@ -364,22 +355,15 @@ class _loginScreenState extends State<loginScreen> {
                                                       .data()!["postalcode"],
                                                   userInfo.profileImgUrl = value
                                                       .data()!["profileImgUrl"],
-                                                  print("Login Successful"),
-                                                  print("Set Local Storage"),
+                                                 
                                                   prefs.setString('UserNum',
                                                       userInfo.mobileNumber),
                                                   prefs.setString(
                                                       'SavedPassword',
                                                       userInfo.password),
-                                                  print(prefs
-                                                      .getString("UserNum")),
-                                                  print(prefs.getString(
-                                                      "SavedPassword")),
-                                                  Navigator
-                                                      .pushNamedAndRemoveUntil(
-                                                          context,
-                                                          HomeScreen.id,
-                                                          (route) => false),
+                                                 
+                                                  Navigator.pushNamed(
+                                                      context, HomeScreen.id),
                                                 }
                                               else
                                                 {

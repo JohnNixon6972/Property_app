@@ -8,8 +8,8 @@ Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
   return showDialog(
       context: context,
       builder: (BuildContext builderContext) {
-        _timer = Timer(const Duration(seconds: 3), () {
-          Navigator.of(context).pop();
+        _timer = Timer(const Duration(seconds: 5), () {
+          Navigator.of(builderContext).pop();
         });
         return AlertDialog(
           elevation: 30,

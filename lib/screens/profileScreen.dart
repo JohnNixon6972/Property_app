@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:email_auth/email_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/screens/approvedPropertiesScreen.dart';
@@ -489,6 +490,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 Column(children: childern),
                 ElevatedButton(
                   onPressed: () async {
+                    
                     _firestore
                         .collection("Users")
                         .doc(userInfo.mobileNumber)

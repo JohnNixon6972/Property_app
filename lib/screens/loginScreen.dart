@@ -221,7 +221,7 @@ class _loginScreenState extends State<loginScreen> {
                                     child: Column(
                                       children: [
                                         Form(
-                                          // key: _loginFormKey,
+                                          key: _loginFormKey,
                                           child: Column(
                                             children: [
                                               SizedBox(
@@ -355,20 +355,18 @@ class _loginScreenState extends State<loginScreen> {
                                                       .data()!["postalcode"],
                                                   userInfo.profileImgUrl = value
                                                       .data()!["profileImgUrl"],
-                                                 
                                                   prefs.setString('UserNum',
                                                       userInfo.mobileNumber),
                                                   prefs.setString(
                                                       'SavedPassword',
                                                       userInfo.password),
-                                                 
                                                   Navigator.pushNamed(
                                                       context, HomeScreen.id),
                                                 }
                                               else
                                                 {
-                                                  popUpAlertDialogBox(
-                                                      context, "Login Failed"),
+                                                  popUpAlertDialogBox(context,
+                                                      "Login Failed\nInvalid Password"),
                                                 }
                                             }
                                           else

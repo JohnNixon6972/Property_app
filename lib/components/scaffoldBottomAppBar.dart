@@ -84,6 +84,9 @@ class scaffoldBottomAppBar extends StatelessWidget {
                     if (page != AddPropertiesScreen.id) {
                       Navigator.pushNamed(context, AddPropertiesScreen.id);
                     }
+                    // if (page != AddPropertyScreen0.id) {
+                    //   Navigator.pushNamed(context, AddPropertyScreen0.id);
+                    // }
                   },
                   child: const AvatarGlow(
                     glowColor: kHighlightedTextColor,

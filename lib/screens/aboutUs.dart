@@ -44,14 +44,14 @@ class _aboutUsState extends State<aboutUs> {
                         style: TextStyle(
                             color: kHighlightedTextColor,
                             fontSize: 24,
-                            fontWeight: FontWeight.w500),
+                            fontWeight: FontWeight.w400),
                       ),
                       const Text(
                         "Pleasant Properties Admin",
                         style: TextStyle(
                             color: kHighlightedTextColor,
                             fontSize: 16,
-                            fontWeight: FontWeight.w500),
+                            fontWeight: FontWeight.w400),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,

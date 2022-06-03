@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:property_app/main.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/previewProperty.dart';
 import 'package:property_app/storage_service.dart';
@@ -324,14 +324,68 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                 },
                               ),
                               const Spacer(),
-                              PropertyDetailTile(
-                                HintText: "Building Area(SqFt.)",
-                                onChange: (newValue) {
-                                  setState(() {
-                                    ConstructionArea = newValue;
-                                  });
-                                },
-                              )
+                              !isLand
+                                  ? PropertyDetailTile(
+                                      HintText: "Building Area(SqFt.)",
+                                      onChange: (newValue) {
+                                        setState(() {
+                                          ConstructionArea = newValue;
+                                        });
+                                      },
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 6),
+                                      child: GestureDetector(
+                                        onTap: () => _showDialog(
+                                          CupertinoPicker(
+                                            magnification: 1.22,
+                                            squeeze: 1.2,
+                                            useMagnifier: true,
+                                            itemExtent: _kItemExtent,
+                                            // This is called when selected item is changed.
+                                            onSelectedItemChanged:
+                                                (int selectedItem) {
+                                              setState(() {
+                                                selectedFace = selectedItem;
+                                                Facing =
+                                                    directions[selectedFace];
+                                              });
+                                            },
+                                            children: List<Widget>.generate(
+                                                directions.length, (int index) {
+                                              return Center(
+                                                child: Text(
+                                                  directions[index],
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          height: 70,
+                                          width: 165,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: kHighlightedTextColor),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 20),
+                                            child: Text(
+                                              "Facing : " + Facing,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  color: Colors.grey[700],
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
                             ],
                           ),
                           Row(
@@ -461,14 +515,30 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                       MaterialPageRoute(
                                           builder: (context) => PreviewProperty(
                                               imageFileList: imageFileList,
-                                              PropertyTitle: PropertyTitle,
-                                              PropertyAddress: PropertyAddress,
-                                              PropertyDescription:
+                                              constructionArea:
+                                                  ConstructionArea,
+                                              state: state,
+                                              district: district,
+                                              noBedroom: BedRoom,
+                                              noBathroom: BathRoom,
+                                              lenght: lenght,
+                                              width: width,
+                                              ownerImgUrl:
+                                                  userInfo.profileImgUrl,
+                                              ownerPhoneNo:
+                                                  userInfo.mobileNumber,
+                                              propertyTitle: PropertyTitle,
+                                              propertyAddress: PropertyAddress,
+                                              propertyDescription:
                                                   PropertyDescription,
-                                              Area: PlotArea,
-                                              BathRoom: BathRoom,
-                                              BedRoom: BedRoom,
-                                              Price: Price,
+                                              area: PlotArea,
+                                              ownerName: userInfo.name,
+                                              category: getCategory(),
+                                              cent: cent,
+                                              face: Facing,
+                                              price: Price,
+                                              ownerMail: userInfo.email,
+                                              type: getType(),
                                               to: getTo())));
                                 },
                                 child: Container(
@@ -526,6 +596,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         bedRoom,
                                         bathRoom,
                                         price,
+                                        state,
+                                        district,
                                         false);
                                     _storage.uploadPropertyImages(
                                         context,

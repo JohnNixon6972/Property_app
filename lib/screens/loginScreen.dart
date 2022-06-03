@@ -29,31 +29,37 @@ Future<void> checkSavedUser(BuildContext context) async {
   print(SavedUserNum);
   print(SavedPassword);
 
-  await _firestore.collection('Users').doc(SavedUserNum).get().then((value) => {
-        // print(value.data()!["password"]),
-        if (value.exists)
-          {
-            if (SavedPassword == (value.data()!["password"]))
-              {
-                userInfo.name = value.data()!["name"],
-                userInfo.password = value.data()!["password"],
-                userInfo.email = value.data()!["email"],
-              userInfo.mobileNumber = value.data()!["mobileNumber"],
-                userInfo.addressLine1 = value.data()!["addressLine1"],
-                userInfo.addressLine2 = value.data()!["addressLine2"],
-                userInfo.state = value.data()!["state"],
-                userInfo.country = value.data()!["country"],
-                userInfo.postalCode = value.data()!["postalcode"],
-                userInfo.profileImgUrl = value.data()!["profileImgUrl"],
-                print("Login Successful"),
-                print("Set Local Storage"),
-                print(prefs.getString("UserNum")),
-                print(prefs.getString("SavedPassword")),
-                Navigator.pushNamedAndRemoveUntil(
-                    context, HomeScreen.id, (route) => false),
-              }
-          }
-      });
+  if (SavedPassword != null && SavedUserNum != null) {
+    await _firestore
+        .collection('Users')
+        .doc(SavedUserNum)
+        .get()
+        .then((value) => {
+              // print(value.data()!["password"]),
+              if (value.exists)
+                {
+                  if (SavedPassword == (value.data()!["password"]))
+                    {
+                      userInfo.name = value.data()!["name"],
+                      userInfo.password = value.data()!["password"],
+                      userInfo.email = value.data()!["email"],
+                      userInfo.mobileNumber = value.data()!["mobileNumber"],
+                      userInfo.addressLine1 = value.data()!["addressLine1"],
+                      userInfo.addressLine2 = value.data()!["addressLine2"],
+                      userInfo.state = value.data()!["state"],
+                      userInfo.country = value.data()!["country"],
+                      userInfo.postalCode = value.data()!["postalcode"],
+                      userInfo.profileImgUrl = value.data()!["profileImgUrl"],
+                      print("Login Successful"),
+                      print("Set Local Storage"),
+                      print(prefs.getString("UserNum")),
+                      print(prefs.getString("SavedPassword")),
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, HomeScreen.id, (route) => false),
+                    }
+                }
+            });
+  }
 }
 
 class _loginScreenState extends State<loginScreen> {
@@ -215,7 +221,7 @@ class _loginScreenState extends State<loginScreen> {
                                     child: Column(
                                       children: [
                                         Form(
-                                          // key: _loginFormKey,
+                                          key: _loginFormKey,
                                           child: Column(
                                             children: [
                                               SizedBox(
@@ -272,15 +278,6 @@ class _loginScreenState extends State<loginScreen> {
                                                     popUpAlertDialogBox(context,
                                                         "User is not registered");
                                                   }
-                                                  // if (_loginFormKey
-                                                  //     .currentState!
-                                                  //     .validate()) {}
-                                                  // FirebaseAuth.instance
-                                                  //     .sendPasswordResetEmail(
-                                                  //         email: userInfo
-                                                  //             .email);
-
-                                                  // FirebaseAuth.instance.send
 
                                                   Navigator.pop(context);
                                                   print(userInfo.mobileNumber);
@@ -358,27 +355,18 @@ class _loginScreenState extends State<loginScreen> {
                                                       .data()!["postalcode"],
                                                   userInfo.profileImgUrl = value
                                                       .data()!["profileImgUrl"],
-                                                  print("Login Successful"),
-                                                  print("Set Local Storage"),
                                                   prefs.setString('UserNum',
                                                       userInfo.mobileNumber),
                                                   prefs.setString(
                                                       'SavedPassword',
                                                       userInfo.password),
-                                                  print(prefs
-                                                      .getString("UserNum")),
-                                                  print(prefs.getString(
-                                                      "SavedPassword")),
-                                                  Navigator
-                                                      .pushNamedAndRemoveUntil(
-                                                          context,
-                                                          HomeScreen.id,
-                                                          (route) => false),
+                                                  Navigator.pushNamed(
+                                                      context, HomeScreen.id),
                                                 }
                                               else
                                                 {
-                                                  popUpAlertDialogBox(
-                                                      context, "Login Failed"),
+                                                  popUpAlertDialogBox(context,
+                                                      "Login Failed\nInvalid Password"),
                                                 }
                                             }
                                           else

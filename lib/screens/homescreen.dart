@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:emojis/emojis.dart'; // to use Emoji collection
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/screens/aboutUs.dart';
 import 'package:property_app/screens/profileScreen.dart';
@@ -118,8 +119,12 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var width = property["LandWidth"];
               var ownerImgUrl = property["profileImgUrl"];
               var cent = property["Cent"];
+              var district = property["District"];
+              var state = property["State"];
 
               final Property = PropertyCard(
+                state: state,
+                district: district,
                 ownerMail: ownerEmail,
                 ownerPhoneNo: ownerPhno,
                 constructionArea: constructionArea,
@@ -240,14 +245,24 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
             displaySaleProperties = PropertiesOnSaleAll;
           }
         }
-        print(displaySaleProperties);
-        return ListView(
+        // print(displaySaleProperties);
+        return AnimationLimiter(
+          child: ListView(
             // reverse: true,
             padding: const EdgeInsets.symmetric(vertical: 10),
             // shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            children: displaySaleProperties);
+            children: AnimationConfiguration.toStaggeredList(
+                childAnimationBuilder: (widget) => SlideAnimation(
+                    duration: const Duration(seconds: 3),
+                    horizontalOffset: 50,
+                    child: FadeInAnimation(
+                        duration: const Duration(seconds: 3), child: widget)),
+                children: displaySaleProperties),
+            // children: displaySaleProperties),
+          ),
+        );
       },
     );
   }
@@ -302,7 +317,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
         BuildingOnRent = [];
         if (!snapshot.hasData) {
           return const Center(
-            child: const CircularProgressIndicator(),
+            child: CircularProgressIndicator(),
           );
         }
         final properties = snapshot.data!.docs;
@@ -338,8 +353,12 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var width = property["LandWidth"];
               var ownerImgUrl = property["profileImgUrl"];
               var cent = property["Cent"];
+              var district = property["District"];
+              var state = property["State"];
 
               final Property = PropertyCard(
+                state: state,
+                district: district,
                 ownerMail: ownerEmail,
                 constructionArea: constructionArea,
                 ownerPhoneNo: ownerPhno,
@@ -458,13 +477,26 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
           }
         }
 
-        return ListView(
-            // reverse: true,
+        return AnimationLimiter(
+          child: ListView(
+            // reverse: true
+            children: AnimationConfiguration.toStaggeredList(
+                childAnimationBuilder: (widget) => SlideAnimation(
+                      duration: const Duration(seconds: 3),
+                      horizontalOffset: 50,
+                      child: FadeInAnimation(
+                        duration: const Duration(seconds: 3),
+                        child: widget,
+                      ),
+                    ),
+                children: displayRentProperties),
             padding: const EdgeInsets.symmetric(vertical: 10),
             // shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            children: displayRentProperties);
+            // children: displayRentProperties
+          ),
+        );
       },
     );
   }
@@ -560,8 +592,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? const Image(
                               height: 70,
                               width: 70,
-                              image:
-                                  const AssetImage('images/profile_img9.png'))
+                              image: AssetImage('images/profile_img9.png'))
                           : CachedNetworkImage(
                               cacheManager: customCacheManager,
                               key: UniqueKey(),
@@ -590,19 +621,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+              padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Category',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, aboutUs.id);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.people,
                       color: kHighlightedTextColor,
                     ),
@@ -739,7 +770,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             const Padding(
                               padding: EdgeInsets.only(left: 8.0),
-                              child: const Center(
+                              child: Center(
                                 child: Text(
                                   "Show admin Only Properties",
                                   style: TextStyle(
@@ -758,19 +789,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderWidth: 2,
                               selectedColor: Colors.white,
                               borderRadius: BorderRadius.circular(35),
-                              children: <Widget>[
-                                const Padding(
+                              children: const <Widget>[
+                                Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'No',
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Yes',
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ],
@@ -796,8 +831,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const Padding(
-                        padding:
-                            const EdgeInsets.only(top: 10, left: 15, right: 15),
+                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
                         child: Text(
                           'Properties on Sale ${Emojis.buildingConstruction}',
                           style: TextStyle(
@@ -815,8 +849,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: kHighlightedTextColor,
                       ),
                       const Padding(
-                        padding:
-                            const EdgeInsets.only(top: 5, left: 15, right: 15),
+                        padding: EdgeInsets.only(top: 5, left: 15, right: 15),
                         child: Text(
                           'Properties on Rent ${Emojis.moneyBag}',
                           style: TextStyle(
@@ -870,6 +903,8 @@ class PropertyCard extends StatefulWidget {
   final String constructionArea;
   final String ownerImgUrl;
   final String cent;
+  final String district;
+  final String state;
   final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
@@ -892,6 +927,8 @@ class PropertyCard extends StatefulWidget {
       required this.lenght,
       required this.ownerImgUrl,
       required this.cent,
+      required this.state,
+      required this.district,
       required this.width});
 
   @override
@@ -997,6 +1034,8 @@ class _PropertyCardState extends State<PropertyCard> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            state: widget.state,
+                            district: widget.district,
                             ownerMail: widget.ownerMail,
                             ownerPhoneNo: widget.ownerPhoneNo,
                             type: widget.propertyType,

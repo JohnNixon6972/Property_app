@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/editPropertyScreen1.dart';
@@ -29,6 +30,8 @@ void getMyPropertiesCards() {
   for (PropertyCard property in PropertiesOnRentAll) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
+        state: property.state,
+        district: property.district,
         ownerMail: property.ownerMail,
         ownerPhno: property.ownerPhoneNo,
         imageloc: property.imageloc,
@@ -58,6 +61,8 @@ void getMyPropertiesCards() {
       myProperties.add(myProperty(
         ownerMail: property.ownerMail,
         ownerPhno: property.ownerPhoneNo,
+        district: property.district,
+        state: property.state,
         imageloc: property.imageloc,
         price: property.price,
         propertyAddress: property.propertyAddress,
@@ -94,315 +99,366 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
   }
 
   Widget buildMyProperties() {
-    return ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: myPropertiesAdv.length,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: kPropertyCardColor,
-                border: Border.all(color: kHighlightedTextColor),
-                borderRadius: const BorderRadius.all(
-                  const Radius.circular(20),
-                ),
-              ),
-              // height: 352,
-              // width: 300,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(const Radius.circular(20)),
-                        child: CachedNetworkImage(
-                          cacheManager: customCacheManager,
-                          key: UniqueKey(),
-                          imageUrl: myProperties[index].imageloc,
-                          height: 200,
-                          width: double.infinity,
+    return AnimationLimiter(
+      child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: myPropertiesAdv.length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (BuildContext context, int index) {
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                duration: Duration(seconds: 3),
+                child: FadeInAnimation(
+                  duration: Duration(seconds: 3),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: kPropertyCardColor,
+                        border: Border.all(color: kHighlightedTextColor),
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(20),
+                        ),
+                      ),
+                      // height: 352,
+                      // width: 300,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12.0, right: 12.0, bottom: 12.0, top: 12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                    const Radius.circular(20)),
+                                child: CachedNetworkImage(
+                                  cacheManager: customCacheManager,
+                                  key: UniqueKey(),
+                                  imageUrl: myProperties[index].imageloc,
+                                  height: 200,
+                                  width: double.infinity,
 
-                          // maxHeightDiskCache: 230,
-                          // maxWidthDiskCache: 190,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(
-                              color: kHighlightedTextColor,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.black12,
-                            child: const Icon(
-                              Icons.error,
-                              color: kHighlightedTextColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        myProperties[index].propertyName,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        myProperties[index].propertyAddress,
-                        style: const TextStyle(
-                          color: kSubCategoryColor,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "\u{20B9} ${myProperties[index].price} ",
-                          style: const TextStyle(
-                              fontSize: 18,
-                              color: kHighlightedTextColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          myProperties[index].to == "Rent" ? " / Month" : "",
-                          style: const TextStyle(
-                              fontSize: 12,
-                              color: kSubCategoryColor,
-                              fontWeight: FontWeight.w400),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PropertyDetailsScreen(
-                                  ownerMail: myProperties[index].ownerMail,
-                                  ownerPhoneNo: myProperties[index].ownerPhno,
-                                  type: myProperties[index].propertyType,
-                                  category:
-                                      myProperties[index].propertyCategory,
-                                  propertyAddress:
-                                      myProperties[index].propertyAddress,
-                                  propertyTitle:
-                                      myProperties[index].propertyName,
-                                  to: myProperties[index].to,
-                                  ownerName: myProperties[index].ownerName,
-                                  propertyDescription:
-                                      myProperties[index].propertyDescription,
-                                  noBathroom: myProperties[index].bathRoom,
-                                  noBedroom: myProperties[index].bedRoom,
-                                  area: myProperties[index].area,
-                                  propertyImages:
-                                      myProperties[index].propertyImages,
-                                  price: myProperties[index].price,
-                                  lenght: myProperties[index].lenght,
-                                  width: myProperties[index].width,
-                                  constructionArea:
-                                      myProperties[index].constructionArea,
-                                  ownerImgUrl: myProperties[index].ownerImgUrl,
-                                  cent: myProperties[index].cent,
-                                  face: myProperties[index].face,
+                                  // maxHeightDiskCache: 230,
+                                  // maxWidthDiskCache: 190,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator(
+                                      color: kHighlightedTextColor,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    color: Colors.black12,
+                                    child: const Icon(
+                                      Icons.error,
+                                      color: kHighlightedTextColor,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            );
-                          },
-                          child: const Text(
-                            'View Details',
-                            style: TextStyle(color: kPrimaryButtonColor),
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditPropertyScreen1(
-                                  propertyToEdit: myProperties[index],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                myProperties[index].propertyName,
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Text(
+                                myProperties[index].propertyAddress,
+                                style: const TextStyle(
+                                  color: kSubCategoryColor,
                                 ),
                               ),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: kHighlightedTextColor,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              // Timer _timer;
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext builderContext) {
-                                    // _timer = Timer(Duration(seconds: 3), () {
-                                    //   Navigator.of(context).pop();
-                                    // });
-                                    return SimpleDialog(
-                                      backgroundColor: kPageBackgroundColor,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      title: const Text(
-                                        "Delete Property ?",
-                                        style: TextStyle(
-                                          color: kHighlightedTextColor,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 25,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "\u{20B9} ${myProperties[index].price} ",
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      color: kHighlightedTextColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  myProperties[index].to == "Rent"
+                                      ? " / Month"
+                                      : "",
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: kSubCategoryColor,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PropertyDetailsScreen(
+                                          state: myProperties[index].state,
+                                          district:
+                                              myProperties[index].district,
+                                          ownerMail:
+                                              myProperties[index].ownerMail,
+                                          ownerPhoneNo:
+                                              myProperties[index].ownerPhno,
+                                          type:
+                                              myProperties[index].propertyType,
+                                          category: myProperties[index]
+                                              .propertyCategory,
+                                          propertyAddress: myProperties[index]
+                                              .propertyAddress,
+                                          propertyTitle:
+                                              myProperties[index].propertyName,
+                                          to: myProperties[index].to,
+                                          ownerName:
+                                              myProperties[index].ownerName,
+                                          propertyDescription:
+                                              myProperties[index]
+                                                  .propertyDescription,
+                                          noBathroom:
+                                              myProperties[index].bathRoom,
+                                          noBedroom:
+                                              myProperties[index].bedRoom,
+                                          area: myProperties[index].area,
+                                          propertyImages: myProperties[index]
+                                              .propertyImages,
+                                          price: myProperties[index].price,
+                                          lenght: myProperties[index].lenght,
+                                          width: myProperties[index].width,
+                                          constructionArea: myProperties[index]
+                                              .constructionArea,
+                                          ownerImgUrl:
+                                              myProperties[index].ownerImgUrl,
+                                          cent: myProperties[index].cent,
+                                          face: myProperties[index].face,
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              const Spacer(),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    String collection =
-                                                        "Properties" +
-                                                            myProperties[index]
-                                                                .to;
-                                                    setState(() {
-                                                      final firestore =
-                                                          FirebaseFirestore
-                                                              .instance;
-
-                                                      firestore
-                                                          .collection(
-                                                              collection)
-                                                          .doc(myProperties[
-                                                                  index]
-                                                              .propertyName)
-                                                          .delete();
-
-                                                      if (bookmarkedPropertyNames
-                                                          .contains(myProperties[
-                                                                  index]
-                                                              .propertyName)) {
-                                                        print("Hi");
-
-                                                        final _firestore =
-                                                            FirebaseFirestore
-                                                                .instance;
-
-                                                        _firestore
-                                                            .collection("Users")
-                                                            .doc(userInfo
-                                                                .mobileNumber)
-                                                            .collection(
-                                                                "BookMarkedProperties")
-                                                            .doc(myProperties[
-                                                                    index]
-                                                                .propertyName)
-                                                            .delete();
-                                                        bookmarkedPropertyNames
-                                                            .remove(myProperties[
-                                                                    index]
-                                                                .propertyName);
-                                                      }
-
-                                                      print(
-                                                          "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}");
-                                                      FirebaseStorage.instance
-                                                          .ref(
-                                                              "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}")
-                                                          .listAll()
-                                                          .then((value) {
-                                                        value.items
-                                                            .forEach((element) {
-                                                          FirebaseStorage
-                                                              .instance
-                                                              .ref(element
-                                                                  .fullPath)
-                                                              .delete();
-                                                        });
-                                                      });
-                                                      myPropertiesAdv.remove(
-                                                          myProperties[index]
-                                                              .propertyName);
-                                                      myProperties.remove(
-                                                          myProperties[index]);
-                                                      Navigator.pop(context);
-                                                    });
-                                                  });
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary:
-                                                      kBottomNavigationBackgroundColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'Yes',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 30,
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: kPrimaryButtonColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                  ),
-                                                ),
-                                                child: const Text(
-                                                  'No',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20),
-                                                ),
-                                              ),
-                                              const Spacer(),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
                                     );
-                                  });
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: kHighlightedTextColor,
-                          ),
+                                  },
+                                  child: const Text(
+                                    'View Details',
+                                    style:
+                                        TextStyle(color: kPrimaryButtonColor),
+                                  ),
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditPropertyScreen1(
+                                          propertyToEdit: myProperties[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      // Timer _timer;
+                                      showDialog(
+                                          context: context,
+                                          builder:
+                                              (BuildContext builderContext) {
+                                            // _timer = Timer(Duration(seconds: 3), () {
+                                            //   Navigator.of(context).pop();
+                                            // });
+                                            return SimpleDialog(
+                                              backgroundColor:
+                                                  kPageBackgroundColor,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              title: const Text(
+                                                "Delete Property ?",
+                                                style: TextStyle(
+                                                  color: kHighlightedTextColor,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 25,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      const Spacer(),
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            String collection =
+                                                                "Properties" +
+                                                                    myProperties[
+                                                                            index]
+                                                                        .to;
+                                                            setState(() {
+                                                              final firestore =
+                                                                  FirebaseFirestore
+                                                                      .instance;
+
+                                                              firestore
+                                                                  .collection(
+                                                                      collection)
+                                                                  .doc(myProperties[
+                                                                          index]
+                                                                      .propertyName)
+                                                                  .delete();
+
+                                                              if (bookmarkedPropertyNames
+                                                                  .contains(myProperties[
+                                                                          index]
+                                                                      .propertyName)) {
+                                                                print("Hi");
+
+                                                                final _firestore =
+                                                                    FirebaseFirestore
+                                                                        .instance;
+
+                                                                _firestore
+                                                                    .collection(
+                                                                        "Users")
+                                                                    .doc(userInfo
+                                                                        .mobileNumber)
+                                                                    .collection(
+                                                                        "BookMarkedProperties")
+                                                                    .doc(myProperties[
+                                                                            index]
+                                                                        .propertyName)
+                                                                    .delete();
+                                                                bookmarkedPropertyNames.remove(
+                                                                    myProperties[
+                                                                            index]
+                                                                        .propertyName);
+                                                              }
+
+                                                              print(
+                                                                  "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}");
+                                                              FirebaseStorage
+                                                                  .instance
+                                                                  .ref(
+                                                                      "asset/propertyImages/${userInfo.mobileNumber}/${myProperties[index].propertyName}")
+                                                                  .listAll()
+                                                                  .then(
+                                                                      (value) {
+                                                                value.items
+                                                                    .forEach(
+                                                                        (element) {
+                                                                  FirebaseStorage
+                                                                      .instance
+                                                                      .ref(element
+                                                                          .fullPath)
+                                                                      .delete();
+                                                                });
+                                                              });
+                                                              myPropertiesAdv.remove(
+                                                                  myProperties[
+                                                                          index]
+                                                                      .propertyName);
+                                                              myProperties.remove(
+                                                                  myProperties[
+                                                                      index]);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            });
+                                                          });
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              kBottomNavigationBackgroundColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                          ),
+                                                        ),
+                                                        child: const Text(
+                                                          'Yes',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 30,
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              kPrimaryButtonColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                          ),
+                                                        ),
+                                                        child: const Text(
+                                                          'No',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20),
+                                                        ),
+                                                      ),
+                                                      const Spacer(),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 
   @override
@@ -484,9 +540,13 @@ class myProperty extends StatefulWidget {
   final String ownerImgUrl;
   final String cent;
   final String face;
+  final String district;
+  final String state;
   final List<String> propertyImages;
   const myProperty(
       {required this.imageloc,
+      required this.district,
+      required this.state,
       required this.lenght,
       required this.face,
       required this.width,

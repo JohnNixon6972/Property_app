@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/aboutUs.dart';
+import 'package:property_app/screens/approvedPropertiesScreen.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
@@ -12,6 +13,7 @@ import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/searchScreen.dart';
+import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 import 'screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/homescreen.dart';
@@ -66,6 +68,8 @@ class _PropertyAppState extends State<PropertyApp> {
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
           aboutUs.id: (context) => aboutUs(),
           forgotPasswordScreen.id: (context) => forgotPasswordScreen(),
+          ApprovedPropertiesScreen.id:(context)=> ApprovedPropertiesScreen(),
+          UnApprovedPropertiesScreen.id:(context)=> UnApprovedPropertiesScreen(),
         },
       ),
     );

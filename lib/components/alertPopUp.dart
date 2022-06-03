@@ -5,11 +5,12 @@ import 'package:property_app/constants.dart';
 Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
   Timer _timer;
   IconData icn = Icons.warning;
-  return showDialog(
+  return
+   showDialog(
       context: context,
       builder: (BuildContext builderContext) {
-        _timer = Timer(const Duration(seconds: 5), () {
-          Navigator.of(builderContext).pop();
+       Timer(const Duration(seconds: 5), () {
+          // Navigator.of(builderContext).pop();
         });
         return AlertDialog(
           elevation: 30,

@@ -22,6 +22,7 @@ import '../components/otpVerification.dart';
 // import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 // final TextEditingController _otpController = TextEditingController();
+final _registerFormKey = GlobalKey<FormState>();
 
 class registerScreen extends StatefulWidget {
   static const String id = 'register';
@@ -115,116 +116,132 @@ class _registerScreenState extends State<registerScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      TextFormField(
-                        onChanged: (value) {
-                          userInfo.name = value;
-                        },
-                        cursorColor: kPrimaryButtonColor,
-                        keyboardType: TextInputType.name,
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(color: kPrimaryButtonColor),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter valid text';
-                          } else {
-                            userInfo.name = value;
-                          }
+                      Form(
+                        key: _registerFormKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              onChanged: (value) {
+                                userInfo.name = value;
+                              },
+                              cursorColor: kPrimaryButtonColor,
+                              keyboardType: TextInputType.name,
+                              textAlign: TextAlign.left,
+                              style:
+                                  const TextStyle(color: kPrimaryButtonColor),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter valid text';
+                                } else {
+                                  userInfo.name = value;
+                                }
 
-                          return null;
-                        },
-                        textInputAction: TextInputAction.done,
-                        decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Enter your Name.',
-                          prefixIcon: const Icon(Icons.badge,
-                              color: kBottomNavigationBackgroundColor),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        onChanged: (value) {
-                          userInfo.mobileNumber = value;
-                        },
-                        cursorColor: kPrimaryButtonColor,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(color: kPrimaryButtonColor),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter valid text';
-                          } else {
-                            userInfo.mobileNumber = value;
-                          }
+                                // return null;
+                              },
+                              textInputAction: TextInputAction.done,
+                              decoration: kTextFieldDecoration.copyWith(
+                                hintText: 'Enter your Name.',
+                                prefixIcon: const Icon(Icons.badge,
+                                    color: kBottomNavigationBackgroundColor),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              onChanged: (value) {
+                                userInfo.mobileNumber = value;
+                              },
+                              cursorColor: kPrimaryButtonColor,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.left,
+                              style:
+                                  const TextStyle(color: kPrimaryButtonColor),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter valid text';
+                                } else {
+                                  userInfo.mobileNumber = value;
+                                }
+                              },
+                              decoration: kTextFieldDecoration.copyWith(
+                                hintText: 'Enter your Mobile Number.',
+                                prefixIcon: const Icon(Icons.phone,
+                                    color: kBottomNavigationBackgroundColor),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              onChanged: (value) {
+                                userInfo.password = value;
+                              },
+                              cursorColor: kPrimaryButtonColor,
+                              obscureText: _isHidden,
+                              keyboardType: TextInputType.visiblePassword,
+                              textAlign: TextAlign.left,
+                              style:
+                                  const TextStyle(color: kPrimaryButtonColor),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter valid text';
+                                } else {
+                                  userInfo.password = value;
+                                }
 
-                          return null;
-                        },
-                        decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Enter your Mobile Number.',
-                          prefixIcon: const Icon(Icons.phone,
-                              color: kBottomNavigationBackgroundColor),
+                                // return null;
+                              },
+                              decoration: kTextFieldDecoration.copyWith(
+                                hintText: 'Enter your Password.',
+                                prefixIcon: const Icon(Icons.lock,
+                                    color: kBottomNavigationBackgroundColor),
+                                suffix: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _isHidden = !_isHidden;
+                                    });
+                                  },
+                                  child: Icon(_isHidden
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        onChanged: (value) {
-                          userInfo.password = value;
-                        },
-                        cursorColor: kPrimaryButtonColor,
-                        obscureText: _isHidden,
-                        keyboardType: TextInputType.visiblePassword,
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(color: kPrimaryButtonColor),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter valid text';
-                          } else {
-                            userInfo.password = value;
-                          }
-
-                          return null;
-                        },
-                        decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Enter your Password.',
-                          prefixIcon: const Icon(Icons.lock,
-                              color: kBottomNavigationBackgroundColor),
-                          suffix: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _isHidden = !_isHidden;
-                              });
-                            },
-                            child: Icon(_isHidden
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          _firestore
-                              .collection("Users")
-                              .doc(userInfo.mobileNumber)
-                              .get()
-                              .then((doc) => {
-                                    if (doc.exists)
-                                      {
-                                        popUpAlertDialogBox(context,
-                                            "${userInfo.mobileNumber} is already registered"),
-                                        // Navigator.pushNamed(
-                                        //     context, loginScreen.id),
-                                      }
-                                    else
-                                      {
-                                        Navigator.pushNamed(context,
-                                            VerifyPhoneNumberScreen.id),
-                                      }
-                                  });
+                          if (_registerFormKey.currentState!.validate()) {
+                            _firestore
+                                .collection("Users")
+                                .doc(userInfo.mobileNumber)
+                                .get()
+                                .then((doc) => {
+                                      if (doc.exists)
+                                        {
+                                          popUpAlertDialogBox(context,
+                                              "${userInfo.mobileNumber} is already registered"),
+                                          // Navigator.pushNamed(
+                                          //     context, loginScreen.id),
+                                        }
+                                      else if ((userInfo.mobileNumber.length) ==
+                                          10)
+                                        {
+                                          Navigator.pushNamed(context,
+                                              VerifyPhoneNumberScreen.id),
+                                        }
+                                      else
+                                        {
+                                          popUpAlertDialogBox(
+                                              context, "Invalid Mobile Number")
+                                        }
+                                    });
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           primary: kPrimaryButtonColor,
@@ -275,29 +292,3 @@ class _registerScreenState extends State<registerScreen> {
     );
   }
 }
-
-// await _auth.verifyPhoneNumber(
-                          //   phoneNumber: "+91 " + userInfo.mobileNumber,
-                          //   timeout: const Duration(seconds: 60),
-                          //   verificationCompleted:
-                          //       (PhoneAuthCredential credential) async {
-                          //     await _auth.signInWithCredential(credential);
-                          //   },
-                          //   verificationFailed: (FirebaseAuthException e) {
-                          //     if (e.code == 'invalid-phone-number') {
-                          //       print(
-                          //           'The provided phone number is not valid.');
-                          //     }
-                          //   },
-                          //   codeSent: (String verificationId,
-                          //       int? resendToken) async {
-                          //     String smsCode = 'xxxx';
-                          //     PhoneAuthCredential credential =
-                          //         PhoneAuthProvider.credential(
-                          //             verificationId: verificationId,
-                          //             smsCode: smsCode);
-                          //     await _auth.signInWithCredential(credential);
-                          //   },
-                          //   codeAutoRetrievalTimeout:
-                          //       (String verificationId) {},
-                          // );

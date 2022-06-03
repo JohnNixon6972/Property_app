@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/constants.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
@@ -44,7 +45,7 @@ class _searchScreenState extends State<searchScreen> {
             _firestore.collection(searchType).snapshots().asBroadcastStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 color: kHighlightedTextColor,
               ),
@@ -60,28 +61,29 @@ class _searchScreenState extends State<searchScreen> {
                             .toLowerCase()
                             .contains(query.toLowerCase()))
                     .isEmpty) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 430),
-                child: Center(
-                  child: Text(
-                    "No Such Place For Property Found!",
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "No Such Property Found!",
                     style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
-                        color: kHighlightedTextColor),
+                        color: kSubCategoryColor),
                   ),
-                ),
+                ],
               );
             } else if (query != "") {
               return AnimationLimiter(
                 child: ListView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   children: AnimationConfiguration.toStaggeredList(
                     childAnimationBuilder: (widget) => SlideAnimation(
                         horizontalOffset: 50.0,
-                        duration: Duration(seconds: 2),
+                        duration: const Duration(seconds: 2),
                         child: FadeInAnimation(
-                            duration: Duration(seconds: 2), child: widget)),
+                            duration: const Duration(seconds: 2),
+                            child: widget)),
                     children: [
                       ...snapshot.data!.docs
                           .where((QueryDocumentSnapshot<Object?> element) =>
@@ -160,13 +162,14 @@ class _searchScreenState extends State<searchScreen> {
             } else {
               return AnimationLimiter(
                 child: ListView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   children: AnimationConfiguration.toStaggeredList(
                     childAnimationBuilder: (widget) => SlideAnimation(
-                        duration: Duration(seconds: 2),
+                        duration: const Duration(seconds: 2),
                         horizontalOffset: 50.0,
                         child: FadeInAnimation(
-                            duration: Duration(seconds: 2), child: widget)),
+                            duration: const Duration(seconds: 2),
+                            child: widget)),
                     children: [
                       ...snapshot.data!.docs
                           .where((QueryDocumentSnapshot<Object?> element) =>
@@ -236,7 +239,6 @@ class _searchScreenState extends State<searchScreen> {
                       })
                     ],
                   ),
-                  
                 ),
               );
             }
@@ -1088,9 +1090,9 @@ class _searchScreenState extends State<searchScreen> {
       backgroundColor: kPageBackgroundColor,
       appBar: AppBar(
         toolbarHeight: 80,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(25),
+            bottom: const Radius.circular(25),
           ),
         ),
         automaticallyImplyLeading: false,
@@ -1106,14 +1108,14 @@ class _searchScreenState extends State<searchScreen> {
               controller: myController,
               cursorColor: kHighlightedTextColor,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(8),
+                  contentPadding: const EdgeInsets.all(8),
                   iconColor: kNavigationIconColor,
                   // prefixIcon: Icon(
                   //   Icons.search,
                   //   color: kHighlightedTextColor,
                   // ),
                   suffixIcon: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                       color: kHighlightedTextColor,
                     ),
@@ -1255,10 +1257,10 @@ class _searchScreenState extends State<searchScreen> {
             ),
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0),
+                const Padding(
+                  padding: EdgeInsets.only(left: 25.0),
                   child: Center(
-                    child: Text(
+                    child: const Text(
                       "Let's see Properties On ",
                       style: TextStyle(
                           fontSize: 16,
@@ -1267,29 +1269,33 @@ class _searchScreenState extends State<searchScreen> {
                     ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
                   child: ToggleButtons(
-                    constraints: BoxConstraints(minHeight: 8),
-                    fillColor: kHighlightedTextColor,
+                    constraints: const BoxConstraints(minHeight: 8),
+                    fillColor: kBottomNavigationBackgroundColor,
                     borderWidth: 2,
-                    selectedColor: Colors.white,
+                    borderColor: kNavigationIconColor,
+                    selectedColor: kHighlightedTextColor,
+                    disabledColor: kHighlightedTextColor,
                     borderRadius: BorderRadius.circular(35),
-                    children: <Widget>[
+                    children: const <Widget>[
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           'Rent',
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                              fontSize: 14, color: kHighlightedTextColor),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           'Sale',
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                              fontSize: 14, color: kHighlightedTextColor),
                         ),
                       ),
                     ],
@@ -1310,27 +1316,21 @@ class _searchScreenState extends State<searchScreen> {
             Expanded(
               flex: 20,
               child: Stack(children: [
-                Opacity(
+                const Opacity(
                   opacity: 0.5,
                   child: Center(
-                    child: Container(
-                      child: Image(
-                        image: AssetImage("images/try10.png"),
-                      ),
+                    child: Image(
+                      image: AssetImage("images/try10.png"),
                     ),
                   ),
                 ),
                 buildResults(context)
               ]),
             ),
-            // BottomPageNavigationBar(
-            //   flex_by: 2,
-            //   page: searchScreen.id,
-            // ),
           ],
         ),
       ),
-      bottomNavigationBar: scaffoldBottomAppBar(
+      bottomNavigationBar: const scaffoldBottomAppBar(
         flex_by: 2,
         page: searchScreen.id,
       ),
@@ -1394,12 +1394,12 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: kHighlightedTextColor),
           color: kPropertyCardColor,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(15),
           ),
         ),
@@ -1429,7 +1429,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                   ),
                   errorWidget: (context, url, error) => Container(
                     color: Colors.black12,
-                    child: Icon(
+                    child: const Icon(
                       Icons.error,
                       color: kHighlightedTextColor,
                     ),
@@ -1446,7 +1446,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                     padding: const EdgeInsets.all(2.0),
                     child: Text(
                       widget.propertyName,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: kHighlightedTextColor,
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
@@ -1454,7 +1454,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                   ),
                   Text(
                     widget.propertyAddress,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: kBottomNavigationBackgroundColor,
                         fontWeight: FontWeight.w500,
                         fontSize: 15),
@@ -1463,14 +1463,14 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
                       widget.district + ",\n" + widget.state,
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w700),
                     ),
                   )
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 8.0, top: 32, bottom: 10),
               child: Column(
@@ -1479,21 +1479,21 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                     children: [
                       Text(
                         widget.price + " \u{20B9}",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15,
                             color: kHighlightedTextColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
                         widget.to == "Rent" ? " / Month" : "",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 10,
                             color: kSubCategoryColor,
                             fontWeight: FontWeight.w400),
                       )
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     children: [
                       GestureDetector(
@@ -1530,7 +1530,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                             ),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'View Details',
                           style: TextStyle(color: kPrimaryButtonColor),
                         ),

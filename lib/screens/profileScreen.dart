@@ -375,7 +375,380 @@ class ProfileDetailsContainer extends StatefulWidget {
 
 class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
   @override
+  final dialogKey = GlobalKey<FormState>();
+  final passwordKey = GlobalKey<FormState>();
+  late String currentPassowrd;
+  late String newPassword = userInfo.password;
+  late String confirmNewPassword = userInfo.password;
+  // void updateValue(String value)
   Widget build(BuildContext context) {
+    List<List<Widget>> fields = [
+      [
+        Form(
+          key: dialogKey,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.name = newValue;
+                  setState(() {
+                    userInfo.name = newValue;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.name,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.name = value;
+                  }
+                  return null;
+                  // return firstName;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.name,
+                  prefixIcon:
+                      const Icon(Icons.badge, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        ),
+      ],
+      [
+        Form(
+          key: dialogKey,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.email = newValue;
+                  setState(() {
+                    userInfo.email = newValue;
+                  });
+
+                  // print(userInfo.email);
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.emailAddress,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.email = value;
+                  }
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.email,
+                  prefixIcon:
+                      const Icon(Icons.mail, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        ),
+      ],
+      [
+        Form(
+          key: passwordKey,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                // controller: _currentPassowrd,
+                // obscureText: true,
+                onChanged: (value) {
+                  currentPassowrd = value;
+                  setState(() {
+                    currentPassowrd = value;
+                  });
+                  // userInfo.password = value;
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.visiblePassword,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else if (userInfo.password != currentPassowrd) {
+                    print("Invalid Password");
+                  }
+
+                  // return null;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'Current Password.',
+                  prefixIcon: const Icon(Icons.lock_outline,
+                      color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                // obscureText: true,
+                onChanged: (value) {
+                  newPassword = value;
+                  setState(() {
+                    newPassword = value;
+                  });
+                  // print("New Password Entered");
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.visiblePassword,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  }
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'New password.',
+                  prefixIcon:
+                      const Icon(Icons.lock, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (value) {
+                  confirmNewPassword = value;
+                  setState(() {
+                    confirmNewPassword = value;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.visiblePassword,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    confirmNewPassword = value;
+                  }
+
+                  // return null;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'Confirm new password.',
+                  prefixIcon:
+                      const Icon(Icons.lock_open, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        ),
+      ],
+      [
+        Form(
+          key: dialogKey,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.addressLine1 = newValue;
+                  setState(() {
+                    userInfo.addressLine1 = newValue;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.streetAddress,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.addressLine1 = value;
+                  }
+
+                  // return null;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.addressLine1,
+                  prefixIcon:
+                      const Icon(Icons.home, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.addressLine2 = newValue;
+                  setState(() {
+                    userInfo.addressLine2 = newValue;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.streetAddress,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.addressLine2 = value;
+                  }
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.addressLine2,
+                  prefixIcon:
+                      const Icon(Icons.house, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.city = newValue;
+                  setState(() {
+                    userInfo.city = newValue;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.streetAddress,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.city = value;
+                  }
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.city,
+                  prefixIcon: const Icon(Icons.location_city,
+                      color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.state = newValue;
+                  setState(() {
+                    userInfo.state = newValue;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.streetAddress,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.state = value;
+                  }
+
+                  // return null;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.state,
+                  prefixIcon:
+                      const Icon(Icons.cabin, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.country = newValue;
+                  setState(() {
+                    userInfo.country = newValue;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.streetAddress,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.country = value;
+                  }
+
+                  // return null;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.country,
+                  prefixIcon:
+                      const Icon(Icons.countertops, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (newValue) {
+                  userInfo.postalCode = newValue;
+                  setState(() {
+                    userInfo.postalCode = newValue;
+                  });
+                },
+                cursorColor: kPrimaryButtonColor,
+                keyboardType: TextInputType.streetAddress,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: kPrimaryButtonColor),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid text';
+                  } else {
+                    userInfo.postalCode = value;
+                  }
+
+                  // return null;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: userInfo.postalCode,
+                  prefixIcon:
+                      const Icon(Icons.code, color: kPrimaryButtonColor),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        )
+      ],
+    ];
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
       child: Container(
@@ -445,8 +818,10 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                     } else {
                       showDialog(
                           context: context,
-                          builder: (_) => editDetailsPopup(widget.Title,
-                              fields[option_titles.indexOf(widget.Title)]));
+                          builder: (_) => editDetailsPopup(
+                              widget.Title,
+                              fields[option_titles.indexOf(widget.Title)],
+                              context));
                     }
 
                     setState(() {
@@ -467,7 +842,8 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
     );
   }
 
-  SimpleDialog editDetailsPopup(String boxTitle, List<Widget> childern) {
+  SimpleDialog editDetailsPopup(
+      String boxTitle, List<Widget> childern, BuildContext context) {
     final _auth = FirebaseAuth.instance;
     return SimpleDialog(
       backgroundColor: kPageBackgroundColor,
@@ -490,50 +866,50 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 Column(children: childern),
                 ElevatedButton(
                   onPressed: () async {
-                    
                     _firestore
                         .collection("Users")
                         .doc(userInfo.mobileNumber)
                         .update({
                       "email": userInfo.email,
                       "name": userInfo.name,
-                      "number": userInfo.mobileNumber,
+                      // "number": userInfo.mobileNumber,
                       "addressLine1": userInfo.addressLine1,
                       "addressLine2": userInfo.addressLine2,
                       "city": userInfo.city,
-                      "state": userInfo.state,
                       "country": userInfo.country,
+                      "state": userInfo.state,
                       "postalcode": userInfo.postalCode,
                     });
-                    Navigator.pop(context);
-                    setState(() {
-                      try {
-                        if (passwordKey.currentState!.validate()) {
-                          // print(userInfo.password);
-                          // userInfo.name = userInfo.name;
-                          print("Current Password" + currentPassowrd);
-                          print("User Password" + userInfo.password);
-                          if (userInfo.password == currentPassowrd) {
-                            if (newPassword == confirmNewPassword) {
-                              _firestore
-                                  .collection('Users')
-                                  .doc(userInfo.mobileNumber)
-                                  .update({"password": newPassword});
 
-                              popUpAlertDialogBox(
-                                  context, "Successfully changed Password");
-                            } else if (newPassword != confirmNewPassword) {
-                              popUpAlertDialogBox(
-                                  context, "Passwords don't match");
-                            }
-                          } else {
-                            popUpAlertDialogBox(context, "Invalid Password");
+                    try {
+                      if (passwordKey.currentState!.validate()) {
+                        // print(userInfo.password);
+                        // userInfo.name = userInfo.name;
+                        // print("Current Password : " + currentPassowrd);
+                        // print("User Password : " + userInfo.password);
+                        // print("New Password : " + newPassword);
+                        // print("Confirmed New Password : " + confirmNewPassword);
+                        if (userInfo.password == currentPassowrd) {
+                          if (newPassword == confirmNewPassword) {
+                            _firestore
+                                .collection('Users')
+                                .doc(userInfo.mobileNumber)
+                                .update({"password": newPassword});
+
+                           await popUpAlertDialogBox(
+                                context, "Successfully changed Password");
+                          } else if (newPassword != confirmNewPassword) {
+                          await  popUpAlertDialogBox(
+                                context, "Passwords don't match");
                           }
+                        } else {
+                        await  popUpAlertDialogBox(context, "Invalid Password");
                         }
-                      } catch (e) {
-                        print(e);
                       }
-                    });
+                    } catch (e) {
+                      print(e);
+                    }
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: kPrimaryButtonColor,

@@ -60,7 +60,7 @@ void readDetails(myProperty propertyToEdit) {
   Price = propertyToEdit.price;
   BathRoom = propertyToEdit.bathRoom;
   district = propertyToEdit.district;
-  state = propertyToEdit.state;
+  constructionArea = propertyToEdit.constructionArea;
   _controller.text = propertyToEdit.propertyDescription;
   _areaController.text = propertyToEdit.area;
   _priceController.text = propertyToEdit.price;
@@ -534,6 +534,8 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                   print("loading");
                                   _storage.uploadPropertyDetails(
                                       context,
+                                      city,
+                                      taluk,
                                       propertyAddress,
                                       propertyTitle,
                                       category,
@@ -545,7 +547,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       cent,
                                       lenght,
                                       width,
-                                      constructionArea,
+                                      _constructionAreaController.text,
                                       bedRoom,
                                       bathRoom,
                                       price,

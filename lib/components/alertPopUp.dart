@@ -9,10 +9,13 @@ Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
    showDialog(
       context: context,
       builder: (BuildContext builderContext) {
-        _timer = Timer(const Duration(seconds: 5), () {
-          Navigator.of(builderContext).pop();
-          // Navigator.pop(context);
-        });
+        // _timer = Timer(const Duration(seconds: 5), () {
+        //   if(builderContext != null){
+
+        //     Navigator.of(builderContext).pop();
+        //   }
+        //   // Navigator.pop(context);
+        // });
         return AlertDialog(
           elevation: 30,
           shape: const RoundedRectangleBorder(

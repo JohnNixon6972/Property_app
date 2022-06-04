@@ -60,6 +60,8 @@ class Storage {
 
   Future<void> uploadPropertyDetails(
       BuildContext context,
+      String city,
+      String taluk,
       String propertyAddress,
       String propertyTitle,
       String category,
@@ -106,28 +108,30 @@ class Storage {
     }
     !isUpdate
         ? _firestore.collection('Properties' + to).doc(propertyTitle).set({
+            "City": city,
+            "Taluk": taluk,
             "PropertyBy": userInfo.email,
             "OwnerName": userInfo.name,
             "PropertyTitle": propertyTitle,
             "PropertyAddress": propertyAddress,
-            "LandLength":Lenght,
-            "LandWidth":Width,
-            "Cent":Cent,
+            "LandLength": Lenght,
+            "LandWidth": Width,
+            "Cent": Cent,
             "PropertyTo": to,
             "PropertyCategory": category,
-            "PropertyDirection":face,
+            "PropertyDirection": face,
             "PropertyType": type,
             "PropertyDescription": propertyDescription,
-            "PlotArea":plotArea,
-            "ConstructionArea":constructionArea,
+            "PlotArea": plotArea,
+            "ConstructionArea": constructionArea,
             "BedRoom": bedRoom,
             "BathRoom": bathRoom,
             "isSetImages": "False",
             "Price": price,
-            "PhNo":userInfo.mobileNumber,
-            "profileImgUrl":userInfo.profileImgUrl,
-            "State":state,
-            "District":district,
+            "PhNo": userInfo.mobileNumber,
+            "profileImgUrl": userInfo.profileImgUrl,
+            "State": 'Tamil Nadu',
+            "District": district,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -138,7 +142,7 @@ class Storage {
             "imgUrl8": "",
             "imgUrl9": "",
             "imgUrl10": "",
-            "isApproved":userInfo.name != "john"?"False":"True"
+            "isApproved": userInfo.name != "john" ? "False" : "True"
           }).then((_) {
             print("Data Added Sucessfully");
           }).catchError((_) {
@@ -149,23 +153,25 @@ class Storage {
             "OwnerName": userInfo.name,
             "PropertyTitle": propertyTitle,
             "PropertyAddress": propertyAddress,
-            "LandLength":Lenght,
-            "LandWidth":Width,
-            "Cent":Cent,
+            "LandLength": Lenght,
+            "LandWidth": Width,
+            "City": city,
+            "Taluk": taluk,
+            "Cent": Cent,
             "PropertyTo": to,
             "PropertyCategory": category,
             "PropertyType": type,
             "PropertyDescription": propertyDescription,
-            "PlotArea":plotArea,
-            "ConstructionArea":constructionArea,
+            "PlotArea": plotArea,
+            "ConstructionArea": constructionArea,
             "BedRoom": bedRoom,
             "BathRoom": bathRoom,
             "isSetImages": "False",
             "Price": price,
-            "PhNo":userInfo.mobileNumber,
-            "profileImgUrl":userInfo.profileImgUrl,
-            "State":state,
-            "District":district,
+            "PhNo": userInfo.mobileNumber,
+            "profileImgUrl": userInfo.profileImgUrl,
+            "State": 'Tamil Nadu',
+            "District": district,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -176,7 +182,7 @@ class Storage {
             "imgUrl8": "",
             "imgUrl9": "",
             "imgUrl10": "",
-            "isApproved":"False"
+            "isApproved": "False"
           }).then((_) {
             print("Data Added Sucessfully");
           }).catchError((_) {

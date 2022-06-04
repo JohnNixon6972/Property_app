@@ -514,10 +514,12 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => PreviewProperty(
+                                              city: city,
+                                              taluk: taluk,
                                               imageFileList: imageFileList,
                                               constructionArea:
                                                   ConstructionArea,
-                                              state: state,
+                                              state: "Tamil Nadu",
                                               district: district,
                                               noBedroom: BedRoom,
                                               noBathroom: BathRoom,
@@ -581,6 +583,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     print("loading");
                                     _storage.uploadPropertyDetails(
                                         context,
+                                        city,
+                                        taluk,
                                         propertyAddress,
                                         propertyTitle,
                                         category,
@@ -596,7 +600,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         bedRoom,
                                         bathRoom,
                                         price,
-                                        state,
+                                        "Tamil Nadu",
                                         district,
                                         false);
                                     _storage.uploadPropertyImages(

@@ -32,6 +32,8 @@ void getBookMarkedPropertiesCards() async {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(
         BookmarkedProperties(
+          city: property.city,
+          taluk: property.taluk,
           state: property.state,
           district: property.district,
           ownerMail: property.ownerMail,
@@ -63,6 +65,8 @@ void getBookMarkedPropertiesCards() async {
   for (PropertyCard property in PropertiesOnSaleAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(BookmarkedProperties(
+        city: property.city,
+        taluk: property.taluk,
         state: property.state,
         district: property.district,
         ownerMail: property.ownerMail,
@@ -227,6 +231,8 @@ class _BookmarkedPropertiesScreenState
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
+                                              city: bookMarkedProperties[index].city,
+                                              taluk: bookMarkedProperties[index].taluk,
                                           state:
                                               bookMarkedProperties[index].state,
                                           district: bookMarkedProperties[index]
@@ -414,10 +420,14 @@ class BookmarkedProperties extends StatefulWidget {
   final String face;
   final String state;
   final String district;
+  final String city;
+  final String taluk;
   final List<String> propertyImages;
 
   const BookmarkedProperties(
       {Key? key,
+      required this.city,
+      required this.taluk,
       required this.state,
       required this.district,
       required this.ownerPhNo,
@@ -545,6 +555,8 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            city: widget.city,
+                            taluk: widget.taluk,
                             state: widget.state,
                             district: widget.district,
                             ownerMail: widget.ownerMail,

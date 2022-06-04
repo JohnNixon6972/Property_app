@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/homescreen.dart';
+import '../components/loactionData.dart';
 import '../constants.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,14 +59,13 @@ late String PropertyTitle;
 late String PropertyAddress;
 late String state = "";
 late String district = "";
-List<String> districts = [];
-
-
-int selectedDistrict = 0;
+late String taluk = "";
+late String city = "";
 
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
   var _PropertyTitleController = TextEditingController();
   var _PropertyAddressController = TextEditingController();
+  var _PropertyCityController = TextEditingController();
   bool uselastusedaddress = false;
   final _auth = FirebaseAuth.instance;
   final _firstore = FirebaseFirestore.instance;
@@ -90,824 +90,21 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
             ));
   }
 
+  int selectedDistrict = 0;
+  List<String> talukas = [];
   @override
   Widget build(BuildContext context) {
-    const List<String> States = [
-      'Andhra Pradesh',
-      'Arunachal Pradesh',
-      'Assam',
-      'Bihar',
-      'Chhattisgarh',
-      'Goa',
-      'Gujarat',
-      'Haryana',
-      'Himachal Pradesh',
-      'Jharkhand',
-      'Karnataka',
-      'Kerala',
-      'Madhya Pradesh',
-      'Maharashtra',
-      'Manipur',
-      'Meghalaya',
-      'Mizoram',
-      'Nagaland',
-      'Odisha',
-      'Punjab',
-      'Rajasthan',
-      'Sikkim',
-      'Tamil Nadu',
-      'Telangana',
-      'Tripura',
-      'Uttar Pradesh',
-      'Uttarakhand',
-      'West Bengal'
-    ];
-
-    const Map Districts = {
-      'Andhra Pradesh': [
-        'Anantapur',
-        'Chittoor',
-        'East Godavari',
-        'Alluri Sitarama Raju',
-        'Anakapalli',
-        'Annamaya',
-        'Bapatla',
-        'Eluru',
-        'Guntur',
-        'Kadapa',
-        'Kakinada',
-        'Konaseema',
-        'Krishna',
-        'Kurnool',
-        'Manyam',
-        'N T Rama Rao',
-        'Nandyal',
-        'Nellore',
-        'Palnadu',
-        'Prakasam',
-        'Sri Balaji',
-        'Sri Satya Sai',
-        'Srikakulam',
-        'Visakhapatnam',
-        'Vizianagaram',
-        'West Godavari'
-      ],
-      'Arunachal Pradesh': [
-        'Anjaw',
-        'Central Siang',
-        'Changlang',
-        'Dibang Valley',
-        'East Kameng',
-        'East Siang',
-        'Kamle',
-        'Kra Daadi',
-        'Kurung Kumey',
-        'Lepa Rada',
-        'Lohit',
-        'Longding',
-        'Lower Dibang Valley',
-        'Lower Siang',
-        'Lower Subansiri',
-        'Namsai',
-        'Pakke Kessang',
-        'Papum Pare',
-        'Shi Yomi',
-        'Tawang',
-        'Tirap',
-        'Upper Siang',
-        'Upper Subansiri',
-        'West Kameng',
-        'West Siang'
-      ],
-      'Assam': [
-        'Bajali',
-        'Baksa',
-        'Barpeta',
-        'Biswanath',
-        'Bongaigaon',
-        'Cachar',
-        'Charaideo',
-        'Chirang',
-        'Darrang',
-        'Dhemaji',
-        'Dhubri',
-        'Dibrugarh',
-        'Dima Hasao',
-        'Goalpara',
-        'Golaghat',
-        'Hailakandi',
-        'Hojai',
-        'Jorhat',
-        'Kamrup',
-        'Kamrup Metropolitan',
-        'Karbi Anglong',
-        'Karimganj',
-        'Kokrajhar',
-        'Lakhimpur',
-        'Majuli',
-        'Morigaon',
-        'Nagaon',
-        'Nalbari',
-        'Sivasagar',
-        'Sonitpur',
-        'South Salmara-Mankachar',
-        'Tinsukia',
-        'Udalguri',
-        'West Karbi Anglong'
-      ],
-      'Bihar': [
-        'Araria',
-        'Arwal',
-        'Aurangabad',
-        'Banka',
-        'Begusarai',
-        'Bhagalpur',
-        'Bhojpur',
-        'Buxar',
-        'Darbhanga',
-        'East Champaran',
-        'Gaya',
-        'Gopalganj',
-        'Jamui',
-        'Jehanabad',
-        'Kaimur',
-        'Katihar',
-        'Khagaria',
-        'Kishanganj',
-        'Lakhisarai',
-        'Madhepura',
-        'Madhubani',
-        'Munger',
-        'Muzaffarpur',
-        'Nalanda',
-        'Nawada',
-        'Patna',
-        'Purnia',
-        'Rohtas',
-        'Saharsa',
-        'Samastipur',
-        'Saran',
-        'Sheikhpura',
-        'Sheohar',
-        'Sitamarhi',
-        'Siwan',
-        'Supaul',
-        'Vaishali',
-        'West Champaran'
-      ],
-      'Chhattisgarh': [
-        'Balod',
-        'Baloda Bazar',
-        'Balrampur',
-        'Bastar',
-        'Bemetara',
-        'Bijapur',
-        'Bilaspur',
-        'Dantewada',
-        'Dhamtari',
-        'Durg',
-        'Gariaband',
-        'Gaurela Pendra Marwahi',
-        'Janjgir Champa',
-        'Jashpur',
-        'Kabirdham',
-        'Kanker',
-        'Kondagaon',
-        'Korba',
-        'Koriya',
-        'Mahasamund',
-        'Manendragarh',
-        'Mohla Manpur',
-        'Mungeli',
-        'Narayanpur',
-        'Raigarh',
-        'Raipur',
-        'Rajnandgaon',
-        'Sakti',
-        'Sarangarh Bilaigarh',
-        'Sukma',
-        'Surajpur',
-        'Surguja'
-      ],
-      'Goa': ['North Goa', 'South Goa'],
-      'Gujarat': [
-        'Ahmedabad',
-        'Amreli',
-        'Anand',
-        'Aravalli',
-        'Banaskantha',
-        'Bharuch',
-        'Bhavnagar',
-        'Botad',
-        'Chhota Udaipur',
-        'Dahod',
-        'Dang',
-        'Devbhoomi Dwarka',
-        'Gandhinagar',
-        'Gir Somnath',
-        'Jamnagar',
-        'Junagadh',
-        'Kheda',
-        'Kutch',
-        'Mahisagar',
-        'Mehsana',
-        'Morbi',
-        'Narmada',
-        'Navsari',
-        'Panchmahal',
-        'Patan',
-        'Porbandar',
-        'Rajkot',
-        'Sabarkantha',
-        'Surat',
-        'Surendranagar',
-        'Tapi',
-        'Vadodara',
-        'Valsad'
-      ],
-      'Haryana': [
-        'Ambala',
-        'Bhiwani',
-        'Charkhi Dadri',
-        'Faridabad',
-        'Fatehabad',
-        'Gurugram',
-        'Hisar',
-        'Jhajjar',
-        'Jind',
-        'Kaithal',
-        'Karnal',
-        'Kurukshetra',
-        'Mahendragarh',
-        'Mewat',
-        'Palwal',
-        'Panchkula',
-        'Panipat',
-        'Rewari',
-        'Rohtak',
-        'Sirsa',
-        'Sonipat',
-        'Yamunanagar'
-      ],
-      'Himachal Pradesh': [
-        'Bilaspur',
-        'Chamba',
-        'Hamirpur',
-        'Kangra',
-        'Kinnaur',
-        'Kullu',
-        'Lahaul Spiti',
-        'Mandi',
-        'Shimla',
-        'Sirmaur',
-        'Solan',
-        'Una'
-      ],
-      'Jharkhand': [
-        'Bokaro',
-        'Chatra',
-        'Deoghar',
-        'Dhanbad',
-        'Dumka',
-        'East Singhbhum',
-        'Garhwa',
-        'Giridih',
-        'Godda',
-        'Gumla',
-        'Hazaribagh',
-        'Jamtara',
-        'Khunti',
-        'Koderma',
-        'Latehar',
-        'Lohardaga',
-        'Pakur',
-        'Palamu',
-        'Ramgarh',
-        'Ranchi',
-        'Sahebganj',
-        'Seraikela Kharsawan',
-        'Simdega',
-        'West Singhbhum'
-      ],
-      'Karnataka': [
-        'Bagalkot',
-        'Bangalore Rural',
-        'Bangalore Urban',
-        'Belgaum',
-        'Bellary',
-        'Bidar',
-        'Chamarajanagar',
-        'Chikkaballapur',
-        'Chikkamagaluru',
-        'Chitradurga',
-        'Dakshina Kannada',
-        'Davanagere',
-        'Dharwad',
-        'Gadag',
-        'Gulbarga',
-        'Hassan',
-        'Haveri',
-        'Kodagu',
-        'Kolar',
-        'Koppal',
-        'Mandya',
-        'Mysore',
-        'Raichur',
-        'Ramanagara',
-        'Shimoga',
-        'Tumkur',
-        'Udupi',
-        'Uttara Kannada',
-        'Vijayanagara',
-        'Vijayapura',
-        'Yadgir'
-      ],
-      'Kerala': [
-        'Alappuzha',
-        'Ernakulam',
-        'Idukki',
-        'Kannur',
-        'Kasaragod',
-        'Kollam',
-        'Kottayam',
-        'Kozhikode',
-        'Malappuram',
-        'Palakkad',
-        'Pathanamthitta',
-        'Thiruvananthapuram',
-        'Thrissur',
-        'Wayanad'
-      ],
-      'Madhya Pradesh': [
-        'Agar Malwa',
-        'Alirajpur',
-        'Anuppur',
-        'Ashoknagar',
-        'Balaghat',
-        'Barwani',
-        'Betul',
-        'Bhind',
-        'Bhopal',
-        'Burhanpur',
-        'Chachaura',
-        'Chhatarpur',
-        'Chhindwara',
-        'Damoh',
-        'Datia',
-        'Dewas',
-        'Dhar',
-        'Dindori',
-        'Guna',
-        'Gwalior',
-        'Harda',
-        'Hoshangabad',
-        'Indore',
-        'Jabalpur',
-        'Jhabua',
-        'Katni',
-        'Khandwa',
-        'Khargone',
-        'Maihar',
-        'Mandla',
-        'Mandsaur',
-        'Morena',
-        'Narsinghpur',
-        'Nagda',
-        'Neemuch',
-        'Niwari',
-        'Panna',
-        'Raisen',
-        'Rajgarh',
-        'Ratlam',
-        'Rewa',
-        'Sagar',
-        'Satna',
-        'Sehore',
-        'Seoni',
-        'Shahdol',
-        'Shajapur',
-        'Sheopur',
-        'Shivpuri',
-        'Sidhi',
-        'Singrauli',
-        'Tikamgarh',
-        'Ujjain',
-        'Umaria',
-        'Vidisha'
-      ],
-      'Maharashtra': [
-        'Ahmednagar',
-        'Akola',
-        'Amravati',
-        'Aurangabad',
-        'Beed',
-        'Bhandara',
-        'Buldhana',
-        'Chandrapur',
-        'Dhule',
-        'Gadchiroli',
-        'Gondia',
-        'Hingoli',
-        'Jalgaon',
-        'Jalna',
-        'Kolhapur',
-        'Latur',
-        'Mumbai City',
-        'Mumbai Suburban',
-        'Nagpur',
-        'Nanded',
-        'Nandurbar',
-        'Nashik',
-        'Osmanabad',
-        'Palghar',
-        'Parbhani',
-        'Pune',
-        'Raigad',
-        'Ratnagiri',
-        'Sangli',
-        'Satara',
-        'Sindhudurg',
-        'Solapur',
-        'Thane',
-        'Wardha',
-        'Washim',
-        'Yavatmal'
-      ],
-      'Manipur': [
-        'Bishnupur',
-        'Chandel',
-        'Churachandpur',
-        'Imphal East',
-        'Imphal West',
-        'Jiribam',
-        'Kakching',
-        'Kamjong',
-        'Kangpokpi',
-        'Noney',
-        'Pherzawl',
-        'Senapati',
-        'Tamenglong',
-        'Tengnoupal',
-        'Thoubal',
-        'Ukhrul'
-      ],
-      'Meghalaya': [
-        'East Garo Hills',
-        'East Jaintia Hills',
-        'East Khasi Hills',
-        'Mairang',
-        'North Garo Hills',
-        'Ri Bhoi',
-        'South Garo Hills',
-        'South West Garo Hills',
-        'South West Khasi Hills',
-        'West Garo Hills',
-        'West Jaintia Hills',
-        'West Khasi Hills'
-      ],
-      'Mizoram': [
-        'Aizawl',
-        'Champhai',
-        'Hnahthial',
-        'Kolasib',
-        'Khawzawl',
-        'Lawngtlai',
-        'Lunglei',
-        'Mamit',
-        'Saiha',
-        'Serchhip',
-        'Saitual'
-      ],
-      'Nagaland': [
-        'Chumukedima',
-        'Dimapur',
-        'Kiphire',
-        'Kohima',
-        'Longleng',
-        'Mokokchung',
-        'Mon',
-        'Noklak',
-        'Niuland',
-        'Peren',
-        'Phek',
-        'Tseminyu',
-        'Tuensang',
-        'Wokha',
-        'Zunheboto'
-      ],
-      'Odisha': [
-        'Angul',
-        'Balangir',
-        'Balasore',
-        'Bargarh',
-        'Bhadrak',
-        'Boudh',
-        'Cuttack',
-        'Debagarh',
-        'Dhenkanal',
-        'Gajapati',
-        'Ganjam',
-        'Jagatsinghpur',
-        'Jajpur',
-        'Jharsuguda',
-        'Kalahandi',
-        'Kandhamal',
-        'Kendrapara',
-        'Kendujhar',
-        'Khordha',
-        'Koraput',
-        'Malkangiri',
-        'Mayurbhanj',
-        'Nabarangpur',
-        'Nayagarh',
-        'Nuapada',
-        'Puri',
-        'Rayagada',
-        'Sambalpur',
-        'Subarnapur',
-        'Sundergarh'
-      ],
-      'Punjab': [
-        'Amritsar',
-        'Barnala',
-        'Bathinda',
-        'Faridkot',
-        'Fatehgarh Sahib',
-        'Fazilka',
-        'Firozpur',
-        'Gurdaspur',
-        'Hoshiarpur',
-        'Jalandhar',
-        'Kapurthala',
-        'Ludhiana',
-        'Malerkotla',
-        'Mansa',
-        'Moga',
-        'Mohali',
-        'Muktsar',
-        'Pathankot',
-        'Patiala',
-        'Rupnagar',
-        'Sangrur',
-        'Shaheed Bhagat Singh Nagar',
-        'Tarn Taran'
-      ],
-      'Rajasthan': [
-        'Ajmer',
-        'Alwar',
-        'Banswara',
-        'Baran',
-        'Barmer',
-        'Bharatpur',
-        'Bhilwara',
-        'Bikaner',
-        'Bundi',
-        'Chittorgarh',
-        'Churu',
-        'Dausa',
-        'Dholpur',
-        'Dungarpur',
-        'Hanumangarh',
-        'Jaipur',
-        'Jaisalmer',
-        'Jalore',
-        'Jhalawar',
-        'Jhunjhunu',
-        'Jodhpur',
-        'Karauli',
-        'Kota',
-        'Nagaur',
-        'Pali',
-        'Pratapgarh',
-        'Rajsamand',
-        'Sawai Madhopur',
-        'Sikar',
-        'Sirohi',
-        'Sri Ganganagar',
-        'Tonk',
-        'Udaipur'
-      ],
-      'Sikkim': [
-        'East Sikkim',
-        'North Sikkim',
-        'Pakyong',
-        'Soreng',
-        'South Sikkim',
-        'West Sikkim'
-      ],
-      'Tamil Nadu': [
-        'Ariyalur',
-        'Chengalpattu',
-        'Chennai',
-        'Coimbatore',
-        'Cuddalore',
-        'Dharmapuri',
-        'Dindigul',
-        'Erode',
-        'Kallakurichi',
-        'Kanchipuram',
-        'Kanyakumari',
-        'Karur',
-        'Krishnagiri',
-        'Madurai',
-        'Mayiladuthurai',
-        'Nagapattinam',
-        'Namakkal',
-        'Nilgiris',
-        'Perambalur',
-        'Pudukkottai',
-        'Ramanathapuram',
-        'Ranipet',
-        'Salem',
-        'Sivaganga',
-        'Tenkasi',
-        'Thanjavur',
-        'Theni',
-        'Thoothukudi',
-        'Tiruchirappalli',
-        'Tirunelveli',
-        'Tirupattur',
-        'Tiruppur',
-        'Tiruvallur',
-        'Tiruvannamalai',
-        'Tiruvarur',
-        'Vellore',
-        'Viluppuram',
-        'Virudhunagar'
-      ],
-      'Telangana': [
-        'Adilabad',
-        'Bhadradri Kothagudem',
-        'Hyderabad',
-        'Jagtial',
-        'Jangaon',
-        'Jayashankar',
-        'Jogulamba',
-        'Kamareddy',
-        'Karimnagar',
-        'Khammam',
-        'Komaram Bheem',
-        'Mahabubabad',
-        'Mahbubnagar',
-        'Mancherial',
-        'Medak',
-        'Medchal',
-        'Mulugu',
-        'Nagarkurnool',
-        'Nalgonda',
-        'Narayanpet',
-        'Nirmal',
-        'Nizamabad',
-        'Peddapalli',
-        'Rajanna Sircilla',
-        'Ranga Reddy',
-        'Sangareddy',
-        'Siddipet',
-        'Suryapet',
-        'Vikarabad',
-        'Wanaparthy',
-        'Warangal',
-        'Hanumakonda',
-        'Yadadri Bhuvanagiri'
-      ],
-      'Tripura': [
-        'Dhalai',
-        'Gomati',
-        'Khowai',
-        'North Tripura',
-        'Sepahijala',
-        'South Tripura',
-        'Unakoti',
-        'West Tripura'
-      ],
-      'Uttar Pradesh': [
-        'Agra',
-        'Aligarh',
-        'Ambedkar Nagar',
-        'Amethi',
-        'Amroha',
-        'Auraiya',
-        'Ayodhya',
-        'Azamgarh',
-        'Baghpat',
-        'Bahraich',
-        'Ballia',
-        'Balrampur',
-        'Banda',
-        'Barabanki',
-        'Bareilly',
-        'Basti',
-        'Bhadohi',
-        'Bijnor',
-        'Budaun',
-        'Bulandshahr',
-        'Chandauli',
-        'Chitrakoot',
-        'Deoria',
-        'Etah',
-        'Etawah',
-        'Farrukhabad',
-        'Fatehpur',
-        'Firozabad',
-        'Gautam Buddha Nagar',
-        'Ghaziabad',
-        'Ghazipur',
-        'Gonda',
-        'Gorakhpur',
-        'Hamirpur',
-        'Hapur',
-        'Hardoi',
-        'Hathras',
-        'Jalaun',
-        'Jaunpur',
-        'Jhansi',
-        'Kannauj',
-        'Kanpur Dehat',
-        'Kanpur Nagar',
-        'Kasganj',
-        'Kaushambi',
-        'Kheri',
-        'Kushinagar',
-        'Lalitpur',
-        'Lucknow',
-        'Maharajganj',
-        'Mahoba',
-        'Mainpuri',
-        'Mathura',
-        'Mau',
-        'Meerut',
-        'Mirzapur',
-        'Moradabad',
-        'Muzaffarnagar',
-        'Pilibhit',
-        'Pratapgarh',
-        'Prayagraj',
-        'Raebareli',
-        'Rampur',
-        'Saharanpur',
-        'Sambhal',
-        'Sant Kabir Nagar',
-        'Shahjahanpur',
-        'Shamli',
-        'Shravasti',
-        'Siddharthnagar',
-        'Sitapur',
-        'Sonbhadra',
-        'Sultanpur',
-        'Unnao',
-        'Varanasi'
-      ],
-      'Uttarakhand': [
-        'Almora',
-        'Bageshwar',
-        'Chamoli',
-        'Champawat',
-        'Dehradun',
-        'Haridwar',
-        'Nainital',
-        'Pauri',
-        'Pithoragarh',
-        'Rudraprayag',
-        'Tehri',
-        'Udham Singh Nagar',
-        'Uttarkashi'
-      ],
-      'West Bengal': [
-        'Alipurduar',
-        'Bankura',
-        'Birbhum',
-        'Cooch Behar',
-        'Dakshin Dinajpur',
-        'Darjeeling',
-        'Hooghly',
-        'Howrah',
-        'Jalpaiguri',
-        'Jhargram',
-        'Kalimpong',
-        'Kolkata',
-        'Malda',
-        'Murshidabad',
-        'Nadia',
-        'North 24 Parganas',
-        'Paschim Bardhaman',
-        'Paschim Medinipur',
-        'Purba Bardhaman',
-        'Purba Medinipur',
-        'Purulia',
-        'South 24 Parganas',
-        'Uttar Dinajpur'
-      ]
-    };
-    void setDistrict(List<String> districtstobeset) {
+    List<String>? districts = Districts['Tamil Nadu'];
+    double _kItemExtent = 32.0;
+    int selectedTaluk = 0;
+    void setTaluka(List<String>? talukstobeset) {
       setState(() {
-        districts = districtstobeset;
-        selectedDistrict = 0;
-        district = "";
+        talukas = talukstobeset!;
+        selectedTaluk = 0;
+        taluk = "";
       });
     }
 
-    double _kItemExtent = 32.0;
-    int selectedState = 0;
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -1220,7 +417,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     child: Row(
                                       children: [
                                         Column(
-                                          children: [
+                                          children: const [
                                             Icon(
                                               Icons.crop_square,
                                               size: 50,
@@ -1263,7 +460,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     child: Row(
                                       children: [
                                         Column(
-                                          children: [
+                                          children: const [
                                             Icon(
                                               Icons.landscape_outlined,
                                               size: 50,
@@ -1306,7 +503,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     child: Row(
                                       children: [
                                         Column(
-                                          children: [
+                                          children: const [
                                             Icon(
                                               Icons.house_outlined,
                                               size: 50,
@@ -1351,7 +548,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     child: Row(
                                       children: [
                                         Column(
-                                          children: [
+                                          children: const [
                                             Icon(
                                               Icons.apartment,
                                               size: 50,
@@ -1396,7 +593,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     child: Row(
                                       children: [
                                         Column(
-                                          children: [
+                                          children: const [
                                             Icon(
                                               Icons.room_preferences_outlined,
                                               size: 50,
@@ -1434,12 +631,24 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Select Area',
-                        style: TextStyle(
-                            color: kSubCategoryColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400),
+                      Row(
+                        children: const [
+                          Text(
+                            'Select Area',
+                            style: TextStyle(
+                                color: kSubCategoryColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Spacer(),
+                          Text(
+                            'State : Tamil Nadu',
+                            style: TextStyle(
+                                color: kSubCategoryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ],
                       ),
                       Row(
                         children: [
@@ -1456,16 +665,17 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                   // This is called when selected item is changed.
                                   onSelectedItemChanged: (int selectedItem) {
                                     setState(() {
-                                      selectedState = selectedItem;
-                                      state = States[selectedState];
-                                      setDistrict(Districts[state]);
+                                      selectedDistrict = selectedItem;
+                                      district = districts![selectedDistrict];
+                                      setTaluka(Taluka[district]);
                                     });
                                   },
-                                  children: List<Widget>.generate(States.length,
-                                      (int index) {
+                                  children: List<Widget>.generate(
+                                      districts!.length, (int index) {
+                                    print(districts);
                                     return Center(
                                       child: Text(
-                                        States[index],
+                                        districts[index],
                                       ),
                                     );
                                   }),
@@ -1473,7 +683,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                               ),
                               child: Container(
                                 height: 60,
-                                width: 150,
+                                width: 155,
                                 decoration: BoxDecoration(
                                   border:
                                       Border.all(color: kHighlightedTextColor),
@@ -1483,7 +693,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 10),
                                   child: Text(
-                                    "State : " + state,
+                                    "District : " + district,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: Colors.grey[700],
@@ -1507,17 +717,17 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                   // This is called when selected item is changed.
                                   onSelectedItemChanged: (int selectedItem) {
                                     setState(() {
-                                      selectedDistrict = selectedItem;
-                                      district = districts[selectedDistrict];
-                                      print(district);
+                                      selectedTaluk = selectedItem;
+                                      taluk = talukas[selectedTaluk];
+                                      print(taluk);
                                     });
                                   },
                                   children: List<Widget>.generate(
-                                      districts.length, (int index) {
-                                    print(districts);
+                                      talukas.length, (int index) {
+                                    print(talukas);
                                     return Center(
                                       child: Text(
-                                        districts[index],
+                                        talukas[index],
                                       ),
                                     );
                                   }),
@@ -1535,7 +745,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 10),
                                   child: Text(
-                                    "District : " + district,
+                                    "Taluka : " + taluk,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: Colors.grey[700],
@@ -1619,28 +829,58 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: kTextFieldFillColor,
-                      child: Transform.rotate(
-                        angle: 90 * pi / 180,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AddPropertiesScreen2.id);
-                          },
-                          child: Icon(
-                            Icons.expand_less_rounded,
-                            color: kHighlightedTextColor,
-                            size: 70,
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: kHighlightedTextColor),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            onChanged: (newValue) {
+                              city = newValue;
+                            },
+                            controller: _PropertyCityController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "City",
+                                hintStyle: TextStyle(color: kSubCategoryColor)),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 30),
+                      child: Center(
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundColor: kTextFieldFillColor,
+                          child: Transform.rotate(
+                            angle: 90 * pi / 180,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AddPropertiesScreen2.id);
+                              },
+                              child: Icon(
+                                Icons.expand_less_rounded,
+                                color: kHighlightedTextColor,
+                                size: 70,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 )
               ],
             ),

@@ -130,6 +130,8 @@ class _UnApprovedPropertiesScreenState
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
+                                              city: unApprovedProperties[index].city,
+                                              taluk: unApprovedProperties[index].taluk,
                                           state:
                                               unApprovedProperties[index].state,
                                           district: unApprovedProperties[index]

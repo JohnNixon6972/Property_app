@@ -53,6 +53,8 @@ void getMyPropertiesCards() {
         ownerImgUrl: property.ownerImgUrl,
         cent: property.cent,
         face: property.direction,
+        city: property.city,
+        taluk: property.taluk,
       ));
     }
   }
@@ -60,6 +62,8 @@ void getMyPropertiesCards() {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
         ownerMail: property.ownerMail,
+        city: property.city,
+        taluk: property.taluk,
         ownerPhno: property.ownerPhoneNo,
         district: property.district,
         state: property.state,
@@ -207,6 +211,8 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
+                                              city: myProperties[index].city,
+                                              taluk: myProperties[index].taluk,
                                           state: myProperties[index].state,
                                           district:
                                               myProperties[index].district,
@@ -542,9 +548,13 @@ class myProperty extends StatefulWidget {
   final String face;
   final String district;
   final String state;
+  final String city;
+  final String taluk;
   final List<String> propertyImages;
   const myProperty(
       {required this.imageloc,
+      required this.city,
+      required this.taluk,
       required this.district,
       required this.state,
       required this.lenght,

@@ -54,8 +54,8 @@ class _ApprovedPropertiesScreenState extends State<ApprovedPropertiesScreen> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 10),
                               child: ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20)),
                                 child: CachedNetworkImage(
                                   cacheManager: customCacheManager,
                                   key: UniqueKey(),
@@ -128,6 +128,9 @@ class _ApprovedPropertiesScreenState extends State<ApprovedPropertiesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
+                                          city: approvedProperties[index].city,
+                                          taluk:
+                                              approvedProperties[index].taluk,
                                           state:
                                               approvedProperties[index].state,
                                           district: approvedProperties[index]
@@ -505,8 +508,7 @@ class _approvedPropertyState extends State<approvedProperty> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ClipRRect(
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                   child: CachedNetworkImage(
                     key: UniqueKey(),
                     imageUrl: widget.imageloc,

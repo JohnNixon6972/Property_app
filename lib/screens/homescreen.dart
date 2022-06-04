@@ -121,8 +121,12 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var cent = property["Cent"];
               var district = property["District"];
               var state = property["State"];
+              var city = property["City"];
+              var taluk = property["Taluk"];
 
               final Property = PropertyCard(
+                city: city,
+                taluk: taluk,
                 state: state,
                 district: district,
                 ownerMail: ownerEmail,
@@ -355,8 +359,12 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var cent = property["Cent"];
               var district = property["District"];
               var state = property["State"];
+              var city = property["City"];
+              var taluk = property["Taluk"];
 
               final Property = PropertyCard(
+                city: city,
+                taluk: taluk,
                 state: state,
                 district: district,
                 ownerMail: ownerEmail,
@@ -626,7 +634,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const Text(
                     'Category',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
                   GestureDetector(
@@ -904,10 +913,14 @@ class PropertyCard extends StatefulWidget {
   final String ownerImgUrl;
   final String cent;
   final String district;
+  final String taluk;
+  final String city;
   final String state;
   final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
+      required this.taluk,
+      required this.city,
       required this.constructionArea,
       required this.ownerMail,
       required this.ownerPhoneNo,
@@ -1034,6 +1047,8 @@ class _PropertyCardState extends State<PropertyCard> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            taluk: widget.taluk,
+                            city: widget.city,
                             state: widget.state,
                             district: widget.district,
                             ownerMail: widget.ownerMail,

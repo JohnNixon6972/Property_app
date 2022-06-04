@@ -33,10 +33,14 @@ class PropertyDetailsScreen extends StatelessWidget {
   final String face;
   final String state;
   final String district;
+  final String taluk;
+  final String city;
   final List<String> propertyImages;
   const PropertyDetailsScreen(
       {Key? key,
       required this.constructionArea,
+      required this.city,
+      required this.taluk,
       required this.state,
       required this.district,
       required this.lenght,
@@ -182,7 +186,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        district + "," + state,
+                        city + "," + taluk + "\n" + district + "," + state,
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,

@@ -32,34 +32,37 @@ class PreviewProperty extends StatelessWidget {
   final String cent;
   final String face;
   final String state;
+  final String city;
+  final String taluk;
   final String district;
-  PreviewProperty(
-      {Key? key,
-      required this.imageFileList,
-      required this.constructionArea,
-      required this.state,
-      required this.district,
-      required this.lenght,
-      required this.width,
-      required this.ownerMail,
-      required this.ownerPhoneNo,
-      required this.propertyTitle,
-      required this.propertyAddress,
-      required this.propertyDescription,
-      required this.noBathroom,
-      required this.noBedroom,
-      required this.area,
-      required this.ownerName,
-      required this.to,
-      required this.price,
-      required this.category,
-      required this.type,
-      required this.cent,
-      required this.ownerImgUrl,
-      required this.face,
-      })
-      : super(key: key);
-  
+  PreviewProperty({
+    Key? key,
+    required this.imageFileList,
+    required this.taluk,
+    required this.city,
+    required this.constructionArea,
+    required this.state,
+    required this.district,
+    required this.lenght,
+    required this.width,
+    required this.ownerMail,
+    required this.ownerPhoneNo,
+    required this.propertyTitle,
+    required this.propertyAddress,
+    required this.propertyDescription,
+    required this.noBathroom,
+    required this.noBedroom,
+    required this.area,
+    required this.ownerName,
+    required this.to,
+    required this.price,
+    required this.category,
+    required this.type,
+    required this.cent,
+    required this.ownerImgUrl,
+    required this.face,
+  }) : super(key: key);
+
   Widget buildListView(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return ListView.builder(
@@ -169,7 +172,7 @@ class PreviewProperty extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        district + "," + state,
+                        city + "," + taluk + "\n" + district + "," + state,
                         style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -260,8 +263,7 @@ class PreviewProperty extends StatelessWidget {
                         ),
                         child: Center(
                           child: const Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
                               "Property Facing : " + "south",
                               style: TextStyle(
@@ -625,8 +627,8 @@ class PreviewProperty extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 20),
                     child: CircleAvatar(
                       radius: 25,
                       child: ClipRRect(
@@ -742,4 +744,3 @@ class PreviewProperty extends StatelessWidget {
     );
   }
 }
-

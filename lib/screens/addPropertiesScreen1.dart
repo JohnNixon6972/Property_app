@@ -156,22 +156,22 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           onTap: () {
                             Navigator.pushNamed(context, HomeScreen.id);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.expand_less_rounded,
                             size: 40,
                             color: kHighlightedTextColor,
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Add Properties',
                         style: TextStyle(
                             color: kHighlightedTextColor,
                             fontSize: 28,
                             fontWeight: FontWeight.w700),
                       ),
-                      Spacer(),
-                      Text(
+                      const Spacer(),
+                      const Text(
                         'Step 1/2',
                         style: TextStyle(
                             color: kSubCategoryColor,
@@ -187,9 +187,9 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'I want to',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: kSubCategoryColor,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
@@ -199,7 +199,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         child: Container(
                           height: 65,
                           child: ListView(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
                             scrollDirection: Axis.horizontal,
                             children: [
@@ -222,13 +222,13 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Row(
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Sell',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
-                                        Spacer(),
+                                        const Spacer(),
                                         Radio(
                                           value: propertyTo.Sell,
                                           activeColor: kHighlightedTextColor,
@@ -264,13 +264,13 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Row(
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Rent',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
-                                        Spacer(),
+                                        const Spacer(),
                                         Radio(
                                           value: propertyTo.Rent,
                                           activeColor: kHighlightedTextColor,
@@ -299,7 +299,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Properties Type',
                         style: TextStyle(
                             color: kSubCategoryColor,
@@ -311,7 +311,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         child: Container(
                           height: 75,
                           child: ListView(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -334,13 +334,13 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Row(
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Residental',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
-                                        Spacer(),
+                                        const Spacer(),
                                         Radio(
                                           activeColor: kHighlightedTextColor,
                                           value: propertyType.Residental,
@@ -377,13 +377,13 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Row(
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Commercial',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                         ),
-                                        Spacer(),
+                                        const Spacer(),
                                         Radio(
                                           activeColor: kHighlightedTextColor,
                                           value: propertyType.Commercial,
@@ -412,9 +412,9 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Select Category',
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: kSubCategoryColor,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
@@ -424,7 +424,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         child: Container(
                           height: 100,
                           child: ListView(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
                             scrollDirection: Axis.horizontal,
                             children: [
@@ -803,7 +803,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Write Property Title',
                             style: TextStyle(color: kSubCategoryColor),
                           ),
@@ -818,7 +818,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 PropertyTitle = newValue;
                               });
                             },
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             maxLines: 1,
                             // minLines: 5,
@@ -851,11 +851,11 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                   border: InputBorder.none,
                                   errorText: _errorText,
                                   hintText: "Address",
-                                  hintStyle:
-                                      TextStyle(color: kSubCategoryColor)),
+                                  hintStyle: const TextStyle(
+                                      color: kSubCategoryColor)),
                             ),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.add_location_outlined,
                             color: kHighlightedTextColor,
                             size: 35,
@@ -889,30 +889,35 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                 errorText: _errorText,
                                 border: InputBorder.none,
                                 hintText: "City",
-                                hintStyle: TextStyle(color: kSubCategoryColor)),
+                                hintStyle:
+                                    const TextStyle(color: kSubCategoryColor)),
                           ),
                         ),
                       ),
                     ),
-                    Spacer(),
-                    ElevatedButton(
-                      // only enable the button if the text is not empty
+                    const Spacer(),
+                    SizedBox(
+                      height: 50,
+                      width: 100,
+                      child: ElevatedButton(
+                        // only enable the button if the text is not empty
 
-                      onPressed: (_PropertyAddressController
-                                  .value.text.isNotEmpty &&
-                              _PropertyCityController.value.text.isNotEmpty &&
-                              _PropertyTitleController.value.text.isNotEmpty)
-                          ? push
-                          : null,
-                      child: Text(
-                        'Next',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 10,
-                        primary: kPrimaryButtonColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                        onPressed: (_PropertyAddressController
+                                    .value.text.isNotEmpty &&
+                                _PropertyCityController.value.text.isNotEmpty &&
+                                _PropertyTitleController.value.text.isNotEmpty)
+                            ? push
+                            : null,
+                        child: const Text(
+                          'Next',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          primary: kPrimaryButtonColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
                         ),
                       ),
                     ),

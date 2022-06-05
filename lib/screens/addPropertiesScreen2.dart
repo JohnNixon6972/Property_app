@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/previewProperty.dart';
@@ -34,6 +36,61 @@ late String cent = "";
 List<XFile>? imageFileList = [];
 
 class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
+  String? get _errorText {
+    final _propertyDescription = _controller.value.text;
+    if (_propertyDescription.isEmpty) {
+      return 'Required*';
+    }
+    return null;
+  }
+
+  void property() async {
+    if (Facing == "") {
+      await popUpAlertDialogBox(context, "Kindly Select Facing");
+    } else {
+      Storage _storage = Storage();
+      setState(() {
+        isloading = true;
+        String propertyAddress = PropertyAddress;
+        String propertyTitle = PropertyTitle;
+        String category = getCategory();
+        String to = getTo();
+        String type = getType();
+        String propertyDescription = PropertyDescription;
+        String squareFit = ConstructionArea;
+        String bedRoom = BedRoom;
+        String bathRoom = BathRoom;
+        String price = Price;
+
+        print("loading");
+        _storage.uploadPropertyDetails(
+            context,
+            city,
+            taluk,
+            propertyAddress,
+            propertyTitle,
+            category,
+            to,
+            Facing,
+            type,
+            propertyDescription,
+            PlotArea,
+            cent,
+            lenght,
+            width,
+            squareFit,
+            bedRoom,
+            bathRoom,
+            price,
+            "Tamil Nadu",
+            district,
+            false);
+        _storage.uploadPropertyImages(
+            context, imageFileList, propertyTitle, to, false);
+      });
+    }
+  }
+
   final ImagePicker imagePicker = ImagePicker();
   @override
   void initState() {
@@ -295,10 +352,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                 ),
                                 TextField(
                                   onChanged: (newValue) {
-                                    PropertyDescription = newValue;
+                                    setState(() {
+                                      PropertyDescription = newValue;
+                                    });
                                   },
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none),
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      errorText: _errorText),
                                   controller: _controller,
                                   style: const TextStyle(
                                       fontSize: 20,
@@ -322,6 +382,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     PlotArea = newValue;
                                   });
                                 },
+                                fieldsController: _plotAreaController,
                               ),
                               const Spacer(),
                               !isLand
@@ -332,6 +393,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                           ConstructionArea = newValue;
                                         });
                                       },
+                                      fieldsController:
+                                          _constructionAreaController,
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -450,7 +513,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         setState(() {
                                           width = newValue;
                                         });
-                                      }),
+                                      },
+                                      fieldsController: _widthController,
+                                    ),
                               const Spacer(),
                               !isLand
                                   ? PropertyDetailTile(
@@ -460,6 +525,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                           BedRoom = newValue;
                                         });
                                       },
+                                      fieldsController: _bedRoomController,
                                     )
                                   : PropertyDetailTile(
                                       HintText: "Length",
@@ -467,7 +533,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         setState(() {
                                           lenght = newValue;
                                         });
-                                      })
+                                      },
+                                      fieldsController: _lengthController,
+                                    )
                             ],
                           ),
                           Row(
@@ -480,6 +548,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                           BathRoom = newValue;
                                         });
                                       },
+                                      fieldsController: _bathRoomController,
                                     )
                                   : PropertyDetailTile(
                                       HintText: "Cent",
@@ -487,7 +556,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         setState(() {
                                           cent = newValue;
                                         });
-                                      }),
+                                      },
+                                      fieldsController: _centController,
+                                    ),
                               const Spacer(),
                               PropertyDetailTile(
                                 HintText: "Price (INR)",
@@ -496,6 +567,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     Price = newValue;
                                   });
                                 },
+                                fieldsController: _priceController,
                               )
                             ],
                           )
@@ -563,68 +635,45 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                             const Spacer(),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Storage _storage = Storage();
-                                  setState(() {
-                                    isloading = true;
-                                    String propertyAddress = PropertyAddress;
-                                    String propertyTitle = PropertyTitle;
-                                    String category = getCategory();
-                                    String to = getTo();
-                                    String type = getType();
-                                    String propertyDescription =
-                                        PropertyDescription;
-                                    String squareFit = ConstructionArea;
-                                    String bedRoom = BedRoom;
-                                    String bathRoom = BathRoom;
-                                    String price = Price;
-
-                                    print("loading");
-                                    _storage.uploadPropertyDetails(
-                                        context,
-                                        city,
-                                        taluk,
-                                        propertyAddress,
-                                        propertyTitle,
-                                        category,
-                                        to,
-                                        Facing,
-                                        type,
-                                        propertyDescription,
-                                        PlotArea,
-                                        cent,
-                                        lenght,
-                                        width,
-                                        squareFit,
-                                        bedRoom,
-                                        bathRoom,
-                                        price,
-                                        "Tamil Nadu",
-                                        district,
-                                        false);
-                                    _storage.uploadPropertyImages(
-                                        context,
-                                        imageFileList,
-                                        propertyTitle,
-                                        to,
-                                        false);
-                                  });
-                                },
-                                child: Container(
-                                  height: 70,
-                                  width: 160,
-                                  decoration: BoxDecoration(
-                                    color: kHighlightedTextColor,
-                                    borderRadius: BorderRadius.circular(35),
-                                  ),
+                              child: SizedBox(
+                                height: 65,
+                                width: 160,
+                                child: ElevatedButton(
+                                  // only enable the button if the text is not empty
+                                  onPressed: ((_controller
+                                                  .value.text.isNotEmpty &&
+                                              (_plotAreaController.value.text.isNotEmpty &&
+                                                  _widthController
+                                                      .value.text.isNotEmpty &&
+                                                  _lengthController
+                                                      .value.text.isNotEmpty &&
+                                                  _centController
+                                                      .value.text.isNotEmpty &&
+                                                  _priceController.value.text
+                                                      .isNotEmpty)) ||
+                                          (_controller.value.text.isNotEmpty &&
+                                              (_constructionAreaController
+                                                      .value.text.isNotEmpty &&
+                                                  _bedRoomController
+                                                      .value.text.isNotEmpty &&
+                                                  _bathRoomController
+                                                      .value.text.isNotEmpty)))
+                                      ? property
+                                      : null,
                                   child: const Center(
-                                    child: Text(
-                                      'Submit',
-                                      style: TextStyle(
-                                          color: kSubCategoryColor,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400),
+                                    child: Text('Submit',
+                                        style: TextStyle(
+                                            color:
+                                                kBottomNavigationBackgroundColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400)),
+                                  ),
+
+                                  style: ElevatedButton.styleFrom(
+                                    // elevation: 10,
+                                    primary: kPrimaryButtonColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(35),
                                     ),
                                   ),
                                 ),
@@ -642,10 +691,30 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   }
 }
 
+final _plotAreaController = TextEditingController();
+final _widthController = TextEditingController();
+final _lengthController = TextEditingController();
+final _centController = TextEditingController();
+final _priceController = TextEditingController();
+final _constructionAreaController = TextEditingController();
+final _bedRoomController = TextEditingController();
+final _bathRoomController = TextEditingController();
+
 class PropertyDetailTile extends StatelessWidget {
   final String HintText;
   final Function(String) onChange;
-  PropertyDetailTile({required this.HintText, required this.onChange});
+  final TextEditingController fieldsController;
+  PropertyDetailTile(
+      {required this.HintText,
+      required this.onChange,
+      required this.fieldsController});
+  String? get _errorFieldsText {
+    final _fieldsEntered = fieldsController.value.text;
+    if (_fieldsEntered.isEmpty) {
+      return 'Required*';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -661,6 +730,7 @@ class PropertyDetailTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
+            controller: fieldsController,
             onChanged: onChange,
             keyboardType: TextInputType.number,
             maxLines: 1,
@@ -669,6 +739,7 @@ class PropertyDetailTile extends StatelessWidget {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
             decoration: InputDecoration(
               border: InputBorder.none,
+              errorText: _errorFieldsText,
               hintText: HintText,
               hintStyle:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),

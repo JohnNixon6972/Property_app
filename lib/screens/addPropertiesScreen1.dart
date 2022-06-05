@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
+import 'package:property_app/screens/editPropertyScreen1.dart';
 import 'package:property_app/screens/homescreen.dart';
 import '../components/loactionData.dart';
 import '../constants.dart';
@@ -63,12 +65,40 @@ late String taluk = "";
 late String city = "";
 
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
-  var _PropertyTitleController = TextEditingController();
-  var _PropertyAddressController = TextEditingController();
-  var _PropertyCityController = TextEditingController();
+  String? get _errorText {
+    final _selectedcity = _PropertyCityController.value.text;
+    final _selectedaddress = _PropertyAddressController.value.text;
+    final _selectedtitle = _PropertyTitleController.value.text;
+    if (_selectedcity.isEmpty ||
+        _selectedaddress.isEmpty ||
+        _selectedtitle.isEmpty) {
+      return 'Required*';
+    }
+    return null;
+  }
+
+  void push() {
+    // if there is no error text
+    if (district == "" || taluk == "") {
+      popUpAlertDialogBox(context, "Kindly select District and Taluk");
+    } else {
+      Navigator.pushNamed(context, AddPropertiesScreen2.id);
+    }
+  }
+
+  final _PropertyTitleController = TextEditingController();
+  final _PropertyAddressController = TextEditingController();
+  final _PropertyCityController = TextEditingController();
   bool uselastusedaddress = false;
   final _auth = FirebaseAuth.instance;
   final _firstore = FirebaseFirestore.instance;
+
+  void dispose() {
+    _PropertyAddressController.dispose();
+    _PropertyCityController.dispose();
+    _PropertyTitleController.dispose();
+    super.dispose();
+  }
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -778,12 +808,15 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                             style: TextStyle(color: kSubCategoryColor),
                           ),
                           TextField(
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                errorText: _errorText),
                             // controller: _controller,
                             controller: _PropertyTitleController,
                             onChanged: (newValue) {
-                              PropertyTitle = newValue;
+                              setState(() {
+                                PropertyTitle = newValue;
+                              });
                             },
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
@@ -809,11 +842,14 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           Expanded(
                             child: TextField(
                               onChanged: (newValue) {
-                                PropertyAddress = newValue;
+                                setState(() {
+                                  PropertyAddress = newValue;
+                                });
                               },
                               controller: _PropertyAddressController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
+                                  errorText: _errorText,
                                   hintText: "Address",
                                   hintStyle:
                                       TextStyle(color: kSubCategoryColor)),
@@ -844,10 +880,13 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextField(
                             onChanged: (newValue) {
-                              city = newValue;
+                              setState(() {
+                                city = newValue;
+                              });
                             },
                             controller: _PropertyCityController,
                             decoration: InputDecoration(
+                                errorText: _errorText,
                                 border: InputBorder.none,
                                 hintText: "City",
                                 hintStyle: TextStyle(color: kSubCategoryColor)),
@@ -856,27 +895,24 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       ),
                     ),
                     Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 30),
-                      child: Center(
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: kTextFieldFillColor,
-                          child: Transform.rotate(
-                            angle: 90 * pi / 180,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AddPropertiesScreen2.id);
-                              },
-                              child: Icon(
-                                Icons.expand_less_rounded,
-                                color: kHighlightedTextColor,
-                                size: 70,
-                              ),
-                            ),
-                          ),
+                    ElevatedButton(
+                      // only enable the button if the text is not empty
+
+                      onPressed: (_PropertyAddressController
+                                  .value.text.isNotEmpty &&
+                              _PropertyCityController.value.text.isNotEmpty &&
+                              _PropertyTitleController.value.text.isNotEmpty)
+                          ? push
+                          : null,
+                      child: Text(
+                        'Next',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        primary: kPrimaryButtonColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
                         ),
                       ),
                     ),

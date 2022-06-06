@@ -401,7 +401,9 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                 cursorColor: kPrimaryButtonColor,
                 keyboardType: TextInputType.name,
                 textAlign: TextAlign.left,
-                style: const TextStyle(color: kPrimaryButtonColor),
+                style: TextStyle(
+                  color: kPrimaryButtonColor,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter valid text';
@@ -787,7 +789,7 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                       widget.Title,
                       style: const TextStyle(
                           color: kHighlightedTextColor,
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -896,14 +898,15 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                                 .doc(userInfo.mobileNumber)
                                 .update({"password": newPassword});
 
-                           await popUpAlertDialogBox(
+                            await popUpAlertDialogBox(
                                 context, "Successfully changed Password");
                           } else if (newPassword != confirmNewPassword) {
-                          await  popUpAlertDialogBox(
+                            await popUpAlertDialogBox(
                                 context, "Passwords don't match");
                           }
                         } else {
-                        await  popUpAlertDialogBox(context, "Invalid Password");
+                          await popUpAlertDialogBox(
+                              context, "Invalid Password");
                         }
                       }
                     } catch (e) {

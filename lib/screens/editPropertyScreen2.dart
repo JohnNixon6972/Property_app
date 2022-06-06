@@ -1,7 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'dart:io';
@@ -80,6 +79,18 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
   @override
   void initState() {
     // TODO: implement initState
+    PropertyDescription = "";
+    plotArea = "";
+    constructionArea = "";
+    lenght = "";
+    width = "";
+    cent = "";
+    BedRoom = "";
+    BathRoom = "";
+    Price = "";
+    face = "";
+    state = "";
+    district = "";
     readDetails(widget.propertyToEdit);
     imageFileList = [];
     super.initState();

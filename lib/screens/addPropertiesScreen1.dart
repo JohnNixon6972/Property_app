@@ -57,8 +57,8 @@ String getTo() {
   }
 }
 
-late String PropertyTitle;
-late String PropertyAddress;
+late String PropertyTitle = "";
+late String PropertyAddress = "";
 late String state = "";
 late String district = "";
 late String taluk = "";
@@ -75,6 +75,20 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
       return 'Required*';
     }
     return null;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    selectedDistrict = 0;
+    selectedTaluk = 0;
+    PropertyTitle = "";
+    PropertyAddress = "";
+    state = "";
+    district = "";
+    taluk = "";
+    city = "";
+    super.initState();
   }
 
   void push() {
@@ -198,90 +212,94 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Container(
                           height: 65,
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            scrollDirection: Axis.horizontal,
+                          child: Row(
+                            // physics: const BouncingScrollPhysics(),
+                            // // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            // scrollDirection: Axis.horizontal,
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Container(
-                                  width: 160,
-                                  decoration: BoxDecoration(
-                                    border: _to == propertyTo.Sell
-                                        ? Border.all(
-                                            color: kHighlightedTextColor)
-                                        : null,
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: _to == propertyTo.Sell
-                                        ? kPropertyCardColor
-                                        : kTextFieldFillColor,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      children: [
-                                        const Text(
-                                          'Sell',
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const Spacer(),
-                                        Radio(
-                                          value: propertyTo.Sell,
-                                          activeColor: kHighlightedTextColor,
-                                          groupValue: _to,
-                                          onChanged: (propertyTo? value) {
-                                            setState(() {
-                                              _to = value;
-                                            });
-                                          },
-                                        )
-                                      ],
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
+                                  child: Container(
+                                    // width: 160,
+                                    decoration: BoxDecoration(
+                                      border: _to == propertyTo.Sell
+                                          ? Border.all(
+                                              color: kHighlightedTextColor)
+                                          : null,
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: _to == propertyTo.Sell
+                                          ? kPropertyCardColor
+                                          : kTextFieldFillColor,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        children: [
+                                          const Text(
+                                            'Sell',
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const Spacer(),
+                                          Radio(
+                                            value: propertyTo.Sell,
+                                            activeColor: kHighlightedTextColor,
+                                            groupValue: _to,
+                                            onChanged: (propertyTo? value) {
+                                              setState(() {
+                                                _to = value;
+                                              });
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                               // Spacer(),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Container(
-                                  width: 160,
-                                  decoration: BoxDecoration(
-                                    border: _to == propertyTo.Rent
-                                        ? Border.all(
-                                            color: kHighlightedTextColor)
-                                        : null,
-                                    color: _to == propertyTo.Rent
-                                        ? kPropertyCardColor
-                                        : kTextFieldFillColor,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      children: [
-                                        const Text(
-                                          'Rent',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const Spacer(),
-                                        Radio(
-                                          value: propertyTo.Rent,
-                                          activeColor: kHighlightedTextColor,
-                                          groupValue: _to,
-                                          onChanged: (propertyTo? value) {
-                                            setState(() {
-                                              _to = value;
-                                            });
-                                          },
-                                        )
-                                      ],
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
+                                  child: Container(
+                                    // width: 160,
+                                    decoration: BoxDecoration(
+                                      border: _to == propertyTo.Rent
+                                          ? Border.all(
+                                              color: kHighlightedTextColor)
+                                          : null,
+                                      color: _to == propertyTo.Rent
+                                          ? kPropertyCardColor
+                                          : kTextFieldFillColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        children: [
+                                          const Text(
+                                            'Rent',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const Spacer(),
+                                          Radio(
+                                            value: propertyTo.Rent,
+                                            activeColor: kHighlightedTextColor,
+                                            groupValue: _to,
+                                            onChanged: (propertyTo? value) {
+                                              setState(() {
+                                                _to = value;
+                                              });
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -310,92 +328,96 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Container(
                           height: 75,
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
+                          child: Row(
+                            // physics: const BouncingScrollPhysics(),
+                            // scrollDirection: Axis.horizontal,
                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Container(
-                                  width: 165,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: _type == propertyType.Residental
-                                        ? Border.all(
-                                            color: kHighlightedTextColor)
-                                        : null,
-                                    color: _type == propertyType.Residental
-                                        ? kPropertyCardColor
-                                        : kTextFieldFillColor,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      children: [
-                                        const Text(
-                                          'Residental',
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const Spacer(),
-                                        Radio(
-                                          activeColor: kHighlightedTextColor,
-                                          value: propertyType.Residental,
-                                          groupValue: _type,
-                                          onChanged: (propertyType? value) {
-                                            setState(() {
-                                              _type = value;
-                                            });
-                                          },
-                                        )
-                                      ],
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
+                                  child: Container(
+                                    // width: 165,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: _type == propertyType.Residental
+                                          ? Border.all(
+                                              color: kHighlightedTextColor)
+                                          : null,
+                                      color: _type == propertyType.Residental
+                                          ? kPropertyCardColor
+                                          : kTextFieldFillColor,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Row(
+                                        children: [
+                                          const Text(
+                                            'Residental',
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const Spacer(),
+                                          Radio(
+                                            activeColor: kHighlightedTextColor,
+                                            value: propertyType.Residental,
+                                            groupValue: _type,
+                                            onChanged: (propertyType? value) {
+                                              setState(() {
+                                                _type = value;
+                                              });
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                               // Spacer(),
 
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Container(
-                                  width: 165,
-                                  decoration: BoxDecoration(
-                                    border: _type == propertyType.Commercial
-                                        ? Border.all(
-                                            color: kHighlightedTextColor)
-                                        : null,
-                                    color: _type == propertyType.Commercial
-                                        ? kPropertyCardColor
-                                        : kTextFieldFillColor,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      children: [
-                                        const Text(
-                                          'Commercial',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const Spacer(),
-                                        Radio(
-                                          activeColor: kHighlightedTextColor,
-                                          value: propertyType.Commercial,
-                                          groupValue: _type,
-                                          onChanged: (propertyType? value) {
-                                            setState(() {
-                                              _type = value;
-                                              print(_type);
-                                            });
-                                          },
-                                        )
-                                      ],
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
+                                  child: Container(
+                                    // width: 165,
+                                    decoration: BoxDecoration(
+                                      border: _type == propertyType.Commercial
+                                          ? Border.all(
+                                              color: kHighlightedTextColor)
+                                          : null,
+                                      color: _type == propertyType.Commercial
+                                          ? kPropertyCardColor
+                                          : kTextFieldFillColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Row(
+                                        children: [
+                                          const Text(
+                                            'Commercial',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const Spacer(),
+                                          Radio(
+                                            activeColor: kHighlightedTextColor,
+                                            value: propertyType.Commercial,
+                                            groupValue: _type,
+                                            onChanged: (propertyType? value) {
+                                              setState(() {
+                                                _type = value;
+                                                print(_type);
+                                              });
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -682,105 +704,109 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       ),
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 6),
-                            child: GestureDetector(
-                              onTap: () => _showDialog(
-                                CupertinoPicker(
-                                  magnification: 1.22,
-                                  squeeze: 1.2,
-                                  useMagnifier: true,
-                                  itemExtent: _kItemExtent,
-                                  // This is called when selected item is changed.
-                                  onSelectedItemChanged: (int selectedItem) {
-                                    setState(() {
-                                      selectedDistrict = selectedItem;
-                                      district = districts![selectedDistrict];
-                                      setTaluka(Taluka[district]);
-                                    });
-                                  },
-                                  children: List<Widget>.generate(
-                                      districts!.length, (int index) {
-                                    print(districts);
-                                    return Center(
-                                      child: Text(
-                                        districts[index],
-                                      ),
-                                    );
-                                  }),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 6),
+                              child: GestureDetector(
+                                onTap: () => _showDialog(
+                                  CupertinoPicker(
+                                    magnification: 1.22,
+                                    squeeze: 1.2,
+                                    useMagnifier: true,
+                                    itemExtent: _kItemExtent,
+                                    // This is called when selected item is changed.
+                                    onSelectedItemChanged: (int selectedItem) {
+                                      setState(() {
+                                        selectedDistrict = selectedItem;
+                                        district = districts![selectedDistrict];
+                                        setTaluka(Taluka[district]);
+                                      });
+                                    },
+                                    children: List<Widget>.generate(
+                                        districts!.length, (int index) {
+                                      print(districts);
+                                      return Center(
+                                        child: Text(
+                                          districts[index],
+                                        ),
+                                      );
+                                    }),
+                                  ),
                                 ),
-                              ),
-                              child: Container(
-                                height: 60,
-                                width: 155,
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: kHighlightedTextColor),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 10),
-                                  child: Text(
-                                    "District : " + district,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600),
+                                child: Container(
+                                  height: 60,
+                                  // width: 155,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: kHighlightedTextColor),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 10),
+                                    child: Text(
+                                      "District : " + district,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: Colors.grey[700],
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 6),
-                            child: GestureDetector(
-                              onTap: () => _showDialog(
-                                CupertinoPicker(
-                                  magnification: 1.22,
-                                  squeeze: 1.2,
-                                  useMagnifier: true,
-                                  itemExtent: _kItemExtent,
-                                  // This is called when selected item is changed.
-                                  onSelectedItemChanged: (int selectedItem) {
-                                    setState(() {
-                                      selectedTaluk = selectedItem;
-                                      taluk = talukas[selectedTaluk];
-                                      print(taluk);
-                                    });
-                                  },
-                                  children: List<Widget>.generate(
-                                      talukas.length, (int index) {
-                                    print(talukas);
-                                    return Center(
-                                      child: Text(
-                                        talukas[index],
-                                      ),
-                                    );
-                                  }),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 6),
+                              child: GestureDetector(
+                                onTap: () => _showDialog(
+                                  CupertinoPicker(
+                                    magnification: 1.22,
+                                    squeeze: 1.2,
+                                    useMagnifier: true,
+                                    itemExtent: _kItemExtent,
+                                    // This is called when selected item is changed.
+                                    onSelectedItemChanged: (int selectedItem) {
+                                      setState(() {
+                                        selectedTaluk = selectedItem;
+                                        taluk = talukas[selectedTaluk];
+                                        print(taluk);
+                                      });
+                                    },
+                                    children: List<Widget>.generate(
+                                        talukas.length, (int index) {
+                                      print(talukas);
+                                      return Center(
+                                        child: Text(
+                                          talukas[index],
+                                        ),
+                                      );
+                                    }),
+                                  ),
                                 ),
-                              ),
-                              child: Container(
-                                height: 60,
-                                width: 155,
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: kHighlightedTextColor),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 10),
-                                  child: Text(
-                                    "Taluka : " + taluk,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600),
+                                child: Container(
+                                  height: 60,
+                                  // width: 155,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: kHighlightedTextColor),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 10),
+                                    child: Text(
+                                      "Taluka : " + taluk,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: Colors.grey[700],
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                    ),
                                   ),
                                 ),
                               ),

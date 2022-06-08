@@ -97,7 +97,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
   }
 
   void property() async {
-    if (Facing == "") {
+    if (face == "") {
       await popUpAlertDialogBox(context, "Kindly Select Facing");
     } else {
       Storage _storage = Storage();
@@ -444,17 +444,20 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 textcontroller: _plotAreaController,
                               ),
                               const Spacer(),
-                             !isLand ? PropertyDetailTile(
-                                HintText: "Building Area(SqFt.)",
-                                onChange: (newValue) {
-                                  setState(() {
-                                    constructionArea = newValue;
-                                    // _bedRoomController.text = newValue;
-                                  });
-                                },
-                                currValue: BedRoom,
-                                textcontroller: _constructionAreaController,
-                              ):Padding(
+                              !isLand
+                                  ? PropertyDetailTile(
+                                      HintText: "Building Area(SqFt.)",
+                                      onChange: (newValue) {
+                                        setState(() {
+                                          constructionArea = newValue;
+                                          // _bedRoomController.text = newValue;
+                                        });
+                                      },
+                                      currValue: BedRoom,
+                                      textcontroller:
+                                          _constructionAreaController,
+                                    )
+                                  : Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0, horizontal: 6),
                                       child: GestureDetector(
@@ -526,8 +529,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                                 (int selectedItem) {
                                               setState(() {
                                                 selectedFace = selectedItem;
-                                                Facing =
-                                                    directions[selectedFace];
+                                                face = directions[selectedFace];
                                               });
                                             },
                                             children: List<Widget>.generate(
@@ -553,7 +555,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0, vertical: 20),
                                             child: Text(
-                                              "Facing : " + Facing,
+                                              "Facing : " + face,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color: Colors.grey[700],
@@ -818,7 +820,8 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-        clipBehavior: Clip.none, children: [
+        clipBehavior: Clip.none,
+        children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

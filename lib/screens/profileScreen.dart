@@ -160,8 +160,7 @@ class _profileScreenState extends State<profileScreen> {
             Expanded(
               flex: 11,
               child: Stack(
-                overflow: Overflow.visible,
-                children: [
+                clipBehavior: Clip.none, children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),

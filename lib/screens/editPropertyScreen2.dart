@@ -351,7 +351,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 children: [
                                   const Text(
                                     'Upload Image',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18),
                                   ),
@@ -369,7 +369,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       onTap: selectImages,
                                       child: const CircleAvatar(
                                         backgroundColor: kPageBackgroundColor,
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.photo_library_sharp,
                                           color: kHighlightedTextColor,
                                         ),
@@ -444,7 +444,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 textcontroller: _plotAreaController,
                               ),
                               const Spacer(),
-                              PropertyDetailTile(
+                             !isLand ? PropertyDetailTile(
                                 HintText: "Building Area(SqFt.)",
                                 onChange: (newValue) {
                                   setState(() {
@@ -454,13 +454,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 },
                                 currValue: BedRoom,
                                 textcontroller: _constructionAreaController,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              !isLand
-                                  ? Padding(
+                              ):Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0, horizontal: 6),
                                       child: GestureDetector(
@@ -502,6 +496,64 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                                 horizontal: 8.0, vertical: 20),
                                             child: Text(
                                               "Facing : " + face,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  color: Colors.grey[700],
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              !isLand
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 6),
+                                      child: GestureDetector(
+                                        onTap: () => _showDialog(
+                                          CupertinoPicker(
+                                            magnification: 1.22,
+                                            squeeze: 1.2,
+                                            useMagnifier: true,
+                                            itemExtent: _kItemExtent,
+                                            // This is called when selected item is changed.
+                                            onSelectedItemChanged:
+                                                (int selectedItem) {
+                                              setState(() {
+                                                selectedFace = selectedItem;
+                                                Facing =
+                                                    directions[selectedFace];
+                                              });
+                                            },
+                                            children: List<Widget>.generate(
+                                                directions.length, (int index) {
+                                              return Center(
+                                                child: Text(
+                                                  directions[index],
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          height: 70,
+                                          width: 165,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: kHighlightedTextColor),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 20),
+                                            child: Text(
+                                              "Facing : " + Facing,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color: Colors.grey[700],
@@ -766,8 +818,7 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-        overflow: Overflow.visible,
-        children: [
+        clipBehavior: Clip.none, children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

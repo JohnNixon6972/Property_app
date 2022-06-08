@@ -142,14 +142,6 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
   void initState() {
     // TODO: implement initState
     readDetails(propertyToEdit, States, Districts);
-    PropertyTitle = "";
-    PropertyAddress = "";
-    state = "";
-    district = "";
-    city = "";
-    taluk = "";
-    selectedDistrict = 0;
-    selectedTaluk = 0;
     super.initState();
   }
 

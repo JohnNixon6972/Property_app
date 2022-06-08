@@ -255,24 +255,25 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Transform.rotate(
-                        angle: 270 * pi / 180,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AddPropertiesScreen.id);
-                          },
-                          child: const Icon(
-                            Icons.expand_less_rounded,
-                            size: 40,
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10.0),
+                            horizontal: 5, vertical: 10.0),
                         child: Row(
-                          children: const [
+                          children: [
+                            Transform.rotate(
+                              angle: 270 * pi / 180,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, AddPropertiesScreen.id);
+                                },
+                                child: const Icon(
+                                  Icons.expand_less_rounded,
+                                  size: 40,
+                                ),
+                              ),
+                            ),
+                            Spacer(),
                             Text(
                               'Add Properties',
                               style: TextStyle(
@@ -794,7 +795,7 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(15),

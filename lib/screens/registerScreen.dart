@@ -2,14 +2,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:email_auth/email_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import '../components/alertPopUp.dart';
-import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import '../components/otpVerification.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/services.dart';

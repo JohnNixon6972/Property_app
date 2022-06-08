@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:property_app/screens/myPropertiesScreen.dart';
 import './screens/homescreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'currentUserInformation.dart';
@@ -53,9 +54,7 @@ class Storage {
         .doc(PropertyTitle)
         .update({"isSetImages": "True"});
     print("Added Property Images");
-    isUpdate
-        ? Navigator.pop(context)
-        : Navigator.pushNamed(context, HomeScreen.id);
+     Navigator.pushNamed(context, HomeScreen.id);
   }
 
   Future<void> uploadPropertyDetails(

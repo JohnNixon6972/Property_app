@@ -104,7 +104,6 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
       setState(
         () {
           isloading = true;
-          print("loading");
           String propertyAddress = PropertyAddress;
           String propertyTitle = PropertyTitle;
           String category = getCategory();
@@ -116,7 +115,6 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
           String bathRoom = BathRoom;
           String price = Price;
           String Face = face;
-          isloading = true;
           print("loading");
           _storage.uploadPropertyDetails(
               context,

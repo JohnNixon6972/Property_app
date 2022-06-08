@@ -641,8 +641,7 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-        overflow: Overflow.visible,
-        children: [
+        clipBehavior: Clip.none, children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

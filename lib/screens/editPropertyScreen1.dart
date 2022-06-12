@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'editPropertyScreen2.dart';
 import 'myPropertiesScreen.dart';
 import '../constants.dart';
@@ -57,8 +58,8 @@ String getTo() {
   }
 }
 
-late String PropertyTitle;
-late String PropertyAddress;
+late String PropertyTitle = "";
+late String PropertyAddress = "";
 late String state = "";
 late String district = "";
 late String city = "";
@@ -105,18 +106,42 @@ void readDetails(myProperty propertyToEdit, List<String> States,
   _PropertyCityController.text = propertyToEdit.city;
 }
 
-var _PropertyTitleController = TextEditingController();
-var _PropertyAddressController = TextEditingController();
-var _PropertyCityController = TextEditingController();
+final _PropertyTitleController = TextEditingController();
+final _PropertyAddressController = TextEditingController();
+final _PropertyCityController = TextEditingController();
 
 class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
+  String? get _errorText {
+    final _selectedcity = _PropertyCityController.value.text;
+    final _selectedaddress = _PropertyAddressController.value.text;
+    final _selectedtitle = _PropertyTitleController.value.text;
+    if (_selectedcity.isEmpty ||
+        _selectedaddress.isEmpty ||
+        _selectedtitle.isEmpty) {
+      return 'Required*';
+    }
+    return null;
+  }
+
+  void push() {
+    // if there is no error text
+    if (district == "" || taluk == "") {
+      popUpAlertDialogBox(context, "Kindly select District and Taluk");
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  editPropertyScreen2(propertyToEdit: propertyToEdit)));
+    }
+  }
+
   myProperty propertyToEdit;
   _EditPropertyScreen1State({required this.propertyToEdit});
   @override
   void initState() {
     // TODO: implement initState
     readDetails(propertyToEdit, States, Districts);
-
     super.initState();
   }
 
@@ -823,12 +848,15 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                             style: TextStyle(color: kSubCategoryColor),
                           ),
                           TextField(
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                errorText: _errorText),
                             // controller: _controller,
                             controller: _PropertyTitleController,
                             onChanged: (newValue) {
-                              PropertyTitle = newValue;
+                              setState(() {
+                                PropertyTitle = newValue;
+                              });
                             },
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
@@ -854,11 +882,14 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                           Expanded(
                             child: TextField(
                               onChanged: (newValue) {
-                                PropertyAddress = newValue;
+                                setState(() {
+                                  PropertyAddress = newValue;
+                                });
                               },
                               controller: _PropertyAddressController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
+                                  errorText: _errorText,
                                   hintText: "Address",
                                   hintStyle:
                                       TextStyle(color: kSubCategoryColor)),
@@ -889,11 +920,14 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextField(
                             onChanged: (newValue) {
-                              city = newValue;
+                              setState(() {
+                                city = newValue;
+                              });
                             },
                             controller: _PropertyCityController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
+                                errorText: _errorText,
                                 hintText: "City",
                                 hintStyle: TextStyle(color: kSubCategoryColor)),
                           ),
@@ -902,33 +936,61 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                     ),
                     Spacer(),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: kTextFieldFillColor,
-                          child: Transform.rotate(
-                            angle: 90 * pi / 180,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            editPropertyScreen2(
-                                                propertyToEdit:
-                                                    propertyToEdit)));
-                              },
-                              child: Icon(
-                                Icons.expand_less_rounded,
-                                color: kHighlightedTextColor,
-                                size: 70,
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 50,
+                          width: 100,
+                          child: ElevatedButton(
+                            // only enable the button if the text is not empty
+
+                            onPressed: (_PropertyAddressController
+                                        .value.text.isNotEmpty &&
+                                    _PropertyCityController
+                                        .value.text.isNotEmpty &&
+                                    _PropertyTitleController
+                                        .value.text.isNotEmpty)
+                                ? push
+                                : null,
+                            child: const Text(
+                              'Next',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              primary: kPrimaryButtonColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
                               ),
                             ),
                           ),
+                        )
+                        // Center(
+                        //   child: CircleAvatar(
+                        //     radius: 35,
+                        //     backgroundColor: kTextFieldFillColor,
+                        //     child: Transform.rotate(
+                        //       angle: 90 * pi / 180,
+                        //       child: GestureDetector(
+                        //         onTap: () {
+                        //           Navigator.push(
+                        //               context,
+                        //               MaterialPageRoute(
+                        //                   builder: (context) =>
+                        //                       editPropertyScreen2(
+                        //                           propertyToEdit:
+                        //                               propertyToEdit)));
+                        //         },
+                        //         child: Icon(
+                        //           Icons.expand_less_rounded,
+                        //           color: kHighlightedTextColor,
+                        //           size: 70,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         ),
-                      ),
-                    ),
                   ],
                 )
               ],

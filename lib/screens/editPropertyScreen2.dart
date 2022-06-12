@@ -1,7 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'dart:io';
 import 'myPropertiesScreen.dart';
@@ -33,15 +33,16 @@ late String Price = "";
 late String face = "";
 late String state = "";
 late String district = "";
-var _controller = TextEditingController();
-TextEditingController _areaController = TextEditingController();
-TextEditingController _priceController = TextEditingController();
-TextEditingController _bedRoomController = TextEditingController();
-TextEditingController _bathRoomController = TextEditingController();
-TextEditingController _constructionAreaController = TextEditingController();
-TextEditingController _lenghtController = TextEditingController();
-TextEditingController _widthController = TextEditingController();
-TextEditingController _centController = TextEditingController();
+final _controller = TextEditingController();
+final _plotAreaController = TextEditingController();
+final _widthController = TextEditingController();
+final _lengthController = TextEditingController();
+final _centController = TextEditingController();
+final _priceController = TextEditingController();
+final _constructionAreaController = TextEditingController();
+final _bedRoomController = TextEditingController();
+final _bathRoomController = TextEditingController();
+
 late int selectedFace;
 List<String> directions = ["North", "South", "East", "West"];
 
@@ -62,11 +63,11 @@ void readDetails(myProperty propertyToEdit) {
   district = propertyToEdit.district;
   constructionArea = propertyToEdit.constructionArea;
   _controller.text = propertyToEdit.propertyDescription;
-  _areaController.text = propertyToEdit.area;
+  _plotAreaController.text = propertyToEdit.area;
   _priceController.text = propertyToEdit.price;
   _bedRoomController.text = propertyToEdit.bedRoom;
   _bathRoomController.text = propertyToEdit.bathRoom;
-  _lenghtController.text = propertyToEdit.lenght;
+  _lengthController.text = propertyToEdit.lenght;
   _widthController.text = propertyToEdit.width;
   _centController.text = propertyToEdit.cent;
   _constructionAreaController.text = propertyToEdit.constructionArea;
@@ -78,9 +79,70 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
   @override
   void initState() {
     // TODO: implement initState
+    PropertyDescription = "";
+    plotArea = "";
+    constructionArea = "";
+    lenght = "";
+    width = "";
+    cent = "";
+    BedRoom = "";
+    BathRoom = "";
+    Price = "";
+    face = "";
+    state = "";
+    district = "";
     readDetails(widget.propertyToEdit);
     imageFileList = [];
     super.initState();
+  }
+
+  void property() async {
+    if (face == "") {
+      await popUpAlertDialogBox(context, "Kindly Select Facing");
+    } else {
+      Storage _storage = Storage();
+      setState(
+        () {
+          isloading = true;
+          String propertyAddress = PropertyAddress;
+          String propertyTitle = PropertyTitle;
+          String category = getCategory();
+          String to = getTo();
+          String type = getType();
+          String propertyDescription = PropertyDescription;
+          String PlotArea = plotArea;
+          String bedRoom = BedRoom;
+          String bathRoom = BathRoom;
+          String price = Price;
+          String Face = face;
+          print("loading");
+          _storage.uploadPropertyDetails(
+              context,
+              city,
+              taluk,
+              propertyAddress,
+              propertyTitle,
+              category,
+              to,
+              Face,
+              type,
+              propertyDescription,
+              PlotArea,
+              cent,
+              lenght,
+              width,
+              _constructionAreaController.text,
+              bedRoom,
+              bathRoom,
+              price,
+              state,
+              district,
+              to == widget.propertyToEdit.to && true);
+          _storage.uploadPropertyImages(
+              context, imageFileList, propertyTitle, to, true);
+        },
+      );
+    }
   }
 
   Future<void> selectImages() async {
@@ -115,6 +177,14 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                 child: child,
               ),
             ));
+  }
+
+  String? get _errorText {
+    final _propertyDescription = _controller.value.text;
+    if (_propertyDescription.isEmpty) {
+      return "Required*";
+    }
+    return null;
   }
 
   Widget buildListView() {
@@ -220,6 +290,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
             : Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,7 +349,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 children: [
                                   const Text(
                                     'Upload Image',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18),
                                   ),
@@ -296,7 +367,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       onTap: selectImages,
                                       child: const CircleAvatar(
                                         backgroundColor: kPageBackgroundColor,
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.photo_library_sharp,
                                           color: kHighlightedTextColor,
                                         ),
@@ -336,10 +407,13 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                 ),
                                 TextField(
                                   onChanged: (newValue) {
-                                    PropertyDescription = newValue;
+                                    setState(() {
+                                      PropertyDescription = newValue;
+                                    });
                                   },
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none),
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      errorText: _errorText),
                                   controller: _controller,
                                   style: const TextStyle(
                                       fontSize: 20,
@@ -365,20 +439,74 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                   });
                                 },
                                 currValue: plotArea,
-                                textcontroller: _areaController,
+                                textcontroller: _plotAreaController,
                               ),
                               const Spacer(),
-                              PropertyDetailTile(
-                                HintText: "Building Area(SqFt.)",
-                                onChange: (newValue) {
-                                  setState(() {
-                                    constructionArea = newValue;
-                                    // _bedRoomController.text = newValue;
-                                  });
-                                },
-                                currValue: BedRoom,
-                                textcontroller: _constructionAreaController,
-                              ),
+                              !isLand
+                                  ? PropertyDetailTile(
+                                      HintText: "Building Area(SqFt.)",
+                                      onChange: (newValue) {
+                                        setState(() {
+                                          constructionArea = newValue;
+                                          // _bedRoomController.text = newValue;
+                                        });
+                                      },
+                                      currValue: BedRoom,
+                                      textcontroller:
+                                          _constructionAreaController,
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 6),
+                                      child: GestureDetector(
+                                        onTap: () => _showDialog(
+                                          CupertinoPicker(
+                                            magnification: 1.22,
+                                            squeeze: 1.2,
+                                            useMagnifier: true,
+                                            itemExtent: _kItemExtent,
+                                            // This is called when selected item is changed.
+                                            onSelectedItemChanged:
+                                                (int selectedItem) {
+                                              setState(() {
+                                                selectedFace = selectedItem;
+                                                face = directions[selectedFace];
+                                              });
+                                            },
+                                            children: List<Widget>.generate(
+                                                directions.length, (int index) {
+                                              return Center(
+                                                child: Text(
+                                                  directions[index],
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          height: 70,
+                                          width: 165,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: kHighlightedTextColor),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 20),
+                                            child: Text(
+                                              "Facing : " + face,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  color: Colors.grey[700],
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
                             ],
                           ),
                           Row(
@@ -460,7 +588,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                                       },
                                     )
                                   : PropertyDetailTile(
-                                      textcontroller: _lenghtController,
+                                      textcontroller: _lengthController,
                                       currValue: lenght,
                                       HintText: "Length",
                                       onChange: (newValue) {
@@ -510,74 +638,115 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                       // const Spacer(),
                       Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Storage _storage = Storage();
-                              setState(
-                                () {
-                                  isloading = true;
-                                  print("loading");
-                                  String propertyAddress = PropertyAddress;
-                                  String propertyTitle = PropertyTitle;
-                                  String category = getCategory();
-                                  String to = getTo();
-                                  String type = getType();
-                                  String propertyDescription =
-                                      PropertyDescription;
-                                  String PlotArea = plotArea;
-                                  String bedRoom = BedRoom;
-                                  String bathRoom = BathRoom;
-                                  String price = Price;
-                                  String Face = face;
-                                  isloading = true;
-                                  print("loading");
-                                  _storage.uploadPropertyDetails(
-                                      context,
-                                      city,
-                                      taluk,
-                                      propertyAddress,
-                                      propertyTitle,
-                                      category,
-                                      to,
-                                      Face,
-                                      type,
-                                      propertyDescription,
-                                      PlotArea,
-                                      cent,
-                                      lenght,
-                                      width,
-                                      _constructionAreaController.text,
-                                      bedRoom,
-                                      bathRoom,
-                                      price,
-                                      state,
-                                      district,
-                                      to == widget.propertyToEdit.to && true);
-                                  _storage.uploadPropertyImages(context,
-                                      imageFileList, propertyTitle, to, true);
-                                },
-                              );
-                            },
-                            child: Container(
-                              height: 70,
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 65,
                               width: 160,
-                              decoration: BoxDecoration(
-                                color: kHighlightedTextColor,
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Save',
-                                  style: const TextStyle(
-                                      color: kSubCategoryColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400),
+                              child: ElevatedButton(
+                                onPressed: ((_controller
+                                                .value.text.isNotEmpty &&
+                                            (_plotAreaController.value.text.isNotEmpty &&
+                                                _widthController
+                                                    .value.text.isNotEmpty &&
+                                                _lengthController
+                                                    .value.text.isNotEmpty &&
+                                                _centController
+                                                    .value.text.isNotEmpty &&
+                                                _priceController
+                                                    .value.text.isNotEmpty)) ||
+                                        (_controller.value.text.isNotEmpty &&
+                                            (_constructionAreaController
+                                                    .value.text.isNotEmpty &&
+                                                _bedRoomController
+                                                    .value.text.isNotEmpty &&
+                                                _bathRoomController
+                                                    .value.text.isNotEmpty)))
+                                    ? property
+                                    : null,
+                                child: const Center(
+                                  child: Text('save',
+                                      style: TextStyle(
+                                          color:
+                                              kBottomNavigationBackgroundColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400)),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  // elevation: 10,
+                                  primary: kPrimaryButtonColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(35),
+                                  ),
                                 ),
                               ),
+                            )
+                            // GestureDetector(
+                            //   onTap: () {
+                            // Storage _storage = Storage();
+                            // setState(
+                            //   () {
+                            //     isloading = true;
+                            //     print("loading");
+                            //     String propertyAddress = PropertyAddress;
+                            //     String propertyTitle = PropertyTitle;
+                            //     String category = getCategory();
+                            //     String to = getTo();
+                            //     String type = getType();
+                            //     String propertyDescription =
+                            //         PropertyDescription;
+                            //     String PlotArea = plotArea;
+                            //     String bedRoom = BedRoom;
+                            //     String bathRoom = BathRoom;
+                            //     String price = Price;
+                            //     String Face = face;
+                            //     isloading = true;
+                            //     print("loading");
+                            //     _storage.uploadPropertyDetails(
+                            //         context,
+                            //         city,
+                            //         taluk,
+                            //         propertyAddress,
+                            //         propertyTitle,
+                            //         category,
+                            //         to,
+                            //         Face,
+                            //         type,
+                            //         propertyDescription,
+                            //         PlotArea,
+                            //         cent,
+                            //         lenght,
+                            //         width,
+                            //         _constructionAreaController.text,
+                            //         bedRoom,
+                            //         bathRoom,
+                            //         price,
+                            //         state,
+                            //         district,
+                            //         to == widget.propertyToEdit.to && true);
+                            //     _storage.uploadPropertyImages(context,
+                            //         imageFileList, propertyTitle, to, true);
+                            //   },
+                            // );
+                            //   },
+                            //   child: Container(
+                            //     height: 70,
+                            //     width: 160,
+                            //     decoration: BoxDecoration(
+                            //       color: kHighlightedTextColor,
+                            //       borderRadius: BorderRadius.circular(35),
+                            //     ),
+                            //     child: const Center(
+                            //       child: Text(
+                            //         'Save',
+                            //         style: const TextStyle(
+                            //             color: kSubCategoryColor,
+                            //             fontSize: 18,
+                            //             fontWeight: FontWeight.w400),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             ),
-                          ),
-                        ),
                       )
                     ],
                   ),
@@ -598,6 +767,13 @@ class PropertyDetailTile extends StatelessWidget {
       required this.onChange,
       required this.currValue,
       required this.textcontroller});
+  String? get _errorFieldsText {
+    final _fieldsEntered = textcontroller.value.text;
+    if (_fieldsEntered.isEmpty) {
+      return 'Required*';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -622,6 +798,7 @@ class PropertyDetailTile extends StatelessWidget {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
             decoration: InputDecoration(
               border: InputBorder.none,
+              errorText: _errorFieldsText,
               hintText: HintText,
               hintStyle:
                   const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
@@ -641,7 +818,10 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-        clipBehavior: Clip.none, children: [
+
+        clipBehavior: Clip.none,
+        children: [
+
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

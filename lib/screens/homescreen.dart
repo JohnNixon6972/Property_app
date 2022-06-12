@@ -10,6 +10,7 @@ import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
 import '../constants.dart';
 // import '../components/bottomNavigationBar.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -562,325 +563,328 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Hey ${userInfo.name} ${Emojis.wavingHandLightSkinTone}',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                            color: kBottomNavigationBackgroundColor,
-                          ),
-                        ),
-                        const Text(
-                          "Let's find your best residence!",
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, profileScreen.id);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: userInfo.profileImgUrl == ""
-                          ? const Image(
-                              height: 70,
-                              width: 70,
-                              image: AssetImage('images/profile_img9.png'))
-                          : CachedNetworkImage(
-                              cacheManager: customCacheManager,
-                              key: UniqueKey(),
-                              imageUrl: userInfo.profileImgUrl,
-                              height: 70,
-                              width: 70,
-                              // maxHeightDiskCache: 230,
-                              // maxWidthDiskCache: 190,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(
-                                  color: kHighlightedTextColor,
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                color: Colors.black12,
-                                child: const Icon(
-                                  Icons.error,
-                                  color: kHighlightedTextColor,
-                                ),
-                              ),
-                            ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-              child: Row(
-                children: [
-                  const Text(
-                    'Category',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, aboutUs.id);
-                    },
-                    child: const Icon(
-                      Icons.people,
-                      color: kHighlightedTextColor,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Padding(
+        child: DoubleBackToCloseApp(
+          snackBar: const SnackBar(content: Text('Tap back again to leave')),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
                 padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-                child: ListView(
-                  clipBehavior: Clip.none,
-                  physics: const BouncingScrollPhysics(),
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  scrollDirection: Axis.horizontal,
+                child: Row(
                   children: [
-                    CategoryCard(
-                      onTap: () {
-                        setState(() {
-                          categorySelected = "All";
-                        });
-                      },
-                      btn_color: categorySelected == "All"
-                          ? kPrimaryButtonColor
-                          : kSecondaryButtonColor,
-                      text: 'All',
-                      width: 60,
-                      text_color: categorySelected == "All"
-                          ? Colors.white
-                          : kSubCategoryColor,
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hey ${userInfo.name} ${Emojis.wavingHandLightSkinTone}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              color: kBottomNavigationBackgroundColor,
+                            ),
+                          ),
+                          const Text(
+                            "Let's find your best residence!",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
                     ),
-                    CategoryCard(
+                    GestureDetector(
                       onTap: () {
-                        setState(() {
-                          categorySelected = "Plot";
-                        });
+                        Navigator.pushNamed(context, profileScreen.id);
                       },
-                      btn_color: categorySelected == "Plot"
-                          ? kPrimaryButtonColor
-                          : kSecondaryButtonColor,
-                      text: 'Plot',
-                      width: 80,
-                      text_color: categorySelected == "Plot"
-                          ? Colors.white
-                          : kSubCategoryColor,
-                    ),
-                    CategoryCard(
-                      onTap: () {
-                        setState(() {
-                          categorySelected = "Land";
-                        });
-                      },
-                      btn_color: categorySelected == "Land"
-                          ? kPrimaryButtonColor
-                          : kSecondaryButtonColor,
-                      text: 'Land',
-                      width: 80,
-                      text_color: categorySelected == "Land"
-                          ? Colors.white
-                          : kSubCategoryColor,
-                    ),
-                    CategoryCard(
-                      onTap: () {
-                        setState(() {
-                          categorySelected = "House";
-                        });
-                      },
-                      btn_color: categorySelected == "House"
-                          ? kPrimaryButtonColor
-                          : kSecondaryButtonColor,
-                      text: 'House',
-                      width: 80,
-                      text_color: categorySelected == "House"
-                          ? Colors.white
-                          : kSubCategoryColor,
-                    ),
-                    CategoryCard(
-                      onTap: () {
-                        setState(() {
-                          categorySelected = "Building";
-                        });
-                      },
-                      btn_color: categorySelected == "Building"
-                          ? kPrimaryButtonColor
-                          : kSecondaryButtonColor,
-                      text: 'Building',
-                      width: 90,
-                      text_color: categorySelected == "Building"
-                          ? Colors.white
-                          : kSubCategoryColor,
-                    ),
-                    CategoryCard(
-                      onTap: () {
-                        setState(() {
-                          categorySelected = "Appartment";
-                        });
-                      },
-                      btn_color: categorySelected == "Appartment"
-                          ? kPrimaryButtonColor
-                          : kSecondaryButtonColor,
-                      text: 'Appartment',
-                      width: 90,
-                      text_color: categorySelected == "Appartment"
-                          ? Colors.white
-                          : kSubCategoryColor,
-                    ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: userInfo.profileImgUrl == ""
+                            ? const Image(
+                                height: 70,
+                                width: 70,
+                                image: AssetImage('images/profile_img9.png'))
+                            : CachedNetworkImage(
+                                cacheManager: customCacheManager,
+                                key: UniqueKey(),
+                                imageUrl: userInfo.profileImgUrl,
+                                height: 70,
+                                width: 70,
+                                // maxHeightDiskCache: 230,
+                                // maxWidthDiskCache: 190,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.black12,
+                                  child: const Icon(
+                                    Icons.error,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    )
                   ],
                 ),
               ),
-            ),
-            Expanded(
-              flex: 32,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 20, left: 15, right: 15),
-                        child: Text(
-                          'Best for you ${Emojis.smilingFaceWithHeartEyes}',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 15.0, left: 15.0, right: 15.0),
-                        child: Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Center(
-                                child: Text(
-                                  "Show admin Only Properties",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: kHighlightedTextColor),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            ToggleButtons(
-                              constraints: const BoxConstraints(minHeight: 8),
-                              fillColor: SelectedToggleBottonColor,
-                              // disabledColor: Colors.green,
-                              // focusColor: Colors.green,
-
-                              borderWidth: 2,
-                              selectedColor: Colors.white,
-                              borderRadius: BorderRadius.circular(35),
-                              children: const <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'No',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Yes',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                              onPressed: (int index) {
-                                setState(() {
-                                  if (index == 0) {
-                                    SelectedToggleBottonColor = kNo;
-                                  } else if (index == 1) {
-                                    SelectedToggleBottonColor = kYes;
-                                  }
-
-                                  displayAdminProperties =
-                                      index != 0 ? true : false;
-                                  print(displayAdminProperties);
-                                  for (int i = 0; i < isSelected.length; i++) {
-                                    isSelected[i] = i == index;
-                                  }
-                                });
-                              },
-                              isSelected: isSelected,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-                        child: Text(
-                          'Properties on Sale ${Emojis.buildingConstruction}',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w900,
-                              color: kSubCategoryColor),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 415,
-                        child: PropertiesOnSaleAdv(),
-                      ),
-                      const Divider(
-                        thickness: 1,
+              Padding(
+                padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Category',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, aboutUs.id);
+                      },
+                      child: const Icon(
+                        Icons.people,
                         color: kHighlightedTextColor,
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 5, left: 15, right: 15),
-                        child: Text(
-                          'Properties on Rent ${Emojis.moneyBag}',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w900,
-                              color: kSubCategoryColor),
-                        ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                  child: ListView(
+                    clipBehavior: Clip.none,
+                    physics: const BouncingScrollPhysics(),
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      CategoryCard(
+                        onTap: () {
+                          setState(() {
+                            categorySelected = "All";
+                          });
+                        },
+                        btn_color: categorySelected == "All"
+                            ? kPrimaryButtonColor
+                            : kSecondaryButtonColor,
+                        text: 'All',
+                        width: 60,
+                        text_color: categorySelected == "All"
+                            ? Colors.white
+                            : kSubCategoryColor,
                       ),
-                      SizedBox(
-                        height: 415,
-                        child: PropertiesOnRentAdv(),
+                      CategoryCard(
+                        onTap: () {
+                          setState(() {
+                            categorySelected = "Plot";
+                          });
+                        },
+                        btn_color: categorySelected == "Plot"
+                            ? kPrimaryButtonColor
+                            : kSecondaryButtonColor,
+                        text: 'Plot',
+                        width: 80,
+                        text_color: categorySelected == "Plot"
+                            ? Colors.white
+                            : kSubCategoryColor,
+                      ),
+                      CategoryCard(
+                        onTap: () {
+                          setState(() {
+                            categorySelected = "Land";
+                          });
+                        },
+                        btn_color: categorySelected == "Land"
+                            ? kPrimaryButtonColor
+                            : kSecondaryButtonColor,
+                        text: 'Land',
+                        width: 80,
+                        text_color: categorySelected == "Land"
+                            ? Colors.white
+                            : kSubCategoryColor,
+                      ),
+                      CategoryCard(
+                        onTap: () {
+                          setState(() {
+                            categorySelected = "House";
+                          });
+                        },
+                        btn_color: categorySelected == "House"
+                            ? kPrimaryButtonColor
+                            : kSecondaryButtonColor,
+                        text: 'House',
+                        width: 80,
+                        text_color: categorySelected == "House"
+                            ? Colors.white
+                            : kSubCategoryColor,
+                      ),
+                      CategoryCard(
+                        onTap: () {
+                          setState(() {
+                            categorySelected = "Building";
+                          });
+                        },
+                        btn_color: categorySelected == "Building"
+                            ? kPrimaryButtonColor
+                            : kSecondaryButtonColor,
+                        text: 'Building',
+                        width: 90,
+                        text_color: categorySelected == "Building"
+                            ? Colors.white
+                            : kSubCategoryColor,
+                      ),
+                      CategoryCard(
+                        onTap: () {
+                          setState(() {
+                            categorySelected = "Appartment";
+                          });
+                        },
+                        btn_color: categorySelected == "Appartment"
+                            ? kPrimaryButtonColor
+                            : kSecondaryButtonColor,
+                        text: 'Appartment',
+                        width: 90,
+                        text_color: categorySelected == "Appartment"
+                            ? Colors.white
+                            : kSubCategoryColor,
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-            // BottomPageNavigationBar(
-            //   flex_by: 4,
-            //   page: HomeScreen.id,
-            // ),
-          ],
+              Expanded(
+                flex: 32,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: ListView(
+                      scrollDirection: Axis.vertical,
+                      physics: const BouncingScrollPhysics(),
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                          child: Text(
+                            'Best for you ${Emojis.smilingFaceWithHeartEyes}',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 15.0, left: 15.0, right: 15.0),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: Center(
+                                  child: Text(
+                                    "Show admin Only Properties",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: kHighlightedTextColor),
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                              ToggleButtons(
+                                constraints: const BoxConstraints(minHeight: 8),
+                                fillColor: SelectedToggleBottonColor,
+                                // disabledColor: Colors.green,
+                                // focusColor: Colors.green,
+            
+                                borderWidth: 2,
+                                selectedColor: Colors.white,
+                                borderRadius: BorderRadius.circular(35),
+                                children: const <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'No',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Yes',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                                onPressed: (int index) {
+                                  setState(() {
+                                    if (index == 0) {
+                                      SelectedToggleBottonColor = kNo;
+                                    } else if (index == 1) {
+                                      SelectedToggleBottonColor = kYes;
+                                    }
+            
+                                    displayAdminProperties =
+                                        index != 0 ? true : false;
+                                    print(displayAdminProperties);
+                                    for (int i = 0; i < isSelected.length; i++) {
+                                      isSelected[i] = i == index;
+                                    }
+                                  });
+                                },
+                                isSelected: isSelected,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                          child: Text(
+                            'Properties on Sale ${Emojis.buildingConstruction}',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900,
+                                color: kSubCategoryColor),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 415,
+                          child: PropertiesOnSaleAdv(),
+                        ),
+                        const Divider(
+                          thickness: 1,
+                          color: kHighlightedTextColor,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 5, left: 15, right: 15),
+                          child: Text(
+                            'Properties on Rent ${Emojis.moneyBag}',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900,
+                                color: kSubCategoryColor),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 415,
+                          child: PropertiesOnRentAdv(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // BottomPageNavigationBar(
+              //   flex_by: 4,
+              //   page: HomeScreen.id,
+              // ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: const scaffoldBottomAppBar(

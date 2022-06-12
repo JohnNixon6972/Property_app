@@ -1,6 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/previewProperty.dart';
@@ -34,12 +37,82 @@ late String cent = "";
 List<XFile>? imageFileList = [];
 
 class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
-  final ImagePicker imagePicker = ImagePicker();
   @override
   void initState() {
+    PropertyDescription = "";
+    PlotArea = "";
+    ConstructionArea = "";
+    Facing = "";
+    BedRoom = "";
+    BathRoom = "";
+    Price = "";
+    lenght = "";
+    width = "";
+    cent = "";
     imageFileList = [];
     super.initState();
   }
+
+  String? get _errorText {
+    final _propertyDescription = _controller.value.text;
+    if (_propertyDescription.isEmpty) {
+      return 'Required*';
+    }
+    return null;
+  }
+
+  void property() async {
+    if (Facing == "") {
+      await popUpAlertDialogBox(context, "Kindly Select Facing");
+    } else {
+      if (imageFileList!.length == 0) {
+        await popUpAlertDialogBox(context, "Kindly Uplaod Property Images");
+      } else {
+        Storage _storage = Storage();
+        setState(() {
+          isloading = true;
+          String propertyAddress = PropertyAddress;
+          String propertyTitle = PropertyTitle;
+          String category = getCategory();
+          String to = getTo();
+          String type = getType();
+          String propertyDescription = PropertyDescription;
+          String squareFit = ConstructionArea;
+          String bedRoom = BedRoom;
+          String bathRoom = BathRoom;
+          String price = Price;
+
+          print("loading");
+          _storage.uploadPropertyDetails(
+              context,
+              city,
+              taluk,
+              propertyAddress,
+              propertyTitle,
+              category,
+              to,
+              Facing,
+              type,
+              propertyDescription,
+              PlotArea,
+              cent,
+              lenght,
+              width,
+              squareFit,
+              bedRoom,
+              bathRoom,
+              price,
+              "Tamil Nadu",
+              district,
+              false);
+          _storage.uploadPropertyImages(
+              context, imageFileList, propertyTitle, to, false);
+        });
+      }
+    }
+  }
+
+  final ImagePicker imagePicker = ImagePicker();
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
@@ -182,24 +255,25 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Transform.rotate(
-                        angle: 270 * pi / 180,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AddPropertiesScreen.id);
-                          },
-                          child: const Icon(
-                            Icons.expand_less_rounded,
-                            size: 40,
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10.0),
+                            horizontal: 5, vertical: 10.0),
                         child: Row(
-                          children: const [
+                          children: [
+                            Transform.rotate(
+                              angle: 270 * pi / 180,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, AddPropertiesScreen.id);
+                                },
+                                child: const Icon(
+                                  Icons.expand_less_rounded,
+                                  size: 40,
+                                ),
+                              ),
+                            ),
+                            Spacer(),
                             Text(
                               'Add Properties',
                               style: TextStyle(
@@ -295,10 +369,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                 ),
                                 TextField(
                                   onChanged: (newValue) {
-                                    PropertyDescription = newValue;
+                                    setState(() {
+                                      PropertyDescription = newValue;
+                                    });
                                   },
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none),
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      errorText: _errorText),
                                   controller: _controller,
                                   style: const TextStyle(
                                       fontSize: 20,
@@ -322,8 +399,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     PlotArea = newValue;
                                   });
                                 },
+                                fieldsController: _plotAreaController,
                               ),
-                              const Spacer(),
+                              // const Spacer(),
                               !isLand
                                   ? PropertyDetailTile(
                                       HintText: "Building Area(SqFt.)",
@@ -332,55 +410,63 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                           ConstructionArea = newValue;
                                         });
                                       },
+                                      fieldsController:
+                                          _constructionAreaController,
                                     )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 6),
-                                      child: GestureDetector(
-                                        onTap: () => _showDialog(
-                                          CupertinoPicker(
-                                            magnification: 1.22,
-                                            squeeze: 1.2,
-                                            useMagnifier: true,
-                                            itemExtent: _kItemExtent,
-                                            // This is called when selected item is changed.
-                                            onSelectedItemChanged:
-                                                (int selectedItem) {
-                                              setState(() {
-                                                selectedFace = selectedItem;
-                                                Facing =
-                                                    directions[selectedFace];
-                                              });
-                                            },
-                                            children: List<Widget>.generate(
-                                                directions.length, (int index) {
-                                              return Center(
-                                                child: Text(
-                                                  directions[index],
-                                                ),
-                                              );
-                                            }),
+                                  : Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 6),
+                                        child: GestureDetector(
+                                          onTap: () => _showDialog(
+                                            CupertinoPicker(
+                                              magnification: 1.22,
+                                              squeeze: 1.2,
+                                              useMagnifier: true,
+                                              itemExtent: _kItemExtent,
+                                              // This is called when selected item is changed.
+                                              onSelectedItemChanged:
+                                                  (int selectedItem) {
+                                                setState(() {
+                                                  selectedFace = selectedItem;
+                                                  Facing =
+                                                      directions[selectedFace];
+                                                });
+                                              },
+                                              children: List<Widget>.generate(
+                                                  directions.length,
+                                                  (int index) {
+                                                return Center(
+                                                  child: Text(
+                                                    directions[index],
+                                                  ),
+                                                );
+                                              }),
+                                            ),
                                           ),
-                                        ),
-                                        child: Container(
-                                          height: 70,
-                                          width: 165,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: kHighlightedTextColor),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 20),
-                                            child: Text(
-                                              "Facing : " + Facing,
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: Colors.grey[700],
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600),
+                                          child: Container(
+                                            height: 70,
+                                            // width: 165,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: kHighlightedTextColor),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 20),
+                                              child: Text(
+                                                "Facing : " + Facing,
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    color: Colors.grey[700],
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -450,8 +536,10 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         setState(() {
                                           width = newValue;
                                         });
-                                      }),
-                              const Spacer(),
+                                      },
+                                      fieldsController: _widthController,
+                                    ),
+                              // const Spacer(),
                               !isLand
                                   ? PropertyDetailTile(
                                       HintText: "Bed Room",
@@ -460,6 +548,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                           BedRoom = newValue;
                                         });
                                       },
+                                      fieldsController: _bedRoomController,
                                     )
                                   : PropertyDetailTile(
                                       HintText: "Length",
@@ -467,7 +556,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         setState(() {
                                           lenght = newValue;
                                         });
-                                      })
+                                      },
+                                      fieldsController: _lengthController,
+                                    )
                             ],
                           ),
                           Row(
@@ -480,6 +571,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                           BathRoom = newValue;
                                         });
                                       },
+                                      fieldsController: _bathRoomController,
                                     )
                                   : PropertyDetailTile(
                                       HintText: "Cent",
@@ -487,8 +579,10 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         setState(() {
                                           cent = newValue;
                                         });
-                                      }),
-                              const Spacer(),
+                                      },
+                                      fieldsController: _centController,
+                                    ),
+                              // const Spacer(),
                               PropertyDetailTile(
                                 HintText: "Price (INR)",
                                 onChange: (newValue) {
@@ -496,6 +590,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                     Price = newValue;
                                   });
                                 },
+                                fieldsController: _priceController,
                               )
                             ],
                           )
@@ -506,125 +601,113 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                         padding: const EdgeInsets.only(bottom: 25.0),
                         child: Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => PreviewProperty(
-                                              city: city,
-                                              taluk: taluk,
-                                              imageFileList: imageFileList,
-                                              constructionArea:
-                                                  ConstructionArea,
-                                              state: "Tamil Nadu",
-                                              district: district,
-                                              noBedroom: BedRoom,
-                                              noBathroom: BathRoom,
-                                              lenght: lenght,
-                                              width: width,
-                                              ownerImgUrl:
-                                                  userInfo.profileImgUrl,
-                                              ownerPhoneNo:
-                                                  userInfo.mobileNumber,
-                                              propertyTitle: PropertyTitle,
-                                              propertyAddress: PropertyAddress,
-                                              propertyDescription:
-                                                  PropertyDescription,
-                                              area: PlotArea,
-                                              ownerName: userInfo.name,
-                                              category: getCategory(),
-                                              cent: cent,
-                                              face: Facing,
-                                              price: Price,
-                                              ownerMail: userInfo.email,
-                                              type: getType(),
-                                              to: getTo())));
-                                },
-                                child: Container(
-                                  height: 70,
-                                  width: 160,
-                                  decoration: BoxDecoration(
-                                    color: kNavigationIconColor,
-                                    borderRadius: BorderRadius.circular(35),
-                                  ),
-                                  child: const Center(
-                                    child: Text('Preview',
-                                        style: TextStyle(
-                                            color: kHighlightedTextColor,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400)),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PreviewProperty(
+                                                    city: city,
+                                                    taluk: taluk,
+                                                    imageFileList:
+                                                        imageFileList,
+                                                    constructionArea:
+                                                        ConstructionArea,
+                                                    state: "Tamil Nadu",
+                                                    district: district,
+                                                    noBedroom: BedRoom,
+                                                    noBathroom: BathRoom,
+                                                    lenght: lenght,
+                                                    width: width,
+                                                    ownerImgUrl:
+                                                        userInfo.profileImgUrl,
+                                                    ownerPhoneNo:
+                                                        userInfo.mobileNumber,
+                                                    propertyTitle:
+                                                        PropertyTitle,
+                                                    propertyAddress:
+                                                        PropertyAddress,
+                                                    propertyDescription:
+                                                        PropertyDescription,
+                                                    area: PlotArea,
+                                                    ownerName: userInfo.name,
+                                                    category: getCategory(),
+                                                    cent: cent,
+                                                    face: Facing,
+                                                    price: Price,
+                                                    ownerMail: userInfo.email,
+                                                    type: getType(),
+                                                    to: getTo())));
+                                  },
+                                  child: Container(
+                                    height: 70,
+                                    // width: 160,
+                                    decoration: BoxDecoration(
+                                      color: kNavigationIconColor,
+                                      borderRadius: BorderRadius.circular(35),
+                                    ),
+                                    child: const Center(
+                                      child: Text('Preview',
+                                          style: TextStyle(
+                                              color: kHighlightedTextColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400)),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Storage _storage = Storage();
-                                  setState(() {
-                                    isloading = true;
-                                    String propertyAddress = PropertyAddress;
-                                    String propertyTitle = PropertyTitle;
-                                    String category = getCategory();
-                                    String to = getTo();
-                                    String type = getType();
-                                    String propertyDescription =
-                                        PropertyDescription;
-                                    String squareFit = ConstructionArea;
-                                    String bedRoom = BedRoom;
-                                    String bathRoom = BathRoom;
-                                    String price = Price;
+                            // const Spacer(),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  height: 65,
+                                  // width: 160,
+                                  child: ElevatedButton(
+                                    // only enable the button if the text is not empty
+                                    onPressed: ((_controller
+                                                    .value.text.isNotEmpty &&
+                                                (_plotAreaController.value.text.isNotEmpty &&
+                                                    _widthController.value.text
+                                                        .isNotEmpty &&
+                                                    _lengthController.value.text
+                                                        .isNotEmpty &&
+                                                    _centController.value.text
+                                                        .isNotEmpty &&
+                                                    _priceController.value.text
+                                                        .isNotEmpty)) ||
+                                            (_controller
+                                                    .value.text.isNotEmpty &&
+                                                (_constructionAreaController
+                                                        .value
+                                                        .text
+                                                        .isNotEmpty &&
+                                                    _bedRoomController.value
+                                                        .text.isNotEmpty &&
+                                                    _bathRoomController.value
+                                                        .text.isNotEmpty)))
+                                        ? property
+                                        : null,
+                                    child: const Center(
+                                      child: Text('Submit',
+                                          style: TextStyle(
+                                              color:
+                                                  kBottomNavigationBackgroundColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400)),
+                                    ),
 
-                                    print("loading");
-                                    _storage.uploadPropertyDetails(
-                                        context,
-                                        city,
-                                        taluk,
-                                        propertyAddress,
-                                        propertyTitle,
-                                        category,
-                                        to,
-                                        Facing,
-                                        type,
-                                        propertyDescription,
-                                        PlotArea,
-                                        cent,
-                                        lenght,
-                                        width,
-                                        squareFit,
-                                        bedRoom,
-                                        bathRoom,
-                                        price,
-                                        "Tamil Nadu",
-                                        district,
-                                        false);
-                                    _storage.uploadPropertyImages(
-                                        context,
-                                        imageFileList,
-                                        propertyTitle,
-                                        to,
-                                        false);
-                                  });
-                                },
-                                child: Container(
-                                  height: 70,
-                                  width: 160,
-                                  decoration: BoxDecoration(
-                                    color: kHighlightedTextColor,
-                                    borderRadius: BorderRadius.circular(35),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Submit',
-                                      style: TextStyle(
-                                          color: kSubCategoryColor,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400),
+                                    style: ElevatedButton.styleFrom(
+                                      // elevation: 10,
+                                      primary: kPrimaryButtonColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(35),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -642,36 +725,60 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   }
 }
 
+final _plotAreaController = TextEditingController();
+final _widthController = TextEditingController();
+final _lengthController = TextEditingController();
+final _centController = TextEditingController();
+final _priceController = TextEditingController();
+final _constructionAreaController = TextEditingController();
+final _bedRoomController = TextEditingController();
+final _bathRoomController = TextEditingController();
+
 class PropertyDetailTile extends StatelessWidget {
   final String HintText;
   final Function(String) onChange;
-  PropertyDetailTile({required this.HintText, required this.onChange});
+  final TextEditingController fieldsController;
+  PropertyDetailTile(
+      {required this.HintText,
+      required this.onChange,
+      required this.fieldsController});
+  String? get _errorFieldsText {
+    final _fieldsEntered = fieldsController.value.text;
+    if (_fieldsEntered.isEmpty) {
+      return 'Required*';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 6),
-      child: Container(
-        height: 70,
-        width: 165,
-        decoration: BoxDecoration(
-          border: Border.all(color: kHighlightedTextColor),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            onChanged: onChange,
-            keyboardType: TextInputType.number,
-            maxLines: 1,
-            cursorColor: kHighlightedTextColor,
-            textAlign: TextAlign.left,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: HintText,
-              hintStyle:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 6),
+        child: Container(
+          height: 70,
+          // width: 165,
+          decoration: BoxDecoration(
+            border: Border.all(color: kHighlightedTextColor),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: fieldsController,
+              onChanged: onChange,
+              keyboardType: TextInputType.number,
+              maxLines: 1,
+              cursorColor: kHighlightedTextColor,
+              textAlign: TextAlign.left,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                errorText: _errorFieldsText,
+                hintText: HintText,
+                hintStyle:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
         ),
@@ -688,7 +795,10 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-        clipBehavior: Clip.none, children: [
+
+        clipBehavior: Clip.none,
+        children: [
+
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

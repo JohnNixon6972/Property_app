@@ -1,33 +1,49 @@
 {
   "project_info": {
-    "project_number": "746968465691",
-    "project_id": "property-app-43ac2",
-    "storage_bucket": "property-app-43ac2.appspot.com"
+    "project_number": "348034661336",
+    "project_id": "pleasant-properties",
+    "storage_bucket": "pleasant-properties.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:746968465691:android:bf1a4973f39bc494a4d3be",
+        "mobilesdk_app_id": "1:348034661336:android:4467b1ec64e0cd381350ad",
         "android_client_info": {
-          "package_name": "com.example.propertyApp"
+          "package_name": "com.PropertyAppPleasantProperties"
         }
       },
       "oauth_client": [
         {
-          "client_id": "746968465691-a14slmqdegjdoodg5r06k102lkm4t7qe.apps.googleusercontent.com",
+          "client_id": "348034661336-hshtffsufcus61ame4ekou0rj9vhustp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.PropertyAppPleasantProperties",
+            "certificate_hash": "c7b6867cc38d68dfe68b45214319a32de92754ae"
+          }
+        },
+        {
+          "client_id": "348034661336-pi9svh0do5b1hpr02s48irqperehahlu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.PropertyAppPleasantProperties",
+            "certificate_hash": "ea4dedbd42fe4be3d7ba1c3f61392cbf4839af97"
+          }
+        },
+        {
+          "client_id": "348034661336-pn843o1fe7jmjlps3ua61lp1drodun2s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCLL-a0gedh7zJDnupPpO-zKFW-bspXD9c"
+          "current_key": "AIzaSyDyXNA6bTeEPRKwkqWEvjoRII0CKqYmWic"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "746968465691-a14slmqdegjdoodg5r06k102lkm4t7qe.apps.googleusercontent.com",
+              "client_id": "348034661336-pn843o1fe7jmjlps3ua61lp1drodun2s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

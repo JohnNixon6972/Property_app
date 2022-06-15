@@ -632,13 +632,13 @@ Map<String,List<String>> Districts = {
     'Thoothukudi',
     'Tiruchirappalli',
     'Tirunelveli',
-    'Tirupattur',
+    'Tirupathur',
     'Tiruppur',
-    'Tiruvallur',
-    'Tiruvannamalai',
-    'Tiruvarur',
+    'Thiruvallur',
+    'Thiruvannamalai',
+    'Thiruvarur',
     'Vellore',
-    'Viluppuram',
+    'Villupuram',
     'Virudhunagar'
   ],
   'Telangana': [

@@ -30,6 +30,7 @@ void getMyPropertiesCards() {
   for (PropertyCard property in PropertiesOnRentAll) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
+        dtcpApproved: property.dtcpApproved,
         state: property.state,
         district: property.district,
         ownerMail: property.ownerMail,
@@ -61,6 +62,7 @@ void getMyPropertiesCards() {
   for (PropertyCard property in PropertiesOnSaleAll) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
+        dtcpApproved: property.dtcpApproved,
         ownerMail: property.ownerMail,
         city: property.city,
         taluk: property.taluk,
@@ -97,16 +99,16 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     getMyPropertiesCards();
+    super.initState();
     // print(myPropertiesAdv);
   }
 
-  Widget buildMyProperties() {
+  Widget buildMyProperties(BuildContext screenContext) {
     return AnimationLimiter(
       child: ListView.builder(
           physics: const BouncingScrollPhysics(),
-          itemCount: myPropertiesAdv.length,
+          itemCount: myProperties.length,
           scrollDirection: Axis.vertical,
           itemBuilder: (BuildContext context, int index) {
             return AnimationConfiguration.staggeredList(
@@ -211,8 +213,10 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
-                                              city: myProperties[index].city,
-                                              taluk: myProperties[index].taluk,
+                                          dtcpApproved:
+                                              myProperties[index].dtcpApproved,
+                                          city: myProperties[index].city,
+                                          taluk: myProperties[index].taluk,
                                           state: myProperties[index].state,
                                           district:
                                               myProperties[index].district,
@@ -268,6 +272,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             EditPropertyScreen1(
+                                          screenContext: screenContext,
                                           propertyToEdit: myProperties[index],
                                         ),
                                       ),
@@ -513,7 +518,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
               endIndent: 60,
               color: kHighlightedTextColor,
             ),
-            Expanded(flex: 10, child: buildMyProperties()),
+            Expanded(flex: 10, child: buildMyProperties(context)),
             const BottomPageNavigationBar(
               flex_by: 1,
               page: myPropertiesScreen.id,
@@ -526,6 +531,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
 }
 
 class myProperty extends StatefulWidget {
+  final bool dtcpApproved;
   final String imageloc;
   final String propertyName;
   final String propertyAddress;
@@ -553,6 +559,7 @@ class myProperty extends StatefulWidget {
   final List<String> propertyImages;
   const myProperty(
       {required this.imageloc,
+      required this.dtcpApproved,
       required this.city,
       required this.taluk,
       required this.district,

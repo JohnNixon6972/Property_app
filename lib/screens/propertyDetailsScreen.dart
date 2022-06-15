@@ -35,10 +35,12 @@ class PropertyDetailsScreen extends StatelessWidget {
   final String district;
   final String taluk;
   final String city;
+  final bool dtcpApproved;
   final List<String> propertyImages;
   const PropertyDetailsScreen(
       {Key? key,
       required this.constructionArea,
+      required this.dtcpApproved,
       required this.city,
       required this.taluk,
       required this.state,
@@ -164,7 +166,9 @@ class PropertyDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        propertyTitle,
+                        propertyTitle.length > 18
+                            ? propertyTitle.substring(0, 18)
+                            : propertyTitle,
                         style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -186,10 +190,10 @@ class PropertyDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        city + "," + taluk + "\n" + district + "," + state,
+                        city + ", " + taluk + "\n" + district + ", " + state,
                         style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w900,
                             color: kSubCategoryColor),
                       ),
                       SizedBox(
@@ -200,7 +204,13 @@ class PropertyDetailsScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "\u{20B9} $price ",
+                            "\u{20B9} " +
+                                price
+                                    .replaceAllMapped(
+                                        new RegExp(
+                                            r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                        (Match m) => "${m[1]},")
+                                    .toString(),
                             style: const TextStyle(
                                 fontSize: 18,
                                 color: kHighlightedTextColor,
@@ -293,6 +303,24 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 15,
+              ),
+              dtcpApproved
+                  ? Text(
+                      "DTCP Approved! ",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: kSubCategoryColor),
+                    )
+                  : Text(
+                      "DTCP Not-Approved",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: kSubCategoryColor),
+                    ),
               const SizedBox(
                 height: 15,
               ),

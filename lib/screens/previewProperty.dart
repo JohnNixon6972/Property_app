@@ -35,8 +35,10 @@ class PreviewProperty extends StatelessWidget {
   final String city;
   final String taluk;
   final String district;
+  final bool dtcpApproved;
   PreviewProperty({
     Key? key,
+    required this.dtcpApproved,
     required this.imageFileList,
     required this.taluk,
     required this.city,
@@ -186,7 +188,13 @@ class PreviewProperty extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "\u{20B9} $price ",
+                            "\u{20B9} " +
+                                price
+                                    .replaceAllMapped(
+                                        new RegExp(
+                                            r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                        (Match m) => "${m[1]},")
+                                    .toString(),
                             style: const TextStyle(
                                 fontSize: 18,
                                 color: kHighlightedTextColor,
@@ -278,6 +286,24 @@ class PreviewProperty extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 15,
+              ),
+              dtcpApproved
+                  ? Text(
+                      "DTCP Approved! ",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: kSubCategoryColor),
+                    )
+                  : Text(
+                      "DTCP Not-Approved",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: kSubCategoryColor),
+                    ),
               const SizedBox(
                 height: 15,
               ),

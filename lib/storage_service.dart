@@ -2,6 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 import './screens/homescreen.dart';
@@ -54,11 +55,12 @@ class Storage {
         .doc(PropertyTitle)
         .update({"isSetImages": "True"});
     print("Added Property Images");
-     Navigator.pushNamed(context, HomeScreen.id);
+     Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),(route)=>false);
   }
 
   Future<void> uploadPropertyDetails(
       BuildContext context,
+      bool dtcpApproved,
       String city,
       String taluk,
       String propertyAddress,
@@ -86,6 +88,7 @@ class Storage {
     // print(userInfo.email);
 
     // print(uselastusedaddress);
+    
     if (!isUpdate) {
       // print("Hi");
       String propertyFor = to == "Rent" ? "Sell" : "Rent";
@@ -107,6 +110,7 @@ class Storage {
     }
     !isUpdate
         ? _firestore.collection('Properties' + to).doc(propertyTitle).set({
+            "DTCPApproved":"$dtcpApproved",
             "City": city,
             "Taluk": taluk,
             "PropertyBy": userInfo.email,
@@ -141,13 +145,14 @@ class Storage {
             "imgUrl8": "",
             "imgUrl9": "",
             "imgUrl10": "",
-            "isApproved": userInfo.name != "john" ? "False" : "True"
+            "isApproved": "False"
           }).then((_) {
             print("Data Added Sucessfully");
           }).catchError((_) {
             print("An error Occured");
           })
         : _firestore.collection('Properties' + to).doc(propertyTitle).update({
+          "DTCPApproved":"$dtcpApproved",
             "PropertyBy": userInfo.email,
             "OwnerName": userInfo.name,
             "PropertyTitle": propertyTitle,

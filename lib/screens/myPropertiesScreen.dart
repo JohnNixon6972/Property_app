@@ -482,7 +482,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
             Expanded(
               flex: 1,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Transform.rotate(
                     angle: 270 * pi / 180,
@@ -496,9 +496,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 100,
-                  ),
+                  const Spacer(),
                   const Center(
                     child: const Text(
                       'My Properties',
@@ -509,6 +507,7 @@ class _myPropertiesScreenState extends State<myPropertiesScreen> {
                       ),
                     ),
                   ),
+                  const Spacer()
                 ],
               ),
             ),

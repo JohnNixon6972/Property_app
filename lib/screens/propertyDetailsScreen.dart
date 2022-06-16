@@ -166,12 +166,12 @@ class PropertyDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        propertyTitle.length > 18
-                            ? propertyTitle.substring(0, 18)
+                        propertyTitle.length > 15
+                            ? propertyTitle.substring(0, 15)
                             : propertyTitle,
                         style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
                             color: kHighlightedTextColor),
                       ),
                       const SizedBox(
@@ -186,46 +186,49 @@ class PropertyDetailsScreen extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        city + ", " + taluk + "\n" + district + ", " + state,
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
-                            color: kSubCategoryColor),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            "\u{20B9} " +
-                                price
-                                    .replaceAllMapped(
-                                        new RegExp(
-                                            r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                        (Match m) => "${m[1]},")
-                                    .toString(),
-                            style: const TextStyle(
-                                fontSize: 18,
-                                color: kHighlightedTextColor,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            to == "Rent" ? " / Month" : "",
-                            style: const TextStyle(
-                                fontSize: 12,
-                                color: kSubCategoryColor,
-                                fontWeight: FontWeight.w400),
-                          )
-                        ],
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          city + ", " + taluk + "\n" + district + ", " + state,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w900,
+                              color: kSubCategoryColor),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "\u{20B9} " +
+                                  price
+                                      .replaceAllMapped(
+                                          new RegExp(
+                                              r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                          (Match m) => "${m[1]},")
+                                      .toString(),
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: kHighlightedTextColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              to == "Rent" ? " / Month" : "",
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  color: kSubCategoryColor,
+                                  fontWeight: FontWeight.w400),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -334,7 +337,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                         color: kSecondaryButtonColor,
                         borderRadius: BorderRadius.all((Radius.circular(15)))),
                     child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.all(14.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

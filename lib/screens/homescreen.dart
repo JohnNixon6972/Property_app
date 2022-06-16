@@ -996,7 +996,7 @@ class _PropertyCardState extends State<PropertyCard> {
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
                     imageUrl: widget.imageloc,
-                    height: 230,
+                    height: 225,
                     width: 190,
                     // maxHeightDiskCache: 230,
                     // maxWidthDiskCache: 190,

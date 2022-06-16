@@ -165,7 +165,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                 // if (bookmarkedPropertyNames.contains(propertyName.toString())) {
                 //   bookmarkedProperties.add(Property);
                 // }
-                if (ownerEmail.toString() == userInfo.email &&
+                if (ownerPhno.toString() == userInfo.mobileNumber &&
                     !myPropertiesAdv.contains(Property.propertyName)) {
                   print(Property.propertyName);
                   myPropertiesAdv.add(Property.propertyName);
@@ -403,7 +403,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                   approvedPropertiesNames.add(Property.propertyName);
                   approvedProperties.add(Property);
                 }
-                if (ownerEmail.toString() == userInfo.email &&
+                if (ownerPhno.toString() == userInfo.mobileNumber &&
                     !myPropertiesAdv.contains(Property.propertyName)) {
                   myPropertiesAdv.add(Property.propertyName);
                 }

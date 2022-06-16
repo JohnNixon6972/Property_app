@@ -605,6 +605,22 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                       onChange: (newValue) {
                                         setState(() {
                                           width = newValue;
+                                          _plotAreaController.text = (int.parse(
+                                                      lenght = lenght.isNotEmpty
+                                                          ? lenght
+                                                          : 0.toString()) *
+                                                  int.parse(width =
+                                                      width.isNotEmpty
+                                                          ? width
+                                                          : 0.toString()))
+                                              .toString();
+                                          _centController.text = (int.parse(
+                                                      _plotAreaController
+                                                          .text) /
+                                                  435.6)
+                                              .toStringAsFixed(2);
+                                          cent = _centController.text;
+                                          PlotArea = _plotAreaController.text;
                                         });
                                       },
                                       fieldsController: _widthController,
@@ -625,10 +641,23 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                       onChange: (newValue) {
                                         setState(() {
                                           lenght = newValue;
-                                          _plotAreaController.text =
-                                              (int.parse(lenght = lenght.isNotEmpty ? lenght : 0.toString()) *
-                                                      int.parse(width = width.isNotEmpty ? width : 0.toString()))
-                                                  .toString();
+                                          _plotAreaController.text = (int.parse(
+                                                      lenght = lenght.isNotEmpty
+                                                          ? lenght
+                                                          : 0.toString()) *
+                                                  int.parse(width =
+                                                      width.isNotEmpty
+                                                          ? width
+                                                          : 0.toString()))
+                                              .toString();
+
+                                          _centController.text = (int.parse(
+                                                      _plotAreaController
+                                                          .text) /
+                                                  435.6)
+                                              .toStringAsFixed(2);
+                                          cent = _centController.text;
+                                          PlotArea = _plotAreaController.text;
                                         });
                                       },
                                       fieldsController: _lengthController,
@@ -840,6 +869,9 @@ class PropertyDetailTile extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              enabled: HintText == "Plot Area(SqFt.)" || HintText == "Cent"
+                  ? false
+                  : true,
               controller: fieldsController,
               onChanged: onChange,
               keyboardType: TextInputType.number,
@@ -870,10 +902,8 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-
         clipBehavior: Clip.none,
         children: [
-
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

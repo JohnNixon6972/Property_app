@@ -30,10 +30,10 @@ class _aboutUsState extends State<aboutUs> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: const Image(
-                      image: AssetImage("./images/profile_img1.jpg"),
+                      image: AssetImage("./images/profile_img9.png"),
                       fit: BoxFit.cover,
-                      height: 100,
-                      width: 100,
+                      height: 80,
+                      width: 80,
                     ),
                   ),
                   const Spacer(),
@@ -128,9 +128,9 @@ class _aboutUsState extends State<aboutUs> {
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(100),
                     child: const Image(
-                      image: AssetImage("./images/profile_img1.jpg"),
+                      image: AssetImage("./images/Hrutuja Patnekar.jpg"),
                       fit: BoxFit.cover,
                       height: 100,
                       width: 100,
@@ -191,6 +191,24 @@ class _aboutUsState extends State<aboutUs> {
                               ),
                             ),
                           ),
+                          GestureDetector(
+                            onTap: () async {
+                              var url = 'tel:6361125470';
+                              if (await canLaunchUrl(Uri.parse(url))) {
+                                await launchUrl(Uri.parse(url));
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.call,
+                                size: 30,
+                                color: kHighlightedTextColor,
+                              ),
+                            ),
+                          )
                         ],
                       )
                     ],
@@ -208,9 +226,9 @@ class _aboutUsState extends State<aboutUs> {
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(100),
                     child: const Image(
-                      image: AssetImage("./images/profile_img1.jpg"),
+                      image: AssetImage("./images/John Nixon.jpg"),
                       fit: BoxFit.cover,
                       height: 100,
                       width: 100,
@@ -335,7 +353,7 @@ class _aboutUsState extends State<aboutUs> {
                       'About Us',
                       style: TextStyle(
                           fontSize: 32,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w500,
                           color: kHighlightedTextColor),
                     ),
                   ),
@@ -354,9 +372,10 @@ class _aboutUsState extends State<aboutUs> {
                     const Text(
                       "Admin",
                       style: TextStyle(
-                          color: kHighlightedTextColor,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                        color: kHighlightedTextColor,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     const Spacer(),
                     FlutterSwitch(
@@ -388,9 +407,10 @@ class _aboutUsState extends State<aboutUs> {
                     const Text(
                       "Developers",
                       style: TextStyle(
-                          color: kHighlightedTextColor,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                        color: kHighlightedTextColor,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     const Spacer(),
                     FlutterSwitch(

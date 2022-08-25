@@ -33,10 +33,12 @@ late String Price = "";
 late String lenght = "";
 late String width = "";
 late String cent = "";
-
+bool dtcpApproved = false;
+Color SelectedToggleBottonColor = kNo;
 List<XFile>? imageFileList = [];
 
 class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
+  late List<bool> isSelected;
   @override
   void initState() {
     PropertyDescription = "";
@@ -50,6 +52,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
     width = "";
     cent = "";
     imageFileList = [];
+    isSelected = [true, false];
     super.initState();
   }
 
@@ -85,6 +88,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
           print("loading");
           _storage.uploadPropertyDetails(
               context,
+              dtcpApproved,
               city,
               taluk,
               propertyAddress,
@@ -248,7 +252,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                 ],
               )
             : Padding(
-                padding: const EdgeInsets.all(14.0),
+                padding: const EdgeInsets.all(8.0),
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -257,7 +261,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 10.0),
+                            horizontal: 5, vertical: 8.0),
                         child: Row(
                           children: [
                             Transform.rotate(
@@ -269,7 +273,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                 },
                                 child: const Icon(
                                   Icons.expand_less_rounded,
-                                  size: 40,
+                                  size: 36,
                                 ),
                               ),
                             ),
@@ -278,7 +282,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                               'Add Properties',
                               style: TextStyle(
                                   color: kHighlightedTextColor,
-                                  fontSize: 28,
+                                  fontSize: 26,
                                   fontWeight: FontWeight.w700),
                             ),
                             Spacer(),
@@ -294,7 +298,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 12),
+                            horizontal: 8.0, vertical: 8),
                         child: DottedBorder(
                           color: kHighlightedTextColor,
                           radius: const Radius.circular(20),
@@ -350,10 +354,76 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                           child: buildListView(),
                         ),
                       ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Center(
+                              child: Text(
+                                "DTCP Approved ? ",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: kHighlightedTextColor),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 35,
+                          ),
+                          ToggleButtons(
+                            constraints: const BoxConstraints(minHeight: 8),
+                            fillColor: SelectedToggleBottonColor,
+                            // disabledColor: Colors.green,
+                            // focusColor: Colors.green,
+
+                            borderWidth: 2,
+                            selectedColor: Colors.white,
+                            borderRadius: BorderRadius.circular(35),
+                            children: const <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  'No',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  'Yes',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                            onPressed: (int index) {
+                              setState(() {
+                                if (index == 0) {
+                                  SelectedToggleBottonColor = kNo;
+                                } else if (index == 1) {
+                                  SelectedToggleBottonColor = kYes;
+                                }
+
+                                dtcpApproved = index != 0 ? true : false;
+                                // print(displayAdminProperties);
+                                for (int i = 0; i < isSelected.length; i++) {
+                                  isSelected[i] = i == index;
+                                }
+                              });
+                            },
+                            isSelected: isSelected,
+                          ),
+                        ],
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 14),
                         child: Container(
+                          height: 120,
                           decoration: BoxDecoration(
                             border: Border.all(color: kHighlightedTextColor),
                             borderRadius: BorderRadius.circular(15),
@@ -378,9 +448,9 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                       errorText: _errorText),
                                   controller: _controller,
                                   style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.bold),
-                                  maxLines: 3,
+                                  maxLines: 2,
                                   // minLines: 5,
                                 ),
                               ],
@@ -531,10 +601,26 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                       ),
                                     )
                                   : PropertyDetailTile(
-                                      HintText: "Width(Ft.)",
+                                      HintText: "East-West(Ft.)",
                                       onChange: (newValue) {
                                         setState(() {
                                           width = newValue;
+                                          _plotAreaController.text = (int.parse(
+                                                      lenght = lenght.isNotEmpty
+                                                          ? lenght
+                                                          : 0.toString()) *
+                                                  int.parse(width =
+                                                      width.isNotEmpty
+                                                          ? width
+                                                          : 0.toString()))
+                                              .toString();
+                                          _centController.text = (int.parse(
+                                                      _plotAreaController
+                                                          .text) /
+                                                  435.6)
+                                              .toStringAsFixed(2);
+                                          cent = _centController.text;
+                                          PlotArea = _plotAreaController.text;
                                         });
                                       },
                                       fieldsController: _widthController,
@@ -551,10 +637,27 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                       fieldsController: _bedRoomController,
                                     )
                                   : PropertyDetailTile(
-                                      HintText: "Length",
+                                      HintText: "North-South(Ft.)",
                                       onChange: (newValue) {
                                         setState(() {
                                           lenght = newValue;
+                                          _plotAreaController.text = (int.parse(
+                                                      lenght = lenght.isNotEmpty
+                                                          ? lenght
+                                                          : 0.toString()) *
+                                                  int.parse(width =
+                                                      width.isNotEmpty
+                                                          ? width
+                                                          : 0.toString()))
+                                              .toString();
+
+                                          _centController.text = (int.parse(
+                                                      _plotAreaController
+                                                          .text) /
+                                                  435.6)
+                                              .toStringAsFixed(2);
+                                          cent = _centController.text;
+                                          PlotArea = _plotAreaController.text;
                                         });
                                       },
                                       fieldsController: _lengthController,
@@ -611,6 +714,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 PreviewProperty(
+                                                    dtcpApproved: dtcpApproved,
                                                     city: city,
                                                     taluk: taluk,
                                                     imageFileList:
@@ -765,6 +869,9 @@ class PropertyDetailTile extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              enabled: HintText == "Plot Area(SqFt.)" || HintText == "Cent"
+                  ? false
+                  : true,
               controller: fieldsController,
               onChanged: onChange,
               keyboardType: TextInputType.number,
@@ -795,10 +902,8 @@ class ImagesFromGallery extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Stack(
-
         clipBehavior: Clip.none,
         children: [
-
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

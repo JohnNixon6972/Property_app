@@ -1,9 +1,11 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/alertPopUp.dart';
-import 'package:property_app/screens/addPropertiesScreen2.dart';
+import 'package:property_app/screens/homescreen.dart';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'myPropertiesScreen.dart';
 import 'editPropertyScreen1.dart';
 import 'package:property_app/storage_service.dart';
@@ -13,6 +15,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import '../storage_service.dart';
+import '../main.dart';
 
 class editPropertyScreen2 extends StatefulWidget {
   myProperty propertyToEdit;
@@ -32,7 +35,10 @@ late String BathRoom = "";
 late String Price = "";
 late String face = "";
 late String state = "";
+bool dtcpApproved = false;
 late String district = "";
+Color SelectedToggleBottonColor = kNo;
+late myProperty propertyToEdit1;
 final _controller = TextEditingController();
 final _plotAreaController = TextEditingController();
 final _widthController = TextEditingController();
@@ -50,6 +56,7 @@ List<XFile>? imageFileList = [];
 late bool isLand;
 
 void readDetails(myProperty propertyToEdit) {
+  propertyToEdit1 = propertyToEdit;
   selectedFace = directions.indexOf(propertyToEdit.face);
   isLand = propertyToEdit.propertyCategory == "Land" ||
       propertyToEdit.propertyCategory == "Plot";
@@ -71,10 +78,14 @@ void readDetails(myProperty propertyToEdit) {
   _widthController.text = propertyToEdit.width;
   _centController.text = propertyToEdit.cent;
   _constructionAreaController.text = propertyToEdit.constructionArea;
+  lenght = propertyToEdit.lenght;
+  width = propertyToEdit.width;
+  cent = propertyToEdit.cent;
 }
 
 class _editPropertyScreen2State extends State<editPropertyScreen2> {
   final ImagePicker imagePicker = ImagePicker();
+  late List<bool> isSelected;
   _editPropertyScreen2State();
   @override
   void initState() {
@@ -91,12 +102,16 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
     face = "";
     state = "";
     district = "";
-    readDetails(widget.propertyToEdit);
     imageFileList = [];
+    isSelected = [true, false];
     super.initState();
+    readDetails(widget.propertyToEdit);
   }
 
+  void delete_duplicate() {}
+
   void property() async {
+    final _firestore = FirebaseFirestore.instance;
     if (face == "") {
       await popUpAlertDialogBox(context, "Kindly Select Facing");
     } else {
@@ -116,8 +131,27 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
           String price = Price;
           String Face = face;
           print("loading");
+          if (propertyTitle != widget.propertyToEdit.propertyName) {
+            print("Deleting Duplicate");
+            String collection = "Properties" + getTo();
+            String title = widget.propertyToEdit.propertyName;
+            _firestore.collection(collection).doc(title).delete();
+            firebase_storage.FirebaseStorage.instance
+                .ref("asset/propertyImages/${userInfo.mobileNumber}/$title")
+                .listAll()
+                .then((value) {
+              value.items.forEach((element) {
+                firebase_storage.FirebaseStorage.instance
+                    .ref(element.fullPath)
+                    .delete();
+              });
+            });
+          }
+          myPropertiesAdv.remove(propertyToEdit1.propertyName);
+          myProperties.remove(propertyToEdit1);
           _storage.uploadPropertyDetails(
               context,
+              dtcpApproved,
               city,
               taluk,
               propertyAddress,
@@ -137,7 +171,8 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
               price,
               state,
               district,
-              to == widget.propertyToEdit.to && true);
+              to == widget.propertyToEdit.to &&
+                  propertyTitle == widget.propertyToEdit);
           _storage.uploadPropertyImages(
               context, imageFileList, propertyTitle, to, true);
         },
@@ -290,37 +325,37 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
             : Padding(
                 padding: const EdgeInsets.all(14.0),
                 child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Transform.rotate(
-                        angle: 270 * pi / 180,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            Icons.expand_less_rounded,
-                            size: 40,
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10.0),
+                            horizontal: 20, vertical: 8.0),
                         child: Row(
-                          children: const [
-                            Text(
+                          children: [
+                            Transform.rotate(
+                              angle: 270 * pi / 180,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(
+                                  Icons.expand_less_rounded,
+                                  size: 36,
+                                ),
+                              ),
+                            ),
+                            const Text(
                               'Edit Property',
                               style: TextStyle(
                                   color: kHighlightedTextColor,
                                   fontSize: 28,
                                   fontWeight: FontWeight.w700),
                             ),
-                            Spacer(),
-                            Text(
+                            const Spacer(),
+                            const Text(
                               'Step 2/2',
                               style: TextStyle(
                                   color: kSubCategoryColor,
@@ -387,6 +422,71 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
                           height: 100,
                           child: buildListView(),
                         ),
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Center(
+                              child: Text(
+                                "DTCP Approved ? ",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: kHighlightedTextColor),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 35,
+                          ),
+                          ToggleButtons(
+                            constraints: const BoxConstraints(minHeight: 8),
+                            fillColor: SelectedToggleBottonColor,
+                            // disabledColor: Colors.green,
+                            // focusColor: Colors.green,
+
+                            borderWidth: 2,
+                            selectedColor: Colors.white,
+                            borderRadius: BorderRadius.circular(35),
+                            children: const <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  'No',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  'Yes',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                            onPressed: (int index) {
+                              setState(() {
+                                if (index == 0) {
+                                  SelectedToggleBottonColor = kNo;
+                                } else if (index == 1) {
+                                  SelectedToggleBottonColor = kYes;
+                                }
+
+                                dtcpApproved = index != 0 ? true : false;
+                                // print(displayAdminProperties);
+                                for (int i = 0; i < isSelected.length; i++) {
+                                  isSelected[i] = i == index;
+                                }
+                              });
+                            },
+                            isSelected: isSelected,
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(

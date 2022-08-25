@@ -3,11 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:property_app/components/alertPopUp.dart';
+
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
 import 'package:property_app/constants.dart';
-import 'package:country_state_city_picker/country_state_city_picker.dart';
-import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 
 import '../components/loactionData.dart';
@@ -52,7 +50,7 @@ class _searchScreenState extends State<searchScreen> {
                 color: kHighlightedTextColor,
               ),
             );
-          } else if (query == "" && state == "" && district == "") {
+          } else if (query == "" && district == "") {
             return Container();
           } else {
             if (query != "" &&
@@ -92,8 +90,7 @@ class _searchScreenState extends State<searchScreen> {
                               element['City']
                                   .toString()
                                   .toLowerCase()
-                                  .contains(query.toLowerCase())
-                              )
+                                  .contains(query.toLowerCase()))
                           .map((QueryDocumentSnapshot<Object?> property) {
                         var isSet = property["isSetImages"].toString();
 
@@ -128,7 +125,11 @@ class _searchScreenState extends State<searchScreen> {
                         var face = property["PropertyDirection"];
                         var state = property["State"];
                         var district = property["District"];
+                        var city = property["City"];
+                        var dtcpApproved = property["DTCPApproved"];
+                        dtcpApproved = dtcpApproved == "false" ? false : true;
                         return SearchedProperties(
+                          dtcpApproved: dtcpApproved,
                           taluk: taluk,
                           city: city,
                           state: state,
@@ -177,7 +178,7 @@ class _searchScreenState extends State<searchScreen> {
                               element["District"].toString().toLowerCase() ==
                                   district.toLowerCase() &&
                               element["Taluk"].toString().toLowerCase() ==
-                                taluk.toLowerCase())
+                                  taluk.toLowerCase())
                           .map((QueryDocumentSnapshot<Object?> property) {
                         var isSet = property["isSetImages"].toString();
 
@@ -212,7 +213,11 @@ class _searchScreenState extends State<searchScreen> {
                         var face = property["PropertyDirection"];
                         var state = property["State"];
                         var district = property["District"];
+                        var city = property["City"];
+                        var dtcpApproved = property["DTCPApproved"];
+                        dtcpApproved = dtcpApproved == "false" ? false : true;
                         return SearchedProperties(
+                          dtcpApproved: dtcpApproved,
                           taluk: taluk,
                           city: city,
                           state: state,
@@ -567,9 +572,11 @@ class SearchedProperties extends StatefulWidget {
   final String district;
   final String city;
   final String taluk;
+  final bool dtcpApproved;
   final List<String> propertyImages;
   const SearchedProperties(
       {required this.imageloc,
+      required this.dtcpApproved,
       required this.city,
       required this.taluk,
       required this.ownerMail,
@@ -653,11 +660,13 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Text(
-                      widget.propertyName,
+                      widget.propertyName.length > 15
+                          ? widget.propertyName.substring(0, 14)
+                          : widget.propertyName,
                       style: const TextStyle(
                           color: kHighlightedTextColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
                   Text(
@@ -665,14 +674,14 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                     style: const TextStyle(
                         color: kBottomNavigationBackgroundColor,
                         fontWeight: FontWeight.w500,
-                        fontSize: 15),
+                        fontSize: 14),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
                       widget.district + ",\n" + widget.state,
                       style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w700),
+                          fontSize: 12, fontWeight: FontWeight.w700),
                     ),
                   )
                 ],
@@ -686,7 +695,12 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                   Row(
                     children: [
                       Text(
-                        widget.price + " \u{20B9}",
+                        "\u{20B9} " +
+                        widget.price
+                            .replaceAllMapped(
+                                new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                (Match m) => "${m[1]},")
+                            .toString(),
                         style: const TextStyle(
                             fontSize: 15,
                             color: kHighlightedTextColor,
@@ -712,6 +726,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => PropertyDetailsScreen(
+                                dtcpApproved: widget.dtcpApproved,
                                 city: widget.city,
                                 taluk: widget.taluk,
                                 ownerMail: widget.ownerMail,

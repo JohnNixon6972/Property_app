@@ -124,8 +124,11 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var state = property["State"];
               var city = property["City"];
               var taluk = property["Taluk"];
+              var dtcpApproved = property["DTCPApproved"];
+              dtcpApproved = dtcpApproved == "false" ? false : true;
 
               final Property = PropertyCard(
+                dtcpApproved: dtcpApproved,
                 city: city,
                 taluk: taluk,
                 state: state,
@@ -162,7 +165,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                 // if (bookmarkedPropertyNames.contains(propertyName.toString())) {
                 //   bookmarkedProperties.add(Property);
                 // }
-                if (ownerEmail.toString() == userInfo.email &&
+                if (ownerPhno.toString() == userInfo.mobileNumber &&
                     !myPropertiesAdv.contains(Property.propertyName)) {
                   print(Property.propertyName);
                   myPropertiesAdv.add(Property.propertyName);
@@ -362,8 +365,11 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var state = property["State"];
               var city = property["City"];
               var taluk = property["Taluk"];
+              var dtcpApproved = property["DTCPApproved"];
+              dtcpApproved = dtcpApproved == "false" ? false : true;
 
               final Property = PropertyCard(
+                dtcpApproved: dtcpApproved,
                 city: city,
                 taluk: taluk,
                 state: state,
@@ -397,7 +403,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                   approvedPropertiesNames.add(Property.propertyName);
                   approvedProperties.add(Property);
                 }
-                if (ownerEmail.toString() == userInfo.email &&
+                if (ownerPhno.toString() == userInfo.mobileNumber &&
                     !myPropertiesAdv.contains(Property.propertyName)) {
                   myPropertiesAdv.add(Property.propertyName);
                 }
@@ -562,9 +568,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
-      body: SafeArea(
-        child: DoubleBackToCloseApp(
-          snackBar: const SnackBar(content: Text('Tap back again to leave')),
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(content: Text('Tap back again to leave')),
+        child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -768,7 +774,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       physics: const BouncingScrollPhysics(),
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                          padding:
+                              EdgeInsets.only(top: 20, left: 15, right: 15),
                           child: Text(
                             'Best for you ${Emojis.smilingFaceWithHeartEyes}',
                             style: TextStyle(
@@ -797,7 +804,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fillColor: SelectedToggleBottonColor,
                                 // disabledColor: Colors.green,
                                 // focusColor: Colors.green,
-            
+      
                                 borderWidth: 2,
                                 selectedColor: Colors.white,
                                 borderRadius: BorderRadius.circular(35),
@@ -828,11 +835,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     } else if (index == 1) {
                                       SelectedToggleBottonColor = kYes;
                                     }
-            
+      
                                     displayAdminProperties =
                                         index != 0 ? true : false;
                                     print(displayAdminProperties);
-                                    for (int i = 0; i < isSelected.length; i++) {
+                                    for (int i = 0;
+                                        i < isSelected.length;
+                                        i++) {
                                       isSelected[i] = i == index;
                                     }
                                   });
@@ -843,7 +852,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                          padding:
+                              EdgeInsets.only(top: 10, left: 15, right: 15),
                           child: Text(
                             'Properties on Sale ${Emojis.buildingConstruction}',
                             style: TextStyle(
@@ -920,9 +930,11 @@ class PropertyCard extends StatefulWidget {
   final String taluk;
   final String city;
   final String state;
+  final bool dtcpApproved;
   final List<String> propertyImages;
   const PropertyCard(
       {required this.imageloc,
+      required this.dtcpApproved,
       required this.taluk,
       required this.city,
       required this.constructionArea,
@@ -984,7 +996,7 @@ class _PropertyCardState extends State<PropertyCard> {
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
                     imageUrl: widget.imageloc,
-                    height: 230,
+                    height: 225,
                     width: 190,
                     // maxHeightDiskCache: 230,
                     // maxWidthDiskCache: 190,
@@ -1024,7 +1036,12 @@ class _PropertyCardState extends State<PropertyCard> {
               Row(
                 children: [
                   Text(
-                    widget.price + " \u{20B9}",
+                    "\u{20B9} " +
+                        widget.price
+                            .replaceAllMapped(
+                                new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                (Match m) => "${m[1]},")
+                            .toString(),
                     style: const TextStyle(
                         fontSize: 18,
                         color: kHighlightedTextColor,
@@ -1051,6 +1068,7 @@ class _PropertyCardState extends State<PropertyCard> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            dtcpApproved: widget.dtcpApproved,
                             taluk: widget.taluk,
                             city: widget.city,
                             state: widget.state,

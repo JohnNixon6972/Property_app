@@ -21,7 +21,8 @@ propertyType? _type;
 
 class EditPropertyScreen1 extends StatefulWidget {
   final myProperty propertyToEdit;
-  EditPropertyScreen1({required this.propertyToEdit});
+  BuildContext screenContext;
+  EditPropertyScreen1({required this.propertyToEdit,required this.screenContext});
 
   @override
   State<EditPropertyScreen1> createState() =>

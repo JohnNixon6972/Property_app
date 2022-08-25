@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
@@ -35,15 +34,35 @@ void main() async {
   runApp(PropertyApp(prefs: prefs));
 }
 
-
 class PropertyApp extends StatefulWidget {
   SharedPreferences prefs;
   PropertyApp({required this.prefs});
   @override
-  State<PropertyApp> createState() => _PropertyAppState(prefs:prefs);
+  State<PropertyApp> createState() => _PropertyAppState(prefs: prefs);
+}
+
+void SignIn() async {
+  try {
+    final userCredential = await FirebaseAuth.instance.signInAnonymously();
+    print("Signed in with temporary account.");
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.");
+        break;
+      default:
+        print("Unknown error.");
+    }
+  }
 }
 
 class _PropertyAppState extends State<PropertyApp> {
+  @override
+  void initState() {
+    super.initState();
+    SignIn();
+  }
+
   SharedPreferences prefs;
   _PropertyAppState({required this.prefs});
   @override
@@ -68,8 +87,9 @@ class _PropertyAppState extends State<PropertyApp> {
           VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
           aboutUs.id: (context) => aboutUs(),
           forgotPasswordScreen.id: (context) => forgotPasswordScreen(),
-          ApprovedPropertiesScreen.id:(context)=> ApprovedPropertiesScreen(),
-          UnApprovedPropertiesScreen.id:(context)=> UnApprovedPropertiesScreen(),
+          ApprovedPropertiesScreen.id: (context) => ApprovedPropertiesScreen(),
+          UnApprovedPropertiesScreen.id: (context) =>
+              UnApprovedPropertiesScreen(),
         },
       ),
     );

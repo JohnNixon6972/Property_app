@@ -259,7 +259,8 @@ class _profileScreenState extends State<profileScreen> {
                               await prefs.clear();
                               myPropertiesAdv = [];
                               bookmarkedPropertyNames = [];
-                              Navigator.pushNamed(context, loginScreen.id);
+                              // Navigator.pushNamed(context, loginScreen.id);
+                              Navigator.pushNamedAndRemoveUntil(context, loginScreen.id, (r) => false);
                             },
                             style: ElevatedButton.styleFrom(
                               elevation: 10,

@@ -32,6 +32,7 @@ void getBookMarkedPropertiesCards() async {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(
         BookmarkedProperties(
+          dtcpApproved: property.dtcpApproved,
           city: property.city,
           taluk: property.taluk,
           state: property.state,
@@ -65,6 +66,7 @@ void getBookMarkedPropertiesCards() async {
   for (PropertyCard property in PropertiesOnSaleAll) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(BookmarkedProperties(
+        dtcpApproved: property.dtcpApproved,
         city: property.city,
         taluk: property.taluk,
         state: property.state,
@@ -202,7 +204,14 @@ class _BookmarkedPropertiesScreenState
                             Row(
                               children: [
                                 Text(
-                                  "\$${bookMarkedProperties[index].price}",
+                                  "\u{20B9} " +
+                                      bookMarkedProperties[index]
+                                          .price
+                                          .replaceAllMapped(
+                                              new RegExp(
+                                                  r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                              (Match m) => "${m[1]},")
+                                          .toString(),
                                   style: const TextStyle(
                                       fontSize: 18,
                                       color: kHighlightedTextColor,
@@ -231,8 +240,13 @@ class _BookmarkedPropertiesScreenState
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
-                                              city: bookMarkedProperties[index].city,
-                                              taluk: bookMarkedProperties[index].taluk,
+                                          dtcpApproved:
+                                              bookMarkedProperties[index]
+                                                  .dtcpApproved,
+                                          city:
+                                              bookMarkedProperties[index].city,
+                                          taluk:
+                                              bookMarkedProperties[index].taluk,
                                           state:
                                               bookMarkedProperties[index].state,
                                           district: bookMarkedProperties[index]
@@ -398,6 +412,7 @@ class _BookmarkedPropertiesScreenState
 }
 
 class BookmarkedProperties extends StatefulWidget {
+  final bool dtcpApproved;
   final String imageloc;
   final String propertyName;
   final String propertyAddress;
@@ -426,6 +441,7 @@ class BookmarkedProperties extends StatefulWidget {
 
   const BookmarkedProperties(
       {Key? key,
+      required this.dtcpApproved,
       required this.city,
       required this.taluk,
       required this.state,
@@ -555,6 +571,7 @@ class _BookmarkedPropertiesState extends State<BookmarkedProperties> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PropertyDetailsScreen(
+                            dtcpApproved: widget.dtcpApproved,
                             city: widget.city,
                             taluk: widget.taluk,
                             state: widget.state,

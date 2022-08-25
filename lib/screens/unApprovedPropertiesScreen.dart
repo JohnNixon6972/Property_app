@@ -130,6 +130,7 @@ class _UnApprovedPropertiesScreenState
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
+                                              dtcpApproved: unApprovedProperties[index].dtcpApproved,
                                               city: unApprovedProperties[index].city,
                                               taluk: unApprovedProperties[index].taluk,
                                           state:

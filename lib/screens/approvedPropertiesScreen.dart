@@ -128,6 +128,7 @@ class _ApprovedPropertiesScreenState extends State<ApprovedPropertiesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             PropertyDetailsScreen(
+                                              dtcpApproved: approvedProperties[index].dtcpApproved,
                                           city: approvedProperties[index].city,
                                           taluk:
                                               approvedProperties[index].taluk,

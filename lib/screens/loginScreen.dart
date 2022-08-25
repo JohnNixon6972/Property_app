@@ -377,8 +377,7 @@ class _loginScreenState extends State<loginScreen> {
                                                     prefs.setString(
                                                         'SavedPassword',
                                                         userInfo.password),
-                                                    Navigator.pushNamed(
-                                                        context, HomeScreen.id),
+                                                    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id, (r) => false),
                                                   }
                                                 else
                                                   {

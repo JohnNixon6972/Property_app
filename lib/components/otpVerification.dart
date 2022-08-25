@@ -106,7 +106,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
             (route) => false,
           );
         },
-        onLoginFailed: (authException) {
+        onLoginFailed: (authException, StackTrace) {
           // showSnackBar('Something went wrong!');
           popUpAlertDialogBox(context, 'Something went wrong!');
           log(VerifyPhoneNumberScreen.id, error: authException.message);
@@ -135,13 +135,13 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                   if (controller.codeSent)
                     TextButton(
                       child: Text(
-                        controller.timerIsActive
-                            ? '${controller.timerCount.inSeconds}s'
+                        controller.isListeningForOtpAutoRetrieve
+                            ? '${controller.autoRetrievalTimeLeft.inSeconds}s'
                             : 'Resend',
                         style: const TextStyle(
                             color: kHighlightedTextColor, fontSize: 18),
                       ),
-                      onPressed: controller.timerIsActive
+                      onPressed: controller.isListeningForOtpAutoRetrieve
                           ? null
                           : () async {
                               log(VerifyPhoneNumberScreen.id,
@@ -161,7 +161,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                           "We've sent an SMS with a verification code to " +
                               userInfo.mobileNumber,
                           textAlign: TextAlign.center,
-                          style:const TextStyle(
+                          style: const TextStyle(
                               fontSize: 20, color: kHighlightedTextColor),
                         ),
                         const SizedBox(height: 10),
@@ -169,7 +169,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                           thickness: 1,
                           color: kHighlightedTextColor,
                         ),
-                        if (controller.timerIsActive)
+                        if (controller.isListeningForOtpAutoRetrieve)
                           Column(
                             children: const [
                               CustomLoader(),
@@ -215,8 +215,8 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                           },
                           onSubmit: (enteredOTP) async {
                             // var smsCode = "xxxx";
-                            final isValidOTP = await controller.verifyOTP(
-                              otp: enteredOTP,
+                            final isValidOTP = await controller.verifyOtp(
+                              enteredOTP,
                             );
                             // PhoneAuthCredential phoneAuthCredential =
                             //     PhoneAuthProvider.credential(

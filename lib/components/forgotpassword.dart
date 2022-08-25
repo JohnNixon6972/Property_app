@@ -35,13 +35,13 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
   @override
   void initState() {
     scrollController = ScrollController();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     scrollController.dispose();
     super.dispose();
   }
@@ -247,7 +247,7 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
             ),
           );
         },
-        onLoginFailed: (authException) {
+        onLoginFailed: (authException, StackTrace) {
           // showSnackBar('Something went wrong!');
           log(forgotPasswordScreen.id, error: authException.message);
           // handle error further if needed
@@ -274,13 +274,13 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
                   if (controller.codeSent)
                     TextButton(
                       child: Text(
-                        controller.timerIsActive
-                            ? '${controller.timerCount.inSeconds}s'
+                        controller.isListeningForOtpAutoRetrieve
+                            ? '${controller.autoRetrievalTimeLeft.inSeconds}s'
                             : 'Resend',
                         style: const TextStyle(
                             color: kHighlightedTextColor, fontSize: 18),
                       ),
-                      onPressed: controller.timerIsActive
+                      onPressed: controller.isListeningForOtpAutoRetrieve
                           ? null
                           : () async {
                               log(forgotPasswordScreen.id, name: 'Resend OTP');
@@ -307,7 +307,7 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
                           thickness: 1,
                           color: kHighlightedTextColor,
                         ),
-                        if (controller.timerIsActive)
+                        if (controller.isListeningForOtpAutoRetrieve)
                           Column(
                             children: const [
                               CustomLoader(),
@@ -353,8 +353,8 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
                           },
                           onSubmit: (enteredOTP) async {
                             var smsCode = "xxxx";
-                            final isValidOTP = await controller.verifyOTP(
-                              otp: enteredOTP,
+                            final isValidOTP = await controller.verifyOtp(
+                              enteredOTP,
                             );
                             // PhoneAuthCredential phoneAuthCredential =
                             //     PhoneAuthProvider.credential(

@@ -568,9 +568,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
-      body: SafeArea(
-        child: DoubleBackToCloseApp(
-          snackBar: const SnackBar(content: Text('Tap back again to leave')),
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(content: Text('Tap back again to leave')),
+        child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -804,7 +804,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fillColor: SelectedToggleBottonColor,
                                 // disabledColor: Colors.green,
                                 // focusColor: Colors.green,
-
+      
                                 borderWidth: 2,
                                 selectedColor: Colors.white,
                                 borderRadius: BorderRadius.circular(35),
@@ -835,7 +835,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     } else if (index == 1) {
                                       SelectedToggleBottonColor = kYes;
                                     }
-
+      
                                     displayAdminProperties =
                                         index != 0 ? true : false;
                                     print(displayAdminProperties);

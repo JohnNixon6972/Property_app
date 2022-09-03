@@ -48,7 +48,7 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
 
   @override
   void didChangeMetrics() {
-    final bottomViewInsets = WidgetsBinding.instance!.window.viewInsets.bottom;
+    final bottomViewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
     isKeyboardVisible = bottomViewInsets > 0;
   }
 

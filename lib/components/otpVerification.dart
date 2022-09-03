@@ -33,20 +33,20 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
   @override
   void initState() {
     scrollController = ScrollController();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     scrollController.dispose();
     super.dispose();
   }
 
   @override
   void didChangeMetrics() {
-    final bottomViewInsets = WidgetsBinding.instance!.window.viewInsets.bottom;
+    final bottomViewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
     isKeyboardVisible = bottomViewInsets > 0;
   }
 

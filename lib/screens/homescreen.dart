@@ -15,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'aboutUs.dart';
+import 'package:geolocator/geolocator.dart';
 
 late User loggedInUser;
 bool displayAdminProperties = false;
@@ -543,12 +544,41 @@ final customCacheManager = CacheManager(
 // late String name = "";
 String categorySelected = "All";
 
+Future<Position> _determinePosition() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error('Location permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+  return await Geolocator.getCurrentPosition();
+}
+
+void loc() async {
+  Position loc = await _determinePosition();
+  print(loc);
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   late List<bool> isSelected;
   @override
   void initState() {
     isSelected = [true, false];
     getBookMarkedProperties();
+    loc();
     super.initState();
   }
 
@@ -804,7 +834,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fillColor: SelectedToggleBottonColor,
                                 // disabledColor: Colors.green,
                                 // focusColor: Colors.green,
-      
+
                                 borderWidth: 2,
                                 selectedColor: Colors.white,
                                 borderRadius: BorderRadius.circular(35),
@@ -835,7 +865,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     } else if (index == 1) {
                                       SelectedToggleBottonColor = kYes;
                                     }
-      
+
                                     displayAdminProperties =
                                         index != 0 ? true : false;
                                     print(displayAdminProperties);

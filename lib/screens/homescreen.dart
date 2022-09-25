@@ -8,6 +8,7 @@ import 'package:property_app/screens/aboutUs.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/propertyDetailsScreen.dart';
 import 'package:property_app/main.dart';
+import 'package:property_app/screens/raiseIssue.dart';
 import '../constants.dart';
 // import '../components/bottomNavigationBar.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -16,6 +17,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'aboutUs.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 late User loggedInUser;
 bool displayAdminProperties = false;
@@ -544,31 +546,31 @@ final customCacheManager = CacheManager(
 // late String name = "";
 String categorySelected = "All";
 
-Future<Position> _determinePosition() async {
-  bool serviceEnabled;
-  LocationPermission permission;
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    return Future.error('Location services are disabled.');
-  }
+// Future<Position> _determinePosition() async {
+//   bool serviceEnabled;
+//   LocationPermission permission;
+//   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+//   if (!serviceEnabled) {
+//     return Future.error('Location services are disabled.');
+//   }
 
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      return Future.error('Location permissions are denied');
-    }
-  }
+// permission = await Geolocator.checkPermission();
+// if (permission == LocationPermission.denied) {
+//   permission = await Geolocator.requestPermission();
+//   if (permission == LocationPermission.denied) {
+//     return Future.error('Location permissions are denied');
+//   }
+// }
 
-  if (permission == LocationPermission.deniedForever) {
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-  }
-  return await Geolocator.getCurrentPosition();
-}
+// if (permission == LocationPermission.deniedForever) {
+//   return Future.error(
+//       'Location permissions are permanently denied, we cannot request permissions.');
+// }
+// return await Geolocator.getCurrentPosition();
+// }
 
 void loc() async {
-  Position loc = await _determinePosition();
+  // Position loc = await _determinePosition();
   print(loc);
 }
 
@@ -598,6 +600,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
+      floatingActionButton: AvatarGlow(
+        glowColor: Colors.black,
+        endRadius: 35,
+        child: FloatingActionButton(
+          backgroundColor: kHighlightedTextColor,
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, raiseAnIssue.id);
+          },
+        ),
+      ),
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to leave')),
         child: SafeArea(

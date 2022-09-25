@@ -8,6 +8,8 @@ import 'package:property_app/screens/addPropertiesScreen1.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
+import 'package:property_app/screens/raiseIssue.dart';
+import 'package:property_app/screens/requestPropertyDetails.dart';
 import 'package:property_app/screens/searchScreen.dart';
 import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 import 'screens/registerScreen.dart';
@@ -91,6 +93,8 @@ class _PropertyAppState extends State<PropertyApp> {
           ApprovedPropertiesScreen.id: (context) => ApprovedPropertiesScreen(),
           UnApprovedPropertiesScreen.id: (context) =>
               UnApprovedPropertiesScreen(),
+          raiseAnIssue.id: (context) => raiseAnIssue(),
+          requestPropertyDetails.id: (context) => requestPropertyDetails(),
         },
       ),
     );

@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/alertPopUp.dart';
@@ -10,15 +8,13 @@ import 'package:property_app/constants.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import 'customLoader.dart';
 import '../main.dart';
-import '../screens/homescreen.dart';
-import '../currentUserInformation.dart';
 
 late String newPassword = userInfo.password;
 late String confirmNewPassword = userInfo.password;
 
-final _auth = FirebaseAuth.instance;
+// final _auth = FirebaseAuth.instance;
+// final _formKey = GlobalKey<FormState>();
 final _firestore = FirebaseFirestore.instance;
-final _formKey = GlobalKey<FormState>();
 
 class forgotPasswordScreen extends StatefulWidget {
   static const String id = 'forgotPasswordScreen';

@@ -8,6 +8,7 @@ import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/screens/approvedPropertiesScreen.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
+import 'package:property_app/screens/raiseIssue.dart';
 import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 // import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
@@ -160,7 +161,8 @@ class _profileScreenState extends State<profileScreen> {
             Expanded(
               flex: 11,
               child: Stack(
-                clipBehavior: Clip.none, children: [
+                clipBehavior: Clip.none,
+                children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(30),
@@ -260,7 +262,8 @@ class _profileScreenState extends State<profileScreen> {
                               myPropertiesAdv = [];
                               bookmarkedPropertyNames = [];
                               // Navigator.pushNamed(context, loginScreen.id);
-                              Navigator.pushNamedAndRemoveUntil(context, loginScreen.id, (r) => false);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, loginScreen.id, (r) => false);
                             },
                             style: ElevatedButton.styleFrom(
                               elevation: 10,
@@ -289,11 +292,11 @@ class _profileScreenState extends State<profileScreen> {
                                     Title: "Personal Information",
                                     SubTitle: userInfo.name,
                                   ),
-                                  // ProfileDetailsContainer(
-                                  //   icon: Icons.call_outlined,
-                                  //   Title: "Phone",
-                                  //   SubTitle: userInfo.mobileNumber,
-                                  // ),
+                                  ProfileDetailsContainer(
+                                    icon: Icons.back_hand,
+                                    Title: "Request a Property",
+                                    SubTitle: "Check requested Properties",
+                                  ),
                                   ProfileDetailsContainer(
                                     icon: Icons.call_outlined,
                                     Title: "Email",
@@ -312,7 +315,6 @@ class _profileScreenState extends State<profileScreen> {
                                           SubTitle: "",
                                         )
                                       : Center(),
-
                                   userInfo.name != "john"
                                       ? ProfileDetailsContainer(
                                           icon: Icons.add_location_outlined,
@@ -334,6 +336,10 @@ class _profileScreenState extends State<profileScreen> {
                                   const SizedBox(
                                     height: 8,
                                   ),
+
+                                  // const SizedBox(
+                                  //   height: 8,
+                                  // ),
                                 ],
                               ),
                             ),
@@ -817,6 +823,8 @@ class _ProfileDetailsContainerState extends State<ProfileDetailsContainer> {
                           context, UnApprovedPropertiesScreen.id);
                     } else if (widget.Title == "My Properties") {
                       Navigator.pushNamed(context, myPropertiesScreen.id);
+                    } else if (widget.Title == "Request a Property") {
+                      Navigator.pushNamed(context, raiseAnIssue.id);
                     } else {
                       showDialog(
                           context: context,

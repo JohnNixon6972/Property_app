@@ -599,17 +599,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       backgroundColor: kPageBackgroundColor,
-      floatingActionButton: AvatarGlow(
-        glowColor: Colors.black,
-        endRadius: 35,
-        child: FloatingActionButton(
-          backgroundColor: kHighlightedTextColor,
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.pushNamed(context, raiseAnIssue.id);
-          },
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 20,
+        label: const Text(
+          'Req Property',
+          style: TextStyle(
+              color: kPageBackgroundColor,
+              fontSize: 13,
+              fontWeight: FontWeight.w900),
         ),
+        backgroundColor: kHighlightedTextColor,
+        // icon: Icon(Icons.add),
+        icon: null,
+        onPressed: () {
+          Navigator.pushNamed(context, raiseAnIssue.id);
+        },
       ),
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to leave')),
@@ -1018,7 +1024,7 @@ class _PropertyCardState extends State<PropertyCard> {
       padding: const EdgeInsets.only(right: 8.0),
       child: Container(
         width: 190,
-        height: 230,
+        height: 240,
         decoration: const BoxDecoration(
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
@@ -1027,7 +1033,7 @@ class _PropertyCardState extends State<PropertyCard> {
         ),
         child: Padding(
           padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, bottom: 8.0, top: 10.0),
+              left: 10.0, right: 10.0, bottom: 8.0, top: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

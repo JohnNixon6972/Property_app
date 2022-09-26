@@ -1,10 +1,12 @@
+// ignore_for_file: file_names
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
 
 Future<dynamic> popUpAlertDialogBox(BuildContext context, title) {
-  Timer _timer;
-  IconData icn = Icons.warning;
+  // Timer _timer;
+  // IconData icn = Icons.warning;
   return
    showDialog(
       context: context,

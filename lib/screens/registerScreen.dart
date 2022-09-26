@@ -59,7 +59,7 @@ class _registerScreenState extends State<registerScreen> {
 
   @override
   void didChangeMetrics() {
-    final bottomViewInsets = WidgetsBinding.instance!.window.viewInsets.bottom;
+    final bottomViewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
     isKeyboardVisible = bottomViewInsets > 0;
   }
 

@@ -9,9 +9,12 @@ import '../constants.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:country_state_city_picker/country_state_city_picker.dart';
 
 enum propertyTo { Sell, Rent }
+
 enum propertyType { Residental, Commercial }
+
 enum propertyCategory { Plot, Land, House, Apartment, Building }
 
 propertyTo? _to = propertyTo.Sell;
@@ -134,6 +137,9 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
             ));
   }
 
+  String countryValue = "";
+  String stateValue = "";
+  String cityValue = "";
   int selectedDistrict = 0;
   List<String> talukas = [];
   @override
@@ -814,6 +820,23 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           )
                         ],
                       ),
+                      // Column(
+                      //   children: [
+                      //     SelectState(onCountryChanged: (value) {
+                      //       setState(() {
+                      //         countryValue = value;
+                      //       });
+                      //     }, onStateChanged: (value) {
+                      //       setState(() {
+                      //         stateValue = value;
+                      //       });
+                      //     }, onCityChanged: (value) {
+                      //       setState(() {
+                      //         cityValue = value;
+                      //       });
+                      //     })
+                      //   ],
+                      // )
                     ],
                   ),
                 ),

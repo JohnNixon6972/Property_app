@@ -57,15 +57,16 @@ class _raiseAnIssueState extends State<raiseAnIssue> {
       child: Scaffold(
         backgroundColor: kPageBackgroundColor,
         appBar: AppBar(
-          toolbarHeight: 141,
+          backgroundColor: kPageBackgroundColor,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.066,
           actions: [
             ToggleSwitch(
               minWidth: MediaQuery.of(context).size.width,
-              minHeight: 70,
+
               initialLabelIndex: idx ? 0 : 1,
               totalSwitches: 2,
               cornerRadius: 0,
-              isVertical: true,
+              // isVertical: true,
               activeBgColor: const [kBottomNavigationBackgroundColor],
               inactiveBgColor: kNavigationIconColor,
               activeBorders: [

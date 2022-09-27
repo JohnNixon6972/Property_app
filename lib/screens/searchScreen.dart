@@ -322,7 +322,7 @@ class _searchScreenState extends State<searchScreen> {
                       color: kHighlightedTextColor,
                     ),
                     onPressed: () {
-                      query = " ";
+                      query = "";
                       myController.text = "";
                       // print(query);
                     },

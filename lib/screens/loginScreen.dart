@@ -1,16 +1,17 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/components/forgotpassword.dart';
-import 'package:property_app/components/otpVerification.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
 import 'package:property_app/screens/registerScreen.dart';
 import 'package:property_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/alertPopUp.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -66,384 +67,448 @@ Future<void> checkSavedUser(BuildContext context) async {
 class _loginScreenState extends State<loginScreen> {
   @override
   void initState() {
-    // TODO: implement initState
-    checkSavedUser(context);
+    // checkSavedUser(context);
+
     super.initState();
   }
 
-  final _auth = FirebaseAuth.instance;
   final _loginFormKey = GlobalKey<FormState>();
   bool showSpinner = false;
   bool _isHidden = true;
-
+  bool showtop = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
-      body: DoubleBackToCloseApp(
-        snackBar: const SnackBar(content: Text('Tap back again to leave')),
-        child: SafeArea(
-          child: ModalProgressHUD(
-            inAsyncCall: showSpinner,
-            child: Form(
-              key: _loginFormKey,
-              child: Padding(
-                padding: EdgeInsets.all(12),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: <Widget>[
-                      Hero(
-                        tag: 'logo',
-                        child: Container(
-                          height: 400,
-                          child: Image.asset(
-                            'images/try1.png',
+      body: OfflineBuilder(
+        connectivityBuilder: (BuildContext context,
+            ConnectivityResult connectivity, Widget child) {
+          final bool connected = connectivity != ConnectivityResult.none;
+         
+            if (connected) {
+              Timer(const Duration(seconds: 1), () {
+                showtop = false;
+              });
+                checkSavedUser(context);
+            } else {
+              showtop = true;
+            }
+          return SafeArea(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                child,
+                Visibility(
+                  visible: showtop && !connected,
+                  child: Positioned(
+                    height: 24.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      color: connected
+                          ? const Color(0xFF00EE44)
+                          : const Color(0xFFEE4400),
+                      child: connected
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Text("Online"),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Text("Offline"),
+                              ],
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        child: DoubleBackToCloseApp(
+          snackBar: const SnackBar(content: Text('Tap back again to leave')),
+          child: SafeArea(
+            child: ModalProgressHUD(
+              inAsyncCall: showSpinner,
+              child: Form(
+                key: _loginFormKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      children: <Widget>[
+                        Hero(
+                          tag: 'logo',
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.45,
+                            child: Image.asset(
+                              'images/try1.png',
+                            ),
                           ),
                         ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              simpleTexts(
-                                texts: 'Login',
-                                styleConstant: kTextTitleStyle,
-                                align: TextAlign.left,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              simpleTexts(
-                                texts: 'Please Login to Continue',
-                                styleConstant: kTextSubTitleStyle,
-                                align: TextAlign.left,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            cursorColor: kPrimaryButtonColor,
-                            keyboardType: TextInputType.phone,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: kPrimaryButtonColor),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter valid Moible Number';
-                              } else {
-                                userInfo.mobileNumber = value;
-                              }
-                              return null;
-                            },
-                            decoration: kTextFieldDecoration.copyWith(
-                              hintText: 'Enter your registered Mobile Number',
-                              prefixIcon: Icon(Icons.phone,
-                                  color: kBottomNavigationBackgroundColor),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextFormField(
-                            cursorColor: kPrimaryButtonColor,
-                            obscureText: _isHidden,
-                            keyboardType: TextInputType.visiblePassword,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(color: kPrimaryButtonColor),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter valid text';
-                              } else {
-                                userInfo.password = value;
-                              }
-                              return null;
-                            },
-                            decoration: kTextFieldDecoration.copyWith(
-                              hintText: 'Enter your Password.',
-                              prefixIcon: Icon(Icons.lock,
-                                  color: kBottomNavigationBackgroundColor),
-                              suffix: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _isHidden = !_isHidden;
-                                  });
-                                },
-                                child: Icon(_isHidden
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          GestureDetector(
-                            child: Row(
+                            Row(
                               children: [
-                                Spacer(),
-                                Text(
-                                  "Forgot Password ?",
-                                  textAlign: TextAlign.right,
-                                  style: kTextTitleStyle.copyWith(fontSize: 17),
+                                simpleTexts(
+                                  texts: 'Login',
+                                  styleConstant: kTextTitleStyle,
+                                  align: TextAlign.left,
                                 ),
                               ],
                             ),
-                            onTap: () async {
-                              final _auth = FirebaseAuth.instance;
-                              // FirebaseAuth.instance
-                              //     .sendPasswordResetEmail(email: userInfo.email);
-                              showDialog(
-                                context: context,
-                                builder: (_) => SimpleDialog(
-                                  backgroundColor: kPageBackgroundColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  title: const Text(
-                                    "Reset password",
-                                    style: TextStyle(
-                                      color: kHighlightedTextColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 25,
-                                    ),
-                                    textAlign: TextAlign.center,
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                simpleTexts(
+                                  texts: 'Please Login to Continue',
+                                  styleConstant: kTextSubTitleStyle,
+                                  align: TextAlign.left,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              cursorColor: kPrimaryButtonColor,
+                              keyboardType: TextInputType.phone,
+                              textAlign: TextAlign.left,
+                              style:
+                                  const TextStyle(color: kPrimaryButtonColor),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter valid Moible Number';
+                                } else {
+                                  userInfo.mobileNumber = value;
+                                }
+                                return null;
+                              },
+                              decoration: kTextFieldDecoration.copyWith(
+                                hintText: 'Enter your registered Mobile Number',
+                                prefixIcon: const Icon(Icons.phone,
+                                    color: kBottomNavigationBackgroundColor),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              cursorColor: kPrimaryButtonColor,
+                              obscureText: _isHidden,
+                              keyboardType: TextInputType.visiblePassword,
+                              textAlign: TextAlign.left,
+                              style:
+                                  const TextStyle(color: kPrimaryButtonColor),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter valid text';
+                                } else {
+                                  userInfo.password = value;
+                                }
+                                return null;
+                              },
+                              decoration: kTextFieldDecoration.copyWith(
+                                hintText: 'Enter your Password.',
+                                prefixIcon: const Icon(Icons.lock,
+                                    color: kBottomNavigationBackgroundColor),
+                                suffix: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _isHidden = !_isHidden;
+                                    });
+                                  },
+                                  child: Icon(_isHidden
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            GestureDetector(
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  Text(
+                                    "Forgot Password ?",
+                                    textAlign: TextAlign.right,
+                                    style:
+                                        kTextTitleStyle.copyWith(fontSize: 17),
                                   ),
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        children: [
-                                          Form(
-                                            key: _loginFormKey,
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                TextFormField(
-                                                  onChanged: (newValue) {
-                                                    userInfo.mobileNumber =
-                                                        newValue;
-                                                    print(
-                                                        userInfo.mobileNumber);
-                                                  },
-                                                  cursorColor:
-                                                      kPrimaryButtonColor,
-                                                  keyboardType:
-                                                      TextInputType.phone,
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                      color:
-                                                          kPrimaryButtonColor),
-                                                  validator: (value) {
-                                                    if (value == null ||
-                                                        value.isEmpty) {
-                                                      return 'Please enter valid text';
-                                                    }
-                                                  },
-                                                  decoration:
-                                                      kTextFieldDecoration
-                                                          .copyWith(
-                                                    hintText:
-                                                        'Enter your Mobile Number.',
-                                                    prefixIcon: Icon(
-                                                        Icons.phone,
+                                ],
+                              ),
+                              onTap: () async {
+                                final _auth = FirebaseAuth.instance;
+                                // FirebaseAuth.instance
+                                //     .sendPasswordResetEmail(email: userInfo.email);
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => SimpleDialog(
+                                    backgroundColor: kPageBackgroundColor,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    title: const Text(
+                                      "Reset password",
+                                      style: TextStyle(
+                                        color: kHighlightedTextColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 25,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          children: [
+                                            Form(
+                                              key: _loginFormKey,
+                                              child: Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  TextFormField(
+                                                    onChanged: (newValue) {
+                                                      userInfo.mobileNumber =
+                                                          newValue;
+                                                      print(userInfo
+                                                          .mobileNumber);
+                                                    },
+                                                    cursorColor:
+                                                        kPrimaryButtonColor,
+                                                    keyboardType:
+                                                        TextInputType.phone,
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
                                                         color:
                                                             kPrimaryButtonColor),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () async {
-                                                    bool userExists = false;
-                                                    _firestore
-                                                        .collection("Users")
-                                                        .doc(userInfo
-                                                            .mobileNumber)
-                                                        .get()
-                                                        .then((value) => {
-                                                              print("hi"),
-                                                              userExists = true,
-                                                              Navigator.pushNamed(
-                                                                  context,
-                                                                  forgotPasswordScreen
-                                                                      .id)
-                                                            });
-                                                    if (userExists == false) {
-                                                      popUpAlertDialogBox(
-                                                          context,
-                                                          "User is not registered");
-                                                    }
-
-                                                    Navigator.pop(context);
-                                                    print(
-                                                        userInfo.mobileNumber);
-                                                  },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary:
-                                                        kPrimaryButtonColor,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
+                                                    validator: (value) {
+                                                      if (value == null ||
+                                                          value.isEmpty) {
+                                                        return 'Please enter valid text';
+                                                      }
+                                                    },
+                                                    decoration:
+                                                        kTextFieldDecoration
+                                                            .copyWith(
+                                                      hintText:
+                                                          'Enter your Mobile Number.',
+                                                      prefixIcon: const Icon(
+                                                          Icons.phone,
+                                                          color:
+                                                              kPrimaryButtonColor),
                                                     ),
                                                   ),
-                                                  child: const Text(
-                                                    'Request OTP',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20),
+                                                  const SizedBox(
+                                                    height: 10,
                                                   ),
-                                                ),
-                                              ],
+                                                  ElevatedButton(
+                                                    onPressed: () async {
+                                                      bool userExists = false;
+                                                      _firestore
+                                                          .collection("Users")
+                                                          .doc(userInfo
+                                                              .mobileNumber)
+                                                          .get()
+                                                          .then((value) => {
+                                                                print("hi"),
+                                                                userExists =
+                                                                    true,
+                                                                Navigator.pushNamed(
+                                                                    context,
+                                                                    forgotPasswordScreen
+                                                                        .id)
+                                                              });
+                                                      if (userExists == false) {
+                                                        popUpAlertDialogBox(
+                                                            context,
+                                                            "User is not registered");
+                                                      }
+
+                                                      Navigator.pop(context);
+                                                      print(userInfo
+                                                          .mobileNumber);
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary:
+                                                          kPrimaryButtonColor,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                      ),
+                                                    ),
+                                                    child: const Text(
+                                                      'Request OTP',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 20),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              if (_loginFormKey.currentState!.validate()) {
-                                print(userInfo.mobileNumber);
-                                print(userInfo.password);
-                                try {
-                                  //   await _auth.signInWithEmailAndPassword(
-                                  //       email: userInfo.email,
-                                  //       password: userInfo.password);
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                if (_loginFormKey.currentState!.validate()) {
+                                  print(userInfo.mobileNumber);
+                                  print(userInfo.password);
+                                  try {
+                                    //   await _auth.signInWithEmailAndPassword(
+                                    //       email: userInfo.email,
+                                    //       password: userInfo.password);
 
-                                  final _firestore = FirebaseFirestore.instance;
+                                    final _firestore =
+                                        FirebaseFirestore.instance;
 
-                                  _firestore
-                                      .collection('Users')
-                                      .doc(userInfo.mobileNumber)
-                                      .get()
-                                      .then((value) => {
-                                            // print(value.data()!["password"]),
-                                            if (value.exists)
-                                              {
-                                                if (userInfo.password ==
-                                                    (value.data()!["password"]))
-                                                  {
-                                                    userInfo.name =
-                                                        value.data()!["name"],
-                                                    userInfo.password = value
-                                                        .data()!["password"],
-                                                    userInfo.email =
-                                                        value.data()!["email"],
-                                                    userInfo.mobileNumber =
-                                                        value.data()![
-                                                            "mobileNumber"],
-                                                    userInfo.addressLine1 =
-                                                        value.data()![
-                                                            "addressLine1"],
-                                                    userInfo.addressLine2 =
-                                                        value.data()![
-                                                            "addressLine2"],
-                                                    userInfo.state =
-                                                        value.data()!["state"],
-                                                    userInfo.country = value
-                                                        .data()!["country"],
-                                                    userInfo.postalCode = value
-                                                        .data()!["postalcode"],
-                                                    userInfo.profileImgUrl =
-                                                        value.data()![
-                                                            "profileImgUrl"],
-                                                    prefs.setString('UserNum',
-                                                        userInfo.mobileNumber),
-                                                    prefs.setString(
-                                                        'SavedPassword',
-                                                        userInfo.password),
-                                                    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id, (r) => false),
-                                                  }
-                                                else
-                                                  {
-                                                    popUpAlertDialogBox(context,
-                                                        "Login Failed\nInvalid Password"),
-                                                  }
-                                              }
-                                            else
-                                              {
-                                                popUpAlertDialogBox(context,
-                                                    "${userInfo.mobileNumber} is not registered"),
-                                              }
-                                          });
+                                    _firestore
+                                        .collection('Users')
+                                        .doc(userInfo.mobileNumber)
+                                        .get()
+                                        .then((value) => {
+                                              // print(value.data()!["password"]),
+                                              if (value.exists)
+                                                {
+                                                  if (userInfo.password ==
+                                                      (value
+                                                          .data()!["password"]))
+                                                    {
+                                                      userInfo.name =
+                                                          value.data()!["name"],
+                                                      userInfo.password = value
+                                                          .data()!["password"],
+                                                      userInfo.email = value
+                                                          .data()!["email"],
+                                                      userInfo.mobileNumber =
+                                                          value.data()![
+                                                              "mobileNumber"],
+                                                      userInfo.addressLine1 =
+                                                          value.data()![
+                                                              "addressLine1"],
+                                                      userInfo.addressLine2 =
+                                                          value.data()![
+                                                              "addressLine2"],
+                                                      userInfo.state = value
+                                                          .data()!["state"],
+                                                      userInfo.country = value
+                                                          .data()!["country"],
+                                                      userInfo.postalCode =
+                                                          value.data()![
+                                                              "postalcode"],
+                                                      userInfo.profileImgUrl =
+                                                          value.data()![
+                                                              "profileImgUrl"],
+                                                      prefs.setString(
+                                                          'UserNum',
+                                                          userInfo
+                                                              .mobileNumber),
+                                                      prefs.setString(
+                                                          'SavedPassword',
+                                                          userInfo.password),
+                                                      Navigator
+                                                          .pushNamedAndRemoveUntil(
+                                                              context,
+                                                              HomeScreen.id,
+                                                              (r) => false),
+                                                    }
+                                                  else
+                                                    {
+                                                      popUpAlertDialogBox(
+                                                          context,
+                                                          "Login Failed\nInvalid Password"),
+                                                    }
+                                                }
+                                              else
+                                                {
+                                                  popUpAlertDialogBox(context,
+                                                      "${userInfo.mobileNumber} is not registered"),
+                                                }
+                                            });
 
-                                  await prefs.setString(
-                                      'User', userInfo.mobileNumber);
-                                  await prefs.setString(
-                                      'Password', userInfo.password);
-                                } catch (e) {
-                                  print(e);
+                                    await prefs.setString(
+                                        'User', userInfo.mobileNumber);
+                                    await prefs.setString(
+                                        'Password', userInfo.password);
+                                  } catch (e) {
+                                    print(e);
+                                  }
                                 }
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: kPrimaryButtonColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: kPrimaryButtonColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ),
+                              child: const Text(
+                                'Login',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
                             ),
-                            child: const Text(
-                              'Login',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                simpleTexts(
-                                  texts: 'Dont have an account? ',
-                                  styleConstant: kTextSubTitleStyle,
-                                  align: TextAlign.center,
-                                ),
-                                simpleTexts(
-                                  texts: 'Sign Up',
-                                  styleConstant: kTextTitleStyle.copyWith(
-                                    fontSize: 18,
+                            GestureDetector(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  simpleTexts(
+                                    texts: 'Dont have an account? ',
+                                    styleConstant: kTextSubTitleStyle,
+                                    align: TextAlign.center,
                                   ),
-                                  align: TextAlign.center,
-                                ),
-                              ],
+                                  simpleTexts(
+                                    texts: 'Sign Up',
+                                    styleConstant: kTextTitleStyle.copyWith(
+                                      fontSize: 18,
+                                    ),
+                                    align: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(context, registerScreen.id);
+                              },
                             ),
-                            onTap: () {
-                              Navigator.pushNamed(context, registerScreen.id);
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
-                    ],
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

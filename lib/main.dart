@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/screens/aboutUs.dart';
@@ -22,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'components/otpVerification.dart';
 import 'components/forgotpassword.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 
 getUserDetails userInfo = getUserDetails();
 

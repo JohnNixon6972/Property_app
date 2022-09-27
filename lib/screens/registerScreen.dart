@@ -1,23 +1,17 @@
 // ignore_for_file: camel_case_types, use_key_in_widget_constructors, override_on_non_overriding_member, unused_element
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:email_auth/email_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/main.dart';
 import 'package:property_app/screens/loginScreen.dart';
 import '../components/alertPopUp.dart';
 import '../components/otpVerification.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/services.dart';
-// import 'package:otp_text_field/otp_field_style.dart';
-// import 'package:property_app/screens/homescreen.dart';
-// import 'package:property_app/currentUserInformation.dart';
-// import 'package:otp_text_field/otp_field.dart';
-// import 'package:otp_text_field/style.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 // final TextEditingController _otpController = TextEditingController();
 final _registerFormKey = GlobalKey<FormState>();
@@ -78,210 +72,262 @@ class _registerScreenState extends State<registerScreen> {
     );
   }
 
+  bool showtop = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Hero(
-                    tag: 'logo',
-                    child: SizedBox(
-                      height: 450,
-                      child: Image.asset(
-                        'images/try11.png',
-                      ),
+      body: OfflineBuilder(
+        connectivityBuilder: (BuildContext context,
+            ConnectivityResult connectivity, Widget child) {
+          final bool connected = connectivity != ConnectivityResult.none;
+
+          if (connected) {
+            Timer(const Duration(seconds: 1), () {
+              showtop = false;
+            });
+            checkSavedUser(context);
+          } else {
+            showtop = true;
+          }
+          return SafeArea(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                child,
+                Visibility(
+                  visible: showtop && !connected,
+                  child: Positioned(
+                    height: 24.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      color: connected
+                          ? const Color(0xFF00EE44)
+                          : const Color(0xFFEE4400),
+                      child: connected
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Text("Online"),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Text("Offline"),
+                              ],
+                            ),
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      simpleTexts(
-                        texts: 'Personal Details',
-                        styleConstant: kTextTitleStyle.copyWith(fontSize: 25),
-                        align: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        },
+        child: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Hero(
+                      tag: 'logo',
+                      child: SizedBox(
+                        height: 450,
+                        child: Image.asset(
+                          'images/try11.png',
+                        ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Form(
-                        key: _registerFormKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              onChanged: (value) {
-                                userInfo.name = value;
-                              },
-                              cursorColor: kPrimaryButtonColor,
-                              keyboardType: TextInputType.name,
-                              textAlign: TextAlign.left,
-                              style:
-                                  const TextStyle(color: kPrimaryButtonColor),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter valid text';
-                                } else {
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        simpleTexts(
+                          texts: 'Personal Details',
+                          styleConstant: kTextTitleStyle.copyWith(fontSize: 25),
+                          align: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Form(
+                          key: _registerFormKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                onChanged: (value) {
                                   userInfo.name = value;
-                                }
+                                },
+                                cursorColor: kPrimaryButtonColor,
+                                keyboardType: TextInputType.name,
+                                textAlign: TextAlign.left,
+                                style:
+                                    const TextStyle(color: kPrimaryButtonColor),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter valid text';
+                                  } else {
+                                    userInfo.name = value;
+                                  }
 
-                                // return null;
-                              },
-                              textInputAction: TextInputAction.done,
-                              decoration: kTextFieldDecoration.copyWith(
-                                hintText: 'Enter your Name.',
-                                prefixIcon: const Icon(Icons.badge,
-                                    color: kBottomNavigationBackgroundColor),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              onChanged: (value) {
-                                userInfo.mobileNumber = value;
-                              },
-                              cursorColor: kPrimaryButtonColor,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.left,
-                              style:
-                                  const TextStyle(color: kPrimaryButtonColor),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter valid text';
-                                } else {
-                                  userInfo.mobileNumber = value;
-                                }
-                              },
-                              decoration: kTextFieldDecoration.copyWith(
-                                hintText: 'Enter your Mobile Number.',
-                                prefixIcon: const Icon(Icons.phone,
-                                    color: kBottomNavigationBackgroundColor),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            TextFormField(
-                              onChanged: (value) {
-                                userInfo.password = value;
-                              },
-                              cursorColor: kPrimaryButtonColor,
-                              obscureText: _isHidden,
-                              keyboardType: TextInputType.visiblePassword,
-                              textAlign: TextAlign.left,
-                              style:
-                                  const TextStyle(color: kPrimaryButtonColor),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter valid text';
-                                } else {
-                                  userInfo.password = value;
-                                }
-
-                                // return null;
-                              },
-                              decoration: kTextFieldDecoration.copyWith(
-                                hintText: 'Enter your Password.',
-                                prefixIcon: const Icon(Icons.lock,
-                                    color: kBottomNavigationBackgroundColor),
-                                suffix: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _isHidden = !_isHidden;
-                                    });
-                                  },
-                                  child: Icon(_isHidden
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
+                                  // return null;
+                                },
+                                textInputAction: TextInputAction.done,
+                                decoration: kTextFieldDecoration.copyWith(
+                                  hintText: 'Enter your Name.',
+                                  prefixIcon: const Icon(Icons.badge,
+                                      color: kBottomNavigationBackgroundColor),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_registerFormKey.currentState!.validate()) {
-                            _firestore
-                                .collection("Users")
-                                .doc(userInfo.mobileNumber)
-                                .get()
-                                .then((doc) => {
-                                      if (doc.exists)
-                                        {
-                                          popUpAlertDialogBox(context,
-                                              "${userInfo.mobileNumber} is already registered"),
-                                          // Navigator.pushNamed(
-                                          //     context, loginScreen.id),
-                                        }
-                                      else if ((userInfo.mobileNumber.length) ==
-                                          10)
-                                        {
-                                          Navigator.pushNamed(context,
-                                              VerifyPhoneNumberScreen.id),
-                                        }
-                                      else
-                                        {
-                                          popUpAlertDialogBox(
-                                              context, "Invalid Mobile Number")
-                                        }
-                                    });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: kPrimaryButtonColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              TextFormField(
+                                onChanged: (value) {
+                                  userInfo.mobileNumber = value;
+                                },
+                                cursorColor: kPrimaryButtonColor,
+                                keyboardType: TextInputType.number,
+                                textAlign: TextAlign.left,
+                                style:
+                                    const TextStyle(color: kPrimaryButtonColor),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter valid text';
+                                  } else {
+                                    userInfo.mobileNumber = value;
+                                  }
+                                },
+                                decoration: kTextFieldDecoration.copyWith(
+                                  hintText: 'Enter your Mobile Number.',
+                                  prefixIcon: const Icon(Icons.phone,
+                                      color: kBottomNavigationBackgroundColor),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              TextFormField(
+                                onChanged: (value) {
+                                  userInfo.password = value;
+                                },
+                                cursorColor: kPrimaryButtonColor,
+                                obscureText: _isHidden,
+                                keyboardType: TextInputType.visiblePassword,
+                                textAlign: TextAlign.left,
+                                style:
+                                    const TextStyle(color: kPrimaryButtonColor),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter valid text';
+                                  } else {
+                                    userInfo.password = value;
+                                  }
+
+                                  // return null;
+                                },
+                                decoration: kTextFieldDecoration.copyWith(
+                                  hintText: 'Enter your Password.',
+                                  prefixIcon: const Icon(Icons.lock,
+                                      color: kBottomNavigationBackgroundColor),
+                                  suffix: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _isHidden = !_isHidden;
+                                      });
+                                    },
+                                    child: Icon(_isHidden
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
                           ),
                         ),
-                        child: const Text(
-                          'Register',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            simpleTexts(
-                              texts: 'Already have an account? ',
-                              styleConstant: kTextSubTitleStyle,
-                              align: TextAlign.center,
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (_registerFormKey.currentState!.validate()) {
+                              _firestore
+                                  .collection("Users")
+                                  .doc(userInfo.mobileNumber)
+                                  .get()
+                                  .then((doc) => {
+                                        if (doc.exists)
+                                          {
+                                            popUpAlertDialogBox(context,
+                                                "${userInfo.mobileNumber} is already registered"),
+                                            // Navigator.pushNamed(
+                                            //     context, loginScreen.id),
+                                          }
+                                        else if ((userInfo
+                                                .mobileNumber.length) ==
+                                            10)
+                                          {
+                                            Navigator.pushNamed(context,
+                                                VerifyPhoneNumberScreen.id),
+                                          }
+                                        else
+                                          {
+                                            popUpAlertDialogBox(context,
+                                                "Invalid Mobile Number")
+                                          }
+                                      });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: kPrimaryButtonColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            simpleTexts(
-                              texts: 'Sign In',
-                              styleConstant:
-                                  kTextTitleStyle.copyWith(fontSize: 18),
-                              align: TextAlign.center,
-                            ),
-                          ],
+                          ),
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, loginScreen.id);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              simpleTexts(
+                                texts: 'Already have an account? ',
+                                styleConstant: kTextSubTitleStyle,
+                                align: TextAlign.center,
+                              ),
+                              simpleTexts(
+                                texts: 'Sign In',
+                                styleConstant:
+                                    kTextTitleStyle.copyWith(fontSize: 18),
+                                align: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, loginScreen.id);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

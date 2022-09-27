@@ -1,4 +1,6 @@
-// ignore_for_file: non_constant_identifier_names, camel_case_types, avoid_print, file_names, constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, camel_case_types, avoid_print, file_names, constant_identifier_names, prefer_const_constructors
+
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +13,7 @@ import 'package:property_app/main.dart';
 import 'package:property_app/screens/requestPropertyDetails.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:badges/badges.dart';
 
 import '../constants.dart';
 
@@ -33,6 +36,9 @@ late String district = "";
 late String taluk = "";
 late String city = "";
 late String price = "";
+late String length = "";
+late String width = "";
+late String PropertyDescription = "";
 
 final _firestore = FirebaseFirestore.instance;
 bool idx = true;
@@ -858,6 +864,75 @@ class _requestPropertyState extends State<requestProperty> {
                                 child: TextField(
                                   onChanged: (newValue) {
                                     setState(() {
+                                      length = newValue;
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      // errorText: _errorText,
+                                      border: InputBorder.none,
+                                      hintText: "East-West(Ft.)",
+                                      hintStyle: const TextStyle(
+                                          color: kSubCategoryColor)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // const Spacer(),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 6),
+                            child: Container(
+                              // height: 200,
+                              // width: MediaQuery.of(context).size.width / 2.3,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: kHighlightedTextColor),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextField(
+                                  keyboardType: TextInputType.phone,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      price = newValue;
+                                    });
+                                  },
+                                  // controller: _PropertyPriceController,
+                                  decoration: InputDecoration(
+                                      // errorText: _errorText,
+                                      border: InputBorder.none,
+                                      hintText: "North-South(Ft.)",
+                                      hintStyle: const TextStyle(
+                                          color: kSubCategoryColor)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 6),
+                            child: Container(
+                              // height: 200,
+                              // width: MediaQuery.of(context).size.width / 2.3,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: kHighlightedTextColor),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextField(
+                                  onChanged: (newValue) {
+                                    setState(() {
                                       city = newValue;
                                     });
                                   },
@@ -909,6 +984,45 @@ class _requestPropertyState extends State<requestProperty> {
                         ),
                       ],
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 14),
+                      child: Container(
+                        height: 121,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: kHighlightedTextColor),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Write Property Description',
+                                style: TextStyle(color: kSubCategoryColor),
+                              ),
+                              TextField(
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    PropertyDescription = newValue;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  // errorText: _errorText,
+                                ),
+                                // controller: _controller,
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                maxLines: 2,
+                                // minLines: 5,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     Center(
                       child: SizedBox(
                         height: 50,
@@ -944,150 +1058,227 @@ class _requestPropertyState extends State<requestProperty> {
         : Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(
-                        20,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: 170,
+                    width: MediaQuery.of(context).size.width - 16,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(
+                          20,
+                        ),
                       ),
+                      border: Border.all(
+                        color: kNavigationIconColor,
+                      ),
+                      color: kBottomNavigationBackgroundColor,
                     ),
-                    border: Border.all(
-                      color: kHighlightedTextColor,
-                    ),
-                    color: kSecondaryButtonColor),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 20),
-                          child: CircleAvatar(
-                            backgroundColor: null,
-                            radius: 25,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: CachedNetworkImage(
-                                // cacheManager: customCacheManager,
-                                key: UniqueKey(),
-                                imageUrl: userInfo.profileImgUrl,
-                                height: 50,
-                                width: 50,
-                                // maxHeightDiskCache: 230,
-                                // maxWidthDiskCache: 190,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator(
-                                    color: kHighlightedTextColor,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) => Container(
-                                  color: Colors.black12,
-                                  child: const Icon(
-                                    Icons.error,
-                                    color: kHighlightedTextColor,
-                                  ),
-                                ),
-                              ),
-                            ),
+                  ),
+                  Container(
+                    // height: 10,
+                    // width: MediaQuery.of(context).size.width - 16,
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(
+                            20,
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "ownerName",
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: kHighlightedTextColor),
-                            ),
-                            Text(
-                              "ownerName" != "admin" ? 'Owner' : "Admin",
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 141, 141, 141),
-                              ),
-                            ),
-                          ],
+                        border: Border.all(
+                          color: kHighlightedTextColor,
                         ),
-                        const Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                EmailContent email = EmailContent(
-                                  to: [
-                                    "ownerMail",
-                                  ],
-                                );
-
-                                OpenMailAppResult result =
-                                    await OpenMailApp.composeNewEmailInMailApp(
-                                        nativePickerTitle:
-                                            'Select email app to compose',
-                                        emailContent: email);
-                                if (!result.didOpen && !result.canOpen) {
-                                  // showNoMailAppsDialog(context);
-                                } else if (!result.didOpen && result.canOpen) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => MailAppPickerDialog(
-                                      mailApps: result.options,
-                                      emailContent: email,
+                        color: kSecondaryButtonColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.crop_square,
+                                    size: 100,
+                                    color: kHighlightedTextColor,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "City Name,",
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: kHighlightedTextColor,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  );
-                                }
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Icon(
-                                  Icons.mail,
-                                  size: 30,
-                                  color: kHighlightedTextColor,
-                                ),
+                                  ),
+                                  Text(
+                                    "Taluk Name.",
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: kHighlightedTextColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        // crossAxisAlignment:
+                                        //     CrossAxisAlignment.start,
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundColor: null,
+                                            radius: 25,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                              child: CachedNetworkImage(
+                                                // cacheManager: customCacheManager,
+                                                key: UniqueKey(),
+                                                imageUrl:
+                                                    userInfo.profileImgUrl,
+                                                height: 50,
+                                                width: 50,
+                                                // maxHeightDiskCache: 230,
+                                                // maxWidthDiskCache: 190,
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color:
+                                                        kHighlightedTextColor,
+                                                  ),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(
+                                                  color: Colors.black12,
+                                                  child: const Icon(
+                                                    Icons.error,
+                                                    color:
+                                                        kHighlightedTextColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "ownerName",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                color: kHighlightedTextColor),
+                                          ),
+                                        ],
+                                      ),
+                                      // const Spacer(),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () async {
+                                              EmailContent email = EmailContent(
+                                                to: [
+                                                  "ownerMail",
+                                                ],
+                                              );
+
+                                              OpenMailAppResult result =
+                                                  await OpenMailApp
+                                                      .composeNewEmailInMailApp(
+                                                          nativePickerTitle:
+                                                              'Select email app to compose',
+                                                          emailContent: email);
+                                              if (!result.didOpen &&
+                                                  !result.canOpen) {
+                                                // showNoMailAppsDialog(context);
+                                              } else if (!result.didOpen &&
+                                                  result.canOpen) {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      MailAppPickerDialog(
+                                                    mailApps: result.options,
+                                                    emailContent: email,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Icon(
+                                                Icons.mail,
+                                                size: 30,
+                                                color: kHighlightedTextColor,
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              var url = 'tel:' +
+                                                  "ownerPhoneNo".toString();
+                                              if (await canLaunchUrl(
+                                                  Uri.parse(url))) {
+                                                await launchUrl(Uri.parse(url));
+                                              } else {
+                                                throw 'Could not launch $url';
+                                              }
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Icon(
+                                                Icons.call,
+                                                size: 30,
+                                                color: kHighlightedTextColor,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                var url = 'tel:' + "ownerPhoneNo".toString();
-                                if (await canLaunchUrl(Uri.parse(url))) {
-                                  await launchUrl(Uri.parse(url));
-                                } else {
-                                  throw 'Could not launch $url';
-                                }
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Icon(
-                                  Icons.call,
-                                  size: 30,
-                                  color: kHighlightedTextColor,
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    requestedPropertyDetails(
-                      fields: "In Taluk : ",
-                      subfields: "taluk",
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, requestPropertyDetails.id);
-                      },
-                      child: const Text(
-                        'View Details',
-                        style:
-                            TextStyle(color: kPrimaryButtonColor, fontSize: 18),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    top: 135,
+                    right: 20,
+                    child: Transform.rotate(
+                      angle: 315 * pi / 180,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, requestPropertyDetails.id);
+                        },
+                        child: const Icon(
+                          Icons.send,
+                          size: 45,
+                          color: kHighlightedTextColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           );

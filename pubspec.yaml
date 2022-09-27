@@ -71,6 +71,7 @@ dependencies:
   country_state_city_picker: ^1.2.8
   geolocator: ^9.0.1
   permission_handler: ^10.0.0
+  badges: ^2.0.3
  
 
 flutter_icons:

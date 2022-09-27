@@ -7,6 +7,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:property_app/components/forgotpassword.dart';
 import 'package:property_app/constants.dart';
 import 'package:property_app/screens/homescreen.dart';
+import 'package:property_app/screens/raiseIssue.dart';
 import 'package:property_app/screens/registerScreen.dart';
 import 'package:property_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,7 +58,7 @@ Future<void> checkSavedUser(BuildContext context) async {
                       print(prefs.getString("UserNum")),
                       print(prefs.getString("SavedPassword")),
                       Navigator.pushNamedAndRemoveUntil(
-                          context, HomeScreen.id, (route) => false),
+                          context, raiseAnIssue.id, (route) => false),
                     }
                 }
             });

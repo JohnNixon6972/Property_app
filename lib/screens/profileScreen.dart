@@ -220,19 +220,20 @@ class _profileScreenState extends State<profileScreen> {
                     ),
                   ),
                   Positioned(
-                      top: backgroundImageHeight + 20,
-                      left: (width / 2) + 35,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            pickImage();
-                          });
-                        },
-                        child: const Icon(
-                          Icons.flip_camera_ios,
-                          color: kHighlightedTextColor,
-                        ),
-                      )),
+                    top: backgroundImageHeight + 20,
+                    left: (width / 2) + 35,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          pickImage();
+                        });
+                      },
+                      child: const Icon(
+                        Icons.flip_camera_ios,
+                        color: kHighlightedTextColor,
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.only(
                         top: backgroundImageHeight + 53 + 5, bottom: 1),

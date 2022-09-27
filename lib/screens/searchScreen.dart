@@ -63,8 +63,8 @@ class _searchScreenState extends State<searchScreen> {
                     .isEmpty) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     "No Such Property Found!",
                     style: TextStyle(
                         fontSize: 20,
@@ -289,6 +289,7 @@ class _searchScreenState extends State<searchScreen> {
 
     double _kItemExtent = 32.0;
     return Scaffold(
+    
       backgroundColor: kPageBackgroundColor,
       appBar: AppBar(
         toolbarHeight: 80,
@@ -322,7 +323,7 @@ class _searchScreenState extends State<searchScreen> {
                       color: kHighlightedTextColor,
                     ),
                     onPressed: () {
-                      query = " ";
+                      query = "";
                       myController.text = "";
                       // print(query);
                     },

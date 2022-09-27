@@ -72,7 +72,7 @@ dependencies:
   geolocator: ^9.0.1
   permission_handler: ^10.0.0
   badges: ^2.0.3
- 
+  flutter_offline: "^2.1.0"
 
 flutter_icons:
   android: true

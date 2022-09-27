@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, camel_case_types, avoid_print, file_names, constant_identifier_names, prefer_const_constructors
+// ignore_for_file: non_constant_identifier_names, camel_case_types, avoid_print, file_names, constant_identifier_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:math';
 

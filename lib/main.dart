@@ -76,7 +76,7 @@ class _PropertyAppState extends State<PropertyApp> {
     return FirebasePhoneAuthProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: loginScreen.id,
+        initialRoute: HomeScreen.id,
         // initialRoute: VerifyPhoneNumberScreen.id,
         routes: {
           loginScreen.id: (context) => loginScreen(),

@@ -232,57 +232,12 @@ class _requestPropertyDetailsState extends State<requestPropertyDetails> {
                     ),
                     Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              Navigator.pushNamed(context, raiseAnIssue.id);
-                            },
-                            child: const Text(
-                              'Browse More',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              elevation: 5,
-                              primary: kBottomNavigationBackgroundColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                          ),
+                        const button(
+                          title: 'Browse More',
                         ),
                         const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              var url = 'tel:6361125470'.toString();
-                              if (await canLaunchUrl(Uri.parse(url))) {
-                                await launchUrl(Uri.parse(url));
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            },
-                            child: const Text(
-                              'Contact Buyer',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              elevation: 5,
-                              primary: kBottomNavigationBackgroundColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                          ),
+                        const button(
+                          title: 'Contact Buyer',
                         ),
                       ],
                     ),
@@ -291,6 +246,40 @@ class _requestPropertyDetailsState extends State<requestPropertyDetails> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class button extends StatelessWidget {
+  final String title;
+  const button({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: ElevatedButton(
+        onPressed: () async {
+          Navigator.pushNamed(context, raiseAnIssue.id);
+        },
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            // fontWeight: FontWeight.bold,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          elevation: title == 'Contact Buyer' ? 10 : 5,
+          primary: title == 'Contact Buyer'
+              ? kHighlightedTextColor
+              : kBottomNavigationBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
         ),
       ),
     );

@@ -295,8 +295,8 @@ class _profileScreenState extends State<profileScreen> {
                                   ),
                                   ProfileDetailsContainer(
                                     icon: Icons.back_hand,
-                                    Title: "Request a Property",
-                                    SubTitle: "Check requested Properties",
+                                    Title: "My Requests",
+                                    SubTitle: "Check request status",
                                   ),
                                   ProfileDetailsContainer(
                                     icon: Icons.call_outlined,

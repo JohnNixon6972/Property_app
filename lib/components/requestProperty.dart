@@ -1,7 +1,8 @@
+// ignore_for_file: unused_import
+
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/components/loactionData.dart';
 import 'package:property_app/main.dart';

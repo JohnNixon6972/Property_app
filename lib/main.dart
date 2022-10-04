@@ -65,8 +65,8 @@ void SignIn() async {
 class _PropertyAppState extends State<PropertyApp> {
   @override
   void initState() {
-    super.initState();
     SignIn();
+    super.initState();
   }
 
   SharedPreferences prefs;
@@ -76,7 +76,7 @@ class _PropertyAppState extends State<PropertyApp> {
     return FirebasePhoneAuthProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: HomeScreen.id,
+        initialRoute: loginScreen.id,
         // initialRoute: VerifyPhoneNumberScreen.id,
         routes: {
           loginScreen.id: (context) => loginScreen(),
@@ -96,8 +96,7 @@ class _PropertyAppState extends State<PropertyApp> {
           ApprovedPropertiesScreen.id: (context) => ApprovedPropertiesScreen(),
           UnApprovedPropertiesScreen.id: (context) =>
               UnApprovedPropertiesScreen(),
-          raiseAnIssue.id: (context) => raiseAnIssue(),
-          requestPropertyDetails.id: (context) => requestPropertyDetails(),
+          raiseAnIssue.id: (context) => raiseAnIssue()
         },
       ),
     );

@@ -1,9 +1,13 @@
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/components/loactionData.dart';
 import 'package:property_app/main.dart';
+import 'package:property_app/screens/homescreen.dart';
+import 'package:property_app/screens/raiseIssue.dart';
+import 'package:property_app/storage_service.dart';
 
 import '../constants.dart';
 
@@ -69,42 +73,18 @@ class requestProperty extends StatefulWidget {
 }
 
 class _requestPropertyState extends State<requestProperty> {
+  final Storage storage_service = Storage();
   final _PropertyCityController = TextEditingController();
   final _PropertyPriceController = TextEditingController();
-  void push() {
-    // if there is no error text
-    if (district == "" || taluk == "") {
-      popUpAlertDialogBox(context, "Kindly select District and Taluk");
-    } else {
-      setState(() {
-        String category = getCategory();
-        String to = getTo();
-        String type = getType();
-
-        _firestore
-            .collection("Users")
-            .doc(userInfo.mobileNumber)
-            .collection("My requests")
-            .add({
-          // "PropertyBy": userInfo.email,
-          "OwnerName": userInfo.name,
-          "City": city,
-          "Taluk": taluk,
-          "PropertyTo": to,
-          "PropertyCategory": category,
-          "PropertyType": type,
-          "isSetImages": "False",
-          "Price": price,
-          "PhNo": userInfo.mobileNumber,
-          "profileImgUrl": userInfo.profileImgUrl,
-          "State": 'Tamil Nadu',
-          "District": district,
-        }).then((_) {
-          print("Data Added Sucessfully");
-        }).catchError((e) {
-          print(e);
-        });
-      });
+  void push() async {
+    // if there is no error text String category = getCategory();
+    String to = getTo();
+    String type = getType();
+    String category = getCategory();
+    bool val = await storage_service.addRequest(district, taluk, category, to,
+        type, price, city, PropertyDescription, length, width);
+    if (val) {
+      Navigator.pop(context);
     }
   }
 
@@ -166,13 +146,13 @@ class _requestPropertyState extends State<requestProperty> {
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.85,
             child: ListView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
                   child: Center(
-                    child: const Text(
+                    child: Text(
                       'Request Property',
                       textAlign: TextAlign.left,
                       style: TextStyle(
@@ -287,8 +267,8 @@ class _requestPropertyState extends State<requestProperty> {
                     ),
                   ),
                 ),
-                Center(
-                  child: const Text(
+                const Center(
+                  child: Text(
                     'Property Type',
                     style: TextStyle(
                         color: kSubCategoryColor,
@@ -321,11 +301,14 @@ class _requestPropertyState extends State<requestProperty> {
                                 padding: const EdgeInsets.all(4.0),
                                 child: Row(
                                   children: [
-                                    const Text(
-                                      'Residental',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Residental',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                     const Spacer(),
                                     Radio(
@@ -365,11 +348,14 @@ class _requestPropertyState extends State<requestProperty> {
                                 padding: const EdgeInsets.all(3.0),
                                 child: Row(
                                   children: [
-                                    const Text(
-                                      'Commercial',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Commercial',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                     const Spacer(),
                                     Radio(
@@ -393,8 +379,8 @@ class _requestPropertyState extends State<requestProperty> {
                     ),
                   ),
                 ),
-                Center(
-                  child: const Text(
+                const Center(
+                  child: Text(
                     'Select Category',
                     style: TextStyle(
                         color: kSubCategoryColor,
@@ -412,7 +398,8 @@ class _requestPropertyState extends State<requestProperty> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Container(
                             height: 100,
                             decoration: BoxDecoration(
@@ -454,7 +441,8 @@ class _requestPropertyState extends State<requestProperty> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Container(
                             height: 100,
                             decoration: BoxDecoration(
@@ -496,7 +484,8 @@ class _requestPropertyState extends State<requestProperty> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Container(
                             height: 100,
                             decoration: BoxDecoration(
@@ -538,7 +527,8 @@ class _requestPropertyState extends State<requestProperty> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -579,7 +569,8 @@ class _requestPropertyState extends State<requestProperty> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Container(
                             height: 100,
                             decoration: BoxDecoration(
@@ -612,7 +603,6 @@ class _requestPropertyState extends State<requestProperty> {
                                     onChanged: (propertyCategory? value) {
                                       setState(() {
                                         _category = value;
-                                        print(_type);
                                       });
                                     },
                                   )
@@ -665,9 +655,8 @@ class _requestPropertyState extends State<requestProperty> {
                                   setTaluka(Taluka[district]);
                                 });
                               },
-                              children: List<Widget>.generate(districts!.length,
-                                  (int index) {
-                                print(districts);
+                              children: List<Widget>.generate(
+                                  districts!.length, (int index) {
                                 return Center(
                                   child: Text(
                                     districts[index],
@@ -680,7 +669,8 @@ class _requestPropertyState extends State<requestProperty> {
                             height: 60,
                             // width: 155,
                             decoration: BoxDecoration(
-                              border: Border.all(color: kHighlightedTextColor),
+                              border:
+                                  Border.all(color: kHighlightedTextColor),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
@@ -715,12 +705,10 @@ class _requestPropertyState extends State<requestProperty> {
                                 setState(() {
                                   selectedTaluk = selectedItem;
                                   taluk = talukas[selectedTaluk];
-                                  print(taluk);
                                 });
                               },
                               children: List<Widget>.generate(talukas.length,
                                   (int index) {
-                                print(talukas);
                                 return Center(
                                   child: Text(
                                     talukas[index],
@@ -733,7 +721,8 @@ class _requestPropertyState extends State<requestProperty> {
                             height: 60,
                             // width: 155,
                             decoration: BoxDecoration(
-                              border: Border.all(color: kHighlightedTextColor),
+                              border:
+                                  Border.all(color: kHighlightedTextColor),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
@@ -770,17 +759,18 @@ class _requestPropertyState extends State<requestProperty> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
+                              keyboardType: TextInputType.number,
                               onChanged: (newValue) {
                                 setState(() {
                                   length = newValue;
                                 });
                               },
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   // errorText: _errorText,
                                   border: InputBorder.none,
                                   hintText: "East-West(Ft.)",
-                                  hintStyle: const TextStyle(
-                                      color: kSubCategoryColor)),
+                                  hintStyle:
+                                      TextStyle(color: kSubCategoryColor)),
                             ),
                           ),
                         ),
@@ -801,19 +791,19 @@ class _requestPropertyState extends State<requestProperty> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.number,
                               onChanged: (newValue) {
                                 setState(() {
-                                  price = newValue;
+                                  width = newValue;
                                 });
                               },
                               // controller: _PropertyPriceController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   // errorText: _errorText,
                                   border: InputBorder.none,
                                   hintText: "North-South(Ft.)",
-                                  hintStyle: const TextStyle(
-                                      color: kSubCategoryColor)),
+                                  hintStyle:
+                                      TextStyle(color: kSubCategoryColor)),
                             ),
                           ),
                         ),
@@ -833,7 +823,8 @@ class _requestPropertyState extends State<requestProperty> {
                             // height: 200,
                             // width: MediaQuery.of(context).size.width / 2.3,
                             decoration: BoxDecoration(
-                              border: Border.all(color: kHighlightedTextColor),
+                              border:
+                                  Border.all(color: kHighlightedTextColor),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
@@ -865,7 +856,8 @@ class _requestPropertyState extends State<requestProperty> {
                             // height: 100,
                             // width: MediaQuery.of(context).size.width / 2.3,
                             decoration: BoxDecoration(
-                              border: Border.all(color: kHighlightedTextColor),
+                              border:
+                                  Border.all(color: kHighlightedTextColor),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
@@ -893,8 +885,8 @@ class _requestPropertyState extends State<requestProperty> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 14),
                   child: Container(
                     height: 101,
                     decoration: BoxDecoration(
@@ -916,7 +908,7 @@ class _requestPropertyState extends State<requestProperty> {
                                 PropertyDescription = newValue;
                               });
                             },
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               // errorText: _errorText,
                             ),

@@ -257,8 +257,8 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
                 backgroundColor: kBottomNavigationBackgroundColor,
                 leadingWidth: 0,
                 leading: const SizedBox.shrink(),
-                title: Center(
-                  child: Text(
+                title: const Center(
+                  child:  Text(
                     'Verify Phone Number',
                     style: TextStyle(
                       color: kHighlightedTextColor,
@@ -295,7 +295,7 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
                           "We've sent an SMS with a verification code to " +
                               userInfo.mobileNumber,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 20, color: kHighlightedTextColor),
                         ),
                         const SizedBox(height: 10),
@@ -385,7 +385,7 @@ class _forgotPasswordScreenState extends State<forgotPasswordScreen>
             );
           } catch (e) {
             print(e);
-            return Center();
+            return const Center();
           }
         },
       ),

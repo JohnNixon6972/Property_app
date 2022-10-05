@@ -1065,6 +1065,7 @@ class _PropertyCardState extends State<PropertyCard> {
                   ),
                 ),
               ),
+              Spacer(),
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Text(

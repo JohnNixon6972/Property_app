@@ -423,13 +423,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 14),
                         child: Container(
-                          height: 121,
+                          height: 130,
                           decoration: BoxDecoration(
                             border: Border.all(color: kHighlightedTextColor),
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(6.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

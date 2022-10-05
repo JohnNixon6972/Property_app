@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 import './screens/homescreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -55,7 +56,10 @@ class Storage {
         .doc(PropertyTitle)
         .update({"isSetImages": "True"});
     print("Added Property Images");
-     Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),(route)=>false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
+        (route) => false);
   }
 
   Future<void> uploadPropertyDetails(
@@ -88,7 +92,7 @@ class Storage {
     // print(userInfo.email);
 
     // print(uselastusedaddress);
-    
+
     if (!isUpdate) {
       // print("Hi");
       String propertyFor = to == "Rent" ? "Sell" : "Rent";
@@ -110,7 +114,7 @@ class Storage {
     }
     !isUpdate
         ? _firestore.collection('Properties' + to).doc(propertyTitle).set({
-            "DTCPApproved":"$dtcpApproved",
+            "DTCPApproved": "$dtcpApproved",
             "City": city,
             "Taluk": taluk,
             "PropertyBy": userInfo.email,
@@ -152,7 +156,7 @@ class Storage {
             print("An error Occured");
           })
         : _firestore.collection('Properties' + to).doc(propertyTitle).update({
-          "DTCPApproved":"$dtcpApproved",
+            "DTCPApproved": "$dtcpApproved",
             "PropertyBy": userInfo.email,
             "OwnerName": userInfo.name,
             "PropertyTitle": propertyTitle,
@@ -192,6 +196,36 @@ class Storage {
           }).catchError((_) {
             print("An error Occured");
           });
+  }
+
+  bool addRequest(String district, String taluk, String category, String to,
+      String type, String price, String city,String description,String length,String width) {
+    _firestore.collection("RequestedProperties").add({
+      // "PropertyBy": userInfo.email,
+      "description": description,
+      "OwnerName": userInfo.name,
+      "City": city,
+      "Taluk": taluk,
+      "PropertyTo": to,
+      "PropertyCategory": category,
+      "PropertyType": type,
+      "isSetImages": "False",
+      "Price": price,
+      "PhNo": userInfo.mobileNumber,
+      "profileImgUrl": userInfo.profileImgUrl,
+      "State": 'Tamil Nadu',
+      "District": district,
+      "PropertyBy": userInfo.email,
+      "Length":length,
+      "Width":width,
+    }).then((_) {
+      print("Data Added Sucessfully");
+      return true;
+    }).catchError((e) {
+      print(e);
+      return false;
+    });
+    return true;
   }
 
   Future<firebase_storage.ListResult> listFiles() async {

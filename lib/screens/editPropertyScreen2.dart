@@ -35,6 +35,8 @@ late String BathRoom = "";
 late String Price = "";
 late String face = "";
 late String state = "";
+late String Elatitude = "";
+late String Elongitude = "";
 bool dtcpApproved = false;
 late String district = "";
 Color SelectedToggleBottonColor = kNo;
@@ -152,6 +154,8 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
           _storage.uploadPropertyDetails(
               context,
               dtcpApproved,
+              Elatitude,
+              Elongitude,
               city,
               taluk,
               propertyAddress,

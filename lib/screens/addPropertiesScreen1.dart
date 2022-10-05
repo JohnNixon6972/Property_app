@@ -70,6 +70,7 @@ late String district = "";
 late String taluk = "";
 late String city = "";
 
+
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
   String? get _errorText {
     final _selectedcity = _PropertyCityController.value.text;
@@ -885,9 +886,11 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PinAddressMap()));
-                      
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PinAddressMap()));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width / 2,
@@ -900,7 +903,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text(
+                              const Text(
                                 "Pick Location",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.w900),
@@ -970,8 +973,8 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       child: ElevatedButton(
                         // only enable the button if the text is not empty
 
-                        onPressed: (
-                                _PropertyCityController.value.text.isNotEmpty &&
+                        onPressed: (_PropertyCityController
+                                    .value.text.isNotEmpty &&
                                 _PropertyTitleController.value.text.isNotEmpty)
                             ? push
                             : null,

@@ -1,15 +1,12 @@
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:property_app/screens/addPropertiesScreen2.dart';
-import 'package:property_app/screens/myPropertiesScreen.dart';
 import './screens/homescreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'currentUserInformation.dart';
 import 'main.dart';
+
 
 class Storage {
   final firebase_storage.FirebaseStorage storage =
@@ -65,6 +62,8 @@ class Storage {
   Future<void> uploadPropertyDetails(
       BuildContext context,
       bool dtcpApproved,
+      String latitude,
+      String longitude,
       String city,
       String taluk,
       String propertyAddress,
@@ -139,6 +138,8 @@ class Storage {
             "profileImgUrl": userInfo.profileImgUrl,
             "State": 'Tamil Nadu',
             "District": district,
+            "latitude":latitude,
+            "longitude":longitude,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -166,6 +167,8 @@ class Storage {
             "City": city,
             "Taluk": taluk,
             "Cent": Cent,
+            "latitude":latitude,
+            "longitude":longitude,
             "PropertyTo": to,
             "PropertyCategory": category,
             "PropertyType": type,
@@ -198,8 +201,17 @@ class Storage {
           });
   }
 
-  bool addRequest(String district, String taluk, String category, String to,
-      String type, String price, String city,String description,String length,String width) {
+  bool addRequest(
+      String district,
+      String taluk,
+      String category,
+      String to,
+      String type,
+      String price,
+      String city,
+      String description,
+      String length,
+      String width) {
     _firestore.collection("RequestedProperties").add({
       // "PropertyBy": userInfo.email,
       "description": description,
@@ -216,8 +228,8 @@ class Storage {
       "State": 'Tamil Nadu',
       "District": district,
       "PropertyBy": userInfo.email,
-      "Length":length,
-      "Width":width,
+      "Length": length,
+      "Width": width,
     }).then((_) {
       print("Data Added Sucessfully");
       return true;

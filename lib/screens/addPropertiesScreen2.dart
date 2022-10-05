@@ -14,7 +14,7 @@ import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
-import '../storage_service.dart';
+import '../components/addressPickerHelper.dart';
 
 class AddPropertiesScreen2 extends StatefulWidget {
   static const String id = 'addPropertiesScreen2';
@@ -33,6 +33,8 @@ late String Price = "";
 late String lenght = "";
 late String width = "";
 late String cent = "";
+late String latitude = "";
+late String longitude = "";
 bool dtcpApproved = false;
 Color SelectedToggleBottonColor = kNo;
 List<XFile>? imageFileList = [];
@@ -89,6 +91,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
           _storage.uploadPropertyDetails(
               context,
               dtcpApproved,
+              latitude,
+              longitude,
               city,
               taluk,
               propertyAddress,

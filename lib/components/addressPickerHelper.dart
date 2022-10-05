@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocode/geocode.dart';
+import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/editPropertyScreen1.dart';
+import 'package:property_app/screens/editPropertyScreen2.dart';
 import '../screens/addPropertiesScreen1.dart';
 
-var _origin = null;
-  Address address = Address();
+late var _origin = null;
+Address address = Address();
+
 class PinAddressMap extends StatefulWidget {
   PinAddressMap({
     Key? key,
   }) : super(key: key);
-  
 
   @override
   State<PinAddressMap> createState() => _PinAddressMapState();
@@ -40,15 +42,19 @@ class _PinAddressMapState extends State<PinAddressMap> {
                         backgroundColor: Theme.of(context).primaryColor),
                     child: const Text("Save Location"),
                     onPressed: () async {
-                      GeoCode geoCode = new GeoCode();
+                      GeoCode geoCode =  GeoCode();
                       Address address = await geoCode.reverseGeocoding(
                           latitude: _origin.position.latitude,
                           longitude: _origin.position.longitude);
                       setState(() {
-                        // print(address.streetAddress);
-                        // print(address.region);
+                        print(address.streetAddress);
+                        print(address.region);
                         PropertyAddress = address.streetAddress!;
                         EPropertyAddress = address.streetAddress!;
+                        latitude = _origin.position.latitude.toString();
+                        longitude = _origin.position.longitude.toString();
+                        Elatitude = _origin.position.latitude.toString();
+                        Elongitude = _origin.position.longitude.toString();
                         Navigator.pop(context);
                       });
                     },

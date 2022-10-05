@@ -119,7 +119,7 @@ class _editPropertyScreen2State extends State<editPropertyScreen2> {
       setState(
         () {
           isloading = true;
-          String propertyAddress = PropertyAddress;
+          String propertyAddress = EPropertyAddress;
           String propertyTitle = PropertyTitle;
           String category = getCategory();
           String to = getTo();

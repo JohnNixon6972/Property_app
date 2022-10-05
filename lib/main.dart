@@ -1,8 +1,6 @@
 
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:property_app/repositories/geolocation/geolocation_repository.dart';
 import 'package:property_app/screens/aboutUs.dart';
 import 'package:property_app/screens/approvedPropertiesScreen.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';
@@ -14,7 +12,6 @@ import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/raiseIssue.dart';
 import 'package:property_app/screens/searchScreen.dart';
 import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
-import 'bloc/geolocation/geolocation_bloc.dart';
 import 'screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/homescreen.dart';
@@ -73,40 +70,30 @@ class _PropertyAppState extends State<PropertyApp> {
   @override
   Widget build(BuildContext context) {
     return FirebasePhoneAuthProvider(
-      child: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<GeoLocationRepository>(
-            create: (_) => GeoLocationRepository(),
-          ),
-        ],
-        child: MultiBlocProvider(
-          providers: [BlocProvider(create: (context)=>  GeolocationBloc(geoLocationRepository: context.read<GeoLocationRepository>())..add(LoadGeolocation()))],
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            initialRoute: loginScreen.id,
-            // initialRoute: VerifyPhoneNumberScreen.id,
-            routes: {
-              loginScreen.id: (context) => loginScreen(),
-              registerScreen.id: (context) => registerScreen(),
-              profileScreen.id: (context) => profileScreen(),
-              HomeScreen.id: (context) => HomeScreen(),
-              myPropertiesScreen.id: (context) => myPropertiesScreen(),
-              // PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
-              BookmarkedPropertiesScreen.id: (context) =>
-                  BookmarkedPropertiesScreen(),
-              AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
-              searchScreen.id: (context) => searchScreen(),
-              AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
-              VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
-              aboutUs.id: (context) => aboutUs(),
-              forgotPasswordScreen.id: (context) => forgotPasswordScreen(),
-              ApprovedPropertiesScreen.id: (context) => ApprovedPropertiesScreen(),
-              UnApprovedPropertiesScreen.id: (context) =>
-                  UnApprovedPropertiesScreen(),
-              raiseAnIssue.id: (context) => raiseAnIssue()
-            },
-          ),
-        ),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: loginScreen.id,
+        // initialRoute: VerifyPhoneNumberScreen.id,
+        routes: {
+          loginScreen.id: (context) => loginScreen(),
+          registerScreen.id: (context) => registerScreen(),
+          profileScreen.id: (context) => profileScreen(),
+          HomeScreen.id: (context) => HomeScreen(),
+          myPropertiesScreen.id: (context) => myPropertiesScreen(),
+          // PropertyDetailsScreen.id: (context) => PropertyDetailsScreen(),
+          BookmarkedPropertiesScreen.id: (context) =>
+              BookmarkedPropertiesScreen(),
+          AddPropertiesScreen.id: (context) => AddPropertiesScreen(),
+          searchScreen.id: (context) => searchScreen(),
+          AddPropertiesScreen2.id: (context) => AddPropertiesScreen2(),
+          VerifyPhoneNumberScreen.id: (context) => VerifyPhoneNumberScreen(),
+          aboutUs.id: (context) => aboutUs(),
+          forgotPasswordScreen.id: (context) => forgotPasswordScreen(),
+          ApprovedPropertiesScreen.id: (context) => ApprovedPropertiesScreen(),
+          UnApprovedPropertiesScreen.id: (context) =>
+              UnApprovedPropertiesScreen(),
+          raiseAnIssue.id: (context) => raiseAnIssue()
+        },
       ),
     );
   }

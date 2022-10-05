@@ -970,8 +970,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       child: ElevatedButton(
                         // only enable the button if the text is not empty
 
-                        onPressed: (_PropertyAddressController
-                                    .value.text.isNotEmpty &&
+                        onPressed: (
                                 _PropertyCityController.value.text.isNotEmpty &&
                                 _PropertyTitleController.value.text.isNotEmpty)
                             ? push

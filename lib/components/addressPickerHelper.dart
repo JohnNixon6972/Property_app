@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:property_app/bloc/geolocation/geolocation_bloc.dart';
+import 'package:geocode/geocode.dart';
+import 'package:property_app/screens/editPropertyScreen1.dart';
+import '../screens/addPropertiesScreen1.dart';
 
-class PinAddressMap extends StatelessWidget {
-  const PinAddressMap({
+var _origin = null;
+  Address address = Address();
+class PinAddressMap extends StatefulWidget {
+  PinAddressMap({
     Key? key,
   }) : super(key: key);
+  
 
+  @override
+  State<PinAddressMap> createState() => _PinAddressMapState();
+}
+
+class _PinAddressMapState extends State<PinAddressMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: double.infinity,
-              child: BlocBuilder<GeolocationBloc, GeolocationState>(
-                  builder: (context, state) {
-                if (state is GeolocationLoading) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (state is GeolocationLoaded) {
-                  return Gmap(
-                    lat: 10,
-                    lng: 10,
-                  );
-                } else
-                  return Text('Something Went Wrong!');
-              }),
+            Gmap(
+              lat: 10,
+              lng: 10,
             ),
             const Positioned(
                 top: 20, left: 20, right: 20, child: LocationSearchBox()),
@@ -42,7 +39,19 @@ class PinAddressMap extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
                     child: const Text("Save Location"),
-                    onPressed: () {},
+                    onPressed: () async {
+                      GeoCode geoCode = new GeoCode();
+                      Address address = await geoCode.reverseGeocoding(
+                          latitude: _origin.position.latitude,
+                          longitude: _origin.position.longitude);
+                      setState(() {
+                        // print(address.streetAddress);
+                        // print(address.region);
+                        PropertyAddress = address.streetAddress!;
+                        EPropertyAddress = address.streetAddress!;
+                        Navigator.pop(context);
+                      });
+                    },
                   ),
                 ))
           ],
@@ -52,15 +61,58 @@ class PinAddressMap extends StatelessWidget {
   }
 }
 
-class Gmap extends StatelessWidget {
+class Gmap extends StatefulWidget {
   double lat, lng;
   Gmap({Key? key, required this.lat, required this.lng}) : super(key: key);
 
   @override
+  State<Gmap> createState() => _GmapState();
+}
+
+class _GmapState extends State<Gmap> {
+  static const _initialCameraPosition =
+      CameraPosition(target: LatLng(11.1271, 78.6569), zoom: 10);
+
+  late GoogleMapController _googleMapController;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _googleMapController.dispose();
+    super.dispose();
+  }
+
+  void _addMarker(LatLng pos) {
+    setState(() {
+      _origin = Marker(
+          markerId: const MarkerId("origin"),
+          position: pos,
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          infoWindow: const InfoWindow(title: "Origin"));
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      myLocationButtonEnabled: true,
-      initialCameraPosition: CameraPosition(target: LatLng(lat, lng), zoom: 8),
+    return Scaffold(
+      body: GoogleMap(
+        zoomControlsEnabled: false,
+        myLocationButtonEnabled: false,
+        initialCameraPosition: _initialCameraPosition,
+        onMapCreated: (controller) => _googleMapController = controller,
+        markers: {
+          if (_origin != null) _origin,
+        },
+        onLongPress: _addMarker,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.black,
+        onPressed: () => _googleMapController.animateCamera(
+            CameraUpdate.newCameraPosition(_initialCameraPosition)),
+        child: const Icon(Icons.center_focus_strong),
+      ),
     );
   }
 }
@@ -74,20 +126,15 @@ class LocationSearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          hintText: 'Enter Your Location',
-          suffixIcon: const Icon(Icons.search),
-          contentPadding: const EdgeInsets.only(left: 20, bottom: 5, right: 5),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Colors.white),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Colors.white),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: const Center(
+          child: Text(
+            "Hold on the map to select location",
+            style: TextStyle(
+                color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
       ),

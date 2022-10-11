@@ -6,7 +6,6 @@ import '../components/checkRequested.dart';
 import '../components/requestProperty.dart';
 import '../constants.dart';
 
-
 bool idx = true;
 
 class raiseAnIssue extends StatefulWidget {
@@ -44,13 +43,10 @@ class _raiseAnIssueState extends State<raiseAnIssue> {
                   animate: true,
                   animationDuration: 1000,
                   curve: Curves.ease,
-          
+
                   radiusStyle: true,
                   labels: const ["Request Property", "Check Requests"],
-                  icons: const [
-                    Icons.back_hand,
-                    Icons.comment_bank_rounded
-                  ],
+                  icons: const [Icons.back_hand, Icons.comment_bank_rounded],
                   onToggle: ((index) {
                     print(index);
                     setState(() {
@@ -59,7 +55,9 @@ class _raiseAnIssueState extends State<raiseAnIssue> {
                   }),
                 ),
               ),
-              idx ? requestProperty() : Expanded(child: checkRequested())
+              idx
+                  ? Expanded(child: requestProperty())
+                  : Expanded(child: checkRequested())
             ],
           ),
         ));

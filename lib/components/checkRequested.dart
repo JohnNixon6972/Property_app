@@ -140,7 +140,7 @@ class RequestedProperty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       child: Stack(
         clipBehavior: Clip.none,
         children: <Widget>[
@@ -345,8 +345,8 @@ class RequestedProperty extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.155,
-            right: 35,
+            top: MediaQuery.of(context).size.height * 0.175,
+            right: 28,
             child: GestureDetector(
               onTap: () {
                 Navigator.push(

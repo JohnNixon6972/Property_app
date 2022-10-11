@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, non_constant_identifier_names
 
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -77,13 +77,13 @@ class _requestPropertyState extends State<requestProperty> {
   final Storage storage_service = Storage();
   final _PropertyCityController = TextEditingController();
   final _PropertyPriceController = TextEditingController();
-  void push() async {
+  void push() {
     // if there is no error text String category = getCategory();
     String to = getTo();
     String type = getType();
     String category = getCategory();
-    bool val = await storage_service.addRequest(district, taluk, category, to,
-        type, price, city, PropertyDescription, length, width);
+    bool val = storage_service.addRequest(district, taluk, category, to, type,
+        price, city, PropertyDescription, length, width);
     if (val) {
       Navigator.pop(context);
     }
@@ -122,7 +122,6 @@ class _requestPropertyState extends State<requestProperty> {
     return null;
   }
 
-  @override
   String countryValue = "";
   String stateValue = "";
   String cityValue = "";
@@ -140,811 +139,724 @@ class _requestPropertyState extends State<requestProperty> {
       });
     }
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.85,
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Center(
-                    child: Text(
-                      'Request Property',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: kHighlightedTextColor,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
-                const Text(
-                  'I want a Property to',
-                  style: TextStyle(
-                      color: kSubCategoryColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      // physics: const BouncingScrollPhysics(),
-                      // // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      // scrollDirection: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Container(
-                              // width: 160,
-                              decoration: BoxDecoration(
-                                border: _to == propertyTo.Buy
-                                    ? Border.all(color: kHighlightedTextColor)
-                                    : null,
-                                borderRadius: BorderRadius.circular(15),
-                                color: _to == propertyTo.Buy
-                                    ? kPropertyCardColor
-                                    : kTextFieldFillColor,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Center(
+              child: Text(
+                'Request Property',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: kHighlightedTextColor,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const Text(
+            'I want a Property to',
+            style: TextStyle(
+                color: kSubCategoryColor,
+                fontSize: 15,
+                fontWeight: FontWeight.w400),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: SizedBox(
+              height: 50,
+              child: Row(
+                // physics: const BouncingScrollPhysics(),
+                // // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // scrollDirection: Axis.horizontal,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Container(
+                        // width: 160,
+                        decoration: BoxDecoration(
+                          border: _to == propertyTo.Buy
+                              ? Border.all(color: kHighlightedTextColor)
+                              : null,
+                          borderRadius: BorderRadius.circular(15),
+                          color: _to == propertyTo.Buy
+                              ? kPropertyCardColor
+                              : kTextFieldFillColor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Buy',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'Buy',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const Spacer(),
-                                    Radio(
-                                      value: propertyTo.Buy,
-                                      activeColor: kHighlightedTextColor,
-                                      groupValue: _to,
-                                      onChanged: (propertyTo? value) {
-                                        setState(() {
-                                          _to = value;
-                                        });
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                              const Spacer(),
+                              Radio(
+                                value: propertyTo.Buy,
+                                activeColor: kHighlightedTextColor,
+                                groupValue: _to,
+                                onChanged: (propertyTo? value) {
+                                  setState(() {
+                                    _to = value;
+                                  });
+                                },
+                              )
+                            ],
                           ),
                         ),
-                        // Spacer(),
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Container(
-                              // width: 160,
-                              decoration: BoxDecoration(
-                                border: _to == propertyTo.Rent
-                                    ? Border.all(color: kHighlightedTextColor)
-                                    : null,
-                                color: _to == propertyTo.Rent
-                                    ? kPropertyCardColor
-                                    : kTextFieldFillColor,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'Rent',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const Spacer(),
-                                    Radio(
-                                      value: propertyTo.Rent,
-                                      activeColor: kHighlightedTextColor,
-                                      groupValue: _to,
-                                      onChanged: (propertyTo? value) {
-                                        setState(() {
-                                          _to = value;
-                                        });
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                const Center(
-                  child: Text(
-                    'Property Type',
-                    style: TextStyle(
-                        color: kSubCategoryColor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: SizedBox(
-                    height: 55,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Container(
-                              // width: 165,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border: _type == propertyType.Residental
-                                    ? Border.all(color: kHighlightedTextColor)
-                                    : null,
-                                color: _type == propertyType.Residental
-                                    ? kPropertyCardColor
-                                    : kTextFieldFillColor,
+                  // Spacer(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Container(
+                        // width: 160,
+                        decoration: BoxDecoration(
+                          border: _to == propertyTo.Rent
+                              ? Border.all(color: kHighlightedTextColor)
+                              : null,
+                          color: _to == propertyTo.Rent
+                              ? kPropertyCardColor
+                              : kTextFieldFillColor,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Rent',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Row(
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Residental',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Radio(
-                                      activeColor: kHighlightedTextColor,
-                                      value: propertyType.Residental,
-                                      groupValue: _type,
-                                      onChanged: (propertyType? value) {
-                                        setState(() {
-                                          _type = value;
-                                        });
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                              const Spacer(),
+                              Radio(
+                                value: propertyTo.Rent,
+                                activeColor: kHighlightedTextColor,
+                                groupValue: _to,
+                                onChanged: (propertyTo? value) {
+                                  setState(() {
+                                    _to = value;
+                                  });
+                                },
+                              )
+                            ],
                           ),
                         ),
-                        // Spacer(),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          const Center(
+            child: Text(
+              'Property Type',
+              style: TextStyle(
+                  color: kSubCategoryColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: SizedBox(
+              height: 55,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: Container(
+                        // width: 165,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: _type == propertyType.Residental
+                              ? Border.all(color: kHighlightedTextColor)
+                              : null,
+                          color: _type == propertyType.Residental
+                              ? kPropertyCardColor
+                              : kTextFieldFillColor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Residental',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              const Spacer(),
+                              Radio(
+                                activeColor: kHighlightedTextColor,
+                                value: propertyType.Residental,
+                                groupValue: _type,
+                                onChanged: (propertyType? value) {
+                                  setState(() {
+                                    _type = value;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Spacer(),
 
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Container(
-                              // width: 165,
-                              decoration: BoxDecoration(
-                                border: _type == propertyType.Commercial
-                                    ? Border.all(color: kHighlightedTextColor)
-                                    : null,
-                                color: _type == propertyType.Commercial
-                                    ? kPropertyCardColor
-                                    : kTextFieldFillColor,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Row(
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Commercial',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Radio(
-                                      activeColor: kHighlightedTextColor,
-                                      value: propertyType.Commercial,
-                                      groupValue: _type,
-                                      onChanged: (propertyType? value) {
-                                        setState(() {
-                                          _type = value;
-                                          print(_type);
-                                        });
-                                      },
-                                    )
-                                  ],
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: Container(
+                        // width: 165,
+                        decoration: BoxDecoration(
+                          border: _type == propertyType.Commercial
+                              ? Border.all(color: kHighlightedTextColor)
+                              : null,
+                          color: _type == propertyType.Commercial
+                              ? kPropertyCardColor
+                              : kTextFieldFillColor,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Commercial',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                const Center(
-                  child: Text(
-                    'Select Category',
-                    style: TextStyle(
-                        color: kSubCategoryColor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: SizedBox(
-                    height: 92,
-                    child: ListView(
-                      physics: const BouncingScrollPhysics(),
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: _category == propertyCategory.Plot
-                                  ? Border.all(color: kHighlightedTextColor)
-                                  : null,
-                              color: _category == propertyCategory.Plot
-                                  ? kPropertyCardColor
-                                  : kTextFieldFillColor,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: const [
-                                      Icon(
-                                        Icons.crop_square,
-                                        size: 50,
-                                        color: kHighlightedTextColor,
-                                      ),
-                                      Text('Plot')
-                                    ],
-                                  ),
-                                  Radio(
-                                    value: propertyCategory.Plot,
-                                    activeColor: kHighlightedTextColor,
-                                    groupValue: _category,
-                                    onChanged: (propertyCategory? value) {
-                                      setState(() {
-                                        _category = value;
-                                      });
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: _category == propertyCategory.Land
-                                  ? Border.all(color: kHighlightedTextColor)
-                                  : null,
-                              color: _category == propertyCategory.Land
-                                  ? kPropertyCardColor
-                                  : kTextFieldFillColor,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: const [
-                                      Icon(
-                                        Icons.landscape_outlined,
-                                        size: 50,
-                                        color: kHighlightedTextColor,
-                                      ),
-                                      Text('Land')
-                                    ],
-                                  ),
-                                  Radio(
-                                    value: propertyCategory.Land,
-                                    activeColor: kHighlightedTextColor,
-                                    groupValue: _category,
-                                    onChanged: (propertyCategory? value) {
-                                      setState(() {
-                                        _category = value;
-                                      });
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: _category == propertyCategory.House
-                                  ? Border.all(color: kHighlightedTextColor)
-                                  : null,
-                              color: _category == propertyCategory.House
-                                  ? kPropertyCardColor
-                                  : kTextFieldFillColor,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: const [
-                                      Icon(
-                                        Icons.house_outlined,
-                                        size: 50,
-                                        color: kHighlightedTextColor,
-                                      ),
-                                      Text('House')
-                                    ],
-                                  ),
-                                  Radio(
-                                    value: propertyCategory.House,
-                                    activeColor: kHighlightedTextColor,
-                                    groupValue: _category,
-                                    onChanged: (propertyCategory? value) {
-                                      setState(() {
-                                        _category = value;
-                                      });
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: _category == propertyCategory.Apartment
-                                  ? Border.all(color: kHighlightedTextColor)
-                                  : null,
-                              color: _category == propertyCategory.Apartment
-                                  ? kPropertyCardColor
-                                  : kTextFieldFillColor,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: const [
-                                      Icon(
-                                        Icons.apartment,
-                                        size: 50,
-                                        color: kHighlightedTextColor,
-                                      ),
-                                      Text('Apartment')
-                                    ],
-                                  ),
-                                  Radio(
-                                    value: propertyCategory.Apartment,
-                                    activeColor: kHighlightedTextColor,
-                                    groupValue: _category,
-                                    onChanged: (propertyCategory? value) {
-                                      setState(() {
-                                        _category = value;
-                                      });
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: _category == propertyCategory.Building
-                                  ? Border.all(color: kHighlightedTextColor)
-                                  : null,
-                              color: _category == propertyCategory.Building
-                                  ? kPropertyCardColor
-                                  : kTextFieldFillColor,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: const [
-                                      Icon(
-                                        Icons.room_preferences_outlined,
-                                        size: 50,
-                                        color: kHighlightedTextColor,
-                                      ),
-                                      Text('Building')
-                                    ],
-                                  ),
-                                  Radio(
-                                    value: propertyCategory.Building,
-                                    activeColor: kHighlightedTextColor,
-                                    groupValue: _category,
-                                    onChanged: (propertyCategory? value) {
-                                      setState(() {
-                                        _category = value;
-                                      });
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Row(
-                  children: const [
-                    Text(
-                      'Select Area',
-                      style: TextStyle(
-                          color: kSubCategoryColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    Spacer(),
-                    Text(
-                      'State : Tamil Nadu',
-                      style: TextStyle(
-                          color: kSubCategoryColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 6),
-                        child: GestureDetector(
-                          onTap: () => _showDialog(
-                            CupertinoPicker(
-                              magnification: 1.22,
-                              squeeze: 1.2,
-                              useMagnifier: true,
-                              itemExtent: _kItemExtent,
-                              // This is called when selected item is changed.
-                              onSelectedItemChanged: (int selectedItem) {
-                                setState(() {
-                                  selectedDistrict = selectedItem;
-                                  district = districts![selectedDistrict];
-                                  setTaluka(Taluka[district]);
-                                });
-                              },
-                              children: List<Widget>.generate(
-                                  districts!.length, (int index) {
-                                return Center(
-                                  child: Text(
-                                    districts[index],
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
-                          child: Container(
-                            height: 60,
-                            // width: 155,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: kHighlightedTextColor),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 10),
-                              child: Text(
-                                "District : " + district,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 6),
-                        child: GestureDetector(
-                          onTap: () => _showDialog(
-                            CupertinoPicker(
-                              magnification: 1.22,
-                              squeeze: 1.2,
-                              useMagnifier: true,
-                              itemExtent: _kItemExtent,
-                              // This is called when selected item is changed.
-                              onSelectedItemChanged: (int selectedItem) {
-                                setState(() {
-                                  selectedTaluk = selectedItem;
-                                  taluk = talukas[selectedTaluk];
-                                });
-                              },
-                              children: List<Widget>.generate(talukas.length,
-                                  (int index) {
-                                return Center(
-                                  child: Text(
-                                    talukas[index],
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
-                          child: Container(
-                            height: 60,
-                            // width: 155,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: kHighlightedTextColor),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 10),
-                              child: Text(
-                                "Taluka : " + taluk,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 6),
-                        child: Container(
-                          // height: 200,
-                          // width: MediaQuery.of(context).size.width / 2.3,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: kHighlightedTextColor),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  length = newValue;
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                  // errorText: _errorText,
-                                  border: InputBorder.none,
-                                  hintText: "East-West(Ft.)",
-                                  hintStyle:
-                                      TextStyle(color: kSubCategoryColor)),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // const Spacer(),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 6),
-                        child: Container(
-                          // height: 200,
-                          // width: MediaQuery.of(context).size.width / 2.3,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: kHighlightedTextColor),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  width = newValue;
-                                });
-                              },
-                              // controller: _PropertyPriceController,
-                              decoration: const InputDecoration(
-                                  // errorText: _errorText,
-                                  border: InputBorder.none,
-                                  hintText: "North-South(Ft.)",
-                                  hintStyle:
-                                      TextStyle(color: kSubCategoryColor)),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 80,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 6),
-                          child: Container(
-                            // height: 200,
-                            // width: MediaQuery.of(context).size.width / 2.3,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: kHighlightedTextColor),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextField(
-                                onChanged: (newValue) {
+                              const Spacer(),
+                              Radio(
+                                activeColor: kHighlightedTextColor,
+                                value: propertyType.Commercial,
+                                groupValue: _type,
+                                onChanged: (propertyType? value) {
                                   setState(() {
-                                    city = newValue;
+                                    _type = value;
+                                    print(_type);
                                   });
                                 },
-                                controller: _PropertyCityController,
-                                decoration: InputDecoration(
-                                    errorText: _errorText,
-                                    border: InputBorder.none,
-                                    hintText: "City",
-                                    hintStyle: const TextStyle(
-                                        color: kSubCategoryColor)),
-                              ),
-                            ),
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      // const Spacer(),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 6),
-                          child: Container(
-                            // height: 100,
-                            // width: MediaQuery.of(context).size.width / 2.3,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: kHighlightedTextColor),
-                              borderRadius: BorderRadius.circular(15),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          const Center(
+            child: Text(
+              'Select Category',
+              style: TextStyle(
+                  color: kSubCategoryColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: SizedBox(
+              height: 92,
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                scrollDirection: Axis.horizontal,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: _category == propertyCategory.Plot
+                            ? Border.all(color: kHighlightedTextColor)
+                            : null,
+                        color: _category == propertyCategory.Plot
+                            ? kPropertyCardColor
+                            : kTextFieldFillColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: const [
+                                Icon(
+                                  Icons.crop_square,
+                                  size: 50,
+                                  color: kHighlightedTextColor,
+                                ),
+                                Text('Plot')
+                              ],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextField(
-                                keyboardType: TextInputType.phone,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    price = newValue;
-                                  });
-                                },
-                                controller: _PropertyPriceController,
-                                decoration: InputDecoration(
-                                    errorText: _errorText,
-                                    border: InputBorder.none,
-                                    hintText: "Price",
-                                    hintStyle: const TextStyle(
-                                        color: kSubCategoryColor)),
-                              ),
-                            ),
-                          ),
+                            Radio(
+                              value: propertyCategory.Plot,
+                              activeColor: kHighlightedTextColor,
+                              groupValue: _category,
+                              onChanged: (propertyCategory? value) {
+                                setState(() {
+                                  _category = value;
+                                });
+                              },
+                            )
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                Padding(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: _category == propertyCategory.Land
+                            ? Border.all(color: kHighlightedTextColor)
+                            : null,
+                        color: _category == propertyCategory.Land
+                            ? kPropertyCardColor
+                            : kTextFieldFillColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: const [
+                                Icon(
+                                  Icons.landscape_outlined,
+                                  size: 50,
+                                  color: kHighlightedTextColor,
+                                ),
+                                Text('Land')
+                              ],
+                            ),
+                            Radio(
+                              value: propertyCategory.Land,
+                              activeColor: kHighlightedTextColor,
+                              groupValue: _category,
+                              onChanged: (propertyCategory? value) {
+                                setState(() {
+                                  _category = value;
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: _category == propertyCategory.House
+                            ? Border.all(color: kHighlightedTextColor)
+                            : null,
+                        color: _category == propertyCategory.House
+                            ? kPropertyCardColor
+                            : kTextFieldFillColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: const [
+                                Icon(
+                                  Icons.house_outlined,
+                                  size: 50,
+                                  color: kHighlightedTextColor,
+                                ),
+                                Text('House')
+                              ],
+                            ),
+                            Radio(
+                              value: propertyCategory.House,
+                              activeColor: kHighlightedTextColor,
+                              groupValue: _category,
+                              onChanged: (propertyCategory? value) {
+                                setState(() {
+                                  _category = value;
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: _category == propertyCategory.Apartment
+                            ? Border.all(color: kHighlightedTextColor)
+                            : null,
+                        color: _category == propertyCategory.Apartment
+                            ? kPropertyCardColor
+                            : kTextFieldFillColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: const [
+                                Icon(
+                                  Icons.apartment,
+                                  size: 50,
+                                  color: kHighlightedTextColor,
+                                ),
+                                Text('Apartment')
+                              ],
+                            ),
+                            Radio(
+                              value: propertyCategory.Apartment,
+                              activeColor: kHighlightedTextColor,
+                              groupValue: _category,
+                              onChanged: (propertyCategory? value) {
+                                setState(() {
+                                  _category = value;
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: _category == propertyCategory.Building
+                            ? Border.all(color: kHighlightedTextColor)
+                            : null,
+                        color: _category == propertyCategory.Building
+                            ? kPropertyCardColor
+                            : kTextFieldFillColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: const [
+                                Icon(
+                                  Icons.room_preferences_outlined,
+                                  size: 50,
+                                  color: kHighlightedTextColor,
+                                ),
+                                Text('Building')
+                              ],
+                            ),
+                            Radio(
+                              value: propertyCategory.Building,
+                              activeColor: kHighlightedTextColor,
+                              groupValue: _category,
+                              onChanged: (propertyCategory? value) {
+                                setState(() {
+                                  _category = value;
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Row(
+            children: const [
+              Text(
+                'Select Area',
+                style: TextStyle(
+                    color: kSubCategoryColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400),
+              ),
+              Spacer(),
+              Text(
+                'State : Tamil Nadu',
+                style: TextStyle(
+                    color: kSubCategoryColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 14),
+                      vertical: 8.0, horizontal: 6),
+                  child: GestureDetector(
+                    onTap: () => _showDialog(
+                      CupertinoPicker(
+                        magnification: 1.22,
+                        squeeze: 1.2,
+                        useMagnifier: true,
+                        itemExtent: _kItemExtent,
+                        // This is called when selected item is changed.
+                        onSelectedItemChanged: (int selectedItem) {
+                          setState(() {
+                            selectedDistrict = selectedItem;
+                            district = districts![selectedDistrict];
+                            setTaluka(Taluka[district]);
+                          });
+                        },
+                        children: List<Widget>.generate(districts!.length,
+                            (int index) {
+                          return Center(
+                            child: Text(
+                              districts[index],
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                    child: Container(
+                      height: 60,
+                      // width: 155,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: kHighlightedTextColor),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 10),
+                        child: Text(
+                          "District : " + district,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 6),
+                  child: GestureDetector(
+                    onTap: () => _showDialog(
+                      CupertinoPicker(
+                        magnification: 1.22,
+                        squeeze: 1.2,
+                        useMagnifier: true,
+                        itemExtent: _kItemExtent,
+                        // This is called when selected item is changed.
+                        onSelectedItemChanged: (int selectedItem) {
+                          setState(() {
+                            selectedTaluk = selectedItem;
+                            taluk = talukas[selectedTaluk];
+                          });
+                        },
+                        children: List<Widget>.generate(talukas.length,
+                            (int index) {
+                          return Center(
+                            child: Text(
+                              talukas[index],
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                    child: Container(
+                      height: 60,
+                      // width: 155,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: kHighlightedTextColor),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 10),
+                        child: Text(
+                          "Taluka : " + taluk,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 6),
                   child: Container(
-                    height: 101,
+                    // height: 200,
+                    // width: MediaQuery.of(context).size.width / 2.3,
                     decoration: BoxDecoration(
                       border: Border.all(color: kHighlightedTextColor),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Write Property Description',
-                            style: TextStyle(color: kSubCategoryColor),
-                          ),
-                          TextField(
-                            onChanged: (newValue) {
-                              setState(() {
-                                PropertyDescription = newValue;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              // errorText: _errorText,
-                            ),
-                            // controller: _controller,
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                            maxLines: 2,
-                            // minLines: 5,
-                          ),
-                        ],
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        onChanged: (newValue) {
+                          setState(() {
+                            length = newValue;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                            // errorText: _errorText,
+                            border: InputBorder.none,
+                            hintText: "East-West(Ft.)",
+                            hintStyle: TextStyle(color: kSubCategoryColor)),
                       ),
                     ),
                   ),
                 ),
-                Center(
-                  child: SizedBox(
-                    height: 50,
-                    // width: 150,
-                    child: ElevatedButton(
-                      // only enable the button if the text is not empty
-
-                      onPressed: (_PropertyCityController
-                                  .value.text.isNotEmpty &&
-                              _PropertyPriceController.value.text.isNotEmpty)
-                          ? push
-                          : null,
-                      child: const Text(
-                        'Submit Request',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              // const Spacer(),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 6),
+                  child: Container(
+                    // height: 200,
+                    // width: MediaQuery.of(context).size.width / 2.3,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: kHighlightedTextColor),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        onChanged: (newValue) {
+                          setState(() {
+                            width = newValue;
+                          });
+                        },
+                        // controller: _PropertyPriceController,
+                        decoration: const InputDecoration(
+                            // errorText: _errorText,
+                            border: InputBorder.none,
+                            hintText: "North-South(Ft.)",
+                            hintStyle: TextStyle(color: kSubCategoryColor)),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 10,
-                        primary: kPrimaryButtonColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 80,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 6),
+                    child: Container(
+                      // height: 200,
+                      // width: MediaQuery.of(context).size.width / 2.3,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: kHighlightedTextColor),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          onChanged: (newValue) {
+                            setState(() {
+                              city = newValue;
+                            });
+                          },
+                          controller: _PropertyCityController,
+                          decoration: InputDecoration(
+                              errorText: _errorText,
+                              border: InputBorder.none,
+                              hintText: "City",
+                              hintStyle:
+                                  const TextStyle(color: kSubCategoryColor)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // const Spacer(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 6),
+                    child: Container(
+                      // height: 100,
+                      // width: MediaQuery.of(context).size.width / 2.3,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: kHighlightedTextColor),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          keyboardType: TextInputType.phone,
+                          onChanged: (newValue) {
+                            setState(() {
+                              price = newValue;
+                            });
+                          },
+                          controller: _PropertyPriceController,
+                          decoration: InputDecoration(
+                              errorText: _errorText,
+                              border: InputBorder.none,
+                              hintText: "Price",
+                              hintStyle:
+                                  const TextStyle(color: kSubCategoryColor)),
                         ),
                       ),
                     ),
@@ -953,8 +865,72 @@ class _requestPropertyState extends State<requestProperty> {
               ],
             ),
           ),
-        )
-      ],
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
+            child: Container(
+              height: 101,
+              decoration: BoxDecoration(
+                border: Border.all(color: kHighlightedTextColor),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Write Property Description',
+                      style: TextStyle(color: kSubCategoryColor),
+                    ),
+                    TextField(
+                      onChanged: (newValue) {
+                        setState(() {
+                          PropertyDescription = newValue;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        // errorText: _errorText,
+                      ),
+                      // controller: _controller,
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                      maxLines: 2,
+                      // minLines: 5,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: SizedBox(
+              height: 50,
+              // width: 150,
+              child: ElevatedButton(
+                // only enable the button if the text is not empty
+
+                onPressed: (_PropertyCityController.value.text.isNotEmpty &&
+                        _PropertyPriceController.value.text.isNotEmpty)
+                    ? push
+                    : null,
+                child: const Text(
+                  'Submit Request',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                style: ElevatedButton.styleFrom(
+                  elevation: 10,
+                  primary: kPrimaryButtonColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

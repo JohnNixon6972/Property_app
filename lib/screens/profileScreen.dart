@@ -2,7 +2,6 @@
 
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:email_auth/email_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/alertPopUp.dart';
 import 'package:property_app/screens/approvedPropertiesScreen.dart';
@@ -13,7 +12,6 @@ import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 // import 'package:property_app/screens/loginScreen.dart';
 import '../constants.dart';
 import 'dart:math';
-import '../components/dialogBoxListWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -293,11 +291,11 @@ class _profileScreenState extends State<profileScreen> {
                                     Title: "Personal Information",
                                     SubTitle: userInfo.name,
                                   ),
-                                  ProfileDetailsContainer(
-                                    icon: Icons.back_hand,
-                                    Title: "My Requests",
-                                    SubTitle: "Check request status",
-                                  ),
+                                  // ProfileDetailsContainer(
+                                  //   icon: Icons.back_hand,
+                                  //   Title: "My Requests",
+                                  //   SubTitle: "Check request status",
+                                  // ),
                                   ProfileDetailsContainer(
                                     icon: Icons.call_outlined,
                                     Title: "Email",

@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, file_names
+
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,10 +32,10 @@ class _UnApprovedPropertiesScreenState
             return AnimationConfiguration.staggeredList(
               position: index,
               child: SlideAnimation(
-                duration: Duration(seconds: 3),
+                duration: const Duration(seconds: 3),
                 verticalOffset: 50.0,
                 child: FadeInAnimation(
-                  duration: Duration(seconds: 3),
+                  duration: const Duration(seconds: 3),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -41,7 +43,7 @@ class _UnApprovedPropertiesScreenState
                         color: kPropertyCardColor,
                         border: Border.all(color: kHighlightedTextColor),
                         borderRadius: const BorderRadius.all(
-                          const Radius.circular(20),
+                          Radius.circular(20),
                         ),
                       ),
                       // height: 352,
@@ -56,7 +58,7 @@ class _UnApprovedPropertiesScreenState
                               padding: const EdgeInsets.only(bottom: 10),
                               child: ClipRRect(
                                 borderRadius: const BorderRadius.all(
-                                    const Radius.circular(20)),
+                                    Radius.circular(20)),
                                 child: CachedNetworkImage(
                                   cacheManager: customCacheManager,
                                   key: UniqueKey(),
@@ -256,8 +258,8 @@ class _UnApprovedPropertiesScreenState
                                                                 "isApproved":
                                                                     "True"
                                                               });
-                                                              print(
-                                                                  "Property Approved Sucessfully");
+                                                              // print(
+                                                              //     "Property Approved Sucessfully");
                                                               unApprovedProperties
                                                                   .remove(
                                                                       unApprovedProperties[
@@ -270,8 +272,7 @@ class _UnApprovedPropertiesScreenState
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(
-                                                          primary:
-                                                              kBottomNavigationBackgroundColor,
+                                                          backgroundColor: kBottomNavigationBackgroundColor,
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             borderRadius:
@@ -298,8 +299,7 @@ class _UnApprovedPropertiesScreenState
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(
-                                                          primary:
-                                                              kPrimaryButtonColor,
+                                                          backgroundColor: kPrimaryButtonColor,
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             borderRadius:
@@ -390,7 +390,7 @@ class _UnApprovedPropertiesScreenState
                                                                   unApprovedProperties[
                                                                           index]
                                                                       .propertyName)) {
-                                                                print("Hi");
+                                                             
 
                                                                 final _firestore =
                                                                     FirebaseFirestore
@@ -413,8 +413,8 @@ class _UnApprovedPropertiesScreenState
                                                                         .propertyName);
                                                               }
 
-                                                              print(
-                                                                  "asset/propertyImages/${userInfo.mobileNumber}/${unApprovedProperties[index].propertyName}");
+                                                              // print(
+                                                              //     "asset/propertyImages/${userInfo.mobileNumber}/${unApprovedProperties[index].propertyName}");
                                                               FirebaseStorage
                                                                   .instance
                                                                   .ref(
@@ -422,15 +422,13 @@ class _UnApprovedPropertiesScreenState
                                                                   .listAll()
                                                                   .then(
                                                                       (value) {
-                                                                value.items
-                                                                    .forEach(
-                                                                        (element) {
+                                                                for (var element in value.items) {
                                                                   FirebaseStorage
                                                                       .instance
                                                                       .ref(element
                                                                           .fullPath)
                                                                       .delete();
-                                                                });
+                                                                }
                                                               });
                                                               unApprovedProperties
                                                                   .remove(
@@ -444,8 +442,7 @@ class _UnApprovedPropertiesScreenState
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(
-                                                          primary:
-                                                              kBottomNavigationBackgroundColor,
+                                                          backgroundColor: kBottomNavigationBackgroundColor,
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             borderRadius:
@@ -472,8 +469,7 @@ class _UnApprovedPropertiesScreenState
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(
-                                                          primary:
-                                                              kPrimaryButtonColor,
+                                                          backgroundColor: kPrimaryButtonColor,
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             borderRadius:
@@ -546,7 +542,7 @@ class _UnApprovedPropertiesScreenState
                     width: 60,
                   ),
                   const Center(
-                    child: const Text(
+                    child: Text(
                       'UnApproved Properties',
                       style: TextStyle(
                         fontSize: 20,

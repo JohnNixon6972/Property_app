@@ -10,7 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../components/loactionData.dart';
 
 enum propertyTo { Sell, Rent }
+
 enum propertyType { Residental, Commercial }
+
 enum propertyCategory { Plot, Land, House, Apartment, Building }
 
 propertyTo? _to;
@@ -22,7 +24,8 @@ propertyType? _type;
 class EditPropertyScreen1 extends StatefulWidget {
   final myProperty propertyToEdit;
   BuildContext screenContext;
-  EditPropertyScreen1({required this.propertyToEdit,required this.screenContext});
+  EditPropertyScreen1(
+      {required this.propertyToEdit, required this.screenContext});
 
   @override
   State<EditPropertyScreen1> createState() =>
@@ -60,7 +63,7 @@ String getTo() {
 }
 
 late String PropertyTitle = "";
-late String PropertyAddress = "";
+late String EPropertyAddress = "";
 late String state = "";
 late String district = "";
 late String city = "";
@@ -96,7 +99,7 @@ void readDetails(myProperty propertyToEdit, List<String> States,
   selectedTaluk = Taluka[district]!.indexOf(taluk);
   talukas = Taluka[district];
   PropertyTitle = propertyToEdit.propertyName;
-  PropertyAddress = propertyToEdit.propertyAddress;
+  EPropertyAddress = propertyToEdit.propertyAddress;
 
   _type = propertyToEdit.propertyType == "Residental"
       ? propertyType.Residental
@@ -869,39 +872,48 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: kHighlightedTextColor),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              onChanged: (newValue) {
-                                setState(() {
-                                  PropertyAddress = newValue;
-                                });
-                              },
-                              controller: _PropertyAddressController,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  errorText: _errorText,
-                                  hintText: "Address",
-                                  hintStyle:
-                                      TextStyle(color: kSubCategoryColor)),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: kHighlightedTextColor),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Expanded(
+                            //   child: TextField(
+                            //     onChanged: (newValue) {
+                            //       setState(() {
+                            //         PropertyAddress = newValue;
+                            //       });
+                            //     },
+                            //     controller: _PropertyAddressController,
+                            //     decoration: InputDecoration(
+                            //         border: InputBorder.none,
+                            //         errorText: _errorText,
+                            //         hintText: "Address",
+                            //         hintStyle:
+                            //             TextStyle(color: kSubCategoryColor)),
+                            //   ),
+                            // ),
+                            Text(
+                              "Pick Location",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w900),
                             ),
-                          ),
-                          Icon(
-                            Icons.add_location_outlined,
-                            color: kHighlightedTextColor,
-                            size: 35,
-                          )
-                        ],
+                            Icon(
+                              Icons.add_location_outlined,
+                              color: kHighlightedTextColor,
+                              size: 35,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -944,8 +956,7 @@ class _EditPropertyScreen1State extends State<EditPropertyScreen1> {
                           child: ElevatedButton(
                             // only enable the button if the text is not empty
 
-                            onPressed: (_PropertyAddressController
-                                        .value.text.isNotEmpty &&
+                            onPressed: (
                                     _PropertyCityController
                                         .value.text.isNotEmpty &&
                                     _PropertyTitleController

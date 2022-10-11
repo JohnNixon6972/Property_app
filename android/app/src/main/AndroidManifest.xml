@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.property_app">
-    <uses-permission android:name="android.permission.INTERNET"/>   
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />   
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="Kayal Properties"
         android:name="${applicationName}"
@@ -33,5 +35,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAD0_g00Z_dEY9zM5JuTFi0_n4raGk9wdY"/>
     </application>
 </manifest>

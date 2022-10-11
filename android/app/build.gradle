@@ -76,6 +76,13 @@ android {
         }
     }
 
+       lintOptions {
+        disable 'InvalidPackage'
+        disable "Instantiatable"
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
 }
 
 flutter {
@@ -89,5 +96,3 @@ dependencies {
     // implementation platform('com.google.firebase:firebase-bom:30.0.0')
     implementation platform('com.google.firebase:firebase-bom:30.4.1')
 }
-
-

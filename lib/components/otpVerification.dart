@@ -30,8 +30,14 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
   bool isKeyboardVisible = false;
   late final ScrollController scrollController;
 
+  void avoidcaptcha() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.setSettings(appVerificationDisabledForTesting: true);
+  }
+
   @override
   void initState() {
+    // avoidcaptcha();
     scrollController = ScrollController();
     WidgetsBinding.instance.addObserver(this);
     super.initState();

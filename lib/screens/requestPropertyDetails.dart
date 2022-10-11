@@ -11,14 +11,40 @@ import '../constants.dart';
 
 void data(category, city, taluk, district, state, price, to) {}
 
-class requestPropertyDetails extends StatefulWidget {
-  static const id = 'requestedPropertyDetailsScreen';
-
-  @override
-  State<requestPropertyDetails> createState() => _requestPropertyDetailsState();
-}
-
-class _requestPropertyDetailsState extends State<requestPropertyDetails> {
+class requestPropertyDetails extends StatelessWidget {
+  final IconData icon;
+  final String ownerName,
+      city,
+      taluk,
+      to,
+      category,
+      type,
+      price,
+      ownerPhno,
+      ownerimg,
+      state,
+      district,
+      description,
+      length,
+      width,
+      ownerEmail;
+  requestPropertyDetails(
+      {required this.icon,
+      required this.length,
+      required this.width,
+      required this.ownerName,
+      required this.city,
+      required this.taluk,
+      required this.to,
+      required this.category,
+      required this.type,
+      required this.price,
+      required this.ownerPhno,
+      required this.ownerimg,
+      required this.state,
+      required this.district,
+      required this.description,
+      required this.ownerEmail});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,9 +124,9 @@ class _requestPropertyDetailsState extends State<requestPropertyDetails> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Buyer Name",
-                              style: TextStyle(
+                            Text(
+                              ownerName,
+                              style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                   color: kHighlightedTextColor),
@@ -122,7 +148,7 @@ class _requestPropertyDetailsState extends State<requestPropertyDetails> {
                               onTap: () async {
                                 EmailContent email = EmailContent(
                                   to: [
-                                    "ownerMail",
+                                    ownerEmail,
                                   ],
                                 );
 
@@ -154,7 +180,7 @@ class _requestPropertyDetailsState extends State<requestPropertyDetails> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                var url = 'tel:' + "ownerPhoneNo".toString();
+                                var url = 'tel:' + ownerPhno.toString();
                                 if (await canLaunchUrl(Uri.parse(url))) {
                                   await launchUrl(Uri.parse(url));
                                 } else {
@@ -174,9 +200,9 @@ class _requestPropertyDetailsState extends State<requestPropertyDetails> {
                         )
                       ],
                     ),
-                    const Text(
-                      "Description if any",
-                      style: TextStyle(
+                    Text(
+                      description,
+                      style: const TextStyle(
                           fontSize: 15,
                           // fontWeight: FontWeight.w600,
                           color: kHighlightedTextColor),
@@ -194,41 +220,38 @@ class _requestPropertyDetailsState extends State<requestPropertyDetails> {
                             color: kHighlightedTextColor),
                       ),
                     ),
-                    const specifications(
+                    specifications(
                       title: "Property to",
-                      subtitle: "Buy / Rent",
+                      subtitle: to,
                     ),
-                    const specifications(
-                      title: "Property type",
-                      subtitle: "Residential",
-                    ),
-                    const specifications(
+                    specifications(title: "Property type", subtitle: type),
+                    specifications(
                       title: "Category",
-                      subtitle: "Plot / Land etc",
+                      subtitle: category,
                     ),
-                    const specifications(
+                    specifications(
                       title: "District",
-                      subtitle: "District name",
+                      subtitle: district,
                     ),
-                    const specifications(
+                    specifications(
                       title: "Taluk",
-                      subtitle: "Taluk Name",
+                      subtitle: taluk,
                     ),
-                    const specifications(
+                    specifications(
                       title: "City",
-                      subtitle: "City Name",
+                      subtitle: city,
                     ),
-                    const specifications(
+                    specifications(
                       title: "Length",
-                      subtitle: "Lgt",
+                      subtitle: length + " Ft.",
                     ),
-                    const specifications(
+                    specifications(
                       title: "Breath",
-                      subtitle: "Bth",
+                      subtitle: width + " Ft.",
                     ),
-                    const specifications(
+                    specifications(
                       title: "Price",
-                      subtitle: "Rs",
+                      subtitle: "Rs " + price,
                     ),
                     Row(
                       children: [
@@ -273,8 +296,7 @@ class button extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          elevation: title == 'Contact Buyer' ? 10 : 5,
-          primary: title == 'Contact Buyer'
+          elevation: title == 'Contact Buyer' ? 10 : 5, backgroundColor: title == 'Contact Buyer'
               ? kHighlightedTextColor
               : kBottomNavigationBackgroundColor,
           shape: RoundedRectangleBorder(

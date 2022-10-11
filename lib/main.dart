@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +10,11 @@ import 'package:property_app/screens/loginScreen.dart';
 import 'package:property_app/screens/myPropertiesScreen.dart';
 import 'package:property_app/screens/profileScreen.dart';
 import 'package:property_app/screens/raiseIssue.dart';
-import 'package:property_app/screens/requestPropertyDetails.dart';
 import 'package:property_app/screens/searchScreen.dart';
 import 'package:property_app/screens/unApprovedPropertiesScreen.dart';
 import 'screens/registerScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/homescreen.dart';
-import './screens/bookmarkedpropertiesscreen.dart';
-import 'screens/addPropertiesScreen2.dart';
 import 'currentUserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/otpVerification.dart';
@@ -65,14 +61,15 @@ void SignIn() async {
 class _PropertyAppState extends State<PropertyApp> {
   @override
   void initState() {
+   
     super.initState();
-    SignIn();
   }
 
   SharedPreferences prefs;
   _PropertyAppState({required this.prefs});
   @override
   Widget build(BuildContext context) {
+
     return FirebasePhoneAuthProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -96,8 +93,7 @@ class _PropertyAppState extends State<PropertyApp> {
           ApprovedPropertiesScreen.id: (context) => ApprovedPropertiesScreen(),
           UnApprovedPropertiesScreen.id: (context) =>
               UnApprovedPropertiesScreen(),
-          raiseAnIssue.id: (context) => raiseAnIssue(),
-          requestPropertyDetails.id: (context) => requestPropertyDetails(),
+          raiseAnIssue.id: (context) => raiseAnIssue()
         },
       ),
     );

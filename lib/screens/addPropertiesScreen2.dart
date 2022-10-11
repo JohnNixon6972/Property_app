@@ -14,7 +14,6 @@ import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
-import '../storage_service.dart';
 
 class AddPropertiesScreen2 extends StatefulWidget {
   static const String id = 'addPropertiesScreen2';
@@ -33,6 +32,8 @@ late String Price = "";
 late String lenght = "";
 late String width = "";
 late String cent = "";
+late String latitude = "";
+late String longitude = "";
 bool dtcpApproved = false;
 Color SelectedToggleBottonColor = kNo;
 List<XFile>? imageFileList = [];
@@ -68,7 +69,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
     if (Facing == "") {
       await popUpAlertDialogBox(context, "Kindly Select Facing");
     } else {
-      if (imageFileList!.length == 0) {
+      if (imageFileList!.isEmpty) {
         await popUpAlertDialogBox(context, "Kindly Uplaod Property Images");
       } else {
         Storage _storage = Storage();
@@ -89,6 +90,8 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
           _storage.uploadPropertyDetails(
               context,
               dtcpApproved,
+              latitude,
+              longitude,
               city,
               taluk,
               propertyAddress,
@@ -139,7 +142,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   }
 
   Future<void> selectImages() async {
-    List<XFile>? selectedImages = null;
+    List<XFile>? selectedImages;
 
     selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
     if (selectedImages == null) {
@@ -147,7 +150,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
     }
     if (selectedImages.isNotEmpty) {
       imageFileList!.addAll(selectedImages);
-      print("Image List Length:" + imageFileList!.length.toString());
+      // print("Image List Length:" + imageFileList!.length.toString());
       setState(() {});
     }
   }
@@ -203,14 +206,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   List<ImagesFromGallery> PickedImages = [];
 
   var _controller = TextEditingController();
-  double _kItemExtent = 32.0;
+  final double _kItemExtent = 32.0;
   bool isloading = false;
   int selectedFace = 0;
   @override
   Widget build(BuildContext context) {
     bool isLand = getCategory() == "Land" || getCategory() == "Plot";
     const List<String> directions = ["North", "South", "East", "West"];
-    final Storage storage = Storage();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(
@@ -423,13 +425,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 14),
                         child: Container(
-                          height: 121,
+                          height: 130,
                           decoration: BoxDecoration(
                             border: Border.all(color: kHighlightedTextColor),
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(6.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

@@ -27,7 +27,7 @@ void getMyPropertiesCards() {
   // print(bookmarkedPropertyNames);
   // print(PropertiesOnRentAll);
   // print(PropertiesOnSaleAll);
-  for (PropertyCard property in PropertiesOnRentAll) {
+  for (PropertyCard property in PropertiesOnRentAll.keys) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
         dtcpApproved: property.dtcpApproved,
@@ -59,7 +59,7 @@ void getMyPropertiesCards() {
       ));
     }
   }
-  for (PropertyCard property in PropertiesOnSaleAll) {
+  for (PropertyCard property in PropertiesOnSaleAll.keys) {
     if (myPropertiesAdv.contains(property.propertyName)) {
       myProperties.add(myProperty(
         dtcpApproved: property.dtcpApproved,

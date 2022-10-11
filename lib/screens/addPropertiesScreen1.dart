@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/components/alertPopUp.dart';
@@ -9,6 +11,7 @@ import '../constants.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../components/addressPickerHelper.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
 
 enum propertyTo { Sell, Rent }
@@ -66,6 +69,7 @@ late String state = "";
 late String district = "";
 late String taluk = "";
 late String city = "";
+
 
 class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
   String? get _errorText {
@@ -877,39 +881,57 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: kHighlightedTextColor),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              onChanged: (newValue) {
-                                setState(() {
-                                  PropertyAddress = newValue;
-                                });
-                              },
-                              controller: _PropertyAddressController,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  errorText: _errorText,
-                                  hintText: "Address",
-                                  hintStyle: const TextStyle(
-                                      color: kSubCategoryColor)),
-                            ),
+                // PinAddressMap(),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PinAddressMap()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: kHighlightedTextColor),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Text(
+                                "Pick Location",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w900),
+                              ),
+                              // Expanded(
+                              //   child: TextField(
+                              //     onChanged: (newValue) {
+                              //       setState(() {
+                              //         PropertyAddress = newValue;
+                              //       });
+                              //     },
+                              //     controller: _PropertyAddressController,
+                              //     decoration: InputDecoration(
+                              //         border: InputBorder.none,
+                              //         errorText: _errorText,
+                              //         hintText: "Address",
+                              //         hintStyle: const TextStyle(
+                              //             color: kSubCategoryColor)),
+                              //   ),
+                              // ),
+                              const Icon(
+                                Icons.add_location_outlined,
+                                color: kHighlightedTextColor,
+                                size: 35,
+                              )
+                            ],
                           ),
-                          const Icon(
-                            Icons.add_location_outlined,
-                            color: kHighlightedTextColor,
-                            size: 35,
-                          )
-                        ],
+                        ),
                       ),
                     ),
                   ),
@@ -951,9 +973,8 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       child: ElevatedButton(
                         // only enable the button if the text is not empty
 
-                        onPressed: (_PropertyAddressController
+                        onPressed: (_PropertyCityController
                                     .value.text.isNotEmpty &&
-                                _PropertyCityController.value.text.isNotEmpty &&
                                 _PropertyTitleController.value.text.isNotEmpty)
                             ? push
                             : null,

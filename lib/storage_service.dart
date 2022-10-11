@@ -1,21 +1,18 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:property_app/screens/addPropertiesScreen2.dart';
-import 'package:property_app/screens/myPropertiesScreen.dart';
 import './screens/homescreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'currentUserInformation.dart';
 import 'main.dart';
+
 
 class Storage {
   final firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
-  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   late firebase_storage.Reference ref;
   late CollectionReference imgRef;
@@ -23,6 +20,7 @@ class Storage {
   Future<void> uploadPropertyImages(
       BuildContext context,
       List<XFile>? imageFileList,
+      
       String PropertyTitle,
       String to,
       bool isUpdate) async {
@@ -32,7 +30,7 @@ class Storage {
       filePath = imageFileList[i].path;
       fileName = imageFileList[i].name;
       File file = File(filePath);
-      print("Adding property images");
+      // print("Adding property images");
 
       try {
         // await storage.ref('test/$fileName').putFile(file);
@@ -48,14 +46,14 @@ class Storage {
           });
         });
       } catch (e) {
-        print(e);
+        // print(e);
       }
     }
     await _firestore
         .collection('Properties' + to)
         .doc(PropertyTitle)
         .update({"isSetImages": "True"});
-    print("Added Property Images");
+    // print("Added Property Images");
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
@@ -65,6 +63,8 @@ class Storage {
   Future<void> uploadPropertyDetails(
       BuildContext context,
       bool dtcpApproved,
+      String latitude,
+      String longitude,
       String city,
       String taluk,
       String propertyAddress,
@@ -99,17 +99,17 @@ class Storage {
       String collection = "Properties" + propertyFor;
       // print(collection);
       // print(propertyTitle);
-      print("Deleting Duplicate");
+      // print("Deleting Duplicate");
       await _firestore.collection(collection).doc(propertyTitle).delete();
       await firebase_storage.FirebaseStorage.instance
           .ref("asset/propertyImages/${userInfo.mobileNumber}/$propertyTitle")
           .listAll()
           .then((value) {
-        value.items.forEach((element) {
+        for (var element in value.items) {
           firebase_storage.FirebaseStorage.instance
               .ref(element.fullPath)
               .delete();
-        });
+        }
       });
     }
     !isUpdate
@@ -139,6 +139,8 @@ class Storage {
             "profileImgUrl": userInfo.profileImgUrl,
             "State": 'Tamil Nadu',
             "District": district,
+            "latitude":latitude,
+            "longitude":longitude,
             "imgUrl1": "",
             "imgUrl2": "",
             "imgUrl3": "",
@@ -151,9 +153,9 @@ class Storage {
             "imgUrl10": "",
             "isApproved": "False"
           }).then((_) {
-            print("Data Added Sucessfully");
+            // print("Data Added Sucessfully");
           }).catchError((_) {
-            print("An error Occured");
+            // print("An error Occured");
           })
         : _firestore.collection('Properties' + to).doc(propertyTitle).update({
             "DTCPApproved": "$dtcpApproved",
@@ -166,6 +168,8 @@ class Storage {
             "City": city,
             "Taluk": taluk,
             "Cent": Cent,
+            "latitude":latitude,
+            "longitude":longitude,
             "PropertyTo": to,
             "PropertyCategory": category,
             "PropertyType": type,
@@ -192,14 +196,23 @@ class Storage {
             "imgUrl10": "",
             "isApproved": "False"
           }).then((_) {
-            print("Data Added Sucessfully");
+            // print("Data Added Sucessfully");
           }).catchError((_) {
-            print("An error Occured");
+            // print("An error Occured");
           });
   }
 
-  bool addRequest(String district, String taluk, String category, String to,
-      String type, String price, String city,String description,String length,String width) {
+  bool addRequest(
+      String district,
+      String taluk,
+      String category,
+      String to,
+      String type,
+      String price,
+      String city,
+      String description,
+      String length,
+      String width) {
     _firestore.collection("RequestedProperties").add({
       // "PropertyBy": userInfo.email,
       "description": description,
@@ -216,13 +229,13 @@ class Storage {
       "State": 'Tamil Nadu',
       "District": district,
       "PropertyBy": userInfo.email,
-      "Length":length,
-      "Width":width,
+      "Length": length,
+      "Width": width,
     }).then((_) {
-      print("Data Added Sucessfully");
+      // print("Data Added Sucessfully");
       return true;
     }).catchError((e) {
-      print(e);
+      // print(e);
       return false;
     });
     return true;
@@ -231,9 +244,9 @@ class Storage {
   Future<firebase_storage.ListResult> listFiles() async {
     firebase_storage.ListResult result = await storage.ref('test/').listAll();
 
-    for (var ref in result.items) {
-      print('Found file $ref');
-    }
+    // for (var ref in result.items) {
+    //   print('Found file $ref');
+    // }
     return result;
   }
 }

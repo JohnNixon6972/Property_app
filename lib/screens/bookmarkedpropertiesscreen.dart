@@ -28,7 +28,7 @@ void getBookMarkedPropertiesCards() async {
   // print(bookmarkedPropertyNames);
   // print(PropertiesOnRentAll);
   // print(PropertiesOnSaleAll);
-  for (PropertyCard property in PropertiesOnRentAll) {
+  for (PropertyCard property in PropertiesOnRentAll.keys) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(
         BookmarkedProperties(
@@ -63,7 +63,7 @@ void getBookMarkedPropertiesCards() async {
       availableBookmarkedProperties.add(property.propertyName);
     }
   }
-  for (PropertyCard property in PropertiesOnSaleAll) {
+  for (PropertyCard property in PropertiesOnSaleAll.keys) {
     if (bookmarkedPropertyNames.contains(property.propertyName)) {
       bookMarkedProperties.add(BookmarkedProperties(
         dtcpApproved: property.dtcpApproved,

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,7 +94,6 @@ class _searchScreenState extends State<searchScreen> {
                                   .toLowerCase()
                                   .contains(query.toLowerCase()))
                           .map((QueryDocumentSnapshot<Object?> property) {
-                        var isSet = property["isSetImages"].toString();
 
                         List<String> propertyImages = [];
                         for (int i = 1; i <= 10; i++) {
@@ -180,7 +181,6 @@ class _searchScreenState extends State<searchScreen> {
                               element["Taluk"].toString().toLowerCase() ==
                                   taluk.toLowerCase())
                           .map((QueryDocumentSnapshot<Object?> property) {
-                        var isSet = property["isSetImages"].toString();
 
                         List<String> propertyImages = [];
                         for (int i = 1; i <= 10; i++) {
@@ -289,13 +289,12 @@ class _searchScreenState extends State<searchScreen> {
 
     double _kItemExtent = 32.0;
     return Scaffold(
-    
       backgroundColor: kPageBackgroundColor,
       appBar: AppBar(
         toolbarHeight: 80,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: const Radius.circular(25),
+            bottom: Radius.circular(25),
           ),
         ),
         automaticallyImplyLeading: false,
@@ -345,9 +344,9 @@ class _searchScreenState extends State<searchScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
+            const Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                  EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
               child: Text("Properties From : Tamil Nadu"),
             ),
             Padding(
@@ -372,14 +371,14 @@ class _searchScreenState extends State<searchScreen> {
                               setState(() {
                                 selectedDistrict = selectedItem;
                                 district = districts![selectedDistrict];
-                                print(district);
+                             
                                 setTaluka(Taluka[district]);
                                 buildResults(context);
                               });
                             },
                             children: List<Widget>.generate(districts!.length,
                                 (int index) {
-                              print(districts);
+                             
                               return Center(
                                 child: Text(
                                   districts![index],
@@ -426,12 +425,12 @@ class _searchScreenState extends State<searchScreen> {
                             setState(() {
                               selectedTaluk = selectedItem;
                               taluk = talukas![selectedTaluk];
-                              print(taluk);
+                             
                             });
                           },
                           children: List<Widget>.generate(talukas!.length,
                               (int index) {
-                            print(talukas);
+                           
                             return Center(
                               child: Text(
                                 talukas![index],
@@ -470,7 +469,7 @@ class _searchScreenState extends State<searchScreen> {
                 const Padding(
                   padding: EdgeInsets.only(left: 25.0),
                   child: Center(
-                    child: const Text(
+                    child: Text(
                       "Let's see Properties On ",
                       style: TextStyle(
                           fontSize: 16,
@@ -576,7 +575,7 @@ class SearchedProperties extends StatefulWidget {
   final bool dtcpApproved;
   final List<String> propertyImages;
   const SearchedProperties(
-      {required this.imageloc,
+      {Key? key, required this.imageloc,
       required this.dtcpApproved,
       required this.city,
       required this.taluk,
@@ -601,7 +600,7 @@ class SearchedProperties extends StatefulWidget {
       required this.face,
       required this.state,
       required this.district,
-      required this.area});
+      required this.area}) : super(key: key);
   @override
   State<SearchedProperties> createState() => _SearchedPropertiesState();
 }
@@ -697,11 +696,11 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                     children: [
                       Text(
                         "\u{20B9} " +
-                        widget.price
-                            .replaceAllMapped(
-                                new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                (Match m) => "${m[1]},")
-                            .toString(),
+                            widget.price
+                                .replaceAllMapped(
+                                    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                    (Match m) => "${m[1]},")
+                                .toString(),
                         style: const TextStyle(
                             fontSize: 15,
                             color: kHighlightedTextColor,
@@ -722,7 +721,7 @@ class _SearchedPropertiesState extends State<SearchedProperties> {
                       GestureDetector(
                         onTap: () {
                           // Navigator.pushNamed(context, PropertyDetailsScreen.id);
-                          print("ViewDetails Pressed");
+                          // print("ViewDetails Pressed");
                           Navigator.push(
                             context,
                             MaterialPageRoute(

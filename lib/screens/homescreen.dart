@@ -657,16 +657,19 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: kPageBackgroundColor,
       floatingActionButton: FloatingActionButton.extended(
         elevation: 20,
-        label: const Text(
-          'Req Property',
-          style: TextStyle(
-              color: kPageBackgroundColor,
-              fontSize: 13,
-              fontWeight: FontWeight.w900),
-        ),
+        // label: const Text(
+        //   'Req Property',
+        //   style: TextStyle(
+        //       color: kPageBackgroundColor,
+        //       fontSize: 13,
+        //       fontWeight: FontWeight.w900),
+        // ),
+        label: const Text(""),
         backgroundColor: kHighlightedTextColor,
-        // icon: Icon(Icons.add),
-        icon: null,
+        icon: const Icon(
+          Icons.back_hand,
+        ),
+        // icon: null,
         onPressed: () {
           Navigator.pushNamed(context, raiseAnIssue.id);
         },

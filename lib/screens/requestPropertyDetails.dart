@@ -126,7 +126,7 @@ class requestPropertyDetails extends StatelessWidget {
                           children: [
                             Text(
                               ownerName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                   color: kHighlightedTextColor),
@@ -202,7 +202,7 @@ class requestPropertyDetails extends StatelessWidget {
                     ),
                     Text(
                       description,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 15,
                           // fontWeight: FontWeight.w600,
                           color: kHighlightedTextColor),
@@ -296,8 +296,7 @@ class button extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          elevation: title == 'Contact Buyer' ? 10 : 5,
-          primary: title == 'Contact Buyer'
+          elevation: title == 'Contact Buyer' ? 10 : 5, backgroundColor: title == 'Contact Buyer'
               ? kHighlightedTextColor
               : kBottomNavigationBackgroundColor,
           shape: RoundedRectangleBorder(

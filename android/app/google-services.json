@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "115422627752-f8f6q9nglce4dnugd50mbvp4ca3090jm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.KayalProperties",
+            "certificate_hash": "4625958ce15b959fa93cd460a76a94750b23ceb2"
+          }
+        },
+        {
           "client_id": "115422627752-3ssb144fu4201kh2t6nudv2enqr9qvch.apps.googleusercontent.com",
           "client_type": 3
         }

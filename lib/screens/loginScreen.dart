@@ -24,6 +24,7 @@ class loginScreen extends StatefulWidget {
 }
 
 Future<void> checkSavedUser(BuildContext context) async {
+  var is_done = await loc();
   final prefs = await SharedPreferences.getInstance();
   final _firestore = FirebaseFirestore.instance;
 

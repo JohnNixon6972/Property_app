@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' show cos, sqrt, asin;
 import 'package:emojis/emojis.dart'; // to use Emoji collection
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:property_app/components/scaffoldBottomAppBar.dart';
@@ -15,9 +16,7 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'aboutUs.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:avatar_glow/avatar_glow.dart';
 
 late User loggedInUser;
 bool displayAdminProperties = false;
@@ -37,52 +36,67 @@ class PropertiesOnSaleAdv extends StatefulWidget {
   State<PropertiesOnSaleAdv> createState() => _PropertiesOnSaleAdvState();
 }
 
-List<PropertyCard> PropertiesOnSaleAll = [];
+late Map<PropertyCard, double> PropertiesOnSaleAll;
 List<PropertyCard> approvedProperties = [];
 List<PropertyCard> unApprovedProperties = [];
 List<String> approvedPropertiesNames = [];
 List<String> unApprovedPropertiesNames = [];
 
 class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
-  List<PropertyCard> PropertiesOnSaleAdmin = [];
+  //
 
-  List<PropertyCard> ApartmentOnSaleAdmin = [];
+  double getDistance(double latitude, double longitude) {
+    print(latitude.toString() + " " + longitude.toString());
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((position.latitude - latitude) * p) / 2 +
+        c(latitude * p) *
+            c(position.latitude * p) *
+            (1 - c((position.longitude - longitude) * p)) /
+            2;
+    return 12742 * asin(sqrt(a));
+  }
 
-  List<PropertyCard> ApartmentOnSale = [];
+  late Map<PropertyCard, double> PropertiesOnSaleAdmin;
 
-  List<PropertyCard> HouseOnSaleAdmin = [];
+  late Map<PropertyCard, double> ApartmentOnSaleAdmin;
 
-  List<PropertyCard> HouseOnSale = [];
+  late Map<PropertyCard, double> ApartmentOnSale;
 
-  List<PropertyCard> PlotOnSale = [];
+  late Map<PropertyCard, double> HouseOnSaleAdmin;
 
-  List<PropertyCard> PlotOnSaleAdmin = [];
+  late Map<PropertyCard, double> HouseOnSale;
 
-  List<PropertyCard> LandOnSale = [];
+  late Map<PropertyCard, double> PlotOnSale;
 
-  List<PropertyCard> LandOnSaleAdmin = [];
+  late Map<PropertyCard, double> PlotOnSaleAdmin;
 
-  List<PropertyCard> BuildingOnSaleAdmin = [];
+  late Map<PropertyCard, double> LandOnSale;
 
-  List<PropertyCard> BuildingOnSale = [];
+  late Map<PropertyCard, double> LandOnSaleAdmin;
+
+  late Map<PropertyCard, double> BuildingOnSaleAdmin;
+
+  late Map<PropertyCard, double> BuildingOnSale;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesSell").snapshots(),
       builder: (sontext, snapshot) {
-        PropertiesOnSaleAll = [];
-        PropertiesOnSaleAdmin = [];
-        ApartmentOnSaleAdmin = [];
-        ApartmentOnSale = [];
-        HouseOnSaleAdmin = [];
-        HouseOnSale = [];
-        LandOnSale = [];
-        LandOnSaleAdmin = [];
-        PlotOnSale = [];
-        PlotOnSaleAdmin = [];
-        BuildingOnSaleAdmin = [];
-        BuildingOnSale = [];
+        PropertiesOnSaleAll = {};
+        PropertiesOnSaleAdmin = {};
+        ApartmentOnSaleAdmin = {};
+        ApartmentOnSale = {};
+        HouseOnSaleAdmin = {};
+        HouseOnSale = {};
+        LandOnSale = {};
+        LandOnSaleAdmin = {};
+        PlotOnSale = {};
+        PlotOnSaleAdmin = {};
+        BuildingOnSaleAdmin = {};
+        BuildingOnSale = {};
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -128,9 +142,17 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
               var city = property["City"];
               var taluk = property["Taluk"];
               var dtcpApproved = property["DTCPApproved"];
+              var latitude = property["latitude"];
+              var longitude = property["longitude"];
               dtcpApproved = dtcpApproved == "false" ? false : true;
 
+              double distance =
+                  getDistance(double.parse(latitude), double.parse(longitude));
+
               final Property = PropertyCard(
+                distance: distance,
+                latitude: latitude,
+                longitude: longitude,
                 dtcpApproved: dtcpApproved,
                 city: city,
                 taluk: taluk,
@@ -159,7 +181,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                 cent: cent,
               );
               if (isApproved == "True") {
-                PropertiesOnSaleAll.add(Property);
+                PropertiesOnSaleAll[Property] = distance;
                 if (!approvedPropertiesNames.contains(Property.propertyName)) {
                   approvedPropertiesNames.add(Property.propertyName);
                   approvedProperties.add(Property);
@@ -174,36 +196,36 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                   myPropertiesAdv.add(Property.propertyName);
                 }
                 if (ownerName.toString() == "john") {
-                  PropertiesOnSaleAdmin.add(Property);
+                  PropertiesOnSaleAdmin[Property] = distance;
                 }
                 if (propertyCategory.toString() == "Apartment") {
-                  ApartmentOnSale.add(Property);
+                  ApartmentOnSale[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    ApartmentOnSaleAdmin.add(Property);
+                    ApartmentOnSaleAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "House") {
-                  HouseOnSale.add(Property);
+                  HouseOnSale[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    HouseOnSaleAdmin.add(Property);
+                    HouseOnSaleAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "Plot") {
-                  PlotOnSale.add(Property);
+                  PlotOnSale[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    PlotOnSaleAdmin.add(Property);
+                    PlotOnSaleAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "Land") {
-                  LandOnSale.add(Property);
+                  LandOnSale[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    LandOnSaleAdmin.add(Property);
+                    LandOnSaleAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "Building") {
-                  BuildingOnSale.add(Property);
+                  BuildingOnSale[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    BuildingOnSaleAdmin.add(Property);
+                    BuildingOnSaleAdmin[Property] = distance;
                   }
                 }
               } else {
@@ -226,7 +248,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
         // print("PentHouse on Sale Admin:" + ApartmentOnSale.toString());
         // print("Building on Sale All:" + ApartmentOnSale.toString());
         // print("Building on Sale Admin:" + ApartmentOnSale.toString());
-        List<PropertyCard> displaySaleProperties = [];
+        Map<PropertyCard, double> displaySaleProperties;
         if (displayAdminProperties) {
           if (categorySelected == "Appartment") {
             displaySaleProperties = ApartmentOnSaleAdmin;
@@ -256,6 +278,10 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
             displaySaleProperties = PropertiesOnSaleAll;
           }
         }
+
+        displaySaleProperties = Map.fromEntries(
+            displaySaleProperties.entries.toList()
+              ..sort((e1, e2) => e1.value.compareTo(e2.value)));
         // print(displaySaleProperties);
         return AnimationLimiter(
           child: ListView(
@@ -270,7 +296,7 @@ class _PropertiesOnSaleAdvState extends State<PropertiesOnSaleAdv> {
                     horizontalOffset: 50,
                     child: FadeInAnimation(
                         duration: const Duration(seconds: 3), child: widget)),
-                children: displaySaleProperties),
+                children: displaySaleProperties.keys.toList()),
             // children: displaySaleProperties),
           ),
         );
@@ -284,48 +310,82 @@ class PropertiesOnRentAdv extends StatefulWidget {
   State<PropertiesOnRentAdv> createState() => _PropertiesOnRentAdvState();
 }
 
-List<PropertyCard> PropertiesOnRentAll = [];
+late Map<PropertyCard, double> PropertiesOnRentAll;
 
 class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
-  List<PropertyCard> PropertiesOnRentAdmin = [];
+  double getDistance(double latitude, double longitude) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((position.latitude - latitude) * p) / 2 +
+        c(latitude * p) *
+            c(position.latitude * p) *
+            (1 - c((position.longitude - longitude) * p)) /
+            2;
+    return 12742 * asin(sqrt(a));
+  }
 
-  List<PropertyCard> ApartmentOnRentAdmin = [];
+  late Map<PropertyCard, double> PropertiesOnRentAdmin;
 
-  List<PropertyCard> ApartmentOnRent = [];
+  late Map<PropertyCard, double> ApartmentOnRentAdmin;
 
-  List<PropertyCard> HouseOnRentAdmin = [];
+  late Map<PropertyCard, double> ApartmentOnRent;
 
-  List<PropertyCard> HouseOnRent = [];
+  late Map<PropertyCard, double> HouseOnRentAdmin;
 
-  List<PropertyCard> LandOnRentAdmin = [];
+  late Map<PropertyCard, double> HouseOnRent;
 
-  List<PropertyCard> LandOnRent = [];
+  late Map<PropertyCard, double> LandOnRentAdmin;
 
-  List<PropertyCard> PlotOnRentAdmin = [];
+  late Map<PropertyCard, double> LandOnRent;
 
-  List<PropertyCard> PlotOnRent = [];
+  late Map<PropertyCard, double> PlotOnRentAdmin;
 
-  List<PropertyCard> BuildingOnRentAdmin = [];
+  late Map<PropertyCard, double> PlotOnRent;
 
-  List<PropertyCard> BuildingOnRent = [];
+  late Map<PropertyCard, double> BuildingOnRentAdmin;
+
+  late Map<PropertyCard, double> BuildingOnRent;
+
+  // List<PropertyCard> PropertiesOnRentAdmin = [];
+
+  // List<PropertyCard> ApartmentOnRentAdmin = [];
+
+  // List<PropertyCard> ApartmentOnRent = [];
+
+  // List<PropertyCard> HouseOnRentAdmin = [];
+
+  // List<PropertyCard> HouseOnRent = [];
+
+  // List<PropertyCard> LandOnRentAdmin = [];
+
+  // List<PropertyCard> LandOnRent = [];
+
+  // List<PropertyCard> PlotOnRentAdmin = [];
+
+  // List<PropertyCard> PlotOnRent = [];
+
+  // List<PropertyCard> BuildingOnRentAdmin = [];
+
+  // List<PropertyCard> BuildingOnRent = [];
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("PropertiesRent").snapshots(),
       builder: (context, snapshot) {
-        PropertiesOnRentAll = [];
-        PropertiesOnRentAdmin = [];
-        ApartmentOnRentAdmin = [];
-        ApartmentOnRent = [];
-        HouseOnRentAdmin = [];
-        HouseOnRent = [];
-        LandOnRentAdmin = [];
-        LandOnRent = [];
-        PlotOnRentAdmin = [];
-        PlotOnRent = [];
-        BuildingOnRentAdmin = [];
-        BuildingOnRent = [];
+        PropertiesOnRentAll = {};
+        PropertiesOnRentAdmin = {};
+        ApartmentOnRentAdmin = {};
+        ApartmentOnRent = {};
+        HouseOnRentAdmin = {};
+        HouseOnRent = {};
+        LandOnRentAdmin = {};
+        LandOnRent = {};
+        PlotOnRentAdmin = {};
+        PlotOnRent = {};
+        BuildingOnRentAdmin = {};
+        BuildingOnRent = {};
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -344,7 +404,8 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                 }
               }
               var imageloc = property["imgUrl1"];
-
+              var latitude = property["latitude"];
+              var longitude = property["longitude"];
               var price = property["Price"];
               var propertyAddress = property["PropertyAddress"];
               var propertyName = property["PropertyTitle"];
@@ -371,8 +432,14 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               var dtcpApproved = property["DTCPApproved"];
               dtcpApproved = dtcpApproved == "false" ? false : true;
 
+              double distance =
+                  getDistance(double.parse(latitude), double.parse(longitude));
+
               final Property = PropertyCard(
+                distance: distance,
                 dtcpApproved: dtcpApproved,
+                latitude: latitude,
+                longitude: longitude,
                 city: city,
                 taluk: taluk,
                 state: state,
@@ -401,7 +468,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
               );
 
               if (isApproved == "True") {
-                PropertiesOnRentAll.add(Property);
+                PropertiesOnRentAll[Property] = distance;
                 if (!approvedPropertiesNames.contains(Property.propertyName)) {
                   approvedPropertiesNames.add(Property.propertyName);
                   approvedProperties.add(Property);
@@ -411,37 +478,37 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                   myPropertiesAdv.add(Property.propertyName);
                 }
                 if (ownerName.toString() == "john") {
-                  PropertiesOnRentAdmin.add(Property);
+                  PropertiesOnRentAdmin[Property] = distance;
                 }
 
                 if (propertyCategory.toString() == "Apartment") {
-                  ApartmentOnRent.add(Property);
+                  ApartmentOnRent[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    ApartmentOnRentAdmin.add(Property);
+                    ApartmentOnRentAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "House") {
-                  HouseOnRent.add(Property);
+                  HouseOnRent[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    HouseOnRentAdmin.add(Property);
+                    HouseOnRentAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "Plot") {
-                  PlotOnRent.add(Property);
+                  PlotOnRent[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    PlotOnRentAdmin.add(Property);
+                    PlotOnRentAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "Land") {
-                  LandOnRent.add(Property);
+                  LandOnRent[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    LandOnRentAdmin.add(Property);
+                    LandOnRentAdmin[Property] = distance;
                   }
                 }
                 if (propertyCategory.toString() == "Building") {
-                  BuildingOnRent.add(Property);
+                  BuildingOnRent[Property] = distance;
                   if (ownerName.toString() == "john") {
-                    BuildingOnRentAdmin.add(Property);
+                    BuildingOnRentAdmin[Property] = distance;
                   }
                 }
               } else {
@@ -464,7 +531,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
         // print("PentHouse on Rent Admin:" + ApartmentOnRent.toString());
         // print("Building on Rent All:" + ApartmentOnRent.toString());
         // print("Building on Rent Admin:" + ApartmentOnRent.toString());
-        List<PropertyCard> displayRentProperties = [];
+        Map<PropertyCard, double> displayRentProperties;
         if (displayAdminProperties) {
           if (categorySelected == "Appartment") {
             displayRentProperties = ApartmentOnRentAdmin;
@@ -495,6 +562,10 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
           }
         }
 
+        displayRentProperties = Map.fromEntries(
+            displayRentProperties.entries.toList()
+              ..sort((e1, e2) => e1.value.compareTo(e2.value)));
+
         return AnimationLimiter(
           child: ListView(
             // reverse: true
@@ -507,7 +578,7 @@ class _PropertiesOnRentAdvState extends State<PropertiesOnRentAdv> {
                         child: widget,
                       ),
                     ),
-                children: displayRentProperties),
+                children: displayRentProperties.keys.toList()),
             padding: const EdgeInsets.symmetric(vertical: 10),
             // shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
@@ -546,41 +617,24 @@ final customCacheManager = CacheManager(
 // late String name = "";
 String categorySelected = "All";
 
-// Future<Position> _determinePosition() async {
-//   bool serviceEnabled;
-//   LocationPermission permission;
-//   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//   if (!serviceEnabled) {
-//     return Future.error('Location services are disabled.');
-//   }
+late Position position;
 
-// permission = await Geolocator.checkPermission();
-// if (permission == LocationPermission.denied) {
-//   permission = await Geolocator.requestPermission();
-//   if (permission == LocationPermission.denied) {
-//     return Future.error('Location permissions are denied');
-//   }
-// }
-
-// if (permission == LocationPermission.deniedForever) {
-//   return Future.error(
-//       'Location permissions are permanently denied, we cannot request permissions.');
-// }
-// return await Geolocator.getCurrentPosition();
-// }
-
-void loc() async {
-  // Position loc = await _determinePosition();
-  print(loc);
+Future<bool> loc() async {
+  position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high)
+      .whenComplete(() {
+    print("Location Fetched");
+  });
+  print(position.latitude.toString() + " " + position.longitude.toString());
+  return true;
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   late List<bool> isSelected;
   @override
   void initState() {
-    isSelected = [true, false];
     getBookMarkedProperties();
-    loc();
+    isSelected = [true, false];
     super.initState();
   }
 
@@ -912,7 +966,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(
-                          height: 415,
+                          height: 420,
                           child: PropertiesOnSaleAdv(),
                         ),
                         const Divider(
@@ -930,7 +984,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(
-                          height: 415,
+                          height: 420,
                           child: PropertiesOnRentAdv(),
                         ),
                       ],
@@ -955,6 +1009,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class PropertyCard extends StatefulWidget {
+  final String latitude;
+  final String longitude;
   final String imageloc;
   final String propertyName;
   final String propertyAddress;
@@ -980,9 +1036,13 @@ class PropertyCard extends StatefulWidget {
   final String city;
   final String state;
   final bool dtcpApproved;
+  final double distance;
   final List<String> propertyImages;
   const PropertyCard(
-      {required this.imageloc,
+      {required this.distance,
+      required this.imageloc,
+      required this.latitude,
+      required this.longitude,
       required this.dtcpApproved,
       required this.taluk,
       required this.city,
@@ -1024,7 +1084,7 @@ class _PropertyCardState extends State<PropertyCard> {
       padding: const EdgeInsets.only(right: 8.0),
       child: Container(
         width: 190,
-        height: 240,
+        height: 250,
         decoration: const BoxDecoration(
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(
@@ -1045,7 +1105,7 @@ class _PropertyCardState extends State<PropertyCard> {
                     cacheManager: customCacheManager,
                     key: UniqueKey(),
                     imageUrl: widget.imageloc,
-                    height: 225,
+                    height: 220,
                     width: 190,
                     // maxHeightDiskCache: 230,
                     // maxWidthDiskCache: 190,
@@ -1188,6 +1248,38 @@ class _PropertyCardState extends State<PropertyCard> {
                     ),
                   ),
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Spacer(),
+                    Text(
+                      widget.distance.toStringAsFixed(1) + " km",
+                      style: TextStyle(
+                          color: kHighlightedTextColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800),
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Icon(
+                      Icons.gps_fixed,
+                      size: 15,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "away",
+                      style: TextStyle(
+                          color: kHighlightedTextColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800),
+                    )
+                  ],
+                ),
               )
             ],
           ),

@@ -14,7 +14,6 @@ import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
-import '../components/addressPickerHelper.dart';
 
 class AddPropertiesScreen2 extends StatefulWidget {
   static const String id = 'addPropertiesScreen2';
@@ -70,7 +69,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
     if (Facing == "") {
       await popUpAlertDialogBox(context, "Kindly Select Facing");
     } else {
-      if (imageFileList!.length == 0) {
+      if (imageFileList!.isEmpty) {
         await popUpAlertDialogBox(context, "Kindly Uplaod Property Images");
       } else {
         Storage _storage = Storage();
@@ -143,7 +142,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   }
 
   Future<void> selectImages() async {
-    List<XFile>? selectedImages = null;
+    List<XFile>? selectedImages;
 
     selectedImages = await imagePicker.pickMultiImage(imageQuality: 80);
     if (selectedImages == null) {
@@ -151,7 +150,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
     }
     if (selectedImages.isNotEmpty) {
       imageFileList!.addAll(selectedImages);
-      print("Image List Length:" + imageFileList!.length.toString());
+      // print("Image List Length:" + imageFileList!.length.toString());
       setState(() {});
     }
   }
@@ -207,14 +206,13 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   List<ImagesFromGallery> PickedImages = [];
 
   var _controller = TextEditingController();
-  double _kItemExtent = 32.0;
+  final double _kItemExtent = 32.0;
   bool isloading = false;
   int selectedFace = 0;
   @override
   Widget build(BuildContext context) {
     bool isLand = getCategory() == "Land" || getCategory() == "Plot";
     const List<String> directions = ["North", "South", "East", "West"];
-    final Storage storage = Storage();
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
       body: SafeArea(

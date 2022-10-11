@@ -61,7 +61,7 @@ void SignIn() async {
 class _PropertyAppState extends State<PropertyApp> {
   @override
   void initState() {
-    SignIn();
+   
     super.initState();
   }
 
@@ -69,6 +69,7 @@ class _PropertyAppState extends State<PropertyApp> {
   _PropertyAppState({required this.prefs});
   @override
   Widget build(BuildContext context) {
+
     return FirebasePhoneAuthProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

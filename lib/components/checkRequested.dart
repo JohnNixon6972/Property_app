@@ -222,9 +222,11 @@ class RequestedProperty extends StatelessWidget {
                                 //     CrossAxisAlignment.start,
                                 children: [
                                   CircleAvatar(
+                                    
                                     backgroundColor: null,
                                     radius: 25,
                                     child: ClipRRect(
+                                      
                                       borderRadius: BorderRadius.circular(25),
                                       child: CachedNetworkImage(
                                         // cacheManager: customCacheManager,
@@ -259,16 +261,6 @@ class RequestedProperty extends StatelessWidget {
                                     ownerName,
                                     style: const TextStyle(
                                         fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        color: kHighlightedTextColor),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    "City : " + city,
-                                    style: const TextStyle(
-                                        fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                         color: kHighlightedTextColor),
                                   ),
@@ -371,7 +363,7 @@ class RequestedProperty extends StatelessWidget {
                             ownerEmail: ownerEmail)));
               },
               child: const Icon(
-                Icons.file_open,
+                Icons.content_paste_go,
                 size: 45,
                 color: kHighlightedTextColor,
               ),

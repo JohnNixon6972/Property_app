@@ -655,7 +655,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       backgroundColor: kPageBackgroundColor,
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         elevation: 20,
         // label: const Text(
         //   'Req Property',
@@ -664,10 +664,11 @@ class _HomeScreenState extends State<HomeScreen> {
         //       fontSize: 13,
         //       fontWeight: FontWeight.w900),
         // ),
-        label: const Text(""),
+
         backgroundColor: kHighlightedTextColor,
-        icon: const Icon(
-          Icons.back_hand,
+        child: const Icon(
+          Icons.border_color,
+          color: kPageBackgroundColor,
         ),
         // icon: null,
         onPressed: () {
@@ -1257,6 +1258,13 @@ class _PropertyCardState extends State<PropertyCard> {
                 child: Row(
                   children: [
                     Spacer(),
+                    Icon(
+                      Icons.gps_fixed,
+                      size: 15,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       widget.distance.toStringAsFixed(1) + " km",
                       style: TextStyle(
@@ -1266,13 +1274,6 @@ class _PropertyCardState extends State<PropertyCard> {
                     ),
                     SizedBox(
                       width: 6,
-                    ),
-                    Icon(
-                      Icons.gps_fixed,
-                      size: 15,
-                    ),
-                    SizedBox(
-                      width: 5,
                     ),
                     Text(
                       "away",

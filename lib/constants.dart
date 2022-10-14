@@ -38,10 +38,9 @@ const kTextFieldDecoration = InputDecoration(
   ),
 );
 
-
-
 const kPageBackgroundColor = Color(0xffE9E3E3);
 const kSubCategoryColor = Color.fromARGB(255, 151, 151, 151);
+const kRequestedIconColor = Color.fromARGB(255, 121, 121, 121);
 const kPrimaryButtonColor = Color(0xff510055);
 const kSecondaryButtonColor = Color(0xffDAD8D9);
 const kHighlightedTextColor = Color(0xff510055);
@@ -49,7 +48,5 @@ const kNavigationIconColor = Color.fromARGB(255, 211, 199, 199);
 const kBottomNavigationBackgroundColor = Color.fromARGB(255, 190, 157, 170);
 const kPropertyCardColor = Color(0xffDAD8D9);
 const kTextFieldFillColor = Color.fromARGB(255, 211, 199, 199);
-const kYes =  Color.fromARGB(255, 7, 91, 10);
+const kYes = Color.fromARGB(255, 7, 91, 10);
 const kNo = Color.fromARGB(255, 147, 20, 11);
-
-

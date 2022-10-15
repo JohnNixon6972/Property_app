@@ -8,7 +8,6 @@ import 'package:property_app/screens/searchScreen.dart';
 import '../constants.dart';
 import '../screens/homescreen.dart';
 import '../screens/profileScreen.dart';
-import '../screens/addPropertiesScreen1.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 
 class BottomPageNavigationBar extends StatelessWidget {

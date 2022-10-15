@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:property_app/constants.dart';
@@ -22,6 +24,21 @@ import 'components/forgotpassword.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 getUserDetails userInfo = getUserDetails();
+final Map<int, Color> _themeColorMaterial = {
+  50: Color(0xffDAD8D9),
+  100: Color(0xffDAD8D9),
+  200: Color(0xffDAD8D9),
+  300: Color(0xffDAD8D9),
+  400: Color(0xffDAD8D9),
+  500: Color(0xffDAD8D9),
+  600: Color(0xffDAD8D9),
+  700: Color(0xffDAD8D9),
+  800: Color(0xffDAD8D9),
+  900: Color(0xffDAD8D9),
+};
+
+final MaterialColor _themeColor =
+    MaterialColor(Color(0xffDAD8D9).value, _themeColorMaterial);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +86,9 @@ class _PropertyAppState extends State<PropertyApp> {
   Widget build(BuildContext context) {
     return FirebasePhoneAuthProvider(
       child: MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.grey),
+        theme: ThemeData(
+          primarySwatch: _themeColor,
+        ),
         debugShowCheckedModeBanner: false,
         initialRoute: loginScreen.id,
         // initialRoute: VerifyPhoneNumberScreen.id,

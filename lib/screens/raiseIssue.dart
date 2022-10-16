@@ -45,8 +45,8 @@ class _raiseAnIssueState extends State<raiseAnIssue> {
                   curve: Curves.ease,
 
                   radiusStyle: true,
-                  labels: const ["Request Property", "Check Requests"],
-                  icons: const [Icons.back_hand, Icons.comment_bank_rounded],
+                  labels: const ["Request\nProperty", "Check\nRequests"],
+                  icons: const [Icons.receipt, Icons.comment_bank_rounded],
                   onToggle: ((index) {
                     print(index);
                     setState(() {

@@ -1,12 +1,11 @@
-import 'dart:math';
+// ignore_for_file: camel_case_types, file_names, constant_identifier_names, must_be_immutable
 
+import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:open_mail_app/open_mail_app.dart';
-import 'package:property_app/components/requestProperty.dart';
 import 'package:property_app/constants.dart';
-import 'package:property_app/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../screens/requestPropertyDetails.dart';
 
@@ -144,228 +143,256 @@ class RequestedProperty extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height * 0.20,
-            width: MediaQuery.of(context).size.width - 16,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(
-                  20,
-                ),
-              ),
-              border: Border.all(
-                color: kNavigationIconColor,
-              ),
-              color: kBottomNavigationBackgroundColor,
-            ),
-          ),
-          Container(
-            // height: 10,
-            // width: MediaQuery.of(context).size.width - 16,
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(
-                    20,
-                  ),
-                ),
-                border: Border.all(
-                  color: kHighlightedTextColor,
-                ),
-                color: kSecondaryButtonColor),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            icon,
-                            size: 100,
-                            color: kHighlightedTextColor,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "City : " + city,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: kHighlightedTextColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            "Taluk : " + taluk,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: kHighlightedTextColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Row(
-                                // crossAxisAlignment:
-                                //     CrossAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    
-                                    backgroundColor: null,
-                                    radius: 25,
-                                    child: ClipRRect(
-                                      
-                                      borderRadius: BorderRadius.circular(25),
-                                      child: CachedNetworkImage(
-                                        // cacheManager: customCacheManager,
-                                        key: UniqueKey(),
-                                        imageUrl: ownerimg,
-                                        height: 50,
-                                        width: 50,
-                                        // maxHeightDiskCache: 230,
-                                        // maxWidthDiskCache: 190,
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
-                                            const Center(
-                                          child: CircularProgressIndicator(
-                                            color: kHighlightedTextColor,
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                          color: Colors.black12,
-                                          child: const Icon(
-                                            Icons.error,
-                                            color: kHighlightedTextColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    ownerName,
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        color: kHighlightedTextColor),
-                                  ),
-                                ],
-                              ),
-                              // const Spacer(),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      EmailContent email = EmailContent(
-                                        to: [
-                                          ownerEmail,
-                                        ],
-                                      );
+          Material(
+            elevation: 5,
+            borderRadius: BorderRadius.circular(50),
+            child: Container(
+              // height: 10,
+              // width: MediaQuery.of(context).size.width - 16,
 
-                                      OpenMailAppResult result = await OpenMailApp
-                                          .composeNewEmailInMailApp(
-                                              nativePickerTitle:
-                                                  'Select email app to compose',
-                                              emailContent: email);
-                                      if (!result.didOpen && !result.canOpen) {
-                                        // showNoMailAppsDialog(context);
-                                      } else if (!result.didOpen &&
-                                          result.canOpen) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) => MailAppPickerDialog(
-                                            mailApps: result.options,
-                                            emailContent: email,
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Icon(
-                                        Icons.mail,
-                                        size: 30,
-                                        color: kHighlightedTextColor,
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      var url = 'tel:' + ownerPhno.toString();
-                                      if (await canLaunchUrl(Uri.parse(url))) {
-                                        await launchUrl(Uri.parse(url));
-                                      } else {
-                                        throw 'Could not launch $url';
-                                      }
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Icon(
-                                        Icons.call,
-                                        size: 30,
-                                        color: kHighlightedTextColor,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      50,
+                    ),
                   ),
-                ],
+                  border: Border.all(
+                    color: kBottomNavigationBackgroundColor,
+                    width: 2,
+                  ),
+                  color: kPropertyCardColor),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              icon,
+                              size: 75,
+                              color: kSubCategoryColor,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "City    : ",
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.05,
+                                    color: kSubCategoryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  city,
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.055,
+                                    color: kHighlightedTextColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Taluk : ",
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.05,
+                                    color: kSubCategoryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  taluk,
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.055,
+                                    color: kHighlightedTextColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Row(
+                                  // crossAxisAlignment:
+                                  //     CrossAxisAlignment.start,
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: null,
+                                      radius: 25,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(25),
+                                        child: CachedNetworkImage(
+                                          // cacheManager: customCacheManager,
+                                          key: UniqueKey(),
+                                          imageUrl: ownerimg,
+                                          height: 50,
+                                          width: 50,
+                                          // maxHeightDiskCache: 230,
+                                          // maxWidthDiskCache: 190,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              const Center(
+                                            child: CircularProgressIndicator(
+                                              color: kHighlightedTextColor,
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Container(
+                                            color: Colors.black12,
+                                            child: const Icon(
+                                              Icons.error,
+                                              color: kHighlightedTextColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      ownerName,
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        // color: kBottomNavigationBackgroundColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // const Spacer(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  // crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        EmailContent email = EmailContent(
+                                          to: [
+                                            ownerEmail,
+                                          ],
+                                        );
+
+                                        OpenMailAppResult result = await OpenMailApp
+                                            .composeNewEmailInMailApp(
+                                                nativePickerTitle:
+                                                    'Select email app to compose',
+                                                emailContent: email);
+                                        if (!result.didOpen &&
+                                            !result.canOpen) {
+                                          // showNoMailAppsDialog(context);
+                                        } else if (!result.didOpen &&
+                                            result.canOpen) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => MailAppPickerDialog(
+                                              mailApps: result.options,
+                                              emailContent: email,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Icon(
+                                          Icons.mail,
+                                          size: 30,
+                                          color:
+                                              kBottomNavigationBackgroundColor,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        var url = 'tel:' + ownerPhno.toString();
+                                        if (await canLaunchUrl(
+                                            Uri.parse(url))) {
+                                          await launchUrl(Uri.parse(url));
+                                        } else {
+                                          throw 'Could not launch $url';
+                                        }
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Icon(
+                                          Icons.call,
+                                          size: 30,
+                                          color:
+                                              kBottomNavigationBackgroundColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.175,
-            right: 28,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => requestPropertyDetails(
-                            length: length,
-                            width: width,
-                            category: category,
-                            ownerName: ownerName,
-                            taluk: taluk,
-                            city: city,
-                            to: to,
-                            type: type,
-                            price: price,
-                            ownerPhno: ownerPhno,
-                            ownerimg: ownerimg,
-                            state: state,
-                            district: district,
-                            description: description,
-                            icon: icon,
-                            ownerEmail: ownerEmail)));
-              },
-              child: const Icon(
-                Icons.content_paste_go,
-                size: 45,
-                color: kHighlightedTextColor,
+            top: MediaQuery.of(context).size.height * 0.21,
+            right: 1,
+            child: Transform(
+              transform: Matrix4.rotationY(math.pi),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => requestPropertyDetails(
+                              length: length,
+                              width: width,
+                              category: category,
+                              ownerName: ownerName,
+                              taluk: taluk,
+                              city: city,
+                              to: to,
+                              type: type,
+                              price: price,
+                              ownerPhno: ownerPhno,
+                              ownerimg: ownerimg,
+                              state: state,
+                              district: district,
+                              description: description,
+                              icon: icon,
+                              ownerEmail: ownerEmail)));
+                },
+                child: const Icon(
+                  Icons.reply_rounded,
+                  size: 40,
+                  color: kHighlightedTextColor,
+                ),
               ),
             ),
           )

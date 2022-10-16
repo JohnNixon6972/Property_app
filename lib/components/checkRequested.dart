@@ -1,12 +1,11 @@
-import 'dart:math';
+// ignore_for_file: camel_case_types, file_names, constant_identifier_names, must_be_immutable
 
+import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:open_mail_app/open_mail_app.dart';
-import 'package:property_app/components/requestProperty.dart';
 import 'package:property_app/constants.dart';
-import 'package:property_app/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../screens/requestPropertyDetails.dart';
 
@@ -144,24 +143,9 @@ class RequestedProperty extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: <Widget>[
-          // Container(
-          //   height: MediaQuery.of(context).size.height * 0.20,
-          //   width: MediaQuery.of(context).size.width - 16,
-          //   decoration: BoxDecoration(
-          //     borderRadius: const BorderRadius.all(
-          //       Radius.circular(
-          //         20,
-          //       ),
-          //     ),
-          //     border: Border.all(
-          //       color: kNavigationIconColor,
-          //     ),
-          //     color: kBottomNavigationBackgroundColor,
-          //   ),
-          // ),
           Material(
-            borderRadius: BorderRadius.circular(50),
             elevation: 5,
+            borderRadius: BorderRadius.circular(50),
             child: Container(
               // height: 10,
               // width: MediaQuery.of(context).size.width - 16,
@@ -173,7 +157,8 @@ class RequestedProperty extends StatelessWidget {
                     ),
                   ),
                   border: Border.all(
-                    color: kSubCategoryColor,
+                    color: kBottomNavigationBackgroundColor,
+                    width: 2,
                   ),
                   color: kPropertyCardColor),
               child: Padding(
@@ -187,8 +172,8 @@ class RequestedProperty extends StatelessWidget {
                           children: [
                             Icon(
                               icon,
-                              size: 80,
-                              color: kHighlightedTextColor,
+                              size: 75,
+                              color: kSubCategoryColor,
                             ),
                           ],
                         ),
@@ -247,7 +232,7 @@ class RequestedProperty extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Column(
@@ -293,7 +278,7 @@ class RequestedProperty extends StatelessWidget {
                                     ),
                                     Text(
                                       ownerName,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 15,
                                         // color: kBottomNavigationBackgroundColor,
                                       ),
@@ -361,7 +346,7 @@ class RequestedProperty extends StatelessWidget {
                                               kBottomNavigationBackgroundColor,
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 )
                               ],
@@ -376,35 +361,38 @@ class RequestedProperty extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 155,
-            right: 28,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => requestPropertyDetails(
-                            length: length,
-                            width: width,
-                            category: category,
-                            ownerName: ownerName,
-                            taluk: taluk,
-                            city: city,
-                            to: to,
-                            type: type,
-                            price: price,
-                            ownerPhno: ownerPhno,
-                            ownerimg: ownerimg,
-                            state: state,
-                            district: district,
-                            description: description,
-                            icon: icon,
-                            ownerEmail: ownerEmail)));
-              },
-              child: const Icon(
-                Icons.reviews,
-                size: 35,
-                color: kHighlightedTextColor,
+            top: MediaQuery.of(context).size.height * 0.21,
+            right: 1,
+            child: Transform(
+              transform: Matrix4.rotationY(math.pi),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => requestPropertyDetails(
+                              length: length,
+                              width: width,
+                              category: category,
+                              ownerName: ownerName,
+                              taluk: taluk,
+                              city: city,
+                              to: to,
+                              type: type,
+                              price: price,
+                              ownerPhno: ownerPhno,
+                              ownerimg: ownerimg,
+                              state: state,
+                              district: district,
+                              description: description,
+                              icon: icon,
+                              ownerEmail: ownerEmail)));
+                },
+                child: const Icon(
+                  Icons.reply_rounded,
+                  size: 40,
+                  color: kHighlightedTextColor,
+                ),
               ),
             ),
           )

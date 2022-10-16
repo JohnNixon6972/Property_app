@@ -22,6 +22,43 @@
           }
         },
         {
+          "client_id": "115422627752-nndn1t8mnc42ima39c9tr3alftpoobli.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.KayalProperties",
+            "certificate_hash": "5c4533b90d702ba63bb0c3ce6570ac08c5a1c513"
+          }
+        },
+        {
+          "client_id": "115422627752-3ssb144fu4201kh2t6nudv2enqr9qvch.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaVKnAc--pR0VKwN9wIbpXWJYvuT--V3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115422627752-3ssb144fu4201kh2t6nudv2enqr9qvch.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115422627752:android:6e4df401e32bc2eb933f9d",
+        "android_client_info": {
+          "package_name": "com.PropertyAppPleasantProperties"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "115422627752-3ssb144fu4201kh2t6nudv2enqr9qvch.apps.googleusercontent.com",
           "client_type": 3
         }

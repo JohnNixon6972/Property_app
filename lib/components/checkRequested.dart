@@ -159,7 +159,8 @@ class RequestedProperty extends StatelessWidget {
           //     color: kBottomNavigationBackgroundColor,
           //   ),
           // ),
-          Card(
+          Material(
+            borderRadius: BorderRadius.circular(50),
             elevation: 5,
             child: Container(
               // height: 10,
@@ -168,7 +169,7 @@ class RequestedProperty extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(
                     Radius.circular(
-                      5,
+                      50,
                     ),
                   ),
                   border: Border.all(
@@ -375,7 +376,7 @@ class RequestedProperty extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.22,
+            top: 155,
             right: 28,
             child: GestureDetector(
               onTap: () {

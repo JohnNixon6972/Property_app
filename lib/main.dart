@@ -2,7 +2,6 @@
 
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
-import 'package:property_app/constants.dart';
 import 'package:property_app/screens/aboutUs.dart';
 import 'package:property_app/screens/approvedPropertiesScreen.dart';
 import 'package:property_app/screens/bookmarkedpropertiesscreen.dart';

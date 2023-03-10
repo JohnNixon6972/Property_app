@@ -213,14 +213,14 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                     children: [
                       const Text(
                         'I want to',
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: kSubCategoryColor,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
+                        child: SizedBox(
                           height: 65,
                           child: Row(
                             // physics: const BouncingScrollPhysics(),
@@ -249,7 +249,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                         children: [
                                           const Text(
                                             'Sell',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500),
                                           ),
@@ -336,7 +336,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
+                        child: SizedBox(
                           height: 75,
                           child: Row(
                             // physics: const BouncingScrollPhysics(),
@@ -365,7 +365,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                                         children: [
                                           const Text(
                                             'Residental',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500),
                                           ),
@@ -446,14 +446,14 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                     children: [
                       const Text(
                         'Select Category',
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: kSubCategoryColor,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
+                        child: SizedBox(
                           height: 100,
                           child: ListView(
                             physics: const BouncingScrollPhysics(),
@@ -824,23 +824,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           )
                         ],
                       ),
-                      // Column(
-                      //   children: [
-                      //     SelectState(onCountryChanged: (value) {
-                      //       setState(() {
-                      //         countryValue = value;
-                      //       });
-                      //     }, onStateChanged: (value) {
-                      //       setState(() {
-                      //         stateValue = value;
-                      //       });
-                      //     }, onCityChanged: (value) {
-                      //       setState(() {
-                      //         cityValue = value;
-                      //       });
-                      //     })
-                      //   ],
-                      // )
+                      
                     ],
                   ),
                 ),
@@ -902,29 +886,14 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 "Pick Location",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.w900),
                               ),
-                              // Expanded(
-                              //   child: TextField(
-                              //     onChanged: (newValue) {
-                              //       setState(() {
-                              //         PropertyAddress = newValue;
-                              //       });
-                              //     },
-                              //     controller: _PropertyAddressController,
-                              //     decoration: InputDecoration(
-                              //         border: InputBorder.none,
-                              //         errorText: _errorText,
-                              //         hintText: "Address",
-                              //         hintStyle: const TextStyle(
-                              //             color: kSubCategoryColor)),
-                              //   ),
-                              // ),
-                              const Icon(
+                          
+                              Icon(
                                 Icons.add_location_outlined,
                                 color: kHighlightedTextColor,
                                 size: 35,
@@ -983,8 +952,7 @@ class _AddPropertiesScreenState extends State<AddPropertiesScreen> {
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                         style: ElevatedButton.styleFrom(
-                          elevation: 10,
-                          primary: kPrimaryButtonColor,
+                          elevation: 10, backgroundColor: kPrimaryButtonColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),

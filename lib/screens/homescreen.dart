@@ -970,7 +970,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(
-                          height: 420,
+                          height: 425,
                           child: PropertiesOnSaleAdv(),
                         ),
                         const Divider(
@@ -1088,7 +1088,7 @@ class _PropertyCardState extends State<PropertyCard> {
       padding: const EdgeInsets.only(right: 8.0),
       child: Container(
         width: 190,
-        height: 250,
+        height: 255,
         decoration: const BoxDecoration(
           color: kPropertyCardColor,
           borderRadius: BorderRadius.all(

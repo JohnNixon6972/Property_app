@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable, avoid_init_to_null, file_names
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocode/geocode.dart';
 import 'package:property_app/screens/addPropertiesScreen2.dart';
 import 'package:property_app/screens/editPropertyScreen1.dart';
 import 'package:property_app/screens/editPropertyScreen2.dart';
 import '../screens/addPropertiesScreen1.dart';
 
 late var _origin = null;
-Address address = Address();
 
 class PinAddressMap extends StatefulWidget {
   const PinAddressMap({
@@ -44,15 +43,32 @@ class _PinAddressMapState extends State<PinAddressMap> {
                         backgroundColor: Theme.of(context).primaryColor),
                     child: const Text("Save Location"),
                     onPressed: () async {
-                      GeoCode geoCode =  GeoCode();
-                      Address address = await geoCode.reverseGeocoding(
-                          latitude: _origin.position.latitude,
-                          longitude: _origin.position.longitude);
+                      List<Placemark> placemarks =
+                          await placemarkFromCoordinates(
+                              _origin.position.latitude,
+                              _origin.position.longitude);
+                      // print(placemarks[0].street);
+                      // print(placemarks[0].locality);
+                      // print(placemarks[0].administrativeArea);
+                      // print(placemarks[0].country);
+                      // print(placemarks[0].postalCode);
+                      // print(placemarks[0].subAdministrativeArea);
+                      // print(placemarks[0].subLocality);
+                      // print(placemarks[0].subThoroughfare);
+                      // print(placemarks[0].thoroughfare);
+                      // print(placemarks[0].name);
+
                       setState(() {
                         // print(address.streetAddress);
                         // print(address.region);
-                        PropertyAddress = address.streetAddress!;
-                        EPropertyAddress = address.streetAddress!;
+                        // PropertyAddress = address.streetAddress!;
+                        // EPropertyAddress = address.streetAddress!;
+                        // latitude = _origin.position.latitude.toString();
+                        // longitude = _origin.position.longitude.toString();
+                        // Elatitude = _origin.position.latitude.toString();
+                        // Elongitude = _origin.position.longitude.toString();
+                        PropertyAddress = placemarks[0].locality!;
+                        EPropertyAddress = placemarks[0].locality!;
                         latitude = _origin.position.latitude.toString();
                         longitude = _origin.position.longitude.toString();
                         Elatitude = _origin.position.latitude.toString();

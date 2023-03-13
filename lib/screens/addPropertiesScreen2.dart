@@ -211,7 +211,7 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
   int selectedFace = 0;
   @override
   Widget build(BuildContext context) {
-    bool isLand = getCategory() == "Land" || getCategory() == "Plot";
+    bool isLand = getCategory() == "Land" || getCategory() == "Plot" || getType() == "Commercial";
     const List<String> directions = ["North", "South", "East", "West"];
     return Scaffold(
       backgroundColor: kPageBackgroundColor,
@@ -279,16 +279,16 @@ class _AddPropertiesScreen2State extends State<AddPropertiesScreen2> {
                                 ),
                               ),
                             ),
-                            Spacer(),
-                            Text(
+                            const Spacer(),
+                            const Text(
                               'Add Properties',
                               style: TextStyle(
                                   color: kHighlightedTextColor,
                                   fontSize: 26,
                                   fontWeight: FontWeight.w700),
                             ),
-                            Spacer(),
-                            Text(
+                            const Spacer(),
+                            const Text(
                               'Step 2/2',
                               style: TextStyle(
                                   color: kSubCategoryColor,

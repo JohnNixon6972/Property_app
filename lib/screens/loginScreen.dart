@@ -86,15 +86,15 @@ class _loginScreenState extends State<loginScreen> {
         connectivityBuilder: (BuildContext context,
             ConnectivityResult connectivity, Widget child) {
           final bool connected = connectivity != ConnectivityResult.none;
-         
-            if (connected) {
-              Timer(const Duration(seconds: 1), () {
-                showtop = false;
-              });
-                checkSavedUser(context);
-            } else {
-              showtop = true;
-            }
+
+          if (connected) {
+            Timer(const Duration(seconds: 1), () {
+              showtop = false;
+            });
+            checkSavedUser(context);
+          } else {
+            showtop = true;
+          }
           return SafeArea(
             child: Stack(
               fit: StackFit.expand,
